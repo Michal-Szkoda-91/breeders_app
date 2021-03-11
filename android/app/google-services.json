@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "663676083966",
+    "project_id": "breedersapp-c1956",
+    "storage_bucket": "breedersapp-c1956.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:663676083966:android:e30529bb3f74df75ac0faf",
+        "android_client_info": {
+          "package_name": "com.example.aplikacja_hodowcow"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "663676083966-valaoave5btmn39790ep5qg852ra5lrg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.aplikacja_hodowcow",
+            "certificate_hash": "191bed3877a5d709c80121edd8f38994f4149c0d"
+          }
+        },
+        {
+          "client_id": "663676083966-kg02pk0fggq52vn1copvbb7the57pbdv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCF2gzMSWiDEV65cQNQQEyVg_8rrRWYCdE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "663676083966-kg02pk0fggq52vn1copvbb7the57pbdv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
