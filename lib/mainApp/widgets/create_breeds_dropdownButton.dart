@@ -73,10 +73,10 @@ class CreateBreedsDropdownButton extends StatelessWidget {
     } else {
       try {
         providerData.createBreedsCollection(
-            name: value['name'],
-            pictureUrl: value['url'],
-            uid: firebaseUser.uid);
-
+          name: value['name'],
+          pictureUrl: value['url'],
+          uid: firebaseUser.uid,
+        );
         showInSnackBar('Utworzono Hodowlę $name', context);
       } catch (e) {
         showInSnackBar('Nie udało się utworzyć hodowli', context);

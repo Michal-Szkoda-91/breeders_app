@@ -1,3 +1,4 @@
+import 'package:breeders_app/main.dart';
 import 'package:flutter/material.dart';
 
 import '../../globalWidgets/imageContainerChinchila.dart';
@@ -55,6 +56,13 @@ class CustomDrawer extends StatelessWidget {
               ),
               onPressed: () async {
                 await _auth.signOut();
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                    builder: ((context) => MyApp()),
+                  ),
+                  (Route<dynamic> route) => false,
+                );
               },
             )
           ],

@@ -1,22 +1,24 @@
-import 'package:breeders_app/mainApp/animals/parrots/widgets/addParrot_screen.dart';
+import 'package:breeders_app/mainApp/animals/parrots/models/parrotsRace_list.dart';
+import 'package:breeders_app/mainApp/animals/parrots/screens/addParrot_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class CreateParrotsDropdownButton extends StatelessWidget {
-  final List<Map> _parrotsRaceList = [
-    {"url": 'assets/parrotsRace/parrot_Icon.jpg', 'name': 'Dodaj Papugę'},
-    {"url": 'assets/parrotsRace/aleksandretta.jpg', 'name': 'Aleksandretta'},
-    {"url": 'assets/parrotsRace/lorysa.jpg', 'name': 'Lorysa'},
-    {"url": 'assets/parrotsRace/nimfa.jpg', 'name': 'Nimfa'},
-    {"url": 'assets/parrotsRace/rozella.jpg', 'name': 'Rozella'},
-  ];
+class CreateParrotsDropdownButton extends StatefulWidget {
+  @override
+  _CreateParrotsDropdownButtonState createState() =>
+      _CreateParrotsDropdownButtonState();
+}
 
+class _CreateParrotsDropdownButtonState
+    extends State<CreateParrotsDropdownButton> {
   final firebaseUser = FirebaseAuth.instance.currentUser;
+
+  ParrotsRace _parrotsRace = new ParrotsRace();
 
   @override
   Widget build(BuildContext context) {
     return DropdownButton(
-      value: _parrotsRaceList[0],
+      value: _parrotsRace.parrotsRaceList[0],
       itemHeight: 70,
       isExpanded: true,
       icon: Padding(
@@ -28,7 +30,7 @@ class CreateParrotsDropdownButton extends StatelessWidget {
         ),
       ),
       dropdownColor: Theme.of(context).backgroundColor,
-      items: _parrotsRaceList.map((value) {
+      items: _parrotsRace.parrotsRaceList.map((value) {
         return DropdownMenuItem(
           value: value,
           child: new Row(
@@ -63,9 +65,7 @@ class CreateParrotsDropdownButton extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => AddParrotScreen(
-                name: value['name'],
-              ),
+              builder: (context) => AddParrotScreen(parrotMap: value),
             ),
           );
         } else {

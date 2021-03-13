@@ -21,14 +21,15 @@ class BreedingsList with ChangeNotifier {
       {String uid, String name, String pictureUrl}) async {
     final CollectionReference breedCollection =
         FirebaseFirestore.instance.collection(uid);
-    breedCollection.doc(name).set(
+    await breedCollection.doc(name).set(
       {
         "pictureUrl": pictureUrl,
-        "Zwierzęta": {},
       },
     );
     loadBreeds(uid);
   }
+
+
 
   Future<void> loadBreeds(String uid) async {
     final CollectionReference breedCollection =
@@ -44,7 +45,7 @@ class BreedingsList with ChangeNotifier {
                   BreedingsModel(
                     name: doc.id,
                     pictureUrl: doc["pictureUrl"],
-                    animals: (doc.data()["Zwierzęta"]),
+                    animals: (doc.data()["Animals"]),
                   ),
                 );
               }),
