@@ -155,6 +155,7 @@ class _SignInScreenState extends State<SignInScreen> {
   }
 
   Widget _createGoogleButton(BuildContext context, Function function) {
+    print(MediaQuery.of(context).size.width.toString());
     return RaisedButton(
       onPressed: function,
       shape: RoundedRectangleBorder(
@@ -174,7 +175,7 @@ class _SignInScreenState extends State<SignInScreen> {
             Text(
               'Zaloguj się przez Google',
               style: TextStyle(
-                fontSize: 16,
+                fontSize: MediaQuery.of(context).size.width < 400 ? 10 : 16,
                 color: Theme.of(context).textSelectionColor,
               ),
             )

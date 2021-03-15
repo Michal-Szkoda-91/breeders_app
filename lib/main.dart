@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'mainApp/animals/parrots/widgets/addParrot_screen.dart';
-import 'mainApp/screens/race_list_screen.dart';
+import 'package:breeders_app/mainApp/animals/parrots/models/parrot_model.dart';
+import 'mainApp/animals/parrots/screens/addParrot_screen.dart';
+import 'mainApp/animals/parrots/screens/parrot_race_list_screen.dart';
+import 'mainApp/animals/parrots/screens/parrotsList.dart';
 import 'mainApp/models/breedings_model.dart';
 import 'fireInitialization/initWidget.dart';
 
@@ -12,12 +14,16 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+  static const routeName = "/Wrapper";
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
           create: (_) => BreedingsList(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => ParrotsList(),
         ),
       ],
       child: MaterialApp(
@@ -45,8 +51,10 @@ class MyApp extends StatelessWidget {
           ),
         ),
         routes: {
-          RaceListScreen.routeName: (ctx) => RaceListScreen(),
+          MyApp.routeName: (ctx) => MyApp(),
+          ParrotsRaceListScreen.routeName: (ctx) => ParrotsRaceListScreen(),
           AddParrotScreen.routeName: (ctx) => AddParrotScreen(),
+          ParrotsListScreen.routeName: (ctx) => ParrotsListScreen(),
         },
       ),
     );

@@ -1,12 +1,12 @@
+import 'package:breeders_app/mainApp/models/breeds_list.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 
 class BreedingsModel {
   final String name;
   final String pictureUrl;
-  final Map<String, dynamic> animals;
 
-  BreedingsModel({this.animals, this.name, this.pictureUrl});
+  BreedingsModel({this.name, this.pictureUrl});
 }
 
 class BreedingsList with ChangeNotifier {
@@ -17,15 +17,11 @@ class BreedingsList with ChangeNotifier {
   }
 
 //create firebase documents
-  Future<dynamic> createBreedsCollection(
-      {String uid, String name, String pictureUrl}) async {
+  Future<dynamic> createBreedsCollection({String uid, String name}) async {
     final CollectionReference breedCollection =
         FirebaseFirestore.instance.collection(uid);
-    breedCollection.doc(name).set(
-      {
-        "pictureUrl": pictureUrl,
-        "Zwierzęta": {},
-      },
+    await breedCollection.doc(name).set(
+      {},
     );
     loadBreeds(uid);
   }
@@ -35,20 +31,24 @@ class BreedingsList with ChangeNotifier {
         FirebaseFirestore.instance.collection(uid);
 
     _breedingsList.clear();
+    BreedList breedList = BreedList();
 
     await breedCollection
         .get()
         .then((QuerySnapshot querySnapshot) => {
               querySnapshot.docs.forEach((doc) {
-                _breedingsList.add(
-                  BreedingsModel(
-                    name: doc.id,
-                    pictureUrl: doc["pictureUrl"],
-                    animals: (doc.data()["Zwierzęta"]),
-                  ),
-                );
+                for (var i = 0; i < breedList.breedsList.length; i++) {
+                  if (doc.id == breedList.breedsList[i]['name']) {
+                    _breedingsList.add(
+                      BreedingsModel(
+                        name: doc.id,
+                        pictureUrl: breedList.breedsList[i]['url'],
+                      ),
+                    );
+                  }
+                }
+                notifyListeners();
               }),
-              notifyListeners(),
             })
         .catchError((error) {});
   }

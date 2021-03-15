@@ -38,6 +38,8 @@ dependencies:
   email_validator: ^1.0.6
   keyboard_visibility: ^0.5.6
   auto_size_text: ^2.1.0
+  flutter_slidable: ^0.5.7
+  flutter_icons: ^1.1.0
 
 dev_dependencies:
   flutter_test:
@@ -64,10 +66,11 @@ flutter:
     - assets/horse.jpg
     #Parrots race
     - assets/parrotsRace/parrot_Icon.jpg
-    - assets/parrotsRace/aleksandretta.jpg
-    - assets/parrotsRace/lorysa.jpg
-    - assets/parrotsRace/nimfa.jpg
-    - assets/parrotsRace/rozella.jpg
+    - assets/parrotsRace/Aleksandretta.jpg
+    - assets/parrotsRace/Lorysa.jpg
+    - assets/parrotsRace/Nimfa.jpg
+    - assets/parrotsRace/Rozella.jpg
+    - assets/parrotsRace/Świergotka.jpg
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
