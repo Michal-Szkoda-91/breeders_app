@@ -1,5 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:breeders_app/mainApp/animals/parrots/screens/Parrotrace_list_screen.dart';
+import 'package:breeders_app/mainApp/animals/parrots/screens/parrot_race_list_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../models/breedings_model.dart';
@@ -38,29 +38,26 @@ class BreedsListView extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      ClipOval(
-                        child: Image.asset(
-                          breedingsList[index].pictureUrl,
-                          width: MediaQuery.of(context).size.width * 0.30,
-                          height: MediaQuery.of(context).size.width * 0.30,
-                          fit: BoxFit.cover,
+                      CircleAvatar(
+                        radius: 50,
+                        backgroundColor: Theme.of(context).primaryColor,
+                        child: CircleAvatar(
+                          backgroundImage: AssetImage(
+                            breedingsList[index].pictureUrl,
+                          ),
+                          radius: 45,
                         ),
                       ),
                       Container(
                         width: MediaQuery.of(context).size.width * 0.45,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            AutoSizeText(
-                              breedingsList[index].name,
-                              maxLines: 1,
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Theme.of(context).textSelectionColor,
-                              ),
-                            ),
-                          ],
+                        child: AutoSizeText(
+                          breedingsList[index].name,
+                          maxLines: 1,
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).textSelectionColor,
+                          ),
                         ),
                       ),
                     ],

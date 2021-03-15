@@ -104,11 +104,11 @@ class _AuthenticateState extends State<Authenticate> {
             selectedIndex: _page,
             tabs: [
               new GButton(
-                text: "Logowanie",
+                text: "Zaloguj się",
                 icon: Icons.login,
               ),
               new GButton(
-                text: "Tworzenie konta",
+                text: "Utwórz konto",
                 icon: Icons.create,
               ),
             ],

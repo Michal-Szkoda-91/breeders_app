@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -6,8 +7,7 @@ import 'package:breeders_app/globalWidgets/mainBackground.dart';
 import 'package:breeders_app/mainApp/widgets/custom_drawer.dart';
 import 'package:breeders_app/services/auth.dart';
 import 'package:provider/provider.dart';
-
-import 'Parrotrace_list_screen.dart';
+import 'parrot_race_list_screen.dart';
 
 class AddParrotScreen extends StatefulWidget {
   static const String routeName = "/AddParrotScreen";
@@ -37,7 +37,11 @@ class _RaceListScreenState extends State<AddParrotScreen> {
   String fission = "";
   String cageNumber = "";
   String notes = "";
-  Map<double, String> sexMap = {1.0: 'Samiec', 2.0: 'Samica', 3.0: 'Nieznana'};
+  Map<double, String> genderMap = {
+    1.0: 'Samiec',
+    2.0: 'Samica',
+    3.0: 'Nieznana'
+  };
   double sex = 1.0;
   String sexName = "";
 
@@ -51,7 +55,7 @@ class _RaceListScreenState extends State<AddParrotScreen> {
   @override
   void initState() {
     super.initState();
-    sexName = sexMap[1.0];
+    sexName = genderMap[1.0];
   }
 
   @override
@@ -85,6 +89,11 @@ class _RaceListScreenState extends State<AddParrotScreen> {
                   children: [
                     //
                     //******************************************************* */
+                    //Sex
+                    genderSwitchRow(context),
+                    SizedBox(height: _sizedBoxHeight),
+                    //
+                    //******************************************************* */
                     //Ring number
                     infoText(context, "Numer obrączki"),
                     SizedBox(height: _sizedBoxHeight),
@@ -96,11 +105,7 @@ class _RaceListScreenState extends State<AddParrotScreen> {
                       _regExpNumber,
                     ),
                     SizedBox(height: _sizedBoxHeight),
-                    //
-                    //******************************************************* */
-                    //Sex
-                    sexSwitchRow(context),
-                    SizedBox(height: _sizedBoxHeight),
+
                     //
                     //******************************************************* */
                     //Color
@@ -114,19 +119,7 @@ class _RaceListScreenState extends State<AddParrotScreen> {
                       maxLength: 30,
                     ),
                     SizedBox(height: _sizedBoxHeight),
-                    //
-                    //******************************************************* */
-                    //Fission
-                    customTextFormField(
-                      context: context,
-                      node: node,
-                      hint: 'Jakie rozszczepienie',
-                      icon: Icons.star_border_purple500_outlined,
-                      mainValue: 'fission',
-                      maxlines: 1,
-                      maxLength: 30,
-                    ),
-                    SizedBox(height: _sizedBoxHeight),
+
                     //
                     //******************************************************* */
                     //cage number
@@ -138,6 +131,19 @@ class _RaceListScreenState extends State<AddParrotScreen> {
                       mainValue: 'cageNumber',
                       maxlines: 1,
                       maxLength: 30,
+                    ),
+                    SizedBox(height: _sizedBoxHeight),
+                    //
+                    //******************************************************* */
+                    //Fission
+                    customTextFormField(
+                      context: context,
+                      node: node,
+                      hint: 'Jakie rozszczepienie',
+                      icon: Icons.star_border_purple500_outlined,
+                      mainValue: 'fission',
+                      maxlines: 2,
+                      maxLength: 50,
                     ),
                     SizedBox(height: _sizedBoxHeight),
                     //
@@ -203,8 +209,8 @@ class _RaceListScreenState extends State<AddParrotScreen> {
         icon,
       ),
       validator: (val) {
-        if (val.isEmpty) {
-          return 'Uzupełnij dane';
+        if (val.isEmpty || val.length > maxLength) {
+          return 'Błąd';
         } else {
           return null;
         }
@@ -233,11 +239,11 @@ class _RaceListScreenState extends State<AddParrotScreen> {
     );
   }
 
-  Row sexSwitchRow(BuildContext context) {
+  Row genderSwitchRow(BuildContext context) {
     return Row(
       children: [
         infoText(context, "Płeć:"),
-        FittedBox(
+        Expanded(
           child: Slider(
             value: sex,
             activeColor: sex == 1.0
@@ -251,7 +257,7 @@ class _RaceListScreenState extends State<AddParrotScreen> {
             onChanged: (val) {
               setState(() {
                 sex = val;
-                sexName = sexMap[val];
+                sexName = genderMap[val];
               });
             },
           ),
@@ -349,7 +355,7 @@ class _RaceListScreenState extends State<AddParrotScreen> {
               null,
             ),
             validator: (val) {
-              if (val.isEmpty) {
+              if (val.isEmpty || val.length > 6) {
                 return 'Błąd';
               } else {
                 return null;
@@ -381,7 +387,9 @@ class _RaceListScreenState extends State<AddParrotScreen> {
               null,
             ),
             validator: (val) {
-              if (val.isEmpty || !_regExpNumber.hasMatch(val)) {
+              if (val.isEmpty ||
+                  !_regExpNumber.hasMatch(val) ||
+                  val.length > 5) {
                 return 'Błąd';
               } else {
                 return null;
@@ -454,20 +462,27 @@ class _RaceListScreenState extends State<AddParrotScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        ClipOval(
-          child: Image.asset(
-            widget.parrotMap['url'],
-            fit: BoxFit.cover,
-            height: 80,
-            width: 80,
+        CircleAvatar(
+          radius: 50,
+          backgroundColor: Theme.of(context).backgroundColor,
+          child: CircleAvatar(
+            radius: 46,
+            backgroundImage: AssetImage(
+              widget.parrotMap['url'],
+            ),
           ),
         ),
-        Text(
-          widget.parrotMap['name'],
-          style: TextStyle(
-            fontSize: 24,
-            color: Theme.of(context).textSelectionColor,
-            fontWeight: FontWeight.bold,
+        Spacer(),
+        Container(
+          width: MediaQuery.of(context).size.width * 0.5,
+          child: AutoSizeText(
+            widget.parrotMap['name'],
+            maxLines: 1,
+            style: TextStyle(
+              fontSize: 24,
+              color: Theme.of(context).textSelectionColor,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
       ],
@@ -494,9 +509,6 @@ class _RaceListScreenState extends State<AddParrotScreen> {
       filled: true,
       fillColor: Theme.of(context).primaryColor,
       enabledBorder: UnderlineInputBorder(
-        // borderRadius: const BorderRadius.all(
-        //   const Radius.circular(5.0),
-        // ),
         borderSide: BorderSide(
           width: 3,
           color: Theme.of(context).primaryColor,

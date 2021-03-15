@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:breeders_app/mainApp/animals/parrots/models/parrot_model.dart';
-import 'mainApp/animals/parrots/screens/Parrotrace_list_screen.dart';
 import 'mainApp/animals/parrots/screens/addParrot_screen.dart';
-import 'mainApp/animals/parrots/screens/choise_parrot_cross_screen.dart';
+import 'mainApp/animals/parrots/screens/parrot_race_list_screen.dart';
+import 'mainApp/animals/parrots/screens/parrotsList.dart';
 import 'mainApp/models/breedings_model.dart';
 import 'fireInitialization/initWidget.dart';
 
@@ -54,7 +54,7 @@ class MyApp extends StatelessWidget {
           MyApp.routeName: (ctx) => MyApp(),
           ParrotsRaceListScreen.routeName: (ctx) => ParrotsRaceListScreen(),
           AddParrotScreen.routeName: (ctx) => AddParrotScreen(),
-          ChoiseParrotCrossScreen.routeName: (ctx) => ChoiseParrotCrossScreen(),
+          ParrotsListScreen.routeName: (ctx) => ParrotsListScreen(),
         },
       ),
     );

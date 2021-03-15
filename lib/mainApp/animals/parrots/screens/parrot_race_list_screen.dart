@@ -1,13 +1,14 @@
-import 'package:breeders_app/services/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../widgets/create_race_listTile.dart';
+import '../widgets/swap_information.dart';
+import '../../../../services/auth.dart';
 import '../models/parrot_model.dart';
-import '../widgets/create_parrot_listTile.dart';
 import '../widgets/parrots_race_AddDropdownButton.dart';
 import '../../../widgets/custom_drawer.dart';
 import '../../../../globalWidgets/mainBackground.dart';
-import 'package:provider/provider.dart';
 
 class ParrotsRaceListScreen extends StatefulWidget {
   static const String routeName = "/ParrotsRaceListScreen";
@@ -23,14 +24,15 @@ class ParrotsRaceListScreen extends StatefulWidget {
 class _ParrotsRaceListScreenState extends State<ParrotsRaceListScreen> {
   final AuthService _auth = AuthService();
   final firebaseUser = FirebaseAuth.instance.currentUser;
+  List<Parrot> _parrotList = [];
   List<String> _activeRaceList = [];
   bool _isLoaded = false;
   bool _isInit = true;
 
   Future<void> _loadData(
-      {BuildContext context, Function readRaceList, String uid}) async {
+      {BuildContext context, Function readParrot, String uid}) async {
     try {
-      await readRaceList(uid: uid).then((_) {
+      await readParrot(uid: uid).then((_) {
         setState(() {
           _isLoaded = true;
         });
@@ -57,13 +59,22 @@ class _ParrotsRaceListScreenState extends State<ParrotsRaceListScreen> {
     }
   }
 
+  void _createActiveRaceList(List<Parrot> parrotList) {
+    _activeRaceList.clear();
+    parrotList.forEach((val) {
+      if (!_activeRaceList.contains(val.race)) {
+        _activeRaceList.add(val.race);
+      }
+    });
+  }
+
   @override
   void didChangeDependencies() {
     if (_isInit) {
       final dataProvider = Provider.of<ParrotsList>(context);
       _loadData(
               context: context,
-              readRaceList: dataProvider.readActiveParrotRace,
+              readParrot: dataProvider.readParrotsList,
               uid: firebaseUser.uid)
           .then((_) {
         setState(() {
@@ -77,7 +88,8 @@ class _ParrotsRaceListScreenState extends State<ParrotsRaceListScreen> {
   @override
   Widget build(BuildContext context) {
     final dataProvider = Provider.of<ParrotsList>(context);
-    _activeRaceList = dataProvider.getRaceList;
+    _parrotList = dataProvider.getParrotList;
+    _createActiveRaceList(_parrotList);
     return Scaffold(
       endDrawer: CustomDrawer(auth: _auth),
       backgroundColor: Colors.transparent,
@@ -89,13 +101,14 @@ class _ParrotsRaceListScreenState extends State<ParrotsRaceListScreen> {
           children: [
             //switch do zmiany zwierzaka
             CreateParrotsDropdownButton(),
+            SwapInformation(),
             !_isLoaded
                 ? Center(
                     child: CircularProgressIndicator(),
                   )
                 : Expanded(
-                    child:
-                        CreateParrotListTile(activeRaceList: _activeRaceList),
+                    child: CreateParrotRaceListTile(
+                        activeRaceList: _activeRaceList),
                   ),
           ],
         ),

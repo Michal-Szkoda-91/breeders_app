@@ -24,14 +24,9 @@ class Parrot {
 
 class ParrotsList with ChangeNotifier {
   List<Parrot> _parrotList = [];
-  List<String> _raceList = [];
 
   List<Parrot> get getParrotList {
     return [..._parrotList];
-  }
-
-  List<String> get getRaceList {
-    return [..._raceList];
   }
 
   Future<dynamic> createParrotCollection({
@@ -40,6 +35,8 @@ class ParrotsList with ChangeNotifier {
   }) async {
     final CollectionReference collectionReference =
         FirebaseFirestore.instance.collection(uid);
+
+    await collectionReference.doc('Hodowla Papug').set({"exist": "true"});
     //create collection if not exist
     await collectionReference
         .doc('Hodowla Papug')
@@ -58,55 +55,50 @@ class ParrotsList with ChangeNotifier {
   }
 
 //creating parrots list
-  Future<dynamic> readParrotsList({String uid, String parrotRace}) async {
+  Future<void> readParrotsList({String uid}) async {
     final CollectionReference collectionReference =
         FirebaseFirestore.instance.collection(uid);
 
     _parrotList.clear();
-
-    await collectionReference
-        .doc("Hodowla Papug")
-        .collection(parrotRace)
-        .doc("Birds")
-        .get()
-        .then((data) => {
-              data.data().forEach((ringNumber, val) {
-                _parrotList.add(
-                  Parrot(
-                    race: parrotRace,
-                    ringNumber: ringNumber,
-                    color: val['Colors'],
-                    cageNumber: val['Cage number'],
-                    fission: val['Fission'],
-                    notes: val['Notes'],
-                    sex: val['Sex'],
-                  ),
-                );
-              }),
-              print("_________" + _parrotList.toString())
-            });
-    notifyListeners();
-  }
-
-  //read race collection
-  Future<dynamic> readActiveParrotRace({String uid}) async {
-    final CollectionReference collectionReference =
-        FirebaseFirestore.instance.collection(uid);
     ParrotsRace parrotsRace = ParrotsRace();
-    _raceList.clear();
-
-    for (var i = 0; i < parrotsRace.parrotsRaceList.length; i++) {
-      await collectionReference
+    for (var i = 0; i < parrotsRace.parrotsNameList.length; i++) {
+      //checking if document exist
+      var snapshot = await collectionReference
           .doc("Hodowla Papug")
-          .collection(parrotsRace.parrotsRaceList[i]['name'])
-          .limit(1)
-          .get()
-          .then((val) {
-        if (val.size > 0) {
-          _raceList.add(parrotsRace.parrotsRaceList[i]['name']);
-        }
-      });
+          .collection(parrotsRace.parrotsNameList[i])
+          .get();
+      if (snapshot.docs.length != 0) {
+        //creating parrot
+        await collectionReference
+            .doc("Hodowla Papug")
+            .collection(parrotsRace.parrotsNameList[i])
+            .doc("Birds")
+            .get()
+            .then((querySnapshot) {
+          querySnapshot.data().forEach((name, val) {
+            if (name != null) {
+              _parrotList.add(
+                Parrot(
+                  race: val['Race Name'],
+                  ringNumber: name,
+                  color: val['Colors'],
+                  cageNumber: val['Cage number'],
+                  fission: val['Fission'],
+                  notes: val['Notes'],
+                  sex: val['Sex'],
+                ),
+              );
+            }
+          });
+        });
+      }
     }
     notifyListeners();
   }
 }
+
+//  await collectionReference.doc("Hodowla Papug").get().then((doc) async {
+//     print(doc.exists);
+//     if (doc.exists) {
+
+//
