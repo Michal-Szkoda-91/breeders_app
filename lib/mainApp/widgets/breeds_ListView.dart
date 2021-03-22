@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:breeders_app/models/global_methods.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
@@ -20,6 +21,8 @@ class BreedsListView extends StatefulWidget {
 }
 
 class _BreedsListViewState extends State<BreedsListView> {
+  GlobalMethods _globalMethods = GlobalMethods();
+
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -70,16 +73,20 @@ class _BreedsListViewState extends State<BreedsListView> {
               ),
             );
           },
-          child: _createActionItem(context, Colors.indigo,
-              MaterialCommunityIcons.home_group, "Moja Hodowla"),
+          child: _globalMethods.createActionItem(context, Colors.indigo,
+              MaterialCommunityIcons.home_group, "Moja Hodowla", 14),
         ),
       ],
       secondaryActions: <Widget>[
         GestureDetector(
           //Delete all breeds
-          onTap: () => _showDeletingDialog(widget.breedingsList[index].name),
-          child: _createActionItem(context, Colors.red,
-              MaterialCommunityIcons.delete, "Usuń hodowlę"),
+          onTap: () => _globalMethods.showDeletingDialog(
+              context,
+              widget.breedingsList[index].name,
+              "Czy chcesz usunąć całą hodowlę wraz ze wszystkimi zwierzętami? \nNie można tego cofnąć",
+              _deleteBreeds, null),
+          child: _globalMethods.createActionItem(context, Colors.red,
+              MaterialCommunityIcons.delete, "Usuń hodowlę", 14),
         ),
       ],
     );
@@ -122,111 +129,15 @@ class _BreedsListViewState extends State<BreedsListView> {
     );
   }
 
-  Widget _createActionItem(
-    BuildContext context,
-    Color color,
-    IconData icon,
-    String name,
-  ) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 14),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5),
-          color: color,
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              icon,
-              size: 30,
-              color: Theme.of(context).textSelectionColor,
-            ),
-            Container(
-              width: MediaQuery.of(context).size.width * 0.30,
-              child: AutoSizeText(
-                name,
-                maxLines: 2,
-                style: TextStyle(
-                  color: Theme.of(context).textSelectionColor,
-                  fontSize: 12,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Future<void> _showDeletingDialog(String name) {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: true,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: Theme.of(context).backgroundColor,
-          title: Text(
-            // "Uwaga!",
-            name,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Theme.of(context).textSelectionColor,
-            ),
-          ),
-          content: Text(
-            "Czy chcesz usunąć całą hodowlę? \nNie można tego cofnąć.",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Theme.of(context).textSelectionColor,
-            ),
-          ),
-          actions: [
-            TextButton(
-              child: Text(
-                "Usuń",
-                style: TextStyle(
-                  color: Theme.of(context).textSelectionColor,
-                  fontSize: 20,
-                ),
-              ),
-              onPressed: () {
-                _deleteBreeds(name);
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: Text(
-                "Anuluj",
-                style: TextStyle(
-                  color: Theme.of(context).textSelectionColor,
-                  fontSize: 20,
-                ),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   Future<void> _deleteBreeds(String name) async {
     final dataProvider = Provider.of<BreedingsList>(context, listen: false);
     final _firebaseUser = FirebaseAuth.instance.currentUser;
+    Navigator.of(context).pop();
 
     await dataProvider.deleteBreeds(_firebaseUser.uid, name).then((_) {
-      showInSnackBar('Usunięto hodowlę.', context);
+      _globalMethods.showInSnackBar('Usunięto hodowlę.', context);
     }).catchError((error) {
-      showInSnackBar('Operacja nieudana.', context);
+      _globalMethods.showInSnackBar('Operacja nieudana.', context);
     });
-  }
-
-  void showInSnackBar(String text, BuildContext context) {
-    Scaffold.of(context).showSnackBar(new SnackBar(content: new Text(text)));
   }
 }

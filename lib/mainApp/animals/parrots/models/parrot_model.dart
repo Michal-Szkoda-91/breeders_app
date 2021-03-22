@@ -52,7 +52,6 @@ class ParrotsList with ChangeNotifier {
         "Notes": "${parrot.notes}",
       },
     }, SetOptions(merge: true));
-    readParrotsList(uid: uid);
   }
 
 //creating parrots list
@@ -109,6 +108,24 @@ class ParrotsList with ChangeNotifier {
       print("succes");
     }).catchError((err) {
       print(err);
+    });
+  }
+
+  Future<void> deleteParrot(String uid, Parrot parrotToDelete) async {
+    final CollectionReference breedCollection =
+        FirebaseFirestore.instance.collection(uid);
+
+    await breedCollection
+        .doc("Hodowla Papug")
+        .collection(parrotToDelete.race)
+        .doc("Birds")
+        .update({
+      '${parrotToDelete.ringNumber}': FieldValue.delete()
+    }).whenComplete(() {
+      _parrotList.removeWhere(
+          (parrot) => parrot.ringNumber == parrotToDelete.ringNumber);
+      notifyListeners();
+      print('succes');
     });
   }
 }

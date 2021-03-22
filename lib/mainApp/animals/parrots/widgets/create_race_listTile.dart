@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:breeders_app/mainApp/animals/parrots/screens/parrot_race_list_screen.dart';
+import 'package:breeders_app/models/global_methods.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -27,6 +28,7 @@ class CreateParrotRaceListTile extends StatefulWidget {
 
 class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
   final firebaseUser = FirebaseAuth.instance.currentUser;
+  GlobalMethods _globalMethods = GlobalMethods();
   List<Parrot> _parrotList = [];
 
   int _countingParrot(String raceName, List<Parrot> parrotList) {
@@ -83,23 +85,29 @@ class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
         ),
       ),
       actions: <Widget>[
-        _createActionItem(context, Colors.pink[300],
-            MaterialCommunityIcons.heart_multiple, "Parowanie"),
+        _globalMethods.createActionItem(context, Colors.pink[300],
+            MaterialCommunityIcons.heart_multiple, "Parowanie", 14),
         GestureDetector(
           onTap: () {
             _navigateToParrotsList(widget.activeRaceList[index]);
           },
-          child: _createActionItem(context, Colors.indigo,
-              MaterialCommunityIcons.home_group, "Hodowla"),
+          child: _globalMethods.createActionItem(context, Colors.indigo,
+              MaterialCommunityIcons.home_group, "Hodowla", 14),
         ),
       ],
       secondaryActions: <Widget>[
         GestureDetector(
           onTap: () {
-            _showDeletingDialog(widget.activeRaceList[index]);
+            _globalMethods.showDeletingDialog(
+              context,
+              widget.activeRaceList[index],
+              "Czy chcesz usunąć wszystkie papugi z hodowli? \nNie można tego cofnąć.",
+              _deleteRace,
+              null,
+            );
           },
-          child: _createActionItem(context, Colors.red,
-              MaterialCommunityIcons.delete, "Usuń hodowlę"),
+          child: _globalMethods.createActionItem(context, Colors.red,
+              MaterialCommunityIcons.delete, "Usuń hodowlę", 14),
         ),
       ],
     );
@@ -201,104 +209,12 @@ class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
     );
   }
 
-  Widget _createActionItem(
-    BuildContext context,
-    Color color,
-    IconData icon,
-    String name,
-  ) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 13),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5),
-          color: color,
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              icon,
-              size: 30,
-              color: Theme.of(context).textSelectionColor,
-            ),
-            Container(
-              width: MediaQuery.of(context).size.width * 0.30,
-              child: AutoSizeText(
-                name,
-                maxLines: 2,
-                style: TextStyle(
-                  color: Theme.of(context).textSelectionColor,
-                  fontSize: 12,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Future<void> _showDeletingDialog(String name) {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: true,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: Theme.of(context).backgroundColor,
-          title: Text(
-            // "Uwaga!",
-            name,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Theme.of(context).textSelectionColor,
-            ),
-          ),
-          content: Text(
-            "Czy chcesz usunąć wszystkie papugi z hodowli: $name? \nNie można tego cofnąć.",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Theme.of(context).textSelectionColor,
-            ),
-          ),
-          actions: [
-            TextButton(
-              child: Text(
-                "Usuń",
-                style: TextStyle(
-                  color: Theme.of(context).textSelectionColor,
-                  fontSize: 20,
-                ),
-              ),
-              onPressed: () {
-                _deleteRace(name);
-              },
-            ),
-            TextButton(
-              child: Text(
-                "Anuluj",
-                style: TextStyle(
-                  color: Theme.of(context).textSelectionColor,
-                  fontSize: 20,
-                ),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   Future<void> _deleteRace(String name) async {
     final dataProvider = Provider.of<ParrotsList>(context, listen: false);
     final _firebaseUser = FirebaseAuth.instance.currentUser;
 
     await dataProvider.deleteRaceList(_firebaseUser.uid, name).then((_) {
-      showInSnackBar('Usunięto hodowlę.', context);
+      _globalMethods.showInSnackBar('Usunięto hodowlę.', context);
       Navigator.of(context).pop();
       Navigator.pushReplacement(
         context,
@@ -309,11 +225,7 @@ class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
         ),
       );
     }).catchError((error) {
-      showInSnackBar('Operacja nieudana.', context);
+      _globalMethods.showInSnackBar('Operacja nieudana.', context);
     });
-  }
-
-  void showInSnackBar(String text, BuildContext context) {
-    Scaffold.of(context).showSnackBar(new SnackBar(content: new Text(text)));
   }
 }
