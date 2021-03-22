@@ -52,6 +52,7 @@ class ParrotsList with ChangeNotifier {
         "Notes": "${parrot.notes}",
       },
     }, SetOptions(merge: true));
+    readParrotsList(uid: uid);
   }
 
 //creating parrots list
@@ -95,10 +96,19 @@ class ParrotsList with ChangeNotifier {
     }
     notifyListeners();
   }
+
+  Future<void> deleteRaceList(String uid, String raceName) async {
+    final CollectionReference breedCollection =
+        FirebaseFirestore.instance.collection(uid);
+    await breedCollection
+        .doc("Hodowla Papug")
+        .collection(raceName)
+        .doc("Birds")
+        .delete()
+        .then((success) {
+      print("succes");
+    }).catchError((err) {
+      print(err);
+    });
+  }
 }
-
-//  await collectionReference.doc("Hodowla Papug").get().then((doc) async {
-//     print(doc.exists);
-//     if (doc.exists) {
-
-//

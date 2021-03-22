@@ -1,3 +1,4 @@
+import 'package:breeders_app/mainApp/animals/parrots/models/parrotsRace_list.dart';
 import 'package:breeders_app/mainApp/models/breeds_list.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -50,6 +51,41 @@ class BreedingsList with ChangeNotifier {
                 notifyListeners();
               }),
             })
-        .catchError((error) {});
+        .catchError((error) {
+      print(error);
+    });
+  }
+
+  Future deleteBreeds(String uid, String docToDelete) async {
+    final CollectionReference breedCollection =
+        FirebaseFirestore.instance.collection(uid);
+
+    //Deleting all collection inside document
+    ParrotsRace parrotsRace = ParrotsRace();
+    for (var i = 0; i < parrotsRace.parrotsNameList.length; i++) {
+      //checking if document exist
+      var snapshot = await breedCollection
+          .doc("Hodowla Papug")
+          .collection(parrotsRace.parrotsNameList[i])
+          .get();
+      if (snapshot.docs.length != 0) {
+        await breedCollection
+            .doc(docToDelete)
+            .collection(parrotsRace.parrotsNameList[i])
+            .doc("Birds")
+            .delete();
+      }
+    }
+
+    await breedCollection.doc(docToDelete).delete().then((_) {
+      _breedingsList.forEach((breeds) {
+        if (breeds.name == docToDelete) {
+          _breedingsList.remove(breeds);
+          notifyListeners();
+        }
+      });
+    }).catchError((error) {
+      print(error);
+    });
   }
 }

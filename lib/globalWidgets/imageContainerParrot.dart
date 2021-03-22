@@ -11,7 +11,7 @@ class ImageContainerParrot extends StatelessWidget {
       alignment: Alignment.center,
       child: ClipOval(
         child: Image.asset(
-          "assets/parrot.jpg",
+          "assets/image/parrot.jpg",
           fit: BoxFit.cover,
           height: 200,
           width: 200,

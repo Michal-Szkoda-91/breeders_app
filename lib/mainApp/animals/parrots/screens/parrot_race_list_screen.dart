@@ -6,7 +6,6 @@ import '../widgets/create_race_listTile.dart';
 import '../widgets/swap_information.dart';
 import '../../../../services/auth.dart';
 import '../models/parrot_model.dart';
-import '../widgets/parrots_race_AddDropdownButton.dart';
 import '../../../widgets/custom_drawer.dart';
 import '../../../../globalWidgets/mainBackground.dart';
 
@@ -99,16 +98,22 @@ class _ParrotsRaceListScreenState extends State<ParrotsRaceListScreen> {
       body: MainBackground(
         child: Column(
           children: [
-            //switch do zmiany zwierzaka
-            CreateParrotsDropdownButton(),
-            SwapInformation(),
             !_isLoaded
                 ? Center(
-                    child: CircularProgressIndicator(),
+                    child: Padding(
+                      padding: const EdgeInsets.all(50.0),
+                      child: CircularProgressIndicator(),
+                    ),
                   )
                 : Expanded(
-                    child: CreateParrotRaceListTile(
-                        activeRaceList: _activeRaceList),
+                    child: Column(
+                      children: [
+                        SwapInformation(),
+                        SizedBox(height: 5),
+                        CreateParrotRaceListTile(
+                            activeRaceList: _activeRaceList),
+                      ],
+                    ),
                   ),
           ],
         ),

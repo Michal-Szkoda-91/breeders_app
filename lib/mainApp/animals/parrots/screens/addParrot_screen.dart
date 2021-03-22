@@ -445,8 +445,6 @@ class _RaceListScreenState extends State<AddParrotScreen> {
         uid: firebaseUser.uid,
         parrot: _createdParrot,
       );
-      // print(
-      //     "${widget.parrot['name']}\n$ringNumber\n$sexName\n$parrotColor\n$fission\n$cageNumber\n$notes");
     }
   }
 

@@ -40,6 +40,7 @@ dependencies:
   auto_size_text: ^2.1.0
   flutter_slidable: ^0.5.7
   flutter_icons: ^1.1.0
+  pull_to_reveal: ^0.0.2
 
 dev_dependencies:
   flutter_test:
@@ -58,19 +59,19 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/background.jpg
-    - assets/parrot.jpg
-    - assets/google_logo.png
-    - assets/chinchila.jpg
-    - assets/animal_Icon.jpg
-    - assets/horse.jpg
+    - assets/image/background.jpg
+    - assets/image/parrot.jpg
+    - assets/image/google_logo.png
+    - assets/image/chinchila.jpg
+    - assets/image/animal_Icon.jpg
+    - assets/image/horse.jpg
     #Parrots race
-    - assets/parrotsRace/parrot_Icon.jpg
-    - assets/parrotsRace/Aleksandretta.jpg
-    - assets/parrotsRace/Lorysa.jpg
-    - assets/parrotsRace/Nimfa.jpg
-    - assets/parrotsRace/Rozella.jpg
-    - assets/parrotsRace/Świergotka.jpg
+    - assets/image/parrotsRace/parrot_Icon.jpg
+    - assets/image/parrotsRace/Aleksandretta.jpg
+    - assets/image/parrotsRace/Lorysa.jpg
+    - assets/image/parrotsRace/Nimfa.jpg
+    - assets/image/parrotsRace/Rozella.jpg
+    - assets/image/parrotsRace/Świergotka.jpg
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
