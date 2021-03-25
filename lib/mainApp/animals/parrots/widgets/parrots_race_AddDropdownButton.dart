@@ -72,7 +72,10 @@ class _CreateParrotsDropdownButtonState
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => AddParrotScreen(parrotMap: value),
+                builder: (context) => AddParrotScreen(
+                  parrotMap: value,
+                  parrot: null,
+                ),
               ),
             );
           } else {

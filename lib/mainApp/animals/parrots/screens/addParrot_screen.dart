@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:breeders_app/models/global_methods.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -13,8 +14,9 @@ class AddParrotScreen extends StatefulWidget {
   static const String routeName = "/AddParrotScreen";
 
   final Map<dynamic, dynamic> parrotMap;
+  final Parrot parrot;
 
-  AddParrotScreen({this.parrotMap});
+  AddParrotScreen({this.parrotMap, this.parrot});
 
   @override
   _RaceListScreenState createState() => _RaceListScreenState();
@@ -25,6 +27,7 @@ class _RaceListScreenState extends State<AddParrotScreen> {
   final firebaseUser = FirebaseAuth.instance.currentUser;
 
   final _formKey = GlobalKey<FormState>();
+  GlobalMethods _globalMethods = GlobalMethods();
 
   final double _sizedBoxHeight = 16.0;
 
@@ -36,7 +39,7 @@ class _RaceListScreenState extends State<AddParrotScreen> {
   String parrotColor = "";
   String fission = "";
   String cageNumber = "";
-  String notes = "";
+  String notes = "brak";
   Map<double, String> genderMap = {
     1.0: 'Samiec',
     2.0: 'Samica',
@@ -44,6 +47,7 @@ class _RaceListScreenState extends State<AddParrotScreen> {
   };
   double sex = 1.0;
   String sexName = "";
+  String actualRing = "";
 
   Pattern _countryPatter = r'^([A-Z]+)$';
   Pattern _yearPatter = r'^(\d{2}|\d{4})$';
@@ -56,6 +60,26 @@ class _RaceListScreenState extends State<AddParrotScreen> {
   void initState() {
     super.initState();
     sexName = genderMap[1.0];
+    if (widget.parrot != null) {
+      _isEditing(widget.parrot);
+      print("edycja");
+    }
+  }
+
+  void _isEditing(Parrot parrot) {
+    sex = genderMap.keys.firstWhere((key) => genderMap[key] == parrot.sex);
+    sexName = parrot.sex;
+    country = parrot.ringNumber.split("-")[0];
+    year = parrot.ringNumber.split("-")[1];
+    symbol = parrot.ringNumber.split("-")[2];
+    parrotNumber = parrot.ringNumber.split("-")[3];
+    parrotColor = parrot.color;
+    cageNumber = parrot.cageNumber;
+    fission = parrot.fission;
+    notes = parrot.notes;
+
+    //save actual parrot ring
+    actualRing = parrot.ringNumber;
   }
 
   @override
@@ -67,9 +91,11 @@ class _RaceListScreenState extends State<AddParrotScreen> {
     final node = FocusScope.of(context);
     return Scaffold(
       endDrawer: CustomDrawer(auth: _auth),
+      endDrawerEnableOpenDragGesture: false,
       backgroundColor: Colors.transparent,
       appBar: AppBar(
-        title: Text("Dodawanie Papugi"),
+        title:
+            widget.parrot != null ? Text("Edycja") : Text("Dodawanie Papugi"),
       ),
       body: MainBackground(
           child: Padding(
@@ -90,7 +116,7 @@ class _RaceListScreenState extends State<AddParrotScreen> {
                     //
                     //******************************************************* */
                     //Sex
-                    genderSwitchRow(context),
+                    genderSwitchRow(context, sex),
                     SizedBox(height: _sizedBoxHeight),
                     //
                     //******************************************************* */
@@ -103,6 +129,10 @@ class _RaceListScreenState extends State<AddParrotScreen> {
                       node,
                       _regExpYear,
                       _regExpNumber,
+                      country,
+                      year,
+                      symbol,
+                      parrotNumber,
                     ),
                     SizedBox(height: _sizedBoxHeight),
 
@@ -117,6 +147,7 @@ class _RaceListScreenState extends State<AddParrotScreen> {
                       mainValue: 'parrotColor',
                       maxlines: 1,
                       maxLength: 30,
+                      initvalue: parrotColor,
                     ),
                     SizedBox(height: _sizedBoxHeight),
 
@@ -131,6 +162,7 @@ class _RaceListScreenState extends State<AddParrotScreen> {
                       mainValue: 'cageNumber',
                       maxlines: 1,
                       maxLength: 30,
+                      initvalue: cageNumber,
                     ),
                     SizedBox(height: _sizedBoxHeight),
                     //
@@ -144,6 +176,7 @@ class _RaceListScreenState extends State<AddParrotScreen> {
                       mainValue: 'fission',
                       maxlines: 2,
                       maxLength: 50,
+                      initvalue: fission,
                     ),
                     SizedBox(height: _sizedBoxHeight),
                     //
@@ -155,35 +188,74 @@ class _RaceListScreenState extends State<AddParrotScreen> {
                       hint: 'Notatka / Dodatkowa informacja',
                       icon: Icons.home_outlined,
                       mainValue: 'notes',
-                      maxlines: 3,
+                      maxlines: 10,
                       maxLength: 100,
+                      initvalue: notes,
                     ),
                   ],
                 ),
               ),
               SizedBox(height: _sizedBoxHeight),
-              Row(
-                children: [
-                  const Expanded(
-                    child: const SizedBox(),
-                  ),
-                  RaisedButton(
-                    color: Theme.of(context).primaryColor,
-                    child: Text(
-                      'Dodaj Papugę',
-                      style: TextStyle(
-                        color: Theme.of(context).textSelectionColor,
-                      ),
+              widget.parrot == null
+                  ? _addParrotConfimButton(context)
+                  : Row(
+                      children: [
+                        Expanded(child: SizedBox()),
+                        RaisedButton(
+                          color: Theme.of(context).primaryColor,
+                          child: Text(
+                            'Zapisz zmiany',
+                            style: TextStyle(
+                              color: Theme.of(context).textSelectionColor,
+                            ),
+                          ),
+                          //edit a parrot
+                          onPressed: _editParrot,
+                        ),
+                        SizedBox(
+                          width: 20,
+                        ),
+                        RaisedButton(
+                          color: Theme.of(context).primaryColor,
+                          child: Text(
+                            'Anuluj',
+                            style: TextStyle(
+                              color: Theme.of(context).textSelectionColor,
+                            ),
+                          ),
+                          //create a parrot
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
                     ),
-                    //create a parrot
-                    onPressed: createParrots,
-                  ),
-                ],
-              ),
+              SizedBox(height: 100),
             ],
           ),
         ),
       )),
+    );
+  }
+
+  Row _addParrotConfimButton(BuildContext context) {
+    return Row(
+      children: [
+        const Expanded(
+          child: const SizedBox(),
+        ),
+        RaisedButton(
+          color: Theme.of(context).primaryColor,
+          child: Text(
+            'Dodaj Papugę',
+            style: TextStyle(
+              color: Theme.of(context).textSelectionColor,
+            ),
+          ),
+          //create a parrot
+          onPressed: _createParrots,
+        ),
+      ],
     );
   }
   //BUILD METODS
@@ -197,20 +269,24 @@ class _RaceListScreenState extends State<AddParrotScreen> {
     String mainValue,
     int maxLength,
     int maxlines,
+    String initvalue,
   }) {
     return TextFormField(
+      initialValue: initvalue,
       style: customTextStyle(context),
       cursorColor: Theme.of(context).textSelectionColor,
       maxLength: maxLength,
       maxLines: maxlines,
+      minLines: 1,
       decoration: _createInputDecoration(
         context,
         hint,
         icon,
       ),
+      autovalidateMode: AutovalidateMode.onUserInteraction,
       validator: (val) {
         if (val.isEmpty || val.length > maxLength) {
-          return 'Błąd';
+          return 'Uzupełnij dane';
         } else {
           return null;
         }
@@ -239,13 +315,13 @@ class _RaceListScreenState extends State<AddParrotScreen> {
     );
   }
 
-  Row genderSwitchRow(BuildContext context) {
+  Row genderSwitchRow(BuildContext context, double initSex) {
     return Row(
       children: [
         infoText(context, "Płeć:"),
         Expanded(
           child: Slider(
-            value: sex,
+            value: initSex,
             activeColor: sex == 1.0
                 ? Colors.blue
                 : sex == 2.0
@@ -267,8 +343,16 @@ class _RaceListScreenState extends State<AddParrotScreen> {
     );
   }
 
-  Row ringNumberRow(BuildContext context, RegExp _regExpCountry,
-      FocusScopeNode node, RegExp _regExpYear, RegExp _regExpNumber) {
+  Row ringNumberRow(
+      BuildContext context,
+      RegExp _regExpCountry,
+      FocusScopeNode node,
+      RegExp _regExpYear,
+      RegExp _regExpNumber,
+      String initCountry,
+      String initYear,
+      String initSymbol,
+      String initNumber) {
     return Row(
       children: [
         //
@@ -280,7 +364,7 @@ class _RaceListScreenState extends State<AddParrotScreen> {
           child: TextFormField(
             textAlign: TextAlign.center,
             maxLength: 4,
-            initialValue: country,
+            initialValue: initCountry,
             style: customTextStyle(context),
             cursorColor: Theme.of(context).textSelectionColor,
             decoration: _createInputDecoration(
@@ -288,6 +372,7 @@ class _RaceListScreenState extends State<AddParrotScreen> {
               'Kraj',
               null,
             ),
+            autovalidateMode: AutovalidateMode.onUserInteraction,
             validator: (val) {
               if (val.isEmpty || !_regExpCountry.hasMatch(val)) {
                 return 'Błąd';
@@ -313,7 +398,7 @@ class _RaceListScreenState extends State<AddParrotScreen> {
           child: TextFormField(
             textAlign: TextAlign.center,
             maxLength: 4,
-            initialValue: year,
+            initialValue: initYear,
             keyboardType: TextInputType.number,
             style: customTextStyle(context),
             cursorColor: Theme.of(context).textSelectionColor,
@@ -322,6 +407,7 @@ class _RaceListScreenState extends State<AddParrotScreen> {
               'Rok',
               null,
             ),
+            autovalidateMode: AutovalidateMode.onUserInteraction,
             validator: (val) {
               if (val.isEmpty || !_regExpYear.hasMatch(val)) {
                 return 'Błąd';
@@ -345,6 +431,7 @@ class _RaceListScreenState extends State<AddParrotScreen> {
         Expanded(
           flex: 6,
           child: TextFormField(
+            initialValue: initSymbol,
             textAlign: TextAlign.center,
             maxLength: 6,
             style: customTextStyle(context),
@@ -354,6 +441,7 @@ class _RaceListScreenState extends State<AddParrotScreen> {
               'Symbol',
               null,
             ),
+            autovalidateMode: AutovalidateMode.onUserInteraction,
             validator: (val) {
               if (val.isEmpty || val.length > 6) {
                 return 'Błąd';
@@ -376,6 +464,7 @@ class _RaceListScreenState extends State<AddParrotScreen> {
         Expanded(
           flex: 5,
           child: TextFormField(
+            initialValue: initNumber,
             textAlign: TextAlign.center,
             maxLength: 5,
             keyboardType: TextInputType.number,
@@ -386,6 +475,7 @@ class _RaceListScreenState extends State<AddParrotScreen> {
               'Numer',
               null,
             ),
+            autovalidateMode: AutovalidateMode.onUserInteraction,
             validator: (val) {
               if (val.isEmpty ||
                   !_regExpNumber.hasMatch(val) ||
@@ -417,9 +507,9 @@ class _RaceListScreenState extends State<AddParrotScreen> {
     );
   }
 
-  void createParrots() {
+  void _createParrots() {
     if (!_formKey.currentState.validate()) {
-      print("nie udalo sie");
+      _globalMethods.showInSnackBar("Nie udało się dodać papugi", context);
     } else {
       setState(() {
         ringNumber = "$country-$year-$symbol-$parrotNumber";
@@ -445,6 +535,52 @@ class _RaceListScreenState extends State<AddParrotScreen> {
         uid: firebaseUser.uid,
         parrot: _createdParrot,
       );
+    }
+  }
+
+  void _editParrot() {
+    if (!_formKey.currentState.validate()) {
+      _globalMethods.showInSnackBar("Nie udało się edytować", context);
+    } else {
+      setState(() {
+        ringNumber = "$country-$year-$symbol-$parrotNumber";
+        _createdParrot = Parrot(
+            race: widget.parrot.race,
+            ringNumber: ringNumber,
+            cageNumber: cageNumber,
+            color: parrotColor,
+            fission: fission,
+            notes: notes,
+            sex: sexName);
+      });
+      dataProvider
+          .updateParrot(
+        uid: firebaseUser.uid,
+        parrot: _createdParrot,
+        actualparrotRing: actualRing,
+      )
+          .then((_) {
+        if (actualRing != _createdParrot.ringNumber) {
+          _createdParrot = Parrot(
+              race: widget.parrot.race,
+              ringNumber: actualRing,
+              cageNumber: cageNumber,
+              color: parrotColor,
+              fission: fission,
+              notes: notes,
+              sex: sexName);
+          dataProvider.deleteParrot(
+            firebaseUser.uid,
+            _createdParrot,
+          );
+        }
+        _globalMethods.showInSnackBar("Edytowano papugę!", context);
+        Navigator.of(context).pop();
+        print("udalo");
+      }).catchError((_) {
+        Navigator.of(context).pop();
+        print("nie udalo");
+      });
     }
   }
 
@@ -474,7 +610,9 @@ class _RaceListScreenState extends State<AddParrotScreen> {
         Container(
           width: MediaQuery.of(context).size.width * 0.5,
           child: AutoSizeText(
-            widget.parrotMap['name'],
+            widget.parrot == null
+                ? widget.parrotMap['name']
+                : widget.parrot.race,
             maxLines: 1,
             style: TextStyle(
               fontSize: 24,
@@ -490,7 +628,8 @@ class _RaceListScreenState extends State<AddParrotScreen> {
   InputDecoration _createInputDecoration(
       BuildContext context, String text, IconData icon) {
     return InputDecoration(
-      contentPadding: EdgeInsets.symmetric(horizontal: icon == null ? 3 : 14),
+      contentPadding:
+          EdgeInsets.symmetric(horizontal: icon == null ? 3 : 14, vertical: 10),
       counterStyle: TextStyle(
         height: double.minPositive,
       ),

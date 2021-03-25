@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../widgets/create_race_listTile.dart';
-import '../widgets/swap_information.dart';
 import '../../../../services/auth.dart';
 import '../models/parrot_model.dart';
 import '../../../widgets/custom_drawer.dart';
@@ -91,6 +90,7 @@ class _ParrotsRaceListScreenState extends State<ParrotsRaceListScreen> {
     _createActiveRaceList(_parrotList);
     return Scaffold(
       endDrawer: CustomDrawer(auth: _auth),
+      endDrawerEnableOpenDragGesture: false,
       backgroundColor: Colors.transparent,
       appBar: AppBar(
         title: Text(widget.name),
@@ -108,8 +108,6 @@ class _ParrotsRaceListScreenState extends State<ParrotsRaceListScreen> {
                 : Expanded(
                     child: Column(
                       children: [
-                        SwapInformation(),
-                        SizedBox(height: 5),
                         CreateParrotRaceListTile(
                             activeRaceList: _activeRaceList),
                       ],

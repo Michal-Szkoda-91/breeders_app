@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:breeders_app/mainApp/animals/parrots/models/swapInformation_model.dart';
 import 'package:breeders_app/mainApp/animals/parrots/models/parrot_model.dart';
 import 'mainApp/animals/parrots/screens/addParrot_screen.dart';
 import 'mainApp/animals/parrots/screens/parrot_race_list_screen.dart';
@@ -25,9 +24,6 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => ParrotsList(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => SwapInformationModel(),
         ),
       ],
       child: MaterialApp(

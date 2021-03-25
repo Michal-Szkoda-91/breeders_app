@@ -1,11 +1,11 @@
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:breeders_app/mainApp/animals/parrots/screens/parrotsList.dart';
-import 'package:breeders_app/models/global_methods.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
+import 'package:breeders_app/mainApp/animals/parrots/screens/addParrot_screen.dart';
+import 'package:breeders_app/mainApp/animals/parrots/screens/parrotsList.dart';
+import 'package:breeders_app/models/global_methods.dart';
 import 'package:breeders_app/mainApp/animals/parrots/models/parrot_model.dart';
 import 'package:provider/provider.dart';
 
@@ -28,7 +28,6 @@ class _ParrotCardState extends State<ParrotCard> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      padding: EdgeInsets.all(20),
       shrinkWrap: true,
       itemCount: widget._createdParrotList.length,
       itemBuilder: (context, index) {
@@ -36,11 +35,15 @@ class _ParrotCardState extends State<ParrotCard> {
           actionPane: SlidableDrawerActionPane(),
           actionExtentRatio: 0.30,
           closeOnScroll: true,
-          child: createParrotCard(context, index),
-          actions: <Widget>[
-            _globalMethods.createActionItem(context, Colors.indigo,
-                MaterialCommunityIcons.circle_edit_outline, "Edycja Papugi", 4),
-          ],
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Row(
+              children: [
+                Expanded(child: createParrotCard(context, index)),
+                _globalMethods.arrowConteiner,
+              ],
+            ),
+          ),
           secondaryActions: [
             GestureDetector(
               onTap: () {
@@ -53,7 +56,7 @@ class _ParrotCardState extends State<ParrotCard> {
                 );
               },
               child: _globalMethods.createActionItem(context, Colors.red,
-                  MaterialCommunityIcons.delete, "Usuń Papugę", 4),
+                  MaterialCommunityIcons.delete, "Usuń Papugę", 13),
             ),
           ],
         );
@@ -96,6 +99,35 @@ class _ParrotCardState extends State<ParrotCard> {
                 _titleRow(context, "Notatki:", index, false),
                 _contentText(
                     index, context, widget._createdParrotList[index].notes),
+                Divider(thickness: 3.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AddParrotScreen(
+                              parrotMap: {
+                                "url": "assets/image/parrot.jpg",
+                                "name": "Edytuj Papugę",
+                                "icubationTime": "21"
+                              },
+                              parrot: widget._createdParrotList[index],
+                            ),
+                          ),
+                        );
+                      },
+                      child: _globalMethods.createActionItem(
+                          context,
+                          Colors.indigo,
+                          MaterialCommunityIcons.circle_edit_outline,
+                          "Edycja Papugi",
+                          4),
+                    ),
+                  ],
+                ),
               ],
             ),
           ],

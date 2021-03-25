@@ -1,6 +1,4 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:breeders_app/mainApp/animals/parrots/screens/parrot_race_list_screen.dart';
-import 'package:breeders_app/models/global_methods.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -9,7 +7,8 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_reveal/pull_to_reveal.dart';
 
-import '../models/swapInformation_model.dart';
+import '../screens/parrot_race_list_screen.dart';
+import '../../../../models/global_methods.dart';
 import '../../parrots/screens/parrotsList.dart';
 import '../models/parrot_model.dart';
 import 'parrots_race_AddDropdownButton.dart';
@@ -47,6 +46,7 @@ class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
     _parrotList = dataProvider.getParrotList;
     return Expanded(
       child: PullToRevealTopItemList(
+        startRevealed: true,
         revealableHeight: 65,
         itemCount: widget.activeRaceList.length,
         itemBuilder: (context, index) {
@@ -65,36 +65,26 @@ class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
   }
 
   Slidable createSlidableCard(BuildContext context, int index) {
-    final dataProvider = Provider.of<SwapInformationModel>(context);
     return Slidable(
       actionPane: SlidableDrawerActionPane(),
       actionExtentRatio: 0.30,
       closeOnScroll: true,
       child: Padding(
         padding: const EdgeInsets.all(10),
-        child: GestureDetector(
-          onTap: () {
-            dataProvider.changeSize();
-          },
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
+        child: Row(
+          children: [
+            Expanded(
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: createCard(context, index, widget.activeRaceList[index]),
+              ),
             ),
-            child: createCard(context, index),
-          ),
+            _globalMethods.arrowConteiner,
+          ],
         ),
       ),
-      actions: <Widget>[
-        _globalMethods.createActionItem(context, Colors.pink[300],
-            MaterialCommunityIcons.heart_multiple, "Parowanie", 14),
-        GestureDetector(
-          onTap: () {
-            _navigateToParrotsList(widget.activeRaceList[index]);
-          },
-          child: _globalMethods.createActionItem(context, Colors.indigo,
-              MaterialCommunityIcons.home_group, "Hodowla", 14),
-        ),
-      ],
       secondaryActions: <Widget>[
         GestureDetector(
           onTap: () {
@@ -124,85 +114,103 @@ class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
     );
   }
 
-  Card createCard(BuildContext context, int index) {
+  Card createCard(BuildContext context, int index, String raceName) {
     return Card(
       elevation: 20,
       color: Theme.of(context).backgroundColor,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: Column(
           children: [
-            CircleAvatar(
-              radius: 40,
-              backgroundColor: Theme.of(context).primaryColor,
-              child: CircleAvatar(
-                radius: 37,
-                backgroundImage: AssetImage(
-                  "assets/image/parrotsRace/${widget.activeRaceList[index]}.jpg",
-                ),
-              ),
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Container(
-                  child: AutoSizeText(
-                    widget.activeRaceList[index],
-                    maxLines: 1,
-                    style: TextStyle(
-                      color: Theme.of(context).textSelectionColor,
-                      fontSize: 20,
+                CircleAvatar(
+                  radius: 40,
+                  backgroundColor: Theme.of(context).primaryColor,
+                  child: CircleAvatar(
+                    radius: 37,
+                    backgroundImage: AssetImage(
+                      "assets/image/parrotsRace/${widget.activeRaceList[index]}.jpg",
                     ),
                   ),
                 ),
                 SizedBox(
-                  height: 10,
+                  width: 10,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
                       child: AutoSizeText(
-                        "Ilość ptaków: ",
+                        widget.activeRaceList[index],
                         maxLines: 1,
-                        style: TextStyle(
-                          color: Theme.of(context).textSelectionColor,
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 10),
-                    Container(
-                      width: 35,
-                      height: 35,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).primaryColor,
-                        border: Border.all(
-                          color: Theme.of(context).textSelectionColor,
-                        ),
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(20),
-                        ),
-                      ),
-                      child: Text(
-                        _countingParrot(
-                                widget.activeRaceList[index], _parrotList)
-                            .toString(),
                         style: TextStyle(
                           color: Theme.of(context).textSelectionColor,
                           fontSize: 20,
                         ),
                       ),
                     ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Container(
+                          child: AutoSizeText(
+                            "Ilość ptaków: ",
+                            maxLines: 1,
+                            style: TextStyle(
+                              color: Theme.of(context).textSelectionColor,
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        Container(
+                          width: 35,
+                          height: 35,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).primaryColor,
+                            border: Border.all(
+                              color: Theme.of(context).textSelectionColor,
+                            ),
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(20),
+                            ),
+                          ),
+                          child: Text(
+                            _countingParrot(
+                                    widget.activeRaceList[index], _parrotList)
+                                .toString(),
+                            style: TextStyle(
+                              color: Theme.of(context).textSelectionColor,
+                              fontSize: 20,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
+                ),
+                Spacer(),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                _globalMethods.createActionItem(context, Colors.pink[300],
+                    MaterialCommunityIcons.heart_multiple, "Parowanie", 5),
+                GestureDetector(
+                  onTap: () {
+                    _navigateToParrotsList(raceName);
+                  },
+                  child: _globalMethods.createActionItem(context, Colors.indigo,
+                      MaterialCommunityIcons.home_group, "Hodowla", 5),
                 ),
               ],
             ),
-            Spacer(),
           ],
         ),
       ),

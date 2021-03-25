@@ -54,6 +54,35 @@ class ParrotsList with ChangeNotifier {
     }, SetOptions(merge: true));
   }
 
+  Future<dynamic> updateParrot({
+    String uid,
+    Parrot parrot,
+    String actualparrotRing,
+  }) async {
+    final CollectionReference collectionReference =
+        FirebaseFirestore.instance.collection(uid);
+
+    await collectionReference
+        .doc('Hodowla Papug')
+        .collection(parrot.race)
+        .doc("Birds")
+        .update({
+      "${parrot.ringNumber}": {
+        "Race Name": "${parrot.race}",
+        "Colors": "${parrot.color}",
+        "Fission": "${parrot.fission}",
+        "Sex": "${parrot.sex}",
+        "Cage number": "${parrot.cageNumber}",
+        "Notes": "${parrot.notes}",
+      },
+    }).then((_) {
+      //Tutaj dodaj lokalna podmianke papugi, nie bedzie trzeba sie cofac po zmianie ;)
+      _parrotList.removeWhere((p) => p.ringNumber == actualparrotRing);
+      _parrotList.add(parrot);
+    });
+    notifyListeners();
+  }
+
 //creating parrots list
   Future<void> readParrotsList({String uid}) async {
     final CollectionReference collectionReference =

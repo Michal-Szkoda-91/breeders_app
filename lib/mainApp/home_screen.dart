@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../services/auth.dart';
-import 'animals/parrots/widgets/swap_information.dart';
 import 'models/breedings_model.dart';
 import 'widgets/breeds_ListView.dart';
 import 'widgets/custom_drawer.dart';
@@ -41,6 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _breedingsList = Provider.of<BreedingsList>(context).getBreedingsList ?? [];
     return Scaffold(
       endDrawer: CustomDrawer(auth: _auth),
+      endDrawerEnableOpenDragGesture: false,
       backgroundColor: Colors.transparent,
       appBar: AppBar(
         title: Text('Moje Hodowle'),

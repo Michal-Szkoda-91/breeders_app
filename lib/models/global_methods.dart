@@ -3,6 +3,10 @@ import 'package:breeders_app/mainApp/animals/parrots/models/parrot_model.dart';
 import 'package:flutter/material.dart';
 
 class GlobalMethods {
+  //arrow container
+  var arrowConteiner = Container(
+      width: 6, child: Icon(Icons.arrow_back_ios_rounded, color: Colors.red));
+
   //Create icon in sliders
   Widget createActionItem(
     BuildContext context,
@@ -14,6 +18,7 @@ class GlobalMethods {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: padding),
       child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 4),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5),
           color: color,
@@ -27,7 +32,6 @@ class GlobalMethods {
               color: Theme.of(context).textSelectionColor,
             ),
             Container(
-              width: MediaQuery.of(context).size.width * 0.30,
               child: AutoSizeText(
                 name,
                 maxLines: 2,
@@ -48,8 +52,8 @@ class GlobalMethods {
     Scaffold.of(context).showSnackBar(new SnackBar(content: new Text(text)));
   }
 
-  Future<void> showDeletingDialog(
-      BuildContext context, String title, String text, Function function, Parrot parrot) {
+  Future<void> showDeletingDialog(BuildContext context, String title,
+      String text, Function function, Parrot parrot) {
     return showDialog<void>(
       context: context,
       barrierDismissible: true,
@@ -80,7 +84,11 @@ class GlobalMethods {
                 ),
               ),
               onPressed: () {
-                function(title, parrot);
+                if (parrot == null) {
+                  function(title);
+                } else {
+                  function(title, parrot);
+                }
               },
             ),
             TextButton(

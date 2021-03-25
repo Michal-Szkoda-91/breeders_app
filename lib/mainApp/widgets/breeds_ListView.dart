@@ -27,6 +27,7 @@ class _BreedsListViewState extends State<BreedsListView> {
   Widget build(BuildContext context) {
     return Expanded(
       child: PullToRevealTopItemList(
+        startRevealed: true,
         itemCount: widget.breedingsList.length,
         itemBuilder: (context, index) {
           return createSlidableCard(context, index);
@@ -58,25 +59,14 @@ class _BreedsListViewState extends State<BreedsListView> {
               ),
             );
           },
-          child: createCard(context, index),
+          child: Row(
+            children: [
+              Expanded(child: createCard(context, index)),
+              _globalMethods.arrowConteiner,
+            ],
+          ),
         ),
       ),
-      actions: <Widget>[
-        GestureDetector(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ParrotsRaceListScreen(
-                  name: widget.breedingsList[index].name,
-                ),
-              ),
-            );
-          },
-          child: _globalMethods.createActionItem(context, Colors.indigo,
-              MaterialCommunityIcons.home_group, "Moja Hodowla", 14),
-        ),
-      ],
       secondaryActions: <Widget>[
         GestureDetector(
           //Delete all breeds
@@ -84,7 +74,8 @@ class _BreedsListViewState extends State<BreedsListView> {
               context,
               widget.breedingsList[index].name,
               "Czy chcesz usunąć całą hodowlę wraz ze wszystkimi zwierzętami? \nNie można tego cofnąć",
-              _deleteBreeds, null),
+              _deleteBreeds,
+              null),
           child: _globalMethods.createActionItem(context, Colors.red,
               MaterialCommunityIcons.delete, "Usuń hodowlę", 14),
         ),
