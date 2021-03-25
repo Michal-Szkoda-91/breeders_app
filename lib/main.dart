@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
             decoration: BoxDecoration(
               image: DecorationImage(
                 image: AssetImage(
-                  "assets/background.jpg",
+                  "assets/image/background.jpg",
                 ),
                 fit: BoxFit.fill,
               ),

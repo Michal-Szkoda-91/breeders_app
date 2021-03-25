@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import '../services/auth.dart';
 import 'models/breedings_model.dart';
 import 'widgets/breeds_ListView.dart';
-import 'widgets/create_breeds_dropdownButton.dart';
 import 'widgets/custom_drawer.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -15,7 +14,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final AuthService _auth = AuthService();
-  final firebaseUser = FirebaseAuth.instance.currentUser;
+  final _firebaseUser = FirebaseAuth.instance.currentUser;
   var _isLoading = true;
   var _isInit = false;
   List<BreedingsModel> _breedingsList;
@@ -25,7 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
     if (!_isInit) {
       _isLoading = true;
       final providerData = Provider.of<BreedingsList>(context);
-      providerData.loadBreeds(firebaseUser.uid).then((_) {
+      providerData.loadBreeds(_firebaseUser.uid).then((_) {
         setState(() {
           _isLoading = false;
           _breedingsList = providerData.getBreedingsList;
@@ -41,6 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _breedingsList = Provider.of<BreedingsList>(context).getBreedingsList ?? [];
     return Scaffold(
       endDrawer: CustomDrawer(auth: _auth),
+      endDrawerEnableOpenDragGesture: false,
       backgroundColor: Colors.transparent,
       appBar: AppBar(
         title: Text('Moje Hodowle'),
@@ -51,8 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
             )
           : Column(
               children: [
-                CreateBreedsDropdownButton(),
-                BreedsListView( _breedingsList),
+                BreedsListView(_breedingsList),
               ],
             ),
     );

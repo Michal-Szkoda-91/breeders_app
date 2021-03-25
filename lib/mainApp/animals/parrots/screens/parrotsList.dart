@@ -37,6 +37,7 @@ class _ParrotsListScreenState extends State<ParrotsListScreen> {
     _loadParrot();
     return Scaffold(
       endDrawer: CustomDrawer(auth: _auth),
+      endDrawerEnableOpenDragGesture: false,
       backgroundColor: Colors.transparent,
       appBar: AppBar(
         title: Text(widget.raceName),

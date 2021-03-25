@@ -54,6 +54,35 @@ class ParrotsList with ChangeNotifier {
     }, SetOptions(merge: true));
   }
 
+  Future<dynamic> updateParrot({
+    String uid,
+    Parrot parrot,
+    String actualparrotRing,
+  }) async {
+    final CollectionReference collectionReference =
+        FirebaseFirestore.instance.collection(uid);
+
+    await collectionReference
+        .doc('Hodowla Papug')
+        .collection(parrot.race)
+        .doc("Birds")
+        .update({
+      "${parrot.ringNumber}": {
+        "Race Name": "${parrot.race}",
+        "Colors": "${parrot.color}",
+        "Fission": "${parrot.fission}",
+        "Sex": "${parrot.sex}",
+        "Cage number": "${parrot.cageNumber}",
+        "Notes": "${parrot.notes}",
+      },
+    }).then((_) {
+      //Tutaj dodaj lokalna podmianke papugi, nie bedzie trzeba sie cofac po zmianie ;)
+      _parrotList.removeWhere((p) => p.ringNumber == actualparrotRing);
+      _parrotList.add(parrot);
+    });
+    notifyListeners();
+  }
+
 //creating parrots list
   Future<void> readParrotsList({String uid}) async {
     final CollectionReference collectionReference =
@@ -95,10 +124,37 @@ class ParrotsList with ChangeNotifier {
     }
     notifyListeners();
   }
+
+  Future<void> deleteRaceList(String uid, String raceName) async {
+    final CollectionReference breedCollection =
+        FirebaseFirestore.instance.collection(uid);
+    await breedCollection
+        .doc("Hodowla Papug")
+        .collection(raceName)
+        .doc("Birds")
+        .delete()
+        .then((success) {
+      print("succes");
+    }).catchError((err) {
+      print(err);
+    });
+  }
+
+  Future<void> deleteParrot(String uid, Parrot parrotToDelete) async {
+    final CollectionReference breedCollection =
+        FirebaseFirestore.instance.collection(uid);
+
+    await breedCollection
+        .doc("Hodowla Papug")
+        .collection(parrotToDelete.race)
+        .doc("Birds")
+        .update({
+      '${parrotToDelete.ringNumber}': FieldValue.delete()
+    }).whenComplete(() {
+      _parrotList.removeWhere(
+          (parrot) => parrot.ringNumber == parrotToDelete.ringNumber);
+      notifyListeners();
+      print('succes');
+    });
+  }
 }
-
-//  await collectionReference.doc("Hodowla Papug").get().then((doc) async {
-//     print(doc.exists);
-//     if (doc.exists) {
-
-//

@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 
@@ -169,14 +170,18 @@ class _SignInScreenState extends State<SignInScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Image.asset(
-              'assets/google_logo.png',
+              'assets/image/google_logo.png',
               height: 25,
             ),
-            Text(
-              'Zaloguj się przez Google',
-              style: TextStyle(
-                fontSize: MediaQuery.of(context).size.width < 400 ? 10 : 16,
-                color: Theme.of(context).textSelectionColor,
+            Container(
+              width: MediaQuery.of(context).size.width * 0.5,
+              child: AutoSizeText(
+                'Zaloguj się przez Google',
+                maxLines: 1,
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Theme.of(context).textSelectionColor,
+                ),
               ),
             )
           ],
