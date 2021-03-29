@@ -66,8 +66,8 @@ class _ParrotCardState extends State<ParrotCard> {
 
   Card createParrotCard(BuildContext context, int index) {
     return Card(
-      elevation: 20,
-      color: Theme.of(context).backgroundColor,
+      color: Colors.transparent,
+      shadowColor: Theme.of(context).cardColor,
       child: Padding(
         padding: const EdgeInsets.all(12.0),
         child: ExpansionTile(
@@ -155,7 +155,7 @@ class _ParrotCardState extends State<ParrotCard> {
         Text(
           text,
           style: TextStyle(
-            color: Theme.of(context).primaryColor,
+            color: Theme.of(context).backgroundColor,
             fontSize: 16,
             fontWeight: FontWeight.bold,
           ),

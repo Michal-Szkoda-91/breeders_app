@@ -18,40 +18,44 @@ class BreedingsList with ChangeNotifier {
   }
 
 //create firebase documents
-  Future<dynamic> createBreedsCollection({String uid, String name}) async {
+  Future<void> createBreedsCollection(
+      {String uid, Map breed, BuildContext context}) async {
     final CollectionReference breedCollection =
         FirebaseFirestore.instance.collection(uid);
-    await breedCollection.doc(name).set(
+    await breedCollection.doc(breed['name']).set(
       {},
-    );
-    loadBreeds(uid);
+    ).then((_) {
+      _breedingsList
+          .add(BreedingsModel(name: breed['name'], pictureUrl: breed['url']));
+      notifyListeners();
+    }).catchError((err) {
+      print("Failed");
+    });
   }
 
-  Future<void> loadBreeds(String uid) async {
+  Future<void> loadBreeds(String uid, BuildContext context) async {
     final CollectionReference breedCollection =
         FirebaseFirestore.instance.collection(uid);
 
     _breedingsList.clear();
     BreedList breedList = BreedList();
 
-    await breedCollection
-        .get()
-        .then((QuerySnapshot querySnapshot) => {
-              querySnapshot.docs.forEach((doc) {
-                for (var i = 0; i < breedList.breedsList.length; i++) {
-                  if (doc.id == breedList.breedsList[i]['name']) {
-                    _breedingsList.add(
-                      BreedingsModel(
-                        name: doc.id,
-                        pictureUrl: breedList.breedsList[i]['url'],
-                      ),
-                    );
-                  }
-                }
-                notifyListeners();
-              }),
-            })
-        .catchError((error) {
+    await breedCollection.get().then((QuerySnapshot querySnapshot) {
+      print("Succes");
+      querySnapshot.docs.forEach((doc) {
+        for (var i = 0; i < breedList.breedsList.length; i++) {
+          if (doc.id == breedList.breedsList[i]['name']) {
+            _breedingsList.add(
+              BreedingsModel(
+                name: doc.id,
+                pictureUrl: breedList.breedsList[i]['url'],
+              ),
+            );
+          }
+        }
+        notifyListeners();
+      });
+    }).catchError((error) {
       print(error);
     });
   }

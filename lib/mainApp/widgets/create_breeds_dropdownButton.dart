@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:breeders_app/mainApp/models/breedings_model.dart';
 import 'package:breeders_app/mainApp/models/breeds_list.dart';
+import 'package:breeders_app/models/global_methods.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -67,25 +68,24 @@ class CreateBreedsDropdownButton extends StatelessWidget {
     );
   }
 
-  void _createBreed(
-      dynamic value, BreedingsList providerData, BuildContext context) {
+  Future<void> _createBreed(
+      dynamic value, BreedingsList providerData, BuildContext context) async {
+    GlobalMethods _globalMethods;
+    final dataProvider = Provider.of<BreedingsList>(context, listen: false);
     String name = value['name'].toString().split(" ")[1];
     if (value['name'] == 'Załóż Hodowlę') {
       return;
     } else {
-      try {
-        providerData.createBreedsCollection(
-          name: value['name'],
-          uid: firebaseUser.uid,
-        );
-        showInSnackBar('Utworzono Hodowlę $name', context);
-      } catch (e) {
-        showInSnackBar('Nie udało się utworzyć hodowli', context);
-      }
+      // Navigator.of(context).pop();
+      await dataProvider
+          .createBreedsCollection(
+              breed: value, uid: firebaseUser.uid, context: context)
+          .then((_) {
+        _globalMethods.showInSnackBar('Utworzono Hodowlę $name', context);
+      }).catchError((_) {
+        _globalMethods.showInSnackBar(
+            'Nie udało się utworzyć hodowli', context);
+      });
     }
-  }
-
-  void showInSnackBar(String text, BuildContext context) {
-    Scaffold.of(context).showSnackBar(new SnackBar(content: new Text(text)));
   }
 }

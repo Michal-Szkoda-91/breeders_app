@@ -10,6 +10,7 @@ class Parrot {
   final String cageNumber;
   final String sex;
   final String notes;
+  final String pairRingNumber;
 
   Parrot({
     this.race,
@@ -19,6 +20,7 @@ class Parrot {
     this.cageNumber,
     this.sex,
     this.notes,
+    this.pairRingNumber,
   });
 }
 
@@ -50,8 +52,24 @@ class ParrotsList with ChangeNotifier {
         "Sex": "${parrot.sex}",
         "Cage number": "${parrot.cageNumber}",
         "Notes": "${parrot.notes}",
+        "PairRingNumber": "brak",
       },
-    }, SetOptions(merge: true));
+    }, SetOptions(merge: true)).then((_) {
+      _parrotList.add(
+        Parrot(
+          race: parrot.race,
+          ringNumber: parrot.ringNumber,
+          color: parrot.color,
+          cageNumber: parrot.cageNumber,
+          fission: parrot.fission,
+          notes: parrot.notes,
+          sex: parrot.sex,
+          pairRingNumber: "brak",
+        ),
+      );
+    });
+
+    notifyListeners();
   }
 
   Future<dynamic> updateParrot({
@@ -74,6 +92,7 @@ class ParrotsList with ChangeNotifier {
         "Sex": "${parrot.sex}",
         "Cage number": "${parrot.cageNumber}",
         "Notes": "${parrot.notes}",
+        "PairRingNumber": "brak",
       },
     }).then((_) {
       //Tutaj dodaj lokalna podmianke papugi, nie bedzie trzeba sie cofac po zmianie ;)
@@ -115,6 +134,7 @@ class ParrotsList with ChangeNotifier {
                   fission: val['Fission'],
                   notes: val['Notes'],
                   sex: val['Sex'],
+                  pairRingNumber: val['PairRingNumber'],
                 ),
               );
             }

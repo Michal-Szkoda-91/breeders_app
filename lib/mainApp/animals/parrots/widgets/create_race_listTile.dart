@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:breeders_app/mainApp/animals/parrots/screens/pairList_screen.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -114,10 +115,21 @@ class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
     );
   }
 
+  void _navigateToPairingList(String raceName) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PairListScreen(
+          raceName: raceName,
+        ),
+      ),
+    );
+  }
+
   Card createCard(BuildContext context, int index, String raceName) {
     return Card(
-      elevation: 20,
-      color: Theme.of(context).backgroundColor,
+      color: Colors.transparent,
+      shadowColor: Theme.of(context).cardColor,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Column(
@@ -200,14 +212,28 @@ class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _globalMethods.createActionItem(context, Colors.pink[300],
-                    MaterialCommunityIcons.heart_multiple, "Parowanie", 5),
+                GestureDetector(
+                  onTap: () {
+                    _navigateToPairingList(raceName);
+                  },
+                  child: _globalMethods.createActionItem(
+                      context,
+                      Colors.pink[300],
+                      MaterialCommunityIcons.heart_multiple,
+                      "Parowanie",
+                      5),
+                ),
                 GestureDetector(
                   onTap: () {
                     _navigateToParrotsList(raceName);
                   },
-                  child: _globalMethods.createActionItem(context, Colors.indigo,
-                      MaterialCommunityIcons.home_group, "Hodowla", 5),
+                  child: _globalMethods.createActionItem(
+                    context,
+                    Colors.blueAccent,
+                    MaterialCommunityIcons.home_group,
+                    "Hodowla",
+                    5,
+                  ),
                 ),
               ],
             ),

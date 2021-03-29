@@ -85,8 +85,8 @@ class _BreedsListViewState extends State<BreedsListView> {
 
   Card createCard(BuildContext context, int index) {
     return Card(
-      elevation: 20,
-      color: Theme.of(context).backgroundColor,
+      color: Colors.transparent,
+      shadowColor: Theme.of(context).cardColor,
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 10),
         child: Row(

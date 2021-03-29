@@ -21,7 +21,7 @@ class _CreateParrotsDropdownButtonState
     return Expanded(
       child: DropdownButton(
         value: _parrotsRace.parrotsRaceList[0],
-        itemHeight: 50,
+        itemHeight: 60,
         isExpanded: true,
         icon: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -40,10 +40,10 @@ class _CreateParrotsDropdownButtonState
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: CircleAvatar(
-                      radius: 27,
+                      radius: 25,
                       backgroundColor: Theme.of(context).primaryColor,
                       child: CircleAvatar(
-                        radius: 24,
+                        radius: 22,
                         backgroundImage: AssetImage(
                           value['url'],
                         ),

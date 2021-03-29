@@ -24,10 +24,9 @@ class _HomeScreenState extends State<HomeScreen> {
     if (!_isInit) {
       _isLoading = true;
       final providerData = Provider.of<BreedingsList>(context);
-      providerData.loadBreeds(_firebaseUser.uid).then((_) {
+      providerData.loadBreeds(_firebaseUser.uid, context).then((_) {
         setState(() {
           _isLoading = false;
-          _breedingsList = providerData.getBreedingsList;
         });
       });
     }
