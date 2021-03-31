@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:breeders_app/mainApp/animals/parrots/screens/pairList_screen.dart';
+import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -8,7 +9,6 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_reveal/pull_to_reveal.dart';
 
-import '../screens/parrot_race_list_screen.dart';
 import '../../../../models/global_methods.dart';
 import '../../parrots/screens/parrotsList.dart';
 import '../models/parrot_model.dart';
@@ -40,6 +40,8 @@ class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
     });
     return count;
   }
+
+  ParrotsList dataProvider;
 
   @override
   Widget build(BuildContext context) {
@@ -244,22 +246,27 @@ class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
   }
 
   Future<void> _deleteRace(String name) async {
-    final dataProvider = Provider.of<ParrotsList>(context, listen: false);
-    final _firebaseUser = FirebaseAuth.instance.currentUser;
+    var dataProvider = Provider.of<ParrotsList>(context, listen: false);
+    bool result = await DataConnectionChecker().hasConnection;
 
-    await dataProvider.deleteRaceList(_firebaseUser.uid, name).then((_) {
-      _globalMethods.showInSnackBar('Usunięto hodowlę.', context);
+    if (!result) {
       Navigator.of(context).pop();
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => ParrotsRaceListScreen(
-            name: "Hodowla Papug",
-          ),
-        ),
-      );
-    }).catchError((error) {
-      _globalMethods.showInSnackBar('Operacja nieudana.', context);
-    });
+      _globalMethods.showMaterialDialog(context,
+          "Operacja nieudana, nieznany błąd lub brak połączenia z internetem.");
+    } else {
+      try {
+        Navigator.of(context).pop();
+        await dataProvider.deleteRaceList(firebaseUser.uid, name).then(
+          (_) {
+            _globalMethods.showMaterialDialog(
+                context, "Usunięto wszystkie papugi z rasy $name");
+          },
+        );
+      } catch (e) {
+        Navigator.of(context).pop();
+        _globalMethods.showMaterialDialog(context,
+            "Operacja nie udana, nieznany błąd lub brak połączenia z internetem.");
+      }
+    }
   }
 }

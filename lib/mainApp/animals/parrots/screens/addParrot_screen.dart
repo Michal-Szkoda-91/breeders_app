@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:breeders_app/models/global_methods.dart';
+import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -8,7 +9,6 @@ import 'package:breeders_app/globalWidgets/mainBackground.dart';
 import 'package:breeders_app/mainApp/widgets/custom_drawer.dart';
 import 'package:breeders_app/services/auth.dart';
 import 'package:provider/provider.dart';
-import 'parrot_race_list_screen.dart';
 
 class AddParrotScreen extends StatefulWidget {
   static const String routeName = "/AddParrotScreen";
@@ -30,6 +30,7 @@ class _RaceListScreenState extends State<AddParrotScreen> {
   GlobalMethods _globalMethods = GlobalMethods();
 
   final double _sizedBoxHeight = 16.0;
+  bool _existRingName = false;
 
   String country = "PL";
   String year = DateTime.now().year.toString();
@@ -116,24 +117,30 @@ class _RaceListScreenState extends State<AddParrotScreen> {
                     //
                     //******************************************************* */
                     //Sex
-                    genderSwitchRow(context, sex),
+                    widget.parrot != null
+                        ? widget.parrot.pairRingNumber == "brak"
+                            ? genderSwitchRow(context, sex)
+                            : infoText(context, widget.parrot.sex)
+                        : genderSwitchRow(context, sex),
                     SizedBox(height: _sizedBoxHeight),
                     //
                     //******************************************************* */
                     //Ring number
                     infoText(context, "Numer obrączki"),
                     SizedBox(height: _sizedBoxHeight),
-                    ringNumberRow(
-                      context,
-                      _regExpCountry,
-                      node,
-                      _regExpYear,
-                      _regExpNumber,
-                      country,
-                      year,
-                      symbol,
-                      parrotNumber,
-                    ),
+                    widget.parrot != null
+                        ? infoText(context, widget.parrot.ringNumber)
+                        : ringNumberRow(
+                            context,
+                            _regExpCountry,
+                            node,
+                            _regExpYear,
+                            _regExpNumber,
+                            country,
+                            year,
+                            symbol,
+                            parrotNumber,
+                          ),
                     SizedBox(height: _sizedBoxHeight),
 
                     //
@@ -253,7 +260,9 @@ class _RaceListScreenState extends State<AddParrotScreen> {
             ),
           ),
           //create a parrot
-          onPressed: _createParrots,
+          onPressed: () {
+            _createParrots();
+          },
         ),
       ],
     );
@@ -507,80 +516,98 @@ class _RaceListScreenState extends State<AddParrotScreen> {
     );
   }
 
-  void _createParrots() {
+  Future<void> _createParrots() async {
     if (!_formKey.currentState.validate()) {
-      _globalMethods.showInSnackBar("Nie udało się dodać papugi", context);
+      _globalMethods.showMaterialDialog(
+          context, "Nie udało się dodać papugi, nie pełne dane");
     } else {
+      bool result = await DataConnectionChecker().hasConnection;
       setState(() {
         ringNumber = "$country-$year-$symbol-$parrotNumber";
-        _createdParrot = Parrot(
-            race: widget.parrotMap['name'],
-            ringNumber: ringNumber,
-            cageNumber: cageNumber,
-            color: parrotColor,
-            fission: fission,
-            notes: notes,
-            sex: sexName);
-        Navigator.of(context).pop();
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ParrotsRaceListScreen(
-              name: "Hodowla Papug",
-            ),
-          ),
-        );
       });
-      dataProvider.createParrotCollection(
-        uid: firebaseUser.uid,
-        parrot: _createdParrot,
-      );
-    }
-  }
-
-  void _editParrot() {
-    if (!_formKey.currentState.validate()) {
-      _globalMethods.showInSnackBar("Nie udało się edytować", context);
-    } else {
-      setState(() {
-        ringNumber = "$country-$year-$symbol-$parrotNumber";
-        _createdParrot = Parrot(
-            race: widget.parrot.race,
-            ringNumber: ringNumber,
-            cageNumber: cageNumber,
-            color: parrotColor,
-            fission: fission,
-            notes: notes,
-            sex: sexName);
+      _existRingName = false;
+      dataProvider.getParrotList.forEach((val) {
+        if (ringNumber == val.ringNumber) {
+          setState(() {
+            _existRingName = true;
+          });
+        }
       });
-      dataProvider
-          .updateParrot(
-        uid: firebaseUser.uid,
-        parrot: _createdParrot,
-        actualparrotRing: actualRing,
-      )
-          .then((_) {
-        if (actualRing != _createdParrot.ringNumber) {
+      if (_existRingName) {
+        _globalMethods.showMaterialDialog(
+            context, "Papuga z tym numerem obrączki już istnieje");
+        return;
+      } else if (!result) {
+        _globalMethods.showMaterialDialog(context,
+            "Operacja nieudana, nieznany błąd lub brak połączenia z internetem.");
+        return;
+      } else {
+        setState(() {
           _createdParrot = Parrot(
-              race: widget.parrot.race,
-              ringNumber: actualRing,
+              race: widget.parrotMap['name'],
+              ringNumber: ringNumber,
               cageNumber: cageNumber,
               color: parrotColor,
               fission: fission,
               notes: notes,
               sex: sexName);
-          dataProvider.deleteParrot(
-            firebaseUser.uid,
-            _createdParrot,
-          );
+        });
+        try {
+          Navigator.of(context).pop();
+          await dataProvider
+              .createParrotCollection(
+            uid: firebaseUser.uid,
+            parrot: _createdParrot,
+          )
+              .then((_) {
+            _globalMethods.showMaterialDialog(context, "Dodano Papugę");
+          });
+        } catch (e) {
+          _globalMethods.showMaterialDialog(context,
+              "Operacja nieudana, nieznany błąd lub brak połączenia z internetem.");
         }
-        _globalMethods.showInSnackBar("Edytowano papugę!", context);
+      }
+    }
+  }
+
+  Future<void> _editParrot() async {
+    if (!_formKey.currentState.validate()) {
+      _globalMethods.showMaterialDialog(
+          context, "Nie udało się edytować papugi, nie pełne dane");
+    } else {
+      bool result = await DataConnectionChecker().hasConnection;
+      if (!result) {
+        _globalMethods.showMaterialDialog(context,
+            "Operacja nieudana, nieznany błąd lub brak połączenia z internetem.");
+        return;
+      } else {
+        setState(() {
+          _createdParrot = Parrot(
+              race: widget.parrot.race,
+              ringNumber: widget.parrot.ringNumber,
+              cageNumber: cageNumber,
+              color: parrotColor,
+              fission: fission,
+              notes: notes,
+              sex: sexName,
+              pairRingNumber: widget.parrot.pairRingNumber);
+        });
         Navigator.of(context).pop();
-        print("udalo");
-      }).catchError((_) {
-        Navigator.of(context).pop();
-        print("nie udalo");
-      });
+        try {
+          dataProvider
+              .updateParrot(
+            uid: firebaseUser.uid,
+            parrot: _createdParrot,
+            pairRingNumber: _createdParrot.pairRingNumber,
+          )
+              .then((_) {
+            _globalMethods.showMaterialDialog(context, "Edytowano dane");
+          });
+        } catch (e) {
+          _globalMethods.showMaterialDialog(context,
+              "Operacja nieudana, nieznany błąd lub brak połączenia z internetem.");
+        }
+      }
     }
   }
 

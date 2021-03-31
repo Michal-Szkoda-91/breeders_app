@@ -1,5 +1,7 @@
 import 'package:breeders_app/mainApp/animals/parrots/models/pairing_model.dart';
+import 'package:breeders_app/models/global_methods.dart';
 import 'package:breeders_app/services/auth.dart';
+import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
@@ -23,8 +25,9 @@ class AddPairScreen extends StatefulWidget {
 class _AddPairScreenState extends State<AddPairScreen> {
   final AuthService _auth = AuthService();
   final firebaseUser = FirebaseAuth.instance.currentUser;
+  GlobalMethods _globalMethods = GlobalMethods();
 
-  List<Parrot> _allParrotsList = [];
+  List<Parrot> _allParrotsList;
   List<Parrot> _maleParrotList = [];
   List<Parrot> _femaleParrotList = [];
   String _choosenMaleParrotRingNumber;
@@ -35,11 +38,9 @@ class _AddPairScreenState extends State<AddPairScreen> {
   String pairTime = DateFormat.yMd('pl_PL').format(DateTime.now()).toString();
 
   void _createListsOfParrot(List<Parrot> allParrotsList) {
-    _maleParrotList = [];
-    _femaleParrotList = [];
-
+    _maleParrotList.clear();
+    _femaleParrotList.clear();
     allParrotsList.forEach((parrot) {
-      print("_____________" + parrot.pairRingNumber.toString());
       if (parrot.sex == "Samiec" &&
           parrot.race == widget.raceName &&
           parrot.pairRingNumber == "brak") {
@@ -52,18 +53,16 @@ class _AddPairScreenState extends State<AddPairScreen> {
         _femaleParrotList.add(parrot);
         if (_choosenFeMaleParrotRingNumber == null)
           _choosenFeMaleParrotRingNumber = _femaleParrotList[0].ringNumber;
-      } else
-        return;
+      }
     });
   }
 
-  ParrotPairingList dataPairProvider;
   ParrotPairing _createdPair;
+  var dataPairProvider;
 
   @override
   Widget build(BuildContext context) {
-    final dataProvider = Provider.of<ParrotsList>(context);
-    dataPairProvider = Provider.of<ParrotPairingList>(context);
+    final dataProvider = Provider.of<ParrotsList>(context, listen: false);
     _allParrotsList = dataProvider.getParrotList;
     _createListsOfParrot(_allParrotsList);
     return Scaffold(
@@ -71,7 +70,7 @@ class _AddPairScreenState extends State<AddPairScreen> {
       endDrawerEnableOpenDragGesture: false,
       backgroundColor: Colors.transparent,
       appBar: AppBar(
-        title: Text("Parowanie Papug"),
+        title: Text("Parowanie - ${widget.raceName}"),
       ),
       body: MainBackground(
         child: Padding(
@@ -330,38 +329,60 @@ class _AddPairScreenState extends State<AddPairScreen> {
     );
   }
 
-  void _createPair() {
+  Future<void> _createPair() async {
     if (_choosenFeMaleParrotRingNumber == null ||
         _choosenFeMaleParrotRingNumber == null) {
+      _globalMethods.showMaterialDialog(
+          context, "Nie można utworzyć pary, niepełne dane");
       return;
     } else {
-      setState(() {
-        _createdPair = ParrotPairing(
-          id: "$_choosenFeMaleParrotRingNumber / $_choosenMaleParrotRingNumber / ${DateTime.now()}",
-          femaleRingNumber: _choosenFeMaleParrotRingNumber,
-          maleRingNumber: _choosenMaleParrotRingNumber,
-          pairingData: pairTime,
-          childrenList: [],
-        );
-        _maleParrotList.forEach((parrot) {
-          if (parrot.ringNumber == _choosenMaleParrotRingNumber) {
-            _maleParrotChoosen = parrot;
-          }
+      bool result = await DataConnectionChecker().hasConnection;
+      dataPairProvider = Provider.of<ParrotPairingList>(context, listen: false);
+
+      if (!result) {
+        _globalMethods.showMaterialDialog(context,
+            "Operacja nieudana, nieznany błąd lub brak połączenia z internetem.");
+      } else {
+        setState(() {
+          _createdPair = ParrotPairing(
+            id: "$_choosenFeMaleParrotRingNumber - $_choosenMaleParrotRingNumber - ${DateTime.now()}",
+            femaleRingNumber: _choosenFeMaleParrotRingNumber,
+            maleRingNumber: _choosenMaleParrotRingNumber,
+            pairingData: pairTime,
+            childrenList: [],
+          );
+          print(_createdPair.id + "wybrana ID");
+
+          _maleParrotList.forEach((parrot) {
+            if (parrot.ringNumber == _choosenMaleParrotRingNumber) {
+              _maleParrotChoosen = parrot;
+              print(_maleParrotChoosen.ringNumber + "wybrany samiec_______");
+            }
+          });
+          _femaleParrotList.forEach((parrot) {
+            if (parrot.ringNumber == _choosenFeMaleParrotRingNumber) {
+              _femaleParrotChoosen = parrot;
+              print(_femaleParrotChoosen.ringNumber + "wybrana samica_______");
+            }
+          });
         });
-        _femaleParrotList.forEach((parrot) {
-          if (parrot.ringNumber == _choosenFeMaleParrotRingNumber) {
-            _femaleParrotChoosen = parrot;
-          }
-        });
-        Navigator.of(context).pop();
-      });
-      dataPairProvider.createPairCollection(
-        uid: firebaseUser.uid,
-        pair: _createdPair,
-        race: widget.raceName,
-        maleParrot: _maleParrotChoosen,
-        femaleParrot: _femaleParrotChoosen,
-      );
+        try {
+          Navigator.of(context).pop();
+          await dataPairProvider
+              .createPairCollection(
+            uid: firebaseUser.uid,
+            pair: _createdPair,
+            race: widget.raceName,
+            maleParrot: _maleParrotChoosen,
+            femaleParrot: _femaleParrotChoosen,
+          )
+              .then((_) {
+            _globalMethods.showMaterialDialog(context, "Utworzono parę");
+          });
+        } catch (e) {
+          _globalMethods.showMaterialDialog(context, "Operacja nieudana");
+        }
+      }
     }
   }
 }

@@ -30,6 +30,9 @@ class _ParrotsListScreenState extends State<ParrotsListScreen> {
         _createdParrotList.add(parrot);
       }
     });
+    _createdParrotList.sort((a, b) {
+      return a.ringNumber.toLowerCase().compareTo(b.ringNumber.toLowerCase());
+    });
   }
 
   @override

@@ -1,4 +1,6 @@
-import 'package:breeders_app/mainApp/animals/parrots/screens/addPairParrot_screen.dart';
+import 'package:breeders_app/mainApp/animals/parrots/widgets/notConnected_information.dart';
+import 'package:breeders_app/models/global_methods.dart';
+import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -12,10 +14,6 @@ import '../../../../globalWidgets/mainBackground.dart';
 class ParrotsRaceListScreen extends StatefulWidget {
   static const String routeName = "/ParrotsRaceListScreen";
 
-  final String name;
-
-  ParrotsRaceListScreen({Key key, this.name}) : super(key: key);
-
   @override
   _ParrotsRaceListScreenState createState() => _ParrotsRaceListScreenState();
 }
@@ -23,38 +21,35 @@ class ParrotsRaceListScreen extends StatefulWidget {
 class _ParrotsRaceListScreenState extends State<ParrotsRaceListScreen> {
   final AuthService _auth = AuthService();
   final firebaseUser = FirebaseAuth.instance.currentUser;
+  GlobalMethods _globalMethods = GlobalMethods();
   List<Parrot> _parrotList = [];
   List<String> _activeRaceList = [];
   bool _isLoaded = false;
   bool _isInit = true;
+  bool _isNotConnected = false;
 
   Future<void> _loadData(
       {BuildContext context, Function readParrot, String uid}) async {
-    try {
-      await readParrot(uid: uid).then((_) {
-        setState(() {
-          _isLoaded = true;
-        });
+    bool result = await DataConnectionChecker().hasConnection;
+
+    if (!result) {
+      _globalMethods.showMaterialDialog(context,
+          "Operacja nieudana, nieznany błąd lub brak połączenia z internetem.");
+      setState(() {
+        _isNotConnected = true;
+        _isLoaded = true;
       });
-    } catch (error) {
-      await showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (ctx) => AlertDialog(
-          title: Text('Nie udało się wczytać danych!'),
-          content: Text(
-              'Sprawdź połączenie z internetem.\nJeśli połączenie jest prawidłowe spróbuj ponownie później.'),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-                Navigator.of(context).pop();
-              },
-            )
-          ],
-        ),
-      );
+    } else {
+      try {
+        await readParrot(uid: uid).then((_) {
+          setState(() {
+            _isLoaded = true;
+          });
+        });
+      } catch (error) {
+        _globalMethods.showMaterialDialog(context,
+            "Operacja nieudana, nieznany błąd lub brak połączenia z internetem.");
+      }
     }
   }
 
@@ -70,7 +65,7 @@ class _ParrotsRaceListScreenState extends State<ParrotsRaceListScreen> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      final dataProvider = Provider.of<ParrotsList>(context);
+      final dataProvider = Provider.of<ParrotsList>(context, listen: false);
       _loadData(
               context: context,
               readParrot: dataProvider.readParrotsList,
@@ -87,14 +82,14 @@ class _ParrotsRaceListScreenState extends State<ParrotsRaceListScreen> {
   @override
   Widget build(BuildContext context) {
     final dataProvider = Provider.of<ParrotsList>(context);
-    _parrotList = dataProvider.getParrotList;
+    _parrotList = dataProvider.getParrotList ?? [];
     _createActiveRaceList(_parrotList);
     return Scaffold(
       endDrawer: CustomDrawer(auth: _auth),
       endDrawerEnableOpenDragGesture: false,
       backgroundColor: Colors.transparent,
       appBar: AppBar(
-        title: Text(widget.name),
+        title: Text("Hodowla Papug"),
       ),
       body: MainBackground(
         child: Column(
@@ -106,14 +101,16 @@ class _ParrotsRaceListScreenState extends State<ParrotsRaceListScreen> {
                       child: CircularProgressIndicator(),
                     ),
                   )
-                : Expanded(
-                    child: Column(
-                      children: [
-                        CreateParrotRaceListTile(
-                            activeRaceList: _activeRaceList),
-                      ],
-                    ),
-                  ),
+                : _isNotConnected
+                    ? NotConnected()
+                    : Expanded(
+                        child: Column(
+                          children: [
+                            CreateParrotRaceListTile(
+                                activeRaceList: _activeRaceList),
+                          ],
+                        ),
+                      ),
           ],
         ),
       ),

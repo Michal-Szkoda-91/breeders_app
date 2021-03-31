@@ -9,7 +9,6 @@ import 'mainApp/animals/parrots/models/pairing_model.dart';
 import 'mainApp/animals/parrots/screens/addParrot_screen.dart';
 import 'mainApp/animals/parrots/screens/parrot_race_list_screen.dart';
 import 'mainApp/animals/parrots/screens/parrotsList.dart';
-import 'mainApp/models/breedings_model.dart';
 import 'fireInitialization/initWidget.dart';
 
 void main() {
@@ -23,9 +22,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-          create: (_) => BreedingsList(),
-        ),
+
         ChangeNotifierProvider(
           create: (_) => ParrotsList(),
         ),

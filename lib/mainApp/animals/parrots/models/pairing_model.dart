@@ -26,7 +26,7 @@ class ParrotPairingList with ChangeNotifier {
     return [..._parrotPairingList];
   }
 
-  Future<dynamic> createPairCollection({
+  Future<void> createPairCollection({
     String uid,
     ParrotPairing pair,
     String race,
@@ -35,51 +35,21 @@ class ParrotPairingList with ChangeNotifier {
   }) async {
     final CollectionReference collectionReference =
         FirebaseFirestore.instance.collection(uid);
+    ParrotsList parrotList = ParrotsList();
 
     //create collection if not exist
-    await collectionReference
-        .doc('Hodowla Papug')
-        .collection(race)
-        .doc("Pairs")
-        .set({
-      "${pair.id}": {
-        "Male Ring": "${pair.maleRingNumber}",
-        "Female Ring": "${pair.femaleRingNumber}",
-        "Pairing Data": "${pair.pairingData}",
-        "Children": "${pair.childrenList}",
-      },
-    }, SetOptions(merge: true));
-
-    //add pair to parrot
-    await collectionReference
-        .doc('Hodowla Papug')
-        .collection(race)
-        .doc("Birds")
-        .update({
-      "${pair.maleRingNumber}": {
-        "Race Name": "${maleParrot.race}",
-        "Colors": "${maleParrot.color}",
-        "Fission": "${maleParrot.fission}",
-        "Sex": "${maleParrot.sex}",
-        "Cage number": "${maleParrot.cageNumber}",
-        "Notes": "${maleParrot.notes}",
-        "PairRingNumber": "${pair.femaleRingNumber}",
-      },
-    });
-    await collectionReference
-        .doc('Hodowla Papug')
-        .collection(race)
-        .doc("Birds")
-        .update({
-      "${pair.femaleRingNumber}": {
-        "Race Name": "${femaleParrot.race}",
-        "Colors": "${femaleParrot.color}",
-        "Fission": "${femaleParrot.fission}",
-        "Sex": "${femaleParrot.sex}",
-        "Cage number": "${femaleParrot.cageNumber}",
-        "Notes": "${femaleParrot.notes}",
-        "PairRingNumber": "${pair.maleRingNumber}",
-      },
+    await collectionReference.doc(race).collection("Pairs").doc(pair.id).set({
+      "Male Ring": "${pair.maleRingNumber}",
+      "Female Ring": "${pair.femaleRingNumber}",
+      "Pairing Data": "${pair.pairingData}",
+      "Children": "${pair.childrenList}",
+    }, SetOptions(merge: true)).then((_) {
+      parrotList.updateParrot(
+          parrot: maleParrot, uid: uid, pairRingNumber: pair.femaleRingNumber);
+      parrotList.updateParrot(
+          parrot: femaleParrot, uid: uid, pairRingNumber: pair.maleRingNumber);
+      _parrotPairingList.add(pair);
+      notifyListeners();
     });
   }
 }

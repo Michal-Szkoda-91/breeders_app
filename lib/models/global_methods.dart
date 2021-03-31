@@ -49,12 +49,8 @@ class GlobalMethods {
     );
   }
 
-  void showInSnackBar(String text, BuildContext context) {
-    Scaffold.of(context).showSnackBar(new SnackBar(content: new Text(text)));
-  }
-
   Future<void> showDeletingDialog(BuildContext context, String title,
-      String text, Function function, Parrot parrot) {
+      String text, Function function, Parrot parrot) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: true,
@@ -84,16 +80,11 @@ class GlobalMethods {
                   fontSize: 20,
                 ),
               ),
-              onPressed: () {
+              onPressed: () async {
                 if (parrot == null) {
-                  function(title);
+                  await function(title);
                 } else {
-                  function(title, parrot);
-                  MaterialPageRoute(
-                    builder: (context) => ParrotsRaceListScreen(
-                      name: "Hodowla Papug",
-                    ),
-                  );
+                  await function(title, parrot);
                 }
               },
             ),
@@ -112,6 +103,29 @@ class GlobalMethods {
           ],
         );
       },
+    );
+  }
+
+  showMaterialDialog(BuildContext context, String text) {
+    double padding = MediaQuery.of(context).size.height * 0.4;
+    showDialog(
+      context: context,
+      builder: (_) => Padding(
+        padding: EdgeInsets.only(top: padding),
+        child: new AlertDialog(
+          backgroundColor: Theme.of(context).backgroundColor,
+          title: new Text(
+            "Informacja",
+            style: TextStyle(color: Theme.of(context).textSelectionColor),
+            textAlign: TextAlign.center,
+          ),
+          content: new Text(
+            text,
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Theme.of(context).textSelectionColor),
+          ),
+        ),
+      ),
     );
   }
 }
