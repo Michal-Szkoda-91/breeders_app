@@ -10,6 +10,7 @@ class Parrot {
   final String cageNumber;
   final String sex;
   final String notes;
+  final String pairRingNumber;
 
   Parrot({
     this.race,
@@ -19,16 +20,11 @@ class Parrot {
     this.cageNumber,
     this.sex,
     this.notes,
+    this.pairRingNumber,
   });
 }
 
-class ParrotsList with ChangeNotifier {
-  List<Parrot> _parrotList = [];
-
-  List<Parrot> get getParrotList {
-    return [..._parrotList];
-  }
-
+class ParrotDataHelper {
   Future<dynamic> createParrotCollection({
     String uid,
     Parrot parrot,
@@ -36,105 +32,77 @@ class ParrotsList with ChangeNotifier {
     final CollectionReference collectionReference =
         FirebaseFirestore.instance.collection(uid);
 
-    await collectionReference.doc('Hodowla Papug').set({"exist": "true"});
-    //create collection if not exist
-    await collectionReference
-        .doc('Hodowla Papug')
-        .collection(parrot.race)
-        .doc("Birds")
-        .set({
-      "${parrot.ringNumber}": {
+    await collectionReference.doc(parrot.race).set({
+      "Race Name": "${parrot.race}",
+    });
+
+    final snapShot = await collectionReference
+        .doc(parrot.race)
+        .collection("Birds")
+        .doc(parrot.ringNumber)
+        .get();
+
+    if (snapShot == null || !snapShot.exists) {
+      await collectionReference
+          .doc(parrot.race)
+          .collection("Birds")
+          .doc(parrot.ringNumber)
+          .set({
         "Race Name": "${parrot.race}",
         "Colors": "${parrot.color}",
         "Fission": "${parrot.fission}",
         "Sex": "${parrot.sex}",
         "Cage number": "${parrot.cageNumber}",
         "Notes": "${parrot.notes}",
-      },
-    }, SetOptions(merge: true));
+        "PairRingNumber": "brak",
+      }, SetOptions(merge: false)).then((_) {
+        print("parrot added");
+      }).catchError((err) {
+        print("error occured $err");
+      });
+    }
   }
 
   Future<dynamic> updateParrot({
     String uid,
     Parrot parrot,
-    String actualparrotRing,
+    String pairRingNumber,
   }) async {
     final CollectionReference collectionReference =
         FirebaseFirestore.instance.collection(uid);
 
     await collectionReference
-        .doc('Hodowla Papug')
-        .collection(parrot.race)
-        .doc("Birds")
+        .doc(parrot.race)
+        .collection("Birds")
+        .doc(parrot.ringNumber)
         .update({
-      "${parrot.ringNumber}": {
-        "Race Name": "${parrot.race}",
-        "Colors": "${parrot.color}",
-        "Fission": "${parrot.fission}",
-        "Sex": "${parrot.sex}",
-        "Cage number": "${parrot.cageNumber}",
-        "Notes": "${parrot.notes}",
-      },
+      "Race Name": "${parrot.race}",
+      "Colors": "${parrot.color}",
+      "Fission": "${parrot.fission}",
+      "Sex": "${parrot.sex}",
+      "Cage number": "${parrot.cageNumber}",
+      "Notes": "${parrot.notes}",
+      "PairRingNumber": pairRingNumber,
     }).then((_) {
-      //Tutaj dodaj lokalna podmianke papugi, nie bedzie trzeba sie cofac po zmianie ;)
-      _parrotList.removeWhere((p) => p.ringNumber == actualparrotRing);
-      _parrotList.add(parrot);
+      print("parrot edited");
+    }).catchError((err) {
+      print("error occured $err");
     });
-    notifyListeners();
-  }
-
-//creating parrots list
-  Future<void> readParrotsList({String uid}) async {
-    final CollectionReference collectionReference =
-        FirebaseFirestore.instance.collection(uid);
-
-    _parrotList.clear();
-    ParrotsRace parrotsRace = ParrotsRace();
-    for (var i = 0; i < parrotsRace.parrotsNameList.length; i++) {
-      //checking if document exist
-      var snapshot = await collectionReference
-          .doc("Hodowla Papug")
-          .collection(parrotsRace.parrotsNameList[i])
-          .get();
-      if (snapshot.docs.length != 0) {
-        //creating parrot
-        await collectionReference
-            .doc("Hodowla Papug")
-            .collection(parrotsRace.parrotsNameList[i])
-            .doc("Birds")
-            .get()
-            .then((querySnapshot) {
-          querySnapshot.data().forEach((name, val) {
-            if (name != null) {
-              _parrotList.add(
-                Parrot(
-                  race: val['Race Name'],
-                  ringNumber: name,
-                  color: val['Colors'],
-                  cageNumber: val['Cage number'],
-                  fission: val['Fission'],
-                  notes: val['Notes'],
-                  sex: val['Sex'],
-                ),
-              );
-            }
-          });
-        });
-      }
-    }
-    notifyListeners();
   }
 
   Future<void> deleteRaceList(String uid, String raceName) async {
-    final CollectionReference breedCollection =
+    final CollectionReference collectionReference =
         FirebaseFirestore.instance.collection(uid);
-    await breedCollection
-        .doc("Hodowla Papug")
-        .collection(raceName)
-        .doc("Birds")
-        .delete()
-        .then((success) {
-      print("succes");
+    await collectionReference
+        .doc(raceName)
+        .collection("Birds")
+        .get()
+        .then((snapshot) {
+      for (DocumentSnapshot ds in snapshot.docs) {
+        ds.reference.delete().then((_) {
+          print("Delete completed");
+        });
+      }
     }).catchError((err) {
       print(err);
     });
@@ -145,16 +113,19 @@ class ParrotsList with ChangeNotifier {
         FirebaseFirestore.instance.collection(uid);
 
     await breedCollection
-        .doc("Hodowla Papug")
-        .collection(parrotToDelete.race)
-        .doc("Birds")
-        .update({
-      '${parrotToDelete.ringNumber}': FieldValue.delete()
-    }).whenComplete(() {
-      _parrotList.removeWhere(
-          (parrot) => parrot.ringNumber == parrotToDelete.ringNumber);
-      notifyListeners();
-      print('succes');
+        .doc(parrotToDelete.race)
+        .collection("Birds")
+        .get()
+        .then((snapshot) {
+      snapshot.docs.forEach((val) {
+        if (val.id == parrotToDelete.ringNumber) {
+          val.reference.delete().then((_) {
+            print("Delete completed");
+          });
+        }
+      });
+    }).catchError((err) {
+      print(err);
     });
   }
 }

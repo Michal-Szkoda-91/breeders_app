@@ -1,17 +1,17 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:breeders_app/mainApp/animals/parrots/screens/pairList_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
-import 'package:pull_to_reveal/pull_to_reveal.dart';
 
-import '../screens/parrot_race_list_screen.dart';
 import '../../../../models/global_methods.dart';
 import '../../parrots/screens/parrotsList.dart';
 import '../models/parrot_model.dart';
-import 'parrots_race_AddDropdownButton.dart';
 
 class CreateParrotRaceListTile extends StatefulWidget {
   const CreateParrotRaceListTile({
@@ -28,43 +28,56 @@ class CreateParrotRaceListTile extends StatefulWidget {
 class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
   final firebaseUser = FirebaseAuth.instance.currentUser;
   GlobalMethods _globalMethods = GlobalMethods();
-  List<Parrot> _parrotList = [];
-
-  int _countingParrot(String raceName, List<Parrot> parrotList) {
-    int count = 0;
-    parrotList.forEach((parrot) {
-      if (parrot.race == raceName) {
-        count++;
-      }
-    });
-    return count;
-  }
+  int _parrotCount;
+  List<String> parrotRingList = [''];
 
   @override
   Widget build(BuildContext context) {
-    final dataProvider = Provider.of<ParrotsList>(context);
-    _parrotList = dataProvider.getParrotList;
     return Expanded(
-      child: PullToRevealTopItemList(
-        startRevealed: true,
-        revealableHeight: 65,
+      child: ListView.builder(
         itemCount: widget.activeRaceList.length,
         itemBuilder: (context, index) {
-          return createSlidableCard(context, index);
-        },
-        revealableBuilder: (BuildContext context, RevealableToggler opener,
-            RevealableToggler closer, BoxConstraints constraints) {
-          return Column(
-            children: [
-              CreateParrotsDropdownButton(),
-            ],
+          return StreamBuilder<QuerySnapshot>(
+            stream: FirebaseFirestore.instance
+                .collection(firebaseUser.uid)
+                .doc(widget.activeRaceList[index])
+                .collection("Birds")
+                .snapshots(),
+            builder:
+                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              if (snapshot.hasError) return Text('Błąd danych');
+              switch (snapshot.connectionState) {
+                case ConnectionState.waiting:
+                  return Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(50.0),
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
+                default:
+                  _countParrot(snapshot);
+                  return Column(
+                    children: [
+                      createSlidableCard(context, index, _parrotCount),
+                    ],
+                  );
+              }
+            },
           );
         },
       ),
     );
   }
 
-  Slidable createSlidableCard(BuildContext context, int index) {
+  void _countParrot(AsyncSnapshot<QuerySnapshot> snapshot) {
+    _parrotCount = 0;
+    snapshot.data.docs.forEach((val) {
+      _parrotCount++;
+    });
+  }
+
+  Slidable createSlidableCard(
+      BuildContext context, int index, int parrotCount) {
     return Slidable(
       actionPane: SlidableDrawerActionPane(),
       actionExtentRatio: 0.30,
@@ -78,7 +91,8 @@ class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5),
                 ),
-                child: createCard(context, index, widget.activeRaceList[index]),
+                child: createCard(
+                    context, index, widget.activeRaceList[index], parrotCount),
               ),
             ),
             _globalMethods.arrowConteiner,
@@ -114,10 +128,22 @@ class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
     );
   }
 
-  Card createCard(BuildContext context, int index, String raceName) {
+  void _navigateToPairingList(String raceName) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PairListScreen(
+          raceName: raceName,
+        ),
+      ),
+    );
+  }
+
+  Card createCard(
+      BuildContext context, int index, String raceName, int parrotCount) {
     return Card(
-      elevation: 20,
-      color: Theme.of(context).backgroundColor,
+      color: Colors.transparent,
+      shadowColor: Theme.of(context).cardColor,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Column(
@@ -181,9 +207,7 @@ class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
                             ),
                           ),
                           child: Text(
-                            _countingParrot(
-                                    widget.activeRaceList[index], _parrotList)
-                                .toString(),
+                            parrotCount.toString(),
                             style: TextStyle(
                               color: Theme.of(context).textSelectionColor,
                               fontSize: 20,
@@ -200,14 +224,28 @@ class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _globalMethods.createActionItem(context, Colors.pink[300],
-                    MaterialCommunityIcons.heart_multiple, "Parowanie", 5),
+                GestureDetector(
+                  onTap: () {
+                    _navigateToPairingList(raceName);
+                  },
+                  child: _globalMethods.createActionItem(
+                      context,
+                      Colors.pink[300],
+                      MaterialCommunityIcons.heart_multiple,
+                      "Parowanie",
+                      5),
+                ),
                 GestureDetector(
                   onTap: () {
                     _navigateToParrotsList(raceName);
                   },
-                  child: _globalMethods.createActionItem(context, Colors.indigo,
-                      MaterialCommunityIcons.home_group, "Hodowla", 5),
+                  child: _globalMethods.createActionItem(
+                    context,
+                    Colors.blueAccent,
+                    MaterialCommunityIcons.home_group,
+                    "Hodowla",
+                    5,
+                  ),
                 ),
               ],
             ),
@@ -218,22 +256,27 @@ class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
   }
 
   Future<void> _deleteRace(String name) async {
-    final dataProvider = Provider.of<ParrotsList>(context, listen: false);
-    final _firebaseUser = FirebaseAuth.instance.currentUser;
+    var dataProvider = Provider.of<ParrotDataHelper>(context, listen: false);
+    bool result = await DataConnectionChecker().hasConnection;
 
-    await dataProvider.deleteRaceList(_firebaseUser.uid, name).then((_) {
-      _globalMethods.showInSnackBar('Usunięto hodowlę.', context);
+    if (!result) {
       Navigator.of(context).pop();
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => ParrotsRaceListScreen(
-            name: "Hodowla Papug",
-          ),
-        ),
-      );
-    }).catchError((error) {
-      _globalMethods.showInSnackBar('Operacja nieudana.', context);
-    });
+      _globalMethods.showMaterialDialog(context,
+          "Operacja nieudana, nieznany błąd lub brak połączenia z internetem.");
+    } else {
+      try {
+        Navigator.of(context).pop();
+        await dataProvider.deleteRaceList(firebaseUser.uid, name).then(
+          (_) {
+            _globalMethods.showMaterialDialog(
+                context, "Usunięto wszystkie papugi z rasy $name");
+          },
+        );
+      } catch (e) {
+        Navigator.of(context).pop();
+        _globalMethods.showMaterialDialog(context,
+            "Operacja nie udana, nieznany błąd lub brak połączenia z internetem.");
+      }
+    }
   }
 }

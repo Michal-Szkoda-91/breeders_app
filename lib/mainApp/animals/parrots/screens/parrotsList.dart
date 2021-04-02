@@ -1,5 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../models/parrot_model.dart';
 import '../widgets/create_parrot_card.dart';
@@ -19,22 +20,13 @@ class ParrotsListScreen extends StatefulWidget {
 }
 
 class _ParrotsListScreenState extends State<ParrotsListScreen> {
+  final firebaseUser = FirebaseAuth.instance.currentUser;
   final AuthService _auth = AuthService();
-  List<Parrot> _createdParrotList = [];
 
-  void _loadParrot() {
-    var providerData = Provider.of<ParrotsList>(context);
-    _createdParrotList.clear();
-    providerData.getParrotList.forEach((parrot) {
-      if (parrot.race == widget.raceName) {
-        _createdParrotList.add(parrot);
-      }
-    });
-  }
+  List<Parrot> _createdParrotList = [];
 
   @override
   Widget build(BuildContext context) {
-    _loadParrot();
     return Scaffold(
       endDrawer: CustomDrawer(auth: _auth),
       endDrawerEnableOpenDragGesture: false,
@@ -43,8 +35,46 @@ class _ParrotsListScreenState extends State<ParrotsListScreen> {
         title: Text(widget.raceName),
       ),
       body: MainBackground(
-        child: ParrotCard(createdParrotList: _createdParrotList),
+        child: StreamBuilder<QuerySnapshot>(
+          stream: FirebaseFirestore.instance
+              .collection(firebaseUser.uid)
+              .doc(widget.raceName)
+              .collection("Birds")
+              .snapshots(),
+          builder:
+              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (snapshot.hasError) return Text('Błąd danych');
+            switch (snapshot.connectionState) {
+              case ConnectionState.waiting:
+                return Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(50.0),
+                    child: CircularProgressIndicator(),
+                  ),
+                );
+              default:
+                _createParrotList(snapshot);
+                return ParrotCard(createdParrotList: _createdParrotList);
+            }
+          },
+        ),
       ),
     );
+  }
+
+  void _createParrotList(AsyncSnapshot<QuerySnapshot> snapshot) {
+    _createdParrotList = [];
+    snapshot.data.docs.forEach((val) {
+      _createdParrotList.add(Parrot(
+        ringNumber: val.id,
+        cageNumber: val.data()['Cage number'],
+        color: val.data()['Colors'],
+        fission: val.data()['Fission'],
+        notes: val.data()['Notes'],
+        pairRingNumber: "brak",
+        race: widget.raceName,
+        sex: val.data()['Sex'],
+      ));
+    });
   }
 }

@@ -1,10 +1,10 @@
+import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 import 'package:breeders_app/mainApp/animals/parrots/screens/addParrot_screen.dart';
-import 'package:breeders_app/mainApp/animals/parrots/screens/parrotsList.dart';
 import 'package:breeders_app/models/global_methods.dart';
 import 'package:breeders_app/mainApp/animals/parrots/models/parrot_model.dart';
 import 'package:provider/provider.dart';
@@ -66,8 +66,8 @@ class _ParrotCardState extends State<ParrotCard> {
 
   Card createParrotCard(BuildContext context, int index) {
     return Card(
-      elevation: 20,
-      color: Theme.of(context).backgroundColor,
+      color: Colors.transparent,
+      shadowColor: Theme.of(context).cardColor,
       child: Padding(
         padding: const EdgeInsets.all(12.0),
         child: ExpansionTile(
@@ -77,6 +77,17 @@ class _ParrotCardState extends State<ParrotCard> {
               _titleRow(context, "Obrączka:", index, true),
               _contentText(
                   index, context, widget._createdParrotList[index].ringNumber),
+              SizedBox(height: 10),
+              widget._createdParrotList[index].pairRingNumber != "brak"
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _titleRow(context, "Para:", index, false),
+                        _contentText(index, context,
+                            widget._createdParrotList[index].pairRingNumber),
+                      ],
+                    )
+                  : _titleRow(context, "Brak pary", index, false),
             ],
           ),
           children: [
@@ -138,7 +149,7 @@ class _ParrotCardState extends State<ParrotCard> {
 
   Widget _contentText(int index, BuildContext context, String text) {
     return Padding(
-      padding: const EdgeInsets.only(top: 10, left: 15),
+      padding: const EdgeInsets.only(top: 3, left: 15),
       child: Text(
         text,
         style: TextStyle(
@@ -155,7 +166,7 @@ class _ParrotCardState extends State<ParrotCard> {
         Text(
           text,
           style: TextStyle(
-            color: Theme.of(context).primaryColor,
+            color: Theme.of(context).backgroundColor,
             fontSize: 16,
             fontWeight: FontWeight.bold,
           ),
@@ -199,23 +210,28 @@ class _ParrotCardState extends State<ParrotCard> {
   }
 
   Future<void> _deleteParrot(String ring, Parrot parrot) async {
-    final dataProvider = Provider.of<ParrotsList>(context, listen: false);
+    final dataProvider = Provider.of<ParrotDataHelper>(context, listen: false);
     final _firebaseUser = FirebaseAuth.instance.currentUser;
+    bool result = await DataConnectionChecker().hasConnection;
 
-    await dataProvider.deleteParrot(_firebaseUser.uid, parrot).then((_) {
-      _globalMethods.showInSnackBar('Usunięto papugę.', context);
+    if (!result) {
       Navigator.of(context).pop();
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => ParrotsListScreen(
-            raceName: parrot.race,
-          ),
-        ),
-      );
-    }).catchError((error) {
-      Navigator.of(context).pop();
-      _globalMethods.showInSnackBar('Operacja nieudana.', context);
-    });
+      _globalMethods.showMaterialDialog(context,
+          "Operacja nieudana, nieznany błąd lub brak połączenia z internetem.");
+    } else {
+      try {
+        Navigator.of(context).pop();
+        await dataProvider.deleteParrot(_firebaseUser.uid, parrot).then(
+          (_) {
+            _globalMethods.showMaterialDialog(context,
+                "Usunięto papugę o numerze obrączki ${parrot.ringNumber}");
+          },
+        );
+      } catch (e) {
+        Navigator.of(context).pop();
+        _globalMethods.showMaterialDialog(context,
+            "Operacja nie udana, nieznany błąd lub brak połączenia z internetem.");
+      }
+    }
   }
 }
