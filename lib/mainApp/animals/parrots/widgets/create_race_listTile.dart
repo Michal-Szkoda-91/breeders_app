@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:breeders_app/mainApp/animals/parrots/screens/pairList_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_icons/flutter_icons.dart';
@@ -7,12 +8,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
-import 'package:pull_to_reveal/pull_to_reveal.dart';
 
 import '../../../../models/global_methods.dart';
 import '../../parrots/screens/parrotsList.dart';
 import '../models/parrot_model.dart';
-import 'parrots_race_AddDropdownButton.dart';
 
 class CreateParrotRaceListTile extends StatefulWidget {
   const CreateParrotRaceListTile({
@@ -29,45 +28,56 @@ class CreateParrotRaceListTile extends StatefulWidget {
 class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
   final firebaseUser = FirebaseAuth.instance.currentUser;
   GlobalMethods _globalMethods = GlobalMethods();
-  List<Parrot> _parrotList = [];
-
-  int _countingParrot(String raceName, List<Parrot> parrotList) {
-    int count = 0;
-    parrotList.forEach((parrot) {
-      if (parrot.race == raceName) {
-        count++;
-      }
-    });
-    return count;
-  }
-
-  ParrotsList dataProvider;
+  int _parrotCount;
+  List<String> parrotRingList = [''];
 
   @override
   Widget build(BuildContext context) {
-    final dataProvider = Provider.of<ParrotsList>(context);
-    _parrotList = dataProvider.getParrotList;
     return Expanded(
-      child: PullToRevealTopItemList(
-        startRevealed: true,
-        revealableHeight: 65,
+      child: ListView.builder(
         itemCount: widget.activeRaceList.length,
         itemBuilder: (context, index) {
-          return createSlidableCard(context, index);
-        },
-        revealableBuilder: (BuildContext context, RevealableToggler opener,
-            RevealableToggler closer, BoxConstraints constraints) {
-          return Column(
-            children: [
-              CreateParrotsDropdownButton(),
-            ],
+          return StreamBuilder<QuerySnapshot>(
+            stream: FirebaseFirestore.instance
+                .collection(firebaseUser.uid)
+                .doc(widget.activeRaceList[index])
+                .collection("Birds")
+                .snapshots(),
+            builder:
+                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              if (snapshot.hasError) return Text('Błąd danych');
+              switch (snapshot.connectionState) {
+                case ConnectionState.waiting:
+                  return Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(50.0),
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
+                default:
+                  _countParrot(snapshot);
+                  return Column(
+                    children: [
+                      createSlidableCard(context, index, _parrotCount),
+                    ],
+                  );
+              }
+            },
           );
         },
       ),
     );
   }
 
-  Slidable createSlidableCard(BuildContext context, int index) {
+  void _countParrot(AsyncSnapshot<QuerySnapshot> snapshot) {
+    _parrotCount = 0;
+    snapshot.data.docs.forEach((val) {
+      _parrotCount++;
+    });
+  }
+
+  Slidable createSlidableCard(
+      BuildContext context, int index, int parrotCount) {
     return Slidable(
       actionPane: SlidableDrawerActionPane(),
       actionExtentRatio: 0.30,
@@ -81,7 +91,8 @@ class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5),
                 ),
-                child: createCard(context, index, widget.activeRaceList[index]),
+                child: createCard(
+                    context, index, widget.activeRaceList[index], parrotCount),
               ),
             ),
             _globalMethods.arrowConteiner,
@@ -128,7 +139,8 @@ class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
     );
   }
 
-  Card createCard(BuildContext context, int index, String raceName) {
+  Card createCard(
+      BuildContext context, int index, String raceName, int parrotCount) {
     return Card(
       color: Colors.transparent,
       shadowColor: Theme.of(context).cardColor,
@@ -195,9 +207,7 @@ class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
                             ),
                           ),
                           child: Text(
-                            _countingParrot(
-                                    widget.activeRaceList[index], _parrotList)
-                                .toString(),
+                            parrotCount.toString(),
                             style: TextStyle(
                               color: Theme.of(context).textSelectionColor,
                               fontSize: 20,
@@ -246,7 +256,7 @@ class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
   }
 
   Future<void> _deleteRace(String name) async {
-    var dataProvider = Provider.of<ParrotsList>(context, listen: false);
+    var dataProvider = Provider.of<ParrotDataHelper>(context, listen: false);
     bool result = await DataConnectionChecker().hasConnection;
 
     if (!result) {

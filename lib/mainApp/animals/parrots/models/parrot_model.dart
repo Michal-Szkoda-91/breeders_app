@@ -24,13 +24,7 @@ class Parrot {
   });
 }
 
-class ParrotsList with ChangeNotifier {
-  List<Parrot> _parrotList = [];
-
-  List<Parrot> get getParrotList {
-    return [..._parrotList];
-  }
-
+class ParrotDataHelper {
   Future<dynamic> createParrotCollection({
     String uid,
     Parrot parrot,
@@ -38,33 +32,35 @@ class ParrotsList with ChangeNotifier {
     final CollectionReference collectionReference =
         FirebaseFirestore.instance.collection(uid);
 
-    await collectionReference
+    await collectionReference.doc(parrot.race).set({
+      "Race Name": "${parrot.race}",
+    });
+
+    final snapShot = await collectionReference
         .doc(parrot.race)
         .collection("Birds")
         .doc(parrot.ringNumber)
-        .set({
-      "Race Name": "${parrot.race}",
-      "Colors": "${parrot.color}",
-      "Fission": "${parrot.fission}",
-      "Sex": "${parrot.sex}",
-      "Cage number": "${parrot.cageNumber}",
-      "Notes": "${parrot.notes}",
-      "PairRingNumber": "brak",
-    }, SetOptions(merge: true)).then((_) {
-      _parrotList.add(
-        Parrot(
-          race: parrot.race,
-          ringNumber: parrot.ringNumber,
-          color: parrot.color,
-          cageNumber: parrot.cageNumber,
-          fission: parrot.fission,
-          notes: parrot.notes,
-          sex: parrot.sex,
-          pairRingNumber: "brak",
-        ),
-      );
-      notifyListeners();
-    });
+        .get();
+
+    if (snapShot == null || !snapShot.exists) {
+      await collectionReference
+          .doc(parrot.race)
+          .collection("Birds")
+          .doc(parrot.ringNumber)
+          .set({
+        "Race Name": "${parrot.race}",
+        "Colors": "${parrot.color}",
+        "Fission": "${parrot.fission}",
+        "Sex": "${parrot.sex}",
+        "Cage number": "${parrot.cageNumber}",
+        "Notes": "${parrot.notes}",
+        "PairRingNumber": "brak",
+      }, SetOptions(merge: false)).then((_) {
+        print("parrot added");
+      }).catchError((err) {
+        print("error occured $err");
+      });
+    }
   }
 
   Future<dynamic> updateParrot({
@@ -88,45 +84,10 @@ class ParrotsList with ChangeNotifier {
       "Notes": "${parrot.notes}",
       "PairRingNumber": pairRingNumber,
     }).then((_) {
-      //Tutaj dodaj lokalna podmianke papugi, nie bedzie trzeba sie cofac po zmianie ;)
-      _parrotList.removeWhere((p) => p.ringNumber == parrot.ringNumber);
-      _parrotList.add(parrot);
-      notifyListeners();
+      print("parrot edited");
+    }).catchError((err) {
+      print("error occured $err");
     });
-  }
-
-//creating parrots list
-  Future<void> readParrotsList({String uid}) async {
-    final CollectionReference collectionReference =
-        FirebaseFirestore.instance.collection(uid);
-
-    _parrotList.clear();
-    ParrotsRace parrotsRace = ParrotsRace();
-    for (var i = 0; i < parrotsRace.parrotsNameList.length; i++) {
-      //checking if document exist
-      var snapshot = await collectionReference
-          .doc(parrotsRace.parrotsNameList[i])
-          .collection("Birds")
-          .get();
-      if (snapshot.docs.length != 0) {
-        //creating parrot
-        snapshot.docs.forEach((val) {
-          _parrotList.add(
-            Parrot(
-              race: val.data()['Race Name'],
-              ringNumber: val.id,
-              color: val.data()['Colors'],
-              cageNumber: val.data()['Cage number'],
-              fission: val.data()['Fission'],
-              notes: val.data()['Notes'],
-              sex: val.data()['Sex'],
-              pairRingNumber: val.data()['PairRingNumber'],
-            ),
-          );
-        });
-      }
-    }
-    notifyListeners();
   }
 
   Future<void> deleteRaceList(String uid, String raceName) async {
@@ -139,10 +100,7 @@ class ParrotsList with ChangeNotifier {
         .then((snapshot) {
       for (DocumentSnapshot ds in snapshot.docs) {
         ds.reference.delete().then((_) {
-          snapshot.docs.forEach((val) {
-            _parrotList.removeWhere((parrot) => parrot.ringNumber == val.id);
-            notifyListeners();
-          });
+          print("Delete completed");
         });
       }
     }).catchError((err) {
@@ -162,9 +120,7 @@ class ParrotsList with ChangeNotifier {
       snapshot.docs.forEach((val) {
         if (val.id == parrotToDelete.ringNumber) {
           val.reference.delete().then((_) {
-            _parrotList.removeWhere(
-                (parrot) => parrot.ringNumber == parrotToDelete.ringNumber);
-            notifyListeners();
+            print("Delete completed");
           });
         }
       });

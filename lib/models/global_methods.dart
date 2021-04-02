@@ -106,9 +106,9 @@ class GlobalMethods {
     );
   }
 
-  showMaterialDialog(BuildContext context, String text) {
+  showMaterialDialog(BuildContext context, String text) async {
     double padding = MediaQuery.of(context).size.height * 0.4;
-    showDialog(
+    await showDialog(
       context: context,
       builder: (_) => Padding(
         padding: EdgeInsets.only(top: padding),

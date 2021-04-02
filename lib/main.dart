@@ -22,10 +22,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-
-        ChangeNotifierProvider(
-          create: (_) => ParrotsList(),
-        ),
         ChangeNotifierProvider(
           create: (_) => ParrotPairingList(),
         ),

@@ -210,7 +210,7 @@ class _ParrotCardState extends State<ParrotCard> {
   }
 
   Future<void> _deleteParrot(String ring, Parrot parrot) async {
-    final dataProvider = Provider.of<ParrotsList>(context, listen: false);
+    final dataProvider = Provider.of<ParrotDataHelper>(context, listen: false);
     final _firebaseUser = FirebaseAuth.instance.currentUser;
     bool result = await DataConnectionChecker().hasConnection;
 

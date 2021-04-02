@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:breeders_app/mainApp/animals/parrots/screens/parrotsList.dart';
 import 'package:breeders_app/models/global_methods.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -8,7 +9,6 @@ import '../../../animals/parrots/models/parrot_model.dart';
 import 'package:breeders_app/globalWidgets/mainBackground.dart';
 import 'package:breeders_app/mainApp/widgets/custom_drawer.dart';
 import 'package:breeders_app/services/auth.dart';
-import 'package:provider/provider.dart';
 
 class AddParrotScreen extends StatefulWidget {
   static const String routeName = "/AddParrotScreen";
@@ -30,7 +30,6 @@ class _RaceListScreenState extends State<AddParrotScreen> {
   GlobalMethods _globalMethods = GlobalMethods();
 
   final double _sizedBoxHeight = 16.0;
-  bool _existRingName = false;
 
   String country = "PL";
   String year = DateTime.now().year.toString();
@@ -54,7 +53,7 @@ class _RaceListScreenState extends State<AddParrotScreen> {
   Pattern _yearPatter = r'^(\d{2}|\d{4})$';
   Pattern _numberPatter = r'^(\d*)$';
 
-  ParrotsList dataProvider;
+  ParrotDataHelper dataProvider = ParrotDataHelper();
   Parrot _createdParrot;
 
   @override
@@ -85,7 +84,6 @@ class _RaceListScreenState extends State<AddParrotScreen> {
 
   @override
   Widget build(BuildContext context) {
-    dataProvider = Provider.of<ParrotsList>(context);
     RegExp _regExpCountry = RegExp(_countryPatter);
     RegExp _regExpYear = RegExp(_yearPatter);
     RegExp _regExpNumber = RegExp(_numberPatter);
@@ -525,21 +523,10 @@ class _RaceListScreenState extends State<AddParrotScreen> {
       setState(() {
         ringNumber = "$country-$year-$symbol-$parrotNumber";
       });
-      _existRingName = false;
-      dataProvider.getParrotList.forEach((val) {
-        if (ringNumber == val.ringNumber) {
-          setState(() {
-            _existRingName = true;
-          });
-        }
-      });
-      if (_existRingName) {
+
+      if (!result) {
         _globalMethods.showMaterialDialog(
-            context, "Papuga z tym numerem obrączki już istnieje");
-        return;
-      } else if (!result) {
-        _globalMethods.showMaterialDialog(context,
-            "Operacja nieudana, nieznany błąd lub brak połączenia z internetem.");
+            context, "brak połączenia z internetem.");
         return;
       } else {
         setState(() {
@@ -553,18 +540,18 @@ class _RaceListScreenState extends State<AddParrotScreen> {
               sex: sexName);
         });
         try {
-          Navigator.of(context).pop();
-          await dataProvider
+          dataProvider
               .createParrotCollection(
             uid: firebaseUser.uid,
             parrot: _createdParrot,
           )
               .then((_) {
+            Navigator.of(context).pop();
             _globalMethods.showMaterialDialog(context, "Dodano Papugę");
           });
         } catch (e) {
           _globalMethods.showMaterialDialog(context,
-              "Operacja nieudana, nieznany błąd lub brak połączenia z internetem.");
+              "Operacja nieudana, nieznany błąd lub brak połączenia z internetem!");
         }
       }
     }
@@ -577,8 +564,8 @@ class _RaceListScreenState extends State<AddParrotScreen> {
     } else {
       bool result = await DataConnectionChecker().hasConnection;
       if (!result) {
-        _globalMethods.showMaterialDialog(context,
-            "Operacja nieudana, nieznany błąd lub brak połączenia z internetem.");
+        _globalMethods.showMaterialDialog(
+            context, "brak połączenia z internetem.");
         return;
       } else {
         setState(() {
@@ -592,7 +579,6 @@ class _RaceListScreenState extends State<AddParrotScreen> {
               sex: sexName,
               pairRingNumber: widget.parrot.pairRingNumber);
         });
-        Navigator.of(context).pop();
         try {
           dataProvider
               .updateParrot(
@@ -601,6 +587,8 @@ class _RaceListScreenState extends State<AddParrotScreen> {
             pairRingNumber: _createdParrot.pairRingNumber,
           )
               .then((_) {
+            Navigator.of(context).pop();
+
             _globalMethods.showMaterialDialog(context, "Edytowano dane");
           });
         } catch (e) {

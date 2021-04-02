@@ -62,8 +62,6 @@ class _AddPairScreenState extends State<AddPairScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final dataProvider = Provider.of<ParrotsList>(context, listen: false);
-    _allParrotsList = dataProvider.getParrotList;
     _createListsOfParrot(_allParrotsList);
     return Scaffold(
       endDrawer: CustomDrawer(auth: _auth),

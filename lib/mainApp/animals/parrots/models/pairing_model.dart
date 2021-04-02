@@ -35,7 +35,7 @@ class ParrotPairingList with ChangeNotifier {
   }) async {
     final CollectionReference collectionReference =
         FirebaseFirestore.instance.collection(uid);
-    ParrotsList parrotList = ParrotsList();
+    ParrotDataHelper parrotList = ParrotDataHelper();
 
     //create collection if not exist
     await collectionReference.doc(race).collection("Pairs").doc(pair.id).set({
