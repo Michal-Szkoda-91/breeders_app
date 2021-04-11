@@ -152,14 +152,15 @@ class _RaceListScreenState extends State<AddParrotScreen> {
                     //  Born Time
                     //
                     SizedBox(height: _sizedBoxHeight),
-                    Row(
-                      children: [
-                        Spacer(),
-                        buildRowCalendar(context),
-                        Spacer(),
-                      ],
-                    ),
-                    SizedBox(height: _sizedBoxHeight),
+                    widget.pair != null
+                        ? Row(
+                            children: [
+                              Spacer(),
+                              buildRowCalendar(context),
+                              Spacer(),
+                            ],
+                          )
+                        : SizedBox(height: _sizedBoxHeight),
 
                     //
                     //******************************************************* */

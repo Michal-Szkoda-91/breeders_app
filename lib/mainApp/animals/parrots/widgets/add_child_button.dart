@@ -18,6 +18,7 @@ class _AddPairChildButtonState extends State<AddPairChildButton> {
       children: [
         Spacer(),
         Container(
+          height: 35,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             color: Colors.black45,
