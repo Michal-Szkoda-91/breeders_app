@@ -1,8 +1,11 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:breeders_app/mainApp/animals/parrots/models/children_model.dart';
+import 'package:breeders_app/mainApp/animals/parrots/models/pairing_model.dart';
 import 'package:breeders_app/models/global_methods.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../../../animals/parrots/models/parrot_model.dart';
 import 'package:breeders_app/globalWidgets/mainBackground.dart';
@@ -14,8 +17,10 @@ class AddParrotScreen extends StatefulWidget {
 
   final Map<dynamic, dynamic> parrotMap;
   final Parrot parrot;
+  final ParrotPairing pair;
+  final String race;
 
-  AddParrotScreen({this.parrotMap, this.parrot});
+  AddParrotScreen({this.parrotMap, this.parrot, this.pair, this.race});
 
   @override
   _RaceListScreenState createState() => _RaceListScreenState();
@@ -37,7 +42,7 @@ class _RaceListScreenState extends State<AddParrotScreen> {
   String ringNumber = "";
   String parrotColor = "";
   String fission = "";
-  String cageNumber = "";
+  String cageNumber = "brak";
   String notes = "brak";
   Map<double, String> genderMap = {
     1.0: 'Samiec',
@@ -47,13 +52,16 @@ class _RaceListScreenState extends State<AddParrotScreen> {
   double sex = 1.0;
   String sexName = "";
   String actualRing = "";
+  String bornTime = DateFormat.yMd('pl_PL').format(DateTime.now()).toString();
 
   Pattern _countryPatter = r'^([A-Z]+)$';
   Pattern _yearPatter = r'^(\d{2}|\d{4})$';
   Pattern _numberPatter = r'^(\d*)$';
 
   ParrotDataHelper dataProvider = ParrotDataHelper();
+  ParrotPairDataHelper pairDataprovider = ParrotPairDataHelper();
   Parrot _createdParrot;
+  Children _createdChild;
 
   @override
   void initState() {
@@ -141,6 +149,19 @@ class _RaceListScreenState extends State<AddParrotScreen> {
                     SizedBox(height: _sizedBoxHeight),
 
                     //
+                    //  Born Time
+                    //
+                    SizedBox(height: _sizedBoxHeight),
+                    Row(
+                      children: [
+                        Spacer(),
+                        buildRowCalendar(context),
+                        Spacer(),
+                      ],
+                    ),
+                    SizedBox(height: _sizedBoxHeight),
+
+                    //
                     //******************************************************* */
                     //Color
                     customTextFormField(
@@ -157,20 +178,6 @@ class _RaceListScreenState extends State<AddParrotScreen> {
 
                     //
                     //******************************************************* */
-                    //cage number
-                    customTextFormField(
-                      context: context,
-                      node: node,
-                      hint: 'Numer / nazwa klatki',
-                      icon: Icons.home_outlined,
-                      mainValue: 'cageNumber',
-                      maxlines: 1,
-                      maxLength: 30,
-                      initvalue: cageNumber,
-                    ),
-                    SizedBox(height: _sizedBoxHeight),
-                    //
-                    //******************************************************* */
                     //Fission
                     customTextFormField(
                       context: context,
@@ -181,6 +188,19 @@ class _RaceListScreenState extends State<AddParrotScreen> {
                       maxlines: 2,
                       maxLength: 50,
                       initvalue: fission,
+                    ),
+                    SizedBox(height: _sizedBoxHeight), //
+                    //******************************************************* */
+                    //cage number
+                    customTextFormField(
+                      context: context,
+                      node: node,
+                      hint: 'Numer / nazwa klatki',
+                      icon: Icons.home_outlined,
+                      mainValue: 'cageNumber',
+                      maxlines: 1,
+                      maxLength: 30,
+                      initvalue: cageNumber,
                     ),
                     SizedBox(height: _sizedBoxHeight),
                     //
@@ -200,45 +220,50 @@ class _RaceListScreenState extends State<AddParrotScreen> {
                 ),
               ),
               SizedBox(height: _sizedBoxHeight),
-              widget.parrot == null
+              (widget.parrot == null && widget.pair == null)
                   ? _addParrotConfimButton(context)
-                  : Row(
-                      children: [
-                        Expanded(child: SizedBox()),
-                        RaisedButton(
-                          color: Theme.of(context).primaryColor,
-                          child: Text(
-                            'Zapisz zmiany',
-                            style: TextStyle(
-                              color: Theme.of(context).textSelectionColor,
-                            ),
-                          ),
-                          //edit a parrot
-                          onPressed: _editParrot,
-                        ),
-                        SizedBox(
-                          width: 20,
-                        ),
-                        RaisedButton(
-                          color: Theme.of(context).primaryColor,
-                          child: Text(
-                            'Anuluj',
-                            style: TextStyle(
-                              color: Theme.of(context).textSelectionColor,
-                            ),
-                          ),
-                          //create a parrot
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                      ],
-                    ),
-              SizedBox(height: 100),
+                  : widget.pair == null
+                      ? _editParrotConfirmButton(context)
+                      : _addParrotConfimButtonChild(context),
             ],
           ),
         ),
       )),
+    );
+  }
+
+  Row _editParrotConfirmButton(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(child: SizedBox()),
+        RaisedButton(
+          color: Theme.of(context).primaryColor,
+          child: Text(
+            'Zapisz zmiany',
+            style: TextStyle(
+              color: Theme.of(context).textSelectionColor,
+            ),
+          ),
+          //edit a parrot
+          onPressed: _editParrot,
+        ),
+        SizedBox(
+          width: 20,
+        ),
+        RaisedButton(
+          color: Theme.of(context).primaryColor,
+          child: Text(
+            'Anuluj',
+            style: TextStyle(
+              color: Theme.of(context).textSelectionColor,
+            ),
+          ),
+          //create a parrot
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+      ],
     );
   }
 
@@ -259,6 +284,30 @@ class _RaceListScreenState extends State<AddParrotScreen> {
           //create a parrot
           onPressed: () {
             _createParrots();
+          },
+        ),
+      ],
+    );
+  }
+
+  Row _addParrotConfimButtonChild(BuildContext context) {
+    return Row(
+      children: [
+        const Expanded(
+          child: const SizedBox(),
+        ),
+        RaisedButton(
+          color: Theme.of(context).primaryColor,
+          child: Text(
+            'Utwórz Potomka',
+            style: TextStyle(
+              color: Theme.of(context).textSelectionColor,
+            ),
+          ),
+          //create a parrot
+          onPressed: () {
+            _createParrots();
+            _createChild();
           },
         ),
       ],
@@ -529,8 +578,12 @@ class _RaceListScreenState extends State<AddParrotScreen> {
         return;
       } else {
         setState(() {
+          String race = "";
+          widget.pair == null
+              ? race = widget.parrotMap['name']
+              : race = widget.race;
           _createdParrot = Parrot(
-              race: widget.parrotMap['name'],
+              race: race,
               ringNumber: ringNumber,
               cageNumber: cageNumber,
               color: parrotColor,
@@ -547,6 +600,49 @@ class _RaceListScreenState extends State<AddParrotScreen> {
               .then((_) {
             Navigator.of(context).pop();
             _globalMethods.showMaterialDialog(context, "Dodano Papugę");
+          });
+        } catch (e) {
+          _globalMethods.showMaterialDialog(context,
+              "Operacja nieudana, nieznany błąd lub brak połączenia z internetem!");
+        }
+      }
+    }
+  }
+
+  Future<void> _createChild() async {
+    if (!_formKey.currentState.validate()) {
+      _globalMethods.showMaterialDialog(
+          context, "Nie udało się dodać papugi, nie pełne dane");
+    } else {
+      bool result = await DataConnectionChecker().hasConnection;
+      setState(() {
+        ringNumber = "$country-$year-$symbol-$parrotNumber";
+      });
+
+      if (!result) {
+        _globalMethods.showMaterialDialog(
+            context, "brak połączenia z internetem.");
+        return;
+      } else {
+        setState(() {
+          _createdChild = Children(
+            broodDate: bornTime,
+            color: parrotColor,
+            gender: sexName,
+            ringNumber: ringNumber,
+          );
+        });
+        try {
+          pairDataprovider
+              .createChild(
+            uid: firebaseUser.uid,
+            race: widget.race,
+            child: _createdChild,
+            pairId: widget.pair.id,
+          )
+              .then((_) {
+            Navigator.of(context).pop();
+            _globalMethods.showMaterialDialog(context, "Utworzono potomka");
           });
         } catch (e) {
           _globalMethods.showMaterialDialog(context,
@@ -690,6 +786,55 @@ class _RaceListScreenState extends State<AddParrotScreen> {
           color: Theme.of(context).textSelectionColor,
         ),
       ),
+    );
+  }
+
+  Column buildRowCalendar(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        FlatButton(
+          color: Theme.of(context).backgroundColor,
+          onPressed: () {
+            showDatePicker(
+              context: context,
+              locale: const Locale("pl", "PL"),
+              initialDate: DateTime.now(),
+              firstDate: DateTime(2000),
+              lastDate: DateTime(2050),
+              cancelText: "Anuluj",
+            ).then((date) {
+              setState(() {
+                bornTime = DateFormat.yMd('pl_PL').format(date).toString();
+              });
+            });
+          },
+          child: _createInfoText(
+            context,
+            'Data urodzenia papugi',
+          ),
+        ),
+        Card(
+          color: Colors.transparent,
+          shadowColor: Theme.of(context).cardColor,
+          child: Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: Text(
+              bornTime,
+              style: TextStyle(
+                  fontSize: 18, color: Theme.of(context).textSelectionColor),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Text _createInfoText(BuildContext context, String text) {
+    return Text(
+      text,
+      style:
+          TextStyle(fontSize: 16, color: Theme.of(context).textSelectionColor),
     );
   }
 }

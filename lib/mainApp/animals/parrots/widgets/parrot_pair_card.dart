@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
+import 'add_child_button.dart';
 import 'parrotDialogInformation.dart';
 
 class ParrotPairCard extends StatefulWidget {
@@ -48,7 +49,9 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
               closeOnScroll: true,
               child: Row(
                 children: [
-                  Expanded(child: _createCard(context, index)),
+                  Expanded(
+                    child: _createCard(context, index),
+                  ),
                   _globalMethods.arrowConteiner,
                 ],
               ),
@@ -115,6 +118,13 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
               context,
               "Samiec(1,0): ",
               widget._pairList[index].maleRingNumber,
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            AddPairChildButton(
+              pair: widget._pairList[index],
+              raceName: widget.race,
             ),
           ],
         ),

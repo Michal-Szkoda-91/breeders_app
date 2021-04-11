@@ -8,6 +8,8 @@ import 'package:breeders_app/mainApp/animals/parrots/screens/addParrot_screen.da
 import 'package:breeders_app/models/global_methods.dart';
 import 'package:breeders_app/mainApp/animals/parrots/models/parrot_model.dart';
 
+import 'parrotDialogInformation.dart';
+
 class ParrotCard extends StatefulWidget {
   const ParrotCard({
     Key key,
@@ -86,11 +88,7 @@ class _ParrotCardState extends State<ParrotCard> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            _contentText(
-                              index,
-                              context,
-                              widget._createdParrotList[index].pairRingNumber,
-                            ),
+                            createPairRow(context, index),
                             Icon(
                               MaterialCommunityIcons.heart,
                               color: Colors.red,
@@ -100,7 +98,7 @@ class _ParrotCardState extends State<ParrotCard> {
                         ),
                       ],
                     )
-                  : _titleRow(context, "Brak pary", index, false),
+                  : _contentText(index, context, "Brak Pary"),
             ],
           ),
           children: [
@@ -155,6 +153,58 @@ class _ParrotCardState extends State<ParrotCard> {
               ],
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget createPairRow(BuildContext context, int index) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: InkWell(
+        splashColor: Theme.of(context).primaryColor,
+        borderRadius: BorderRadius.circular(10),
+        onTap: () {
+          showDialog(
+            context: context,
+            builder: (_) => new AlertDialog(
+              backgroundColor: Theme.of(context).backgroundColor,
+              scrollable: true,
+              title: new Text(
+                widget._createdParrotList[index].ringNumber,
+                style: _cretedTextStyle(context),
+              ),
+              content: ParrotDialogInformation(
+                parrotRace: widget._createdParrotList[index].race,
+                parrotRing: widget._createdParrotList[index].pairRingNumber,
+              ),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text(
+                    'OK',
+                    style: TextStyle(
+                      color: Theme.of(context).textSelectionColor,
+                      fontSize: 18,
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            ),
+          );
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: Colors.black45,
+          ),
+          padding: EdgeInsets.all(10),
+          child: Text(
+            widget._createdParrotList[index].pairRingNumber,
+            style: _cretedTextStyle(context),
+          ),
         ),
       ),
     );
@@ -245,5 +295,11 @@ class _ParrotCardState extends State<ParrotCard> {
             "Operacja nie udana, nieznany błąd lub brak połączenia z internetem.");
       }
     }
+  }
+
+  TextStyle _cretedTextStyle(BuildContext context) {
+    return TextStyle(
+      color: Theme.of(context).textSelectionColor,
+    );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:breeders_app/mainApp/animals/parrots/models/parrot_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
+
+import 'children_model.dart';
 
 class ParrotPairing {
   final String id;
@@ -18,7 +19,7 @@ class ParrotPairing {
   });
 }
 
-class ParrotPairDataHelper with ChangeNotifier {
+class ParrotPairDataHelper {
   Future<void> createPairCollection({
     String uid,
     ParrotPairing pair,
@@ -44,6 +45,29 @@ class ParrotPairDataHelper with ChangeNotifier {
     }).catchError((err) {
       print("error occured $err");
     });
+  }
+
+  Future<void> createChild(
+      {String uid, String race, String pairId, Children child}) async {
+    final CollectionReference collectionReference =
+        FirebaseFirestore.instance.collection(uid);
+
+    await collectionReference
+        .doc(race)
+        .collection("Pairs")
+        .doc(pairId)
+        .collection("Child")
+        .doc(child.ringNumber)
+        .set({
+      "Colors": "${child.color}",
+      "Sex": "${child.gender}",
+      "Born Date": "${child.broodDate}"
+    }, SetOptions(merge: false)).then((_) {
+      print("parrot added");
+    }).catchError((err) {
+      print("error occured $err");
+    });
+    ;
   }
 
   Future<void> deletePair(String uid, String race, String id,
