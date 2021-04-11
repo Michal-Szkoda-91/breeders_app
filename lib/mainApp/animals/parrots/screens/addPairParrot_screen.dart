@@ -1,11 +1,12 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:breeders_app/mainApp/animals/parrots/models/pairing_model.dart';
 import 'package:breeders_app/models/global_methods.dart';
 import 'package:breeders_app/services/auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
-import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
 import 'package:breeders_app/globalWidgets/mainBackground.dart';
@@ -25,15 +26,20 @@ class AddPairScreen extends StatefulWidget {
 class _AddPairScreenState extends State<AddPairScreen> {
   final AuthService _auth = AuthService();
   final firebaseUser = FirebaseAuth.instance.currentUser;
-  GlobalMethods _globalMethods = GlobalMethods();
+  static GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
 
-  List<Parrot> _allParrotsList;
+  GlobalMethods _globalMethods = GlobalMethods();
+  ParrotDataHelper dataProvider = ParrotDataHelper();
+  ParrotPairDataHelper _parrotPairDataHelper = ParrotPairDataHelper();
+
+  List<Parrot> _allParrotList = [];
   List<Parrot> _maleParrotList = [];
   List<Parrot> _femaleParrotList = [];
   String _choosenMaleParrotRingNumber;
   String _choosenFeMaleParrotRingNumber;
   Parrot _femaleParrotChoosen;
   Parrot _maleParrotChoosen;
+  String pairColor = "";
   ParrotPairing pair;
   String pairTime = DateFormat.yMd('pl_PL').format(DateTime.now()).toString();
 
@@ -58,75 +64,180 @@ class _AddPairScreenState extends State<AddPairScreen> {
   }
 
   ParrotPairing _createdPair;
-  var dataPairProvider;
+
+  //load stream only once
+  StreamBuilder _streamBuilder;
+  @override
+  void initState() {
+    super.initState();
+    _streamBuilder = StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance
+          .collection(firebaseUser.uid)
+          .doc(widget.raceName)
+          .collection("Birds")
+          .snapshots(),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (snapshot.hasError) return Text('Błąd danych');
+        switch (snapshot.connectionState) {
+          case ConnectionState.waiting:
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.all(50.0),
+                child: CircularProgressIndicator(),
+              ),
+            );
+          default:
+            _createParrotsList(snapshot);
+            _createListsOfParrot(_allParrotList);
+            return _createContent(context);
+        }
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    _createListsOfParrot(_allParrotsList);
+    final node = FocusScope.of(context);
     return Scaffold(
       endDrawer: CustomDrawer(auth: _auth),
       endDrawerEnableOpenDragGesture: false,
       backgroundColor: Colors.transparent,
       appBar: AppBar(
-        title: Text("Parowanie - ${widget.raceName}"),
+        title: AutoSizeText(
+          "Parowanie - ${widget.raceName}",
+          maxLines: 1,
+        ),
       ),
       body: MainBackground(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                createCard(
-                    context: context,
-                    text: "Samica (0,1)",
-                    alterText: "Brak Samic z wybranego gatunku",
-                    color: Colors.pink,
-                    icon: MaterialCommunityIcons.gender_female,
-                    gender: _createDropdownButtonFeMale,
-                    list: _femaleParrotList),
-                SizedBox(
-                  height: 15,
-                ),
-                createCard(
-                  context: context,
-                  text: "Samiec (1,0)",
-                  alterText: "Brak Samców z wybranego gatunku",
-                  color: Colors.blue,
-                  icon: MaterialCommunityIcons.gender_male,
-                  gender: _createDropdownButtonMale,
-                  list: _maleParrotList,
-                ),
-                SizedBox(height: 15),
-                buildRowCalendar(context),
-                SizedBox(height: 25),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    FlatButton(
-                      color: Theme.of(context).backgroundColor,
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: _createInfoText(
-                        context,
-                        'Anuluj',
-                      ),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              _streamBuilder,
+              const SizedBox(height: 15),
+              _createForm(context, node),
+              const SizedBox(height: 15),
+              buildRowCalendar(context),
+              const SizedBox(height: 25),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  FlatButton(
+                    color: Theme.of(context).backgroundColor,
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: _createInfoText(
+                      context,
+                      'Anuluj',
                     ),
-                    FlatButton(
-                      color: Theme.of(context).backgroundColor,
-                      onPressed: _createPair,
-                      child: _createInfoText(
-                        context,
-                        'Utwórz parę',
-                      ),
+                  ),
+                  FlatButton(
+                    color: Theme.of(context).backgroundColor,
+                    onPressed: _createPair,
+                    child: _createInfoText(
+                      context,
+                      'Utwórz parę',
                     ),
-                  ],
-                )
-              ],
-            ),
+                  ),
+                ],
+              )
+            ],
           ),
         ),
       ),
+    );
+  }
+
+  void _createParrotsList(AsyncSnapshot<QuerySnapshot> snapshot) {
+    _allParrotList = [];
+    snapshot.data.docs.forEach((val) {
+      _allParrotList.add(Parrot(
+        ringNumber: val.id,
+        cageNumber: val.data()['Cage number'],
+        color: val.data()['Colors'],
+        fission: val.data()['Fission'],
+        notes: val.data()['Notes'],
+        pairRingNumber: val.data()['PairRingNumber'],
+        race: widget.raceName,
+        sex: val.data()['Sex'],
+      ));
+    });
+  }
+
+  Padding _createContent(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            createCard(
+                context: context,
+                text: "Samica (0,1)",
+                alterText: "Brak Samic z wybranego gatunku",
+                color: Colors.pink,
+                icon: MaterialCommunityIcons.gender_female,
+                gender: _createDropdownButtonFeMale,
+                list: _femaleParrotList),
+            SizedBox(
+              height: 15,
+            ),
+            createCard(
+              context: context,
+              text: "Samiec (1,0)",
+              alterText: "Brak Samców z wybranego gatunku",
+              color: Colors.blue,
+              icon: MaterialCommunityIcons.gender_male,
+              gender: _createDropdownButtonMale,
+              list: _maleParrotList,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _createForm(BuildContext context, FocusScopeNode node) {
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: Form(
+        key: _formKey,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        child: TextFormField(
+          initialValue: pairColor,
+          style: customTextStyle(context),
+          cursorColor: Theme.of(context).textSelectionColor,
+          maxLength: 30,
+          maxLines: 1,
+          decoration: _createInputDecoration(
+            context,
+            'Kolor Pary',
+            null,
+          ),
+          validator: (val) {
+            if (val.isEmpty) {
+              return 'Uzupełnij dane';
+            } else if (val.length > 30) {
+              return 'Zbyt długi tekst';
+            } else {
+              return null;
+            }
+          },
+          onChanged: (val) {
+            setState(() {
+              pairColor = val;
+            });
+          },
+          onEditingComplete: () => node.nextFocus(),
+        ),
+      ),
+    );
+  }
+
+  //Styl tekstu w inputach
+  TextStyle customTextStyle(BuildContext context) {
+    return TextStyle(
+      color: Theme.of(context).textSelectionColor,
+      fontSize: 16,
     );
   }
 
@@ -329,13 +440,13 @@ class _AddPairScreenState extends State<AddPairScreen> {
 
   Future<void> _createPair() async {
     if (_choosenFeMaleParrotRingNumber == null ||
-        _choosenFeMaleParrotRingNumber == null) {
+        _choosenFeMaleParrotRingNumber == null ||
+        !_formKey.currentState.validate()) {
       _globalMethods.showMaterialDialog(
           context, "Nie można utworzyć pary, niepełne dane");
       return;
     } else {
       bool result = await DataConnectionChecker().hasConnection;
-      dataPairProvider = Provider.of<ParrotPairingList>(context, listen: false);
 
       if (!result) {
         _globalMethods.showMaterialDialog(context,
@@ -347,26 +458,22 @@ class _AddPairScreenState extends State<AddPairScreen> {
             femaleRingNumber: _choosenFeMaleParrotRingNumber,
             maleRingNumber: _choosenMaleParrotRingNumber,
             pairingData: pairTime,
-            childrenList: [],
+            pairColor: pairColor,
           );
           print(_createdPair.id + "wybrana ID");
-
           _maleParrotList.forEach((parrot) {
             if (parrot.ringNumber == _choosenMaleParrotRingNumber) {
               _maleParrotChoosen = parrot;
-              print(_maleParrotChoosen.ringNumber + "wybrany samiec_______");
             }
           });
           _femaleParrotList.forEach((parrot) {
             if (parrot.ringNumber == _choosenFeMaleParrotRingNumber) {
               _femaleParrotChoosen = parrot;
-              print(_femaleParrotChoosen.ringNumber + "wybrana samica_______");
             }
           });
         });
         try {
-          Navigator.of(context).pop();
-          await dataPairProvider
+          await _parrotPairDataHelper
               .createPairCollection(
             uid: firebaseUser.uid,
             pair: _createdPair,
@@ -375,6 +482,9 @@ class _AddPairScreenState extends State<AddPairScreen> {
             femaleParrot: _femaleParrotChoosen,
           )
               .then((_) {
+            _choosenFeMaleParrotRingNumber = null;
+            _choosenMaleParrotRingNumber = null;
+            Navigator.of(context).pop();
             _globalMethods.showMaterialDialog(context, "Utworzono parę");
           });
         } catch (e) {
@@ -382,5 +492,59 @@ class _AddPairScreenState extends State<AddPairScreen> {
         }
       }
     }
+  }
+
+  InputDecoration _createInputDecoration(
+      BuildContext context, String text, IconData icon) {
+    return InputDecoration(
+      contentPadding:
+          EdgeInsets.symmetric(horizontal: icon == null ? 3 : 14, vertical: 10),
+      counterStyle: TextStyle(
+        height: double.minPositive,
+      ),
+      labelText: text,
+      icon: icon == null
+          ? null
+          : Icon(
+              icon,
+              color: Theme.of(context).textSelectionColor,
+            ),
+      labelStyle: TextStyle(
+        color: Theme.of(context).hintColor,
+      ),
+      filled: true,
+      fillColor: Theme.of(context).primaryColor,
+      enabledBorder: UnderlineInputBorder(
+        borderSide: BorderSide(
+          width: 3,
+          color: Theme.of(context).primaryColor,
+        ),
+      ),
+      focusedBorder: UnderlineInputBorder(
+        borderRadius: const BorderRadius.all(
+          const Radius.circular(5.0),
+        ),
+        borderSide: BorderSide(
+          width: 3,
+          color: Theme.of(context).textSelectionColor,
+        ),
+      ),
+      errorBorder: OutlineInputBorder(
+        borderRadius: const BorderRadius.all(
+          const Radius.circular(5.0),
+        ),
+        borderSide: BorderSide(
+          color: Theme.of(context).errorColor,
+        ),
+      ),
+      focusedErrorBorder: OutlineInputBorder(
+        borderRadius: const BorderRadius.all(
+          const Radius.circular(5.0),
+        ),
+        borderSide: BorderSide(
+          color: Theme.of(context).textSelectionColor,
+        ),
+      ),
+    );
   }
 }

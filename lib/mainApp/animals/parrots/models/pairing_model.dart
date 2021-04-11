@@ -1,4 +1,3 @@
-import 'package:breeders_app/mainApp/animals/parrots/models/children_model.dart';
 import 'package:breeders_app/mainApp/animals/parrots/models/parrot_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,24 +7,18 @@ class ParrotPairing {
   final String maleRingNumber;
   final String femaleRingNumber;
   final String pairingData;
-  final List<Children> childrenList;
+  final String pairColor;
 
   ParrotPairing({
     this.id,
     this.maleRingNumber,
     this.femaleRingNumber,
     this.pairingData,
-    this.childrenList,
+    this.pairColor,
   });
 }
 
-class ParrotPairingList with ChangeNotifier {
-  List<ParrotPairing> _parrotPairingList = [];
-
-  List<ParrotPairing> get getParringParrotList {
-    return [..._parrotPairingList];
-  }
-
+class ParrotPairDataHelper with ChangeNotifier {
   Future<void> createPairCollection({
     String uid,
     ParrotPairing pair,
@@ -42,14 +35,36 @@ class ParrotPairingList with ChangeNotifier {
       "Male Ring": "${pair.maleRingNumber}",
       "Female Ring": "${pair.femaleRingNumber}",
       "Pairing Data": "${pair.pairingData}",
-      "Children": "${pair.childrenList}",
+      "Pair Color": "${pair.pairColor}",
     }, SetOptions(merge: true)).then((_) {
       parrotList.updateParrot(
           parrot: maleParrot, uid: uid, pairRingNumber: pair.femaleRingNumber);
       parrotList.updateParrot(
           parrot: femaleParrot, uid: uid, pairRingNumber: pair.maleRingNumber);
-      _parrotPairingList.add(pair);
-      notifyListeners();
+    }).catchError((err) {
+      print("error occured $err");
+    });
+  }
+
+  Future<void> deletePair(String uid, String race, String id,
+      Parrot femaleParrot, Parrot maleParrot) async {
+    final CollectionReference breedCollection =
+        FirebaseFirestore.instance.collection(uid);
+    ParrotDataHelper parrotList = ParrotDataHelper();
+
+    await breedCollection
+        .doc(race)
+        .collection("Pairs")
+        .doc(id)
+        .delete()
+        .then((_) {
+      parrotList.updateParrot(
+          parrot: maleParrot, uid: uid, pairRingNumber: "brak");
+      parrotList.updateParrot(
+          parrot: femaleParrot, uid: uid, pairRingNumber: "brak");
+      print("Pair deleted");
+    }).catchError((err) {
+      print("error occured $err");
     });
   }
 }
