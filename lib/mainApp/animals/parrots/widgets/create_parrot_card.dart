@@ -7,7 +7,6 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:breeders_app/mainApp/animals/parrots/screens/addParrot_screen.dart';
 import 'package:breeders_app/models/global_methods.dart';
 import 'package:breeders_app/mainApp/animals/parrots/models/parrot_model.dart';
-import 'package:provider/provider.dart';
 
 class ParrotCard extends StatefulWidget {
   const ParrotCard({
@@ -24,6 +23,7 @@ class ParrotCard extends StatefulWidget {
 
 class _ParrotCardState extends State<ParrotCard> {
   GlobalMethods _globalMethods = GlobalMethods();
+  ParrotDataHelper _parrotHelper = ParrotDataHelper();
 
   @override
   Widget build(BuildContext context) {
@@ -83,8 +83,21 @@ class _ParrotCardState extends State<ParrotCard> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         _titleRow(context, "Para:", index, false),
-                        _contentText(index, context,
-                            widget._createdParrotList[index].pairRingNumber),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            _contentText(
+                              index,
+                              context,
+                              widget._createdParrotList[index].pairRingNumber,
+                            ),
+                            Icon(
+                              MaterialCommunityIcons.heart,
+                              color: Colors.red,
+                              size: 30,
+                            ),
+                          ],
+                        ),
                       ],
                     )
                   : _titleRow(context, "Brak pary", index, false),
@@ -210,7 +223,6 @@ class _ParrotCardState extends State<ParrotCard> {
   }
 
   Future<void> _deleteParrot(String ring, Parrot parrot) async {
-    final dataProvider = Provider.of<ParrotDataHelper>(context, listen: false);
     final _firebaseUser = FirebaseAuth.instance.currentUser;
     bool result = await DataConnectionChecker().hasConnection;
 
@@ -221,7 +233,7 @@ class _ParrotCardState extends State<ParrotCard> {
     } else {
       try {
         Navigator.of(context).pop();
-        await dataProvider.deleteParrot(_firebaseUser.uid, parrot).then(
+        await _parrotHelper.deleteParrot(_firebaseUser.uid, parrot).then(
           (_) {
             _globalMethods.showMaterialDialog(context,
                 "Usunięto papugę o numerze obrączki ${parrot.ringNumber}");

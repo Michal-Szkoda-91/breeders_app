@@ -71,7 +71,7 @@ class _ParrotsListScreenState extends State<ParrotsListScreen> {
         color: val.data()['Colors'],
         fission: val.data()['Fission'],
         notes: val.data()['Notes'],
-        pairRingNumber: "brak",
+        pairRingNumber: val.data()['PairRingNumber'],
         race: widget.raceName,
         sex: val.data()['Sex'],
       ));

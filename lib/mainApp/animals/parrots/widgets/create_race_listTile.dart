@@ -7,7 +7,6 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:provider/provider.dart';
 
 import '../../../../models/global_methods.dart';
 import '../../parrots/screens/parrotsList.dart';
@@ -28,8 +27,10 @@ class CreateParrotRaceListTile extends StatefulWidget {
 class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
   final firebaseUser = FirebaseAuth.instance.currentUser;
   GlobalMethods _globalMethods = GlobalMethods();
+  ParrotDataHelper _parrotDataHelper = ParrotDataHelper();
   int _parrotCount;
   List<String> parrotRingList = [''];
+  List<Parrot> parrotList = [];
 
   @override
   Widget build(BuildContext context) {
@@ -73,6 +74,16 @@ class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
     _parrotCount = 0;
     snapshot.data.docs.forEach((val) {
       _parrotCount++;
+      parrotList.add(Parrot(
+        ringNumber: val.id,
+        cageNumber: val.data()['Cage number'],
+        color: val.data()['Colors'],
+        fission: val.data()['Fission'],
+        notes: val.data()['Notes'],
+        pairRingNumber: val.data()['PairRingNumber'],
+        race: val.data()['Race Name'],
+        sex: val.data()['Sex'],
+      ));
     });
   }
 
@@ -80,7 +91,7 @@ class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
       BuildContext context, int index, int parrotCount) {
     return Slidable(
       actionPane: SlidableDrawerActionPane(),
-      actionExtentRatio: 0.30,
+      actionExtentRatio: 0.35,
       closeOnScroll: true,
       child: Padding(
         padding: const EdgeInsets.all(10),
@@ -134,6 +145,7 @@ class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
       MaterialPageRoute(
         builder: (context) => PairListScreen(
           raceName: raceName,
+          parrotList: parrotList,
         ),
       ),
     );
@@ -256,7 +268,6 @@ class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
   }
 
   Future<void> _deleteRace(String name) async {
-    var dataProvider = Provider.of<ParrotDataHelper>(context, listen: false);
     bool result = await DataConnectionChecker().hasConnection;
 
     if (!result) {
@@ -266,7 +277,7 @@ class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
     } else {
       try {
         Navigator.of(context).pop();
-        await dataProvider.deleteRaceList(firebaseUser.uid, name).then(
+        await _parrotDataHelper.deleteRaceList(firebaseUser.uid, name).then(
           (_) {
             _globalMethods.showMaterialDialog(
                 context, "Usunięto wszystkie papugi z rasy $name");

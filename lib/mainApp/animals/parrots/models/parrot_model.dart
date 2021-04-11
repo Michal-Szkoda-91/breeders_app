@@ -1,6 +1,4 @@
-import 'package:breeders_app/mainApp/animals/parrots/models/parrotsRace_list.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 
 class Parrot {
   final String race;
@@ -98,13 +96,29 @@ class ParrotDataHelper {
         .collection("Birds")
         .get()
         .then((snapshot) {
-      for (DocumentSnapshot ds in snapshot.docs) {
-        ds.reference.delete().then((_) {
-          print("Delete completed");
-        });
+      for (DocumentSnapshot doc in snapshot.docs) {
+        doc.reference.delete();
       }
+      print("Delete completed");
     }).catchError((err) {
       print(err);
+    });
+    await collectionReference
+        .doc(raceName)
+        .collection("Pairs")
+        .get()
+        .then((snapshot) {
+      for (DocumentSnapshot doc in snapshot.docs) {
+        doc.reference.delete();
+      }
+      print("Delete completed");
+    }).catchError((err) {
+      print(err);
+    });
+    await collectionReference.doc(raceName).delete().then((_) {
+      print("collection of parrots deleted");
+    }).catchError((err) {
+      print("error occured $err");
     });
   }
 
@@ -112,20 +126,37 @@ class ParrotDataHelper {
     final CollectionReference breedCollection =
         FirebaseFirestore.instance.collection(uid);
 
+    if (parrotToDelete.pairRingNumber != "brak") {
+      await breedCollection
+          .doc(parrotToDelete.race)
+          .collection("Pairs")
+          .get()
+          .then((snapshot) {
+        for (DocumentSnapshot doc in snapshot.docs) {
+          if (doc.id.contains(parrotToDelete.ringNumber)) {
+            doc.reference.delete();
+          }
+        }
+      });
+
+      await breedCollection
+          .doc(parrotToDelete.race)
+          .collection("Birds")
+          .doc(parrotToDelete.pairRingNumber)
+          .update({
+        "PairRingNumber": "brak",
+      });
+    }
+
     await breedCollection
         .doc(parrotToDelete.race)
         .collection("Birds")
-        .get()
-        .then((snapshot) {
-      snapshot.docs.forEach((val) {
-        if (val.id == parrotToDelete.ringNumber) {
-          val.reference.delete().then((_) {
-            print("Delete completed");
-          });
-        }
-      });
+        .doc(parrotToDelete.ringNumber)
+        .delete()
+        .then((_) {
+      print("parrot deleted");
     }).catchError((err) {
-      print(err);
+      print("error occured $err");
     });
   }
 }

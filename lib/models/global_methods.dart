@@ -1,6 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:breeders_app/mainApp/animals/parrots/models/parrot_model.dart';
-import 'package:breeders_app/mainApp/animals/parrots/screens/parrot_race_list_screen.dart';
 import 'package:flutter/material.dart';
 
 class GlobalMethods {
