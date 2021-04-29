@@ -67,7 +67,6 @@ class ParrotPairDataHelper {
     }).catchError((err) {
       print("error occured $err");
     });
-    ;
   }
 
   Future<void> deletePair(String uid, String race, String id,

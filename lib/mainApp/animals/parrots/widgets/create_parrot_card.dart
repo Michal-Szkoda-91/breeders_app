@@ -7,6 +7,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:breeders_app/mainApp/animals/parrots/screens/addParrot_screen.dart';
 import 'package:breeders_app/models/global_methods.dart';
 import 'package:breeders_app/mainApp/animals/parrots/models/parrot_model.dart';
+import 'package:group_button/group_button.dart';
 
 import 'parrotDialogInformation.dart';
 
@@ -27,42 +28,121 @@ class _ParrotCardState extends State<ParrotCard> {
   GlobalMethods _globalMethods = GlobalMethods();
   ParrotDataHelper _parrotHelper = ParrotDataHelper();
 
+  _sortingBy(int index) {
+    switch (index) {
+      case 0:
+        setState(() {
+          widget._createdParrotList
+              .sort((a, b) => a.ringNumber.compareTo(b.ringNumber));
+        });
+        break;
+      case 1:
+        setState(() {
+          widget._createdParrotList.sort((a, b) => a.color.compareTo(b.color));
+        });
+        break;
+      case 2:
+        setState(() {
+          widget._createdParrotList
+              .sort((a, b) => a.fission.compareTo(b.fission));
+        });
+        break;
+      case 3:
+        setState(() {
+          widget._createdParrotList
+              .sort((a, b) => a.cageNumber.compareTo(b.cageNumber));
+        });
+        break;
+      default:
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      shrinkWrap: true,
-      itemCount: widget._createdParrotList.length,
-      itemBuilder: (context, index) {
-        return Slidable(
-          actionPane: SlidableDrawerActionPane(),
-          actionExtentRatio: 0.30,
-          closeOnScroll: true,
-          child: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Row(
-              children: [
-                Expanded(child: createParrotCard(context, index)),
-                _globalMethods.arrowConteiner,
-              ],
+    return SingleChildScrollView(
+      physics: ScrollPhysics(),
+      child: Column(
+        children: [
+          _sortingColumn(context),
+          SizedBox(
+            height: 15,
+          ),
+          ListView.builder(
+            physics: NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: widget._createdParrotList.length,
+            itemBuilder: (context, index) {
+              return Slidable(
+                actionPane: SlidableDrawerActionPane(),
+                actionExtentRatio: 0.30,
+                closeOnScroll: true,
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Row(
+                    children: [
+                      Expanded(child: createParrotCard(context, index)),
+                      _globalMethods.arrowConteiner,
+                    ],
+                  ),
+                ),
+                secondaryActions: [
+                  GestureDetector(
+                    onTap: () {
+                      _globalMethods.showDeletingDialog(
+                        context,
+                        widget._createdParrotList[index].ringNumber,
+                        "Napewno usunąć tę papugę z hodowli?",
+                        _deleteParrot,
+                        widget._createdParrotList[index],
+                      );
+                    },
+                    child: _globalMethods.createActionItem(context, Colors.red,
+                        MaterialCommunityIcons.delete, "Usuń Papugę", 13),
+                  ),
+                ],
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Container _sortingColumn(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(11.0),
+            child: Text(
+              "Sortowanie listy papug",
+              style: TextStyle(
+                color: Theme.of(context).textSelectionColor,
+                fontSize: 16,
+              ),
             ),
           ),
-          secondaryActions: [
-            GestureDetector(
-              onTap: () {
-                _globalMethods.showDeletingDialog(
-                  context,
-                  widget._createdParrotList[index].ringNumber,
-                  "Napewno usunąć tę papugę z hodowli?",
-                  _deleteParrot,
-                  widget._createdParrotList[index],
-                );
-              },
-              child: _globalMethods.createActionItem(context, Colors.red,
-                  MaterialCommunityIcons.delete, "Usuń Papugę", 13),
+          GroupButton(
+            isRadio: true,
+            spacing: 5,
+            buttonHeight: 40,
+            buttonWidth: 160,
+            unselectedColor: Theme.of(context).hintColor,
+            selectedColor: Theme.of(context).accentColor,
+            selectedTextStyle: TextStyle(
+              color: Theme.of(context).textSelectionColor,
+              fontSize: 16,
             ),
-          ],
-        );
-      },
+            unselectedTextStyle: TextStyle(
+              color: Theme.of(context).textSelectionColor,
+              fontSize: 14,
+            ),
+            onSelected: (index, isSelected) => _sortingBy(index),
+            buttons: ["Obrączka", "Kolor", "Rozszczepienie", "Numer Klatki"],
+          )
+        ],
+      ),
     );
   }
 
