@@ -171,7 +171,7 @@ class _ParrotCardState extends State<ParrotCard> {
               backgroundColor: Theme.of(context).backgroundColor,
               scrollable: true,
               title: new Text(
-                widget._createdParrotList[index].ringNumber,
+                widget._createdParrotList[index].pairRingNumber,
                 style: _cretedTextStyle(context),
               ),
               content: ParrotDialogInformation(

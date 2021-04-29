@@ -91,6 +91,7 @@ class ParrotDataHelper {
   Future<void> deleteRaceList(String uid, String raceName) async {
     final CollectionReference collectionReference =
         FirebaseFirestore.instance.collection(uid);
+    //delete all birds in collection
     await collectionReference
         .doc(raceName)
         .collection("Birds")
@@ -103,6 +104,25 @@ class ParrotDataHelper {
     }).catchError((err) {
       print(err);
     });
+    //delete all children in collection
+    await collectionReference
+        .doc(raceName)
+        .collection("Pairs")
+        .get()
+        .then((snapshot) {
+      for (DocumentSnapshot doc in snapshot.docs) {
+        doc.reference.collection("Child").get().then((snap) {
+          for (DocumentSnapshot doc in snap.docs) {
+            doc.reference.delete();
+          }
+        });
+      }
+      print("Delete completed");
+    }).catchError((err) {
+      print(err);
+    });
+
+//delete all pairs
     await collectionReference
         .doc(raceName)
         .collection("Pairs")
@@ -115,6 +135,7 @@ class ParrotDataHelper {
     }).catchError((err) {
       print(err);
     });
+//delete all document
     await collectionReference.doc(raceName).delete().then((_) {
       print("collection of parrots deleted");
     }).catchError((err) {

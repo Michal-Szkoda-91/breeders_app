@@ -80,6 +80,21 @@ class ParrotPairDataHelper {
         .doc(race)
         .collection("Pairs")
         .doc(id)
+        .collection("Child")
+        .get()
+        .then((snapshot) {
+      for (DocumentSnapshot doc in snapshot.docs) {
+        doc.reference.delete();
+      }
+      print("Pair deleted");
+    }).catchError((err) {
+      print("error occured $err");
+    });
+
+    await breedCollection
+        .doc(race)
+        .collection("Pairs")
+        .doc(id)
         .delete()
         .then((_) {
       parrotList.updateParrot(

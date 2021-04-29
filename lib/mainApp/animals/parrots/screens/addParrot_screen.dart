@@ -127,7 +127,9 @@ class _RaceListScreenState extends State<AddParrotScreen> {
                             ? genderSwitchRow(context, sex)
                             : infoText(context, widget.parrot.sex)
                         : genderSwitchRow(context, sex),
-                    SizedBox(height: _sizedBoxHeight),
+                    widget.pair != null
+                        ? Center()
+                        : SizedBox(height: _sizedBoxHeight),
                     //
                     //******************************************************* */
                     //Ring number
@@ -146,7 +148,9 @@ class _RaceListScreenState extends State<AddParrotScreen> {
                             symbol,
                             parrotNumber,
                           ),
-                    SizedBox(height: _sizedBoxHeight),
+                    widget.pair != null
+                        ? Center()
+                        : SizedBox(height: _sizedBoxHeight),
 
                     //
                     //  Born Time
@@ -165,6 +169,7 @@ class _RaceListScreenState extends State<AddParrotScreen> {
                     //
                     //******************************************************* */
                     //Color
+                    SizedBox(height: _sizedBoxHeight),
                     customTextFormField(
                       context: context,
                       node: node,
@@ -180,43 +185,53 @@ class _RaceListScreenState extends State<AddParrotScreen> {
                     //
                     //******************************************************* */
                     //Fission
-                    customTextFormField(
-                      context: context,
-                      node: node,
-                      hint: 'Jakie rozszczepienie',
-                      icon: Icons.star_border_purple500_outlined,
-                      mainValue: 'fission',
-                      maxlines: 2,
-                      maxLength: 50,
-                      initvalue: fission,
-                    ),
-                    SizedBox(height: _sizedBoxHeight), //
+                    widget.pair != null
+                        ? Center()
+                        : customTextFormField(
+                            context: context,
+                            node: node,
+                            hint: 'Jakie rozszczepienie',
+                            icon: Icons.star_border_purple500_outlined,
+                            mainValue: 'fission',
+                            maxlines: 2,
+                            maxLength: 50,
+                            initvalue: fission,
+                          ),
+                    widget.pair != null
+                        ? Center()
+                        : SizedBox(height: _sizedBoxHeight), //
                     //******************************************************* */
                     //cage number
-                    customTextFormField(
-                      context: context,
-                      node: node,
-                      hint: 'Numer / nazwa klatki',
-                      icon: Icons.home_outlined,
-                      mainValue: 'cageNumber',
-                      maxlines: 1,
-                      maxLength: 30,
-                      initvalue: cageNumber,
-                    ),
-                    SizedBox(height: _sizedBoxHeight),
+                    widget.pair != null
+                        ? Center()
+                        : customTextFormField(
+                            context: context,
+                            node: node,
+                            hint: 'Numer / nazwa klatki',
+                            icon: Icons.home_outlined,
+                            mainValue: 'cageNumber',
+                            maxlines: 1,
+                            maxLength: 30,
+                            initvalue: cageNumber,
+                          ),
+                    widget.pair != null
+                        ? Center()
+                        : SizedBox(height: _sizedBoxHeight),
                     //
                     //******************************************************* */
                     //notes
-                    customTextFormField(
-                      context: context,
-                      node: node,
-                      hint: 'Notatka / Dodatkowa informacja',
-                      icon: Icons.home_outlined,
-                      mainValue: 'notes',
-                      maxlines: 10,
-                      maxLength: 100,
-                      initvalue: notes,
-                    ),
+                    widget.pair != null
+                        ? Center()
+                        : customTextFormField(
+                            context: context,
+                            node: node,
+                            hint: 'Notatka / Dodatkowa informacja',
+                            icon: Icons.home_outlined,
+                            mainValue: 'notes',
+                            maxlines: 10,
+                            maxLength: 100,
+                            initvalue: notes,
+                          ),
                   ],
                 ),
               ),
@@ -307,7 +322,6 @@ class _RaceListScreenState extends State<AddParrotScreen> {
           ),
           //create a parrot
           onPressed: () {
-            _createParrots();
             _createChild();
           },
         ),
