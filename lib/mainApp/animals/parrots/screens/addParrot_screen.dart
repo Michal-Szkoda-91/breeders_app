@@ -241,6 +241,7 @@ class _RaceListScreenState extends State<AddParrotScreen> {
                   : widget.pair == null
                       ? _editParrotConfirmButton(context)
                       : _addParrotConfimButtonChild(context),
+              SizedBox(height: 200),
             ],
           ),
         ),

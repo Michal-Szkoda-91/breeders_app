@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
         textSelectionColor: Colors.white,
         backgroundColor: Colors.blueAccent[200],
         buttonColor: Colors.blue[200],
-        hintColor: Colors.grey[500],
+        hintColor: Colors.grey[400],
         cardColor: Colors.black,
       ),
       home: SafeArea(

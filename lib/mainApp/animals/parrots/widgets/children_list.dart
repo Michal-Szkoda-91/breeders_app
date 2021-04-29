@@ -80,19 +80,58 @@ class _ChildrenListState extends State<ChildrenList> {
                     ),
                     children: [
                       ListView.builder(
+                        physics: NeverScrollableScrollPhysics(),
                         itemCount: _childrenCount,
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
                           return ListTile(
-                            title: Text(_childrenList[index].ringNumber),
+                            title: Text(
+                              _childrenList[index].ringNumber,
+                              style: TextStyle(
+                                color: Theme.of(context).textSelectionColor,
+                                fontSize: 16,
+                              ),
+                            ),
                             subtitle: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  "Kolor:   ${_childrenList[index].color}",
+                                Row(
+                                  children: [
+                                    Text(
+                                      "Kolor:           ",
+                                      style: TextStyle(
+                                        color: Theme.of(context).hintColor,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                    Text(
+                                      "${_childrenList[index].color}",
+                                      style: TextStyle(
+                                        color: Theme.of(context)
+                                            .textSelectionColor,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                Text(
-                                  "Data ur.:   ${_childrenList[index].broodDate}",
+                                Row(
+                                  children: [
+                                    Text(
+                                      "Data ur.:       ",
+                                      style: TextStyle(
+                                        color: Theme.of(context).hintColor,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                    Text(
+                                      "${_childrenList[index].broodDate}",
+                                      style: TextStyle(
+                                        color: Theme.of(context)
+                                            .textSelectionColor,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
