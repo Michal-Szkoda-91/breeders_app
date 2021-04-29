@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
+import 'add_child_button.dart';
+import 'children_list.dart';
 import 'parrotDialogInformation.dart';
 
 class ParrotPairCard extends StatefulWidget {
@@ -48,7 +50,9 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
               closeOnScroll: true,
               child: Row(
                 children: [
-                  Expanded(child: _createCard(context, index)),
+                  Expanded(
+                    child: _createCard(context, index),
+                  ),
                   _globalMethods.arrowConteiner,
                 ],
               ),
@@ -98,23 +102,37 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
               "Data utworzenia pary: ",
               widget._pairList[index].pairingData,
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             _createInfoRow(
               context,
               "Kolor Pary: ",
               widget._pairList[index].pairColor,
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             _createInfoRowParrot(
               context,
               "Samica(0,1): ",
               widget._pairList[index].femaleRingNumber,
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             _createInfoRowParrot(
               context,
               "Samiec(1,0): ",
               widget._pairList[index].maleRingNumber,
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            AddPairChildButton(
+              pair: widget._pairList[index],
+              raceName: widget.race,
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            ChildrenList(
+              pairId: widget._pairList[index].id,
+              raceName: widget.race,
             ),
           ],
         ),

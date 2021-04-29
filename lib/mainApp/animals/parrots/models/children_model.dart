@@ -4,10 +4,10 @@ class Children {
   final String gender;
   final String broodDate;
 
-  Children(
+  Children({
     this.ringNumber,
     this.color,
     this.gender,
     this.broodDate,
-  );
+  });
 }
