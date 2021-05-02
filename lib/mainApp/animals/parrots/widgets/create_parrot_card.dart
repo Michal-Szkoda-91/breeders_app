@@ -2,12 +2,10 @@ import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 
 import 'package:breeders_app/mainApp/animals/parrots/screens/addParrot_screen.dart';
 import 'package:breeders_app/models/global_methods.dart';
 import 'package:breeders_app/mainApp/animals/parrots/models/parrot_model.dart';
-import 'package:group_button/group_button.dart';
 
 import 'parrotDialogInformation.dart';
 
@@ -27,30 +25,48 @@ class ParrotCard extends StatefulWidget {
 class _ParrotCardState extends State<ParrotCard> {
   GlobalMethods _globalMethods = GlobalMethods();
   ParrotDataHelper _parrotHelper = ParrotDataHelper();
+  int _sortingNumber = 1;
 
   _sortingBy(int index) {
     switch (index) {
-      case 0:
+      case 1:
         setState(() {
           widget._createdParrotList
               .sort((a, b) => a.ringNumber.compareTo(b.ringNumber));
-        });
-        break;
-      case 1:
-        setState(() {
-          widget._createdParrotList.sort((a, b) => a.color.compareTo(b.color));
+          _sortingNumber = 1;
         });
         break;
       case 2:
         setState(() {
-          widget._createdParrotList
-              .sort((a, b) => a.fission.compareTo(b.fission));
+          widget._createdParrotList.sort((a, b) => a.color.compareTo(b.color));
+          _sortingNumber = 2;
         });
         break;
       case 3:
         setState(() {
           widget._createdParrotList
+              .sort((a, b) => a.fission.compareTo(b.fission));
+          _sortingNumber = 3;
+        });
+        break;
+      case 4:
+        setState(() {
+          widget._createdParrotList
               .sort((a, b) => a.cageNumber.compareTo(b.cageNumber));
+          _sortingNumber = 4;
+        });
+        break;
+      case 5:
+        setState(() {
+          widget._createdParrotList
+              .sort((a, b) => a.pairRingNumber.compareTo(b.pairRingNumber));
+          _sortingNumber = 5;
+        });
+        break;
+      case 6:
+        setState(() {
+          widget._createdParrotList.sort((a, b) => a.sex.compareTo(b.sex));
+          _sortingNumber = 6;
         });
         break;
       default:
@@ -60,180 +76,296 @@ class _ParrotCardState extends State<ParrotCard> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      physics: ScrollPhysics(),
-      child: Column(
-        children: [
-          _sortingColumn(context),
-          SizedBox(
-            height: 15,
-          ),
-          ListView.builder(
-            physics: NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            itemCount: widget._createdParrotList.length,
-            itemBuilder: (context, index) {
-              return Slidable(
-                actionPane: SlidableDrawerActionPane(),
-                actionExtentRatio: 0.30,
-                closeOnScroll: true,
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Row(
-                    children: [
-                      Expanded(child: createParrotCard(context, index)),
-                      _globalMethods.arrowConteiner,
-                    ],
-                  ),
-                ),
-                secondaryActions: [
-                  GestureDetector(
-                    onTap: () {
-                      _globalMethods.showDeletingDialog(
-                        context,
-                        widget._createdParrotList[index].ringNumber,
-                        "Napewno usunąć tę papugę z hodowli?",
-                        _deleteParrot,
-                        widget._createdParrotList[index],
-                      );
-                    },
-                    child: _globalMethods.createActionItem(context, Colors.red,
-                        MaterialCommunityIcons.delete, "Usuń Papugę", 13),
-                  ),
-                ],
-              );
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
-  Container _sortingColumn(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(11.0),
-            child: Text(
-              "Sortowanie listy papug",
-              style: TextStyle(
-                color: Theme.of(context).textSelectionColor,
-                fontSize: 16,
-              ),
-            ),
-          ),
-          GroupButton(
-            isRadio: true,
-            spacing: 5,
-            buttonHeight: 40,
-            buttonWidth: 160,
-            unselectedColor: Theme.of(context).hintColor,
-            selectedColor: Theme.of(context).accentColor,
-            selectedTextStyle: TextStyle(
-              color: Theme.of(context).textSelectionColor,
-              fontSize: 16,
-            ),
-            unselectedTextStyle: TextStyle(
-              color: Theme.of(context).textSelectionColor,
-              fontSize: 14,
-            ),
-            onSelected: (index, isSelected) => _sortingBy(index),
-            buttons: ["Obrączka", "Kolor", "Rozszczepienie", "Numer Klatki"],
-          )
-        ],
-      ),
-    );
-  }
-
-  Card createParrotCard(BuildContext context, int index) {
-    return Card(
-      color: Colors.transparent,
-      shadowColor: Theme.of(context).cardColor,
       child: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: ExpansionTile(
-          title: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _titleRow(context, "Obrączka:", index, true),
-              _contentText(
-                  index, context, widget._createdParrotList[index].ringNumber),
-              SizedBox(height: 10),
-              widget._createdParrotList[index].pairRingNumber != "brak"
-                  ? Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+        padding: const EdgeInsets.all(10.0),
+        child: Column(
+          children: [
+            SizedBox(
+              height: 10,
+            ),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Container(
+                width: 1150,
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        _titleRow(context, "Para:", index, false),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            createPairRow(context, index),
-                            Icon(
-                              MaterialCommunityIcons.heart,
-                              color: Colors.red,
-                              size: 30,
-                            ),
-                          ],
+                        _createTitleRow(context, "", 50.0, 6),
+                        _createTitleRow(context, "Nr", 50.0, 0),
+                        _createTitleRow(context, "Nr obrączki", 150.0, 1),
+                        _createTitleRow(context, "Para", 150.0, 5),
+                        _createTitleRow(context, "Kolor", 150.0, 2),
+                        _createTitleRow(context, "Rozszczepienie", 200.0, 3),
+                        _createTitleRow(context, "Nr klatki", 150.0, 4),
+                        _createTitleRow(context, "Notatki", 150.0, 0),
+                        SizedBox(
+                          width: 100,
                         ),
                       ],
-                    )
-                  : _contentText(index, context, "Brak Pary"),
-            ],
-          ),
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Divider(thickness: 3.0),
-                _titleRow(context, "Kolor:", index, false),
-                _contentText(
-                    index, context, widget._createdParrotList[index].color),
-                Divider(thickness: 3.0),
-                _titleRow(context, "Rozczepienie:", index, false),
-                _contentText(
-                    index, context, widget._createdParrotList[index].fission),
-                Divider(thickness: 3.0),
-                _titleRow(context, "Numer klatki:", index, false),
-                _contentText(index, context,
-                    widget._createdParrotList[index].cageNumber),
-                Divider(thickness: 3.0),
-                _titleRow(context, "Notatki:", index, false),
-                _contentText(
-                    index, context, widget._createdParrotList[index].notes),
-                Divider(thickness: 3.0),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => AddParrotScreen(
-                              parrotMap: {
-                                "url": "assets/image/parrot.jpg",
-                                "name": "Edytuj Papugę",
-                                "icubationTime": "21"
-                              },
-                              parrot: widget._createdParrotList[index],
-                            ),
+                    ),
+                    ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: widget._createdParrotList.length,
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          width: 950,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
+                                child: _genderIcon(context, index),
+                              ),
+                              _createContentRow(
+                                  context, (index + 1).toString(), 50.0),
+                              _createContentRow(
+                                context,
+                                widget._createdParrotList[index].ringNumber,
+                                150.0,
+                              ),
+                              _createContentRowPair(
+                                context,
+                                widget._createdParrotList[index].pairRingNumber,
+                                150.0,
+                                index,
+                              ),
+                              _createContentRow(
+                                context,
+                                widget._createdParrotList[index].color,
+                                150.0,
+                              ),
+                              _createContentRowNotes(
+                                  context,
+                                  widget._createdParrotList[index].fission,
+                                  200.0),
+                              _createContentRow(
+                                context,
+                                widget._createdParrotList[index].cageNumber,
+                                150.0,
+                              ),
+                              _createContentRowNotes(
+                                context,
+                                widget._createdParrotList[index].notes,
+                                150.0,
+                              ),
+                              _createInteractiveRow(index),
+                            ],
                           ),
                         );
                       },
-                      child: _globalMethods.createActionItem(
-                          context,
-                          Colors.indigo,
-                          MaterialCommunityIcons.circle_edit_outline,
-                          "Edycja Papugi",
-                          4),
+                    ),
+                    SizedBox(
+                      height: 25,
                     ),
                   ],
                 ),
-              ],
+              ),
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Container _createInteractiveRow(int index) {
+    return Container(
+      width: 100,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          GestureDetector(
+            onTap: () {
+              _globalMethods.showDeletingDialog(
+                context,
+                widget._createdParrotList[index].ringNumber,
+                "Napewno usunąć tę papugę z hodowli?",
+                _deleteParrot,
+                widget._createdParrotList[index],
+              );
+            },
+            child: Icon(
+              Icons.delete,
+              color: Colors.red,
+              size: 30,
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AddParrotScreen(
+                    parrotMap: {
+                      "url": "assets/image/parrot.jpg",
+                      "name": "Edytuj Papugę",
+                      "icubationTime": "21"
+                    },
+                    parrot: widget._createdParrotList[index],
+                  ),
+                ),
+              );
+            },
+            child: Icon(
+              MaterialCommunityIcons.circle_edit_outline,
+              color: Colors.lightBlueAccent,
+              size: 30,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Container _createContentRow(
+      BuildContext context, String title, double width) {
+    return Container(
+      padding: EdgeInsets.all(5.0),
+      decoration: BoxDecoration(
+        border: Border(
+          right: BorderSide(color: Colors.black, width: 1.0),
+          bottom: BorderSide(color: Colors.black, width: 1.0),
+        ),
+      ),
+      height: 60,
+      width: width,
+      alignment: Alignment.center,
+      child: Text(
+        title,
+        style: TextStyle(
+          color: Theme.of(context).textSelectionColor,
+          fontSize: 14,
+        ),
+        textAlign: TextAlign.center,
+      ),
+    );
+  }
+
+  Container _createContentRowPair(
+      BuildContext context, String title, double width, int index) {
+    return Container(
+      padding: EdgeInsets.all(5.0),
+      decoration: BoxDecoration(
+        border: Border(
+          right: BorderSide(color: Colors.black, width: 1.0),
+          bottom: BorderSide(color: Colors.black, width: 1.0),
+        ),
+      ),
+      height: 60,
+      width: width,
+      alignment: Alignment.center,
+      child: widget._createdParrotList[index].pairRingNumber == "brak"
+          ? Text(
+              title,
+              style: TextStyle(
+                color: Theme.of(context).textSelectionColor,
+                fontSize: 14,
+              ),
+              textAlign: TextAlign.center,
+            )
+          : createPairRow(context, index),
+    );
+  }
+
+  Container _createContentRowNotes(
+      BuildContext context, String title, double width) {
+    return Container(
+      padding: EdgeInsets.all(5.0),
+      decoration: BoxDecoration(
+        border: Border(
+          right: BorderSide(color: Colors.black, width: 1.0),
+          bottom: BorderSide(color: Colors.black, width: 1.0),
+        ),
+      ),
+      height: 60,
+      width: width,
+      alignment: Alignment.center,
+      child: title.length > 25
+          ? GestureDetector(
+              onTap: () {
+                return _showInfo(context, title);
+              },
+              child: Text(
+                title.substring(0, 20) + "... ->",
+                style: TextStyle(
+                  color: Theme.of(context).textSelectionColor,
+                  fontSize: 14,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            )
+          : Text(
+              title,
+              style: TextStyle(
+                color: Theme.of(context).textSelectionColor,
+                fontSize: 14,
+              ),
+              textAlign: TextAlign.center,
+            ),
+    );
+  }
+
+  Future<void> _showInfo(BuildContext context, String title) {
+    return showDialog<void>(
+      barrierDismissible: true,
+      context: context,
+      builder: (BuildContext context) {
+        return new AlertDialog(
+          backgroundColor: Theme.of(context).backgroundColor,
+          content: Text(
+            title,
+            style: new TextStyle(
+              fontSize: 14,
+              color: Theme.of(context).textSelectionColor,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        );
+      },
+    );
+  }
+
+  Container _createTitleRow(
+      BuildContext context, String title, double width, int sortedIndex) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).backgroundColor,
+        border: Border(
+          right: BorderSide(color: Colors.black, width: 2.0),
+          bottom: BorderSide(color: Colors.black, width: 2.0),
+        ),
+      ),
+      height: 35,
+      width: width,
+      alignment: Alignment.center,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            title,
+            style: TextStyle(
+              color: Theme.of(context).textSelectionColor,
+              fontSize: 14,
+            ),
+          ),
+          sortedIndex != 0
+              ? GestureDetector(
+                  onTap: () {
+                    _sortingBy(sortedIndex);
+                  },
+                  child: Icon(
+                    MaterialCommunityIcons.arrow_down_drop_circle_outline,
+                    color: Theme.of(context).textSelectionColor,
+                    size: 25,
+                  ),
+                )
+              : Container(
+                  width: 0,
+                ),
+        ],
       ),
     );
   }
@@ -290,36 +422,6 @@ class _ParrotCardState extends State<ParrotCard> {
     );
   }
 
-  Widget _contentText(int index, BuildContext context, String text) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 3, left: 15),
-      child: Text(
-        text,
-        style: TextStyle(
-          color: Theme.of(context).textSelectionColor,
-          fontSize: 16,
-        ),
-      ),
-    );
-  }
-
-  Widget _titleRow(BuildContext context, String text, int index, bool isFirst) {
-    return Row(
-      children: [
-        Text(
-          text,
-          style: TextStyle(
-            color: Theme.of(context).backgroundColor,
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        Spacer(),
-        isFirst ? _genderIcon(context, index) : Center(),
-      ],
-    );
-  }
-
   Container _genderIcon(BuildContext context, int index) {
     Color colorBackground = Colors.greenAccent;
     Color colorIcon = Colors.green[700];
@@ -336,8 +438,8 @@ class _ParrotCardState extends State<ParrotCard> {
     }
 
     return Container(
-      width: 45,
-      height: 45,
+      width: 30,
+      height: 30,
       alignment: Alignment.center,
       decoration: BoxDecoration(
         color: colorBackground,
@@ -345,10 +447,14 @@ class _ParrotCardState extends State<ParrotCard> {
           color: Theme.of(context).textSelectionColor,
         ),
         borderRadius: BorderRadius.all(
-          Radius.circular(35),
+          Radius.circular(30),
         ),
       ),
-      child: Icon(icon, color: colorIcon),
+      child: Icon(
+        icon,
+        color: colorIcon,
+        size: 16,
+      ),
     );
   }
 
