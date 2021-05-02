@@ -52,7 +52,8 @@ class _RaceListScreenState extends State<AddParrotScreen> {
   double sex = 1.0;
   String sexName = "";
   String actualRing = "";
-  String bornTime = DateFormat.yMd('pl_PL').format(DateTime.now()).toString();
+  String bornTime =
+      DateFormat("yyyy-MM-dd", 'pl_PL').format(DateTime.now()).toString();
 
   Pattern _countryPatter = r'^([A-Z]+)$';
   Pattern _yearPatter = r'^(\d{2}|\d{4})$';
@@ -821,7 +822,8 @@ class _RaceListScreenState extends State<AddParrotScreen> {
               cancelText: "Anuluj",
             ).then((date) {
               setState(() {
-                bornTime = DateFormat.yMd('pl_PL').format(date).toString();
+                bornTime =
+                    DateFormat("yyyy-MM-dd", 'pl_PL').format(date).toString();
               });
             });
           },

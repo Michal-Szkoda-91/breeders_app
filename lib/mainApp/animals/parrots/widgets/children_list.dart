@@ -21,6 +21,8 @@ class _ChildrenListState extends State<ChildrenList> {
 
   @override
   Widget build(BuildContext context) {
+    _childrenList = [];
+    _childrenCount = 0;
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
           .collection(firebaseUser.uid)
@@ -79,70 +81,112 @@ class _ChildrenListState extends State<ChildrenList> {
                       ],
                     ),
                     children: [
-                      ListView.builder(
-                        physics: NeverScrollableScrollPhysics(),
-                        itemCount: _childrenCount,
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) {
-                          return ListTile(
-                            title: Text(
-                              _childrenList[index].ringNumber,
-                              style: TextStyle(
-                                color: Theme.of(context).textSelectionColor,
-                                fontSize: 16,
-                              ),
-                            ),
-                            subtitle: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                      "Kolor:           ",
-                                      style: TextStyle(
-                                        color: Theme.of(context).hintColor,
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                    Text(
-                                      "${_childrenList[index].color}",
-                                      style: TextStyle(
-                                        color: Theme.of(context)
-                                            .textSelectionColor,
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      "Data ur.:       ",
-                                      style: TextStyle(
-                                        color: Theme.of(context).hintColor,
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                    Text(
-                                      "${_childrenList[index].broodDate}",
-                                      style: TextStyle(
-                                        color: Theme.of(context)
-                                            .textSelectionColor,
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            trailing: _genderIcon(context, index),
-                          );
-                        },
+                      Row(
+                        children: [
+                          Icon(
+                            MaterialIcons.compare_arrows,
+                            color: Theme.of(context).accentColor,
+                          ),
+                        ],
                       ),
+                      _createChildDetailTable(),
                     ],
                   );
         }
       },
+    );
+  }
+
+  Container _createTitleRow(BuildContext context, String title) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).backgroundColor,
+        border: Border(
+          right: BorderSide(color: Colors.black, width: 2.0),
+          bottom: BorderSide(color: Colors.black, width: 2.0),
+        ),
+      ),
+      height: 30,
+      width: 110,
+      alignment: Alignment.center,
+      child: Text(
+        title,
+        style: TextStyle(
+          color: Theme.of(context).textSelectionColor,
+          fontSize: 14,
+        ),
+      ),
+    );
+  }
+
+  Container _createContentRow(BuildContext context, String title) {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border(
+          right: BorderSide(color: Colors.black, width: 1.0),
+          bottom: BorderSide(color: Colors.black, width: 1.0),
+        ),
+      ),
+      height: 35,
+      width: 110,
+      alignment: Alignment.center,
+      child: Text(
+        title,
+        style: TextStyle(
+          color: Theme.of(context).textSelectionColor,
+          fontSize: 14,
+        ),
+      ),
+    );
+  }
+
+  Column _createChildDetailTable() {
+    return Column(
+      children: [
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Container(
+            width: 355,
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    SizedBox(
+                      width: 25,
+                    ),
+                    _createTitleRow(context, "Nr obrączki"),
+                    _createTitleRow(context, "Kolor"),
+                    _createTitleRow(context, "Data ur."),
+                  ],
+                ),
+                ListView.builder(
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: _childrenCount,
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return Container(
+                      width: 330,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          _genderIcon(context, index),
+                          _createContentRow(
+                              context, _childrenList[index].ringNumber),
+                          _createContentRow(
+                              context, _childrenList[index].color),
+                          _createContentRow(
+                              context, _childrenList[index].broodDate),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -162,8 +206,8 @@ class _ChildrenListState extends State<ChildrenList> {
     }
 
     return Container(
-      width: 45,
-      height: 45,
+      width: 25,
+      height: 25,
       alignment: Alignment.center,
       decoration: BoxDecoration(
         color: colorBackground,
@@ -171,10 +215,14 @@ class _ChildrenListState extends State<ChildrenList> {
           color: Theme.of(context).textSelectionColor,
         ),
         borderRadius: BorderRadius.all(
-          Radius.circular(35),
+          Radius.circular(25),
         ),
       ),
-      child: Icon(icon, color: colorIcon),
+      child: Icon(
+        icon,
+        color: colorIcon,
+        size: 12,
+      ),
     );
   }
 
@@ -204,7 +252,9 @@ class _ChildrenListState extends State<ChildrenList> {
           gender: val.data()['Sex'],
         ),
       );
+
       _childrenCount++;
     });
+    _childrenList.sort((a, b) => a.broodDate.compareTo(b.broodDate));
   }
 }

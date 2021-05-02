@@ -68,10 +68,12 @@ class _PairListScreenState extends State<PairListScreen> {
                     CreatePairingParrotDropdownButton(
                       raceName: widget.raceName,
                     ),
-                    ParrotPairCard(
-                      pairList: _pairList,
-                      race: widget.raceName,
-                      parrotList: widget.parrotList,
+                    Expanded(
+                      child: ParrotPairCard(
+                        pairList: _pairList,
+                        race: widget.raceName,
+                        parrotList: widget.parrotList,
+                      ),
                     ),
                   ],
                 );
@@ -93,5 +95,6 @@ class _PairListScreenState extends State<PairListScreen> {
         pairColor: val.data()['Pair Color'],
       ));
     });
+    _pairList.sort((a, b) => a.pairingData.compareTo(b.pairingData));
   }
 }
