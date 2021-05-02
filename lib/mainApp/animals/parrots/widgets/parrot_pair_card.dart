@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:group_button/group_button.dart';
 
 import 'add_child_button.dart';
 import 'children_list.dart';
@@ -15,15 +16,12 @@ import 'parrotDialogInformation.dart';
 class ParrotPairCard extends StatefulWidget {
   final String race;
   final List<Parrot> parrotList;
+  final List<ParrotPairing> pairList;
   const ParrotPairCard({
-    Key key,
-    @required List<ParrotPairing> pairList,
+    this.pairList,
     this.race,
     this.parrotList,
-  })  : _pairList = pairList,
-        super(key: key);
-
-  final List<ParrotPairing> _pairList;
+  });
 
   @override
   _ParrotPairCardState createState() => _ParrotPairCardState();
@@ -35,55 +33,83 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
   Parrot chosenMaleParrot;
   Parrot chosenFemaleParrot;
 
+  _sortingBy(int index) {
+    switch (index) {
+      case 0:
+        setState(() {
+          widget.pairList
+              .sort((a, b) => a.pairingData.compareTo(b.pairingData));
+        });
+        break;
+      case 1:
+        setState(() {
+          widget.pairList.sort((a, b) => a.pairColor.compareTo(b.pairColor));
+        });
+        break;
+      default:
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: ListView.builder(
-          shrinkWrap: true,
-          itemCount: widget._pairList.length,
-          itemBuilder: (context, index) {
-            return Slidable(
-              actionPane: SlidableDrawerActionPane(),
-              actionExtentRatio: 0.35,
-              closeOnScroll: true,
-              child: Row(
-                children: [
-                  Expanded(
-                    child: _createCard(context, index),
+    return SingleChildScrollView(
+      physics: ScrollPhysics(),
+      child: Column(
+        children: [
+          _sortingColumn(context),
+          SizedBox(
+            height: 15,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: ListView.builder(
+              physics: NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: widget.pairList.length,
+              itemBuilder: (context, index) {
+                return Slidable(
+                  actionPane: SlidableDrawerActionPane(),
+                  actionExtentRatio: 0.35,
+                  closeOnScroll: true,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: _createCard(context, index),
+                      ),
+                      _globalMethods.arrowConteiner,
+                    ],
                   ),
-                  _globalMethods.arrowConteiner,
-                ],
-              ),
-              secondaryActions: [
-                GestureDetector(
-                  onTap: () {
-                    _globalMethods.showDeletingDialog(
-                      context,
-                      "Usuń parę",
-                      "Napewno usunąć wybraną parę z hodowli?",
-                      (_) {
-                        _deletePair(
-                            widget._pairList[index].id,
-                            widget._pairList[index].femaleRingNumber,
-                            widget._pairList[index].maleRingNumber);
+                  secondaryActions: [
+                    GestureDetector(
+                      onTap: () {
+                        _globalMethods.showDeletingDialog(
+                          context,
+                          "Usuń parę",
+                          "Napewno usunąć wybraną parę z hodowli?",
+                          (_) {
+                            _deletePair(
+                                widget.pairList[index].id,
+                                widget.pairList[index].femaleRingNumber,
+                                widget.pairList[index].maleRingNumber);
+                          },
+                          null,
+                        );
                       },
-                      null,
-                    );
-                  },
-                  child: _globalMethods.createActionItem(
-                    context,
-                    Colors.red,
-                    MaterialCommunityIcons.delete,
-                    "Usuń Parę",
-                    4,
-                  ),
-                ),
-              ],
-            );
-          },
-        ),
+                      child: _globalMethods.createActionItem(
+                        context,
+                        Colors.red,
+                        MaterialCommunityIcons.delete,
+                        "Usuń Parę",
+                        4,
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -100,38 +126,38 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
             _createInfoRow(
               context,
               "Data utworzenia pary: ",
-              widget._pairList[index].pairingData,
+              widget.pairList[index].pairingData,
             ),
             const SizedBox(height: 10),
             _createInfoRow(
               context,
               "Kolor Pary: ",
-              widget._pairList[index].pairColor,
+              widget.pairList[index].pairColor,
             ),
             const SizedBox(height: 10),
             _createInfoRowParrot(
               context,
               "Samica(0,1): ",
-              widget._pairList[index].femaleRingNumber,
+              widget.pairList[index].femaleRingNumber,
             ),
             const SizedBox(height: 10),
             _createInfoRowParrot(
               context,
               "Samiec(1,0): ",
-              widget._pairList[index].maleRingNumber,
+              widget.pairList[index].maleRingNumber,
             ),
             const SizedBox(
               height: 10,
             ),
             AddPairChildButton(
-              pair: widget._pairList[index],
+              pair: widget.pairList[index],
               raceName: widget.race,
             ),
             const SizedBox(
               height: 10,
             ),
             ChildrenList(
-              pairId: widget._pairList[index].id,
+              pairId: widget.pairList[index].id,
               raceName: widget.race,
             ),
           ],
@@ -271,5 +297,43 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
             "Operacja nie udana, nieznany błąd lub brak połączenia z internetem.");
       }
     }
+  }
+
+  Container _sortingColumn(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(11.0),
+            child: Text(
+              "Sortowanie listy par",
+              style: TextStyle(
+                color: Theme.of(context).textSelectionColor,
+                fontSize: 16,
+              ),
+            ),
+          ),
+          GroupButton(
+            isRadio: true,
+            spacing: 5,
+            buttonHeight: 40,
+            buttonWidth: 160,
+            unselectedColor: Theme.of(context).hintColor,
+            selectedColor: Theme.of(context).accentColor,
+            selectedTextStyle: TextStyle(
+              color: Theme.of(context).textSelectionColor,
+              fontSize: 16,
+            ),
+            unselectedTextStyle: TextStyle(
+              color: Theme.of(context).textSelectionColor,
+              fontSize: 14,
+            ),
+            onSelected: (index, isSelected) => _sortingBy(index),
+            buttons: ["Data Parowania", "Kolor"],
+          )
+        ],
+      ),
+    );
   }
 }

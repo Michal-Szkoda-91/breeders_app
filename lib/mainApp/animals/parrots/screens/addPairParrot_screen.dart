@@ -41,7 +41,8 @@ class _AddPairScreenState extends State<AddPairScreen> {
   Parrot _maleParrotChoosen;
   String pairColor = "";
   ParrotPairing pair;
-  String pairTime = DateFormat.yMd('pl_PL').format(DateTime.now()).toString();
+  String pairTime =
+      DateFormat("yyyy-MM-dd", 'pl_PL').format(DateTime.now()).toString();
 
   void _createListsOfParrot(List<Parrot> allParrotsList) {
     _maleParrotList.clear();
@@ -413,7 +414,8 @@ class _AddPairScreenState extends State<AddPairScreen> {
               cancelText: "Anuluj",
             ).then((date) {
               setState(() {
-                pairTime = DateFormat.yMd('pl_PL').format(date).toString();
+                pairTime =
+                    DateFormat("yyyy-MM-dd", 'pl_PL').format(date).toString();
               });
             });
           },
