@@ -37,7 +37,7 @@ class _ChildrenListState extends State<ChildrenList> {
           case ConnectionState.waiting:
             return Center(
               child: Padding(
-                padding: const EdgeInsets.all(50.0),
+                padding: const EdgeInsets.all(5.0),
                 child: CircularProgressIndicator(),
               ),
             );
@@ -46,54 +46,50 @@ class _ChildrenListState extends State<ChildrenList> {
             _createChildList(snapshot);
             return _childrenCount == 0
                 ? _createdNoChildRow(context)
-                : ExpansionTile(
-                    title: Row(
-                      children: [
-                        Text(
-                          "Ilość potomków:",
-                          style: TextStyle(
-                            color: Theme.of(context).textSelectionColor,
-                            fontSize: 16,
-                          ),
-                        ),
-                        Spacer(),
-                        Container(
-                          width: 35,
-                          height: 35,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).primaryColor,
-                            border: Border.all(
-                              color: Theme.of(context).textSelectionColor,
-                            ),
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(20),
-                            ),
-                          ),
-                          child: Text(
-                            _childrenCount.toString(),
-                            style: TextStyle(
-                              color: Theme.of(context).textSelectionColor,
-                              fontSize: 20,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    children: [
-                      Row(
-                        children: [
-                          Icon(
-                            MaterialIcons.compare_arrows,
-                            color: Theme.of(context).accentColor,
-                          ),
-                        ],
-                      ),
-                      _createChildDetailTable(),
-                    ],
-                  );
+                : _createdChildExpansionTile(context);
         }
       },
+    );
+  }
+
+  ExpansionTile _createdChildExpansionTile(BuildContext context) {
+    return ExpansionTile(
+      title: Row(
+        children: [
+          Text(
+            "Ilość potomków:",
+            style: TextStyle(
+              color: Theme.of(context).textSelectionColor,
+              fontSize: 16,
+            ),
+          ),
+          Spacer(),
+          Container(
+            width: 35,
+            height: 35,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: Theme.of(context).primaryColor,
+              border: Border.all(
+                color: Theme.of(context).textSelectionColor,
+              ),
+              borderRadius: BorderRadius.all(
+                Radius.circular(20),
+              ),
+            ),
+            child: Text(
+              _childrenCount.toString(),
+              style: TextStyle(
+                color: Theme.of(context).textSelectionColor,
+                fontSize: 20,
+              ),
+            ),
+          ),
+        ],
+      ),
+      children: [
+        _createChildDetailTable(),
+      ],
     );
   }
 
@@ -230,7 +226,9 @@ class _ChildrenListState extends State<ChildrenList> {
   Row _createdNoChildRow(BuildContext context) {
     return Row(
       children: [
-        Spacer(),
+        SizedBox(
+          width: 15,
+        ),
         Text(
           "Brak potomstwa",
           style: TextStyle(
@@ -238,7 +236,6 @@ class _ChildrenListState extends State<ChildrenList> {
             fontSize: 16,
           ),
         ),
-        Spacer(),
       ],
     );
   }
@@ -253,7 +250,6 @@ class _ChildrenListState extends State<ChildrenList> {
           gender: val.data()['Sex'],
         ),
       );
-
       _childrenCount++;
     });
     _childrenList.sort((a, b) => b.broodDate.compareTo(a.broodDate));
