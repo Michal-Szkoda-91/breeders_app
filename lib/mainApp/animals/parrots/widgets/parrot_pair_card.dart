@@ -85,29 +85,6 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
                       onTap: () {
                         _globalMethods.showDeletingDialog(
                           context,
-                          "Przenieś do archiwum",
-                          "Napewno ustawić wybraną parę jako nie aktywną? \nNie można cofnąć operacji",
-                          (_) {
-                            _movingToArchive(
-                                widget.pairList[index].id,
-                                widget.pairList[index].femaleRingNumber,
-                                widget.pairList[index].maleRingNumber);
-                          },
-                          null,
-                        );
-                      },
-                      child: _globalMethods.createActionItem(
-                        context,
-                        Colors.indigo,
-                        MaterialCommunityIcons.archive,
-                        "Przenieś do archiwum",
-                        4,
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        _globalMethods.showDeletingDialog(
-                          context,
                           "Usuń parę",
                           "Napewno usunąć wybraną parę z hodowli?",
                           (_) {
@@ -127,6 +104,31 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
                         4,
                       ),
                     ),
+                    widget.pairList[index].isArchive == "false"
+                        ? GestureDetector(
+                            onTap: () {
+                              _globalMethods.showDeletingDialog(
+                                context,
+                                "Przenieś do archiwum",
+                                "Napewno ustawić wybraną parę jako nie aktywną? \nNie można cofnąć operacji",
+                                (_) {
+                                  _movingToArchive(
+                                      widget.pairList[index].id,
+                                      widget.pairList[index].femaleRingNumber,
+                                      widget.pairList[index].maleRingNumber);
+                                },
+                                null,
+                              );
+                            },
+                            child: _globalMethods.createActionItem(
+                              context,
+                              Colors.indigo,
+                              MaterialCommunityIcons.archive,
+                              "Przenieś do archiwum",
+                              4,
+                            ),
+                          )
+                        : null,
                   ],
                 );
               },
@@ -139,7 +141,9 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
 
   Card _createCard(BuildContext context, int index) {
     return Card(
-      color: Colors.transparent,
+      color: widget.pairList[index].isArchive == "false"
+          ? Colors.transparent
+          : Colors.grey[700],
       shadowColor: Theme.of(context).cardColor,
       child: Padding(
         padding: const EdgeInsets.all(10.0),
@@ -172,10 +176,14 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
             const SizedBox(
               height: 10,
             ),
-            AddPairChildButton(
-              pair: widget.pairList[index],
-              raceName: widget.race,
-            ),
+            widget.pairList[index].isArchive == "false"
+                ? AddPairChildButton(
+                    pair: widget.pairList[index],
+                    raceName: widget.race,
+                  )
+                : SizedBox(
+                    height: 1,
+                  ),
             const SizedBox(
               height: 10,
             ),

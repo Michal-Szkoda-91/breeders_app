@@ -9,6 +9,7 @@ import 'package:breeders_app/services/auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 
 class PairListScreen extends StatefulWidget {
   static const String routeName = "/ParringListScreen";
@@ -27,6 +28,14 @@ class _PairListScreenState extends State<PairListScreen> {
   final firebaseUser = FirebaseAuth.instance.currentUser;
 
   List<ParrotPairing> _pairList = [];
+
+  bool _showArchive;
+
+  @override
+  void initState() {
+    super.initState();
+    _showArchive = false;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,9 +74,14 @@ class _PairListScreenState extends State<PairListScreen> {
                 _createPairList(snapshot);
                 return Column(
                   children: [
-                    CreatePairingParrotDropdownButton(
-                      raceName: widget.raceName,
-                    ),
+                    !_showArchive
+                        ? CreatePairingParrotDropdownButton(
+                            raceName: widget.raceName,
+                          )
+                        : SizedBox(
+                            height: 1,
+                          ),
+                    _changeView(context),
                     Expanded(
                       child: ParrotPairCard(
                         pairList: _pairList,
@@ -84,18 +98,75 @@ class _PairListScreenState extends State<PairListScreen> {
     );
   }
 
+  Widget _changeView(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+      child: GestureDetector(
+        onTap: () {
+          setState(() {
+            _showArchive = !_showArchive;
+          });
+        },
+        child: Container(
+          width: double.infinity,
+          height: 30,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: _showArchive
+                ? Theme.of(context).hintColor
+                : Theme.of(context).backgroundColor,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                !_showArchive ? "Wyświetl archiwum" : "Pokaż aktywne pary",
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Theme.of(context).textSelectionColor,
+                ),
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Icon(
+                !_showArchive
+                    ? MaterialCommunityIcons.archive
+                    : MaterialCommunityIcons.star,
+                color: Theme.of(context).textSelectionColor,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   void _createPairList(AsyncSnapshot<QuerySnapshot> snapshot) {
     _pairList = [];
     snapshot.data.docs.forEach((val) {
-      if (val.data()['Is Archive'] == "false") {
-        _pairList.add(ParrotPairing(
-          id: val.id,
-          pairingData: val.data()['Pairing Data'],
-          femaleRingNumber: val.data()['Female Ring'],
-          maleRingNumber: val.data()['Male Ring'],
-          pairColor: val.data()['Pair Color'],
-          isArchive: val.data()['Is Archive'],
-        ));
+      if (!_showArchive) {
+        if (val.data()['Is Archive'] == "false") {
+          _pairList.add(ParrotPairing(
+            id: val.id,
+            pairingData: val.data()['Pairing Data'],
+            femaleRingNumber: val.data()['Female Ring'],
+            maleRingNumber: val.data()['Male Ring'],
+            pairColor: val.data()['Pair Color'],
+            isArchive: val.data()['Is Archive'],
+          ));
+        }
+      } else {
+        if (val.data()['Is Archive'] == "true") {
+          _pairList.add(ParrotPairing(
+            id: val.id,
+            pairingData: val.data()['Pairing Data'],
+            femaleRingNumber: val.data()['Female Ring'],
+            maleRingNumber: val.data()['Male Ring'],
+            pairColor: val.data()['Pair Color'],
+            isArchive: val.data()['Is Archive'],
+          ));
+        }
       }
     });
     _pairList.sort((a, b) => a.pairingData.compareTo(b.pairingData));

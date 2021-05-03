@@ -41,10 +41,10 @@ class _CreatePairingParrotDropdownButtonState
                     horizontal: 20,
                   ),
                   child: CircleAvatar(
-                    radius: 25,
+                    radius: 20,
                     backgroundColor: Theme.of(context).primaryColor,
                     child: CircleAvatar(
-                      radius: 22,
+                      radius: 20,
                       backgroundImage: AssetImage(
                         url,
                       ),
@@ -59,7 +59,7 @@ class _CreatePairingParrotDropdownButtonState
                   maxLines: 1,
                   style: TextStyle(
                     color: Theme.of(context).textSelectionColor,
-                    fontSize: 20,
+                    fontSize: 18,
                   ),
                 ),
                 Expanded(
