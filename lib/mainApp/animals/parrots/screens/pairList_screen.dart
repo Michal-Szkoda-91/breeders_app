@@ -87,13 +87,16 @@ class _PairListScreenState extends State<PairListScreen> {
   void _createPairList(AsyncSnapshot<QuerySnapshot> snapshot) {
     _pairList = [];
     snapshot.data.docs.forEach((val) {
-      _pairList.add(ParrotPairing(
-        id: val.id,
-        pairingData: val.data()['Pairing Data'],
-        femaleRingNumber: val.data()['Female Ring'],
-        maleRingNumber: val.data()['Male Ring'],
-        pairColor: val.data()['Pair Color'],
-      ));
+      if (val.data()['Is Archive'] == "false") {
+        _pairList.add(ParrotPairing(
+          id: val.id,
+          pairingData: val.data()['Pairing Data'],
+          femaleRingNumber: val.data()['Female Ring'],
+          maleRingNumber: val.data()['Male Ring'],
+          pairColor: val.data()['Pair Color'],
+          isArchive: val.data()['Is Archive'],
+        ));
+      }
     });
     _pairList.sort((a, b) => a.pairingData.compareTo(b.pairingData));
   }

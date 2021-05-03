@@ -73,7 +73,7 @@ class GlobalMethods {
           actions: [
             TextButton(
               child: Text(
-                "Usuń",
+                "OK",
                 style: TextStyle(
                   color: Theme.of(context).textSelectionColor,
                   fontSize: 20,

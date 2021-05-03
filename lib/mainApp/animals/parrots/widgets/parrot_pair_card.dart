@@ -38,7 +38,7 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
       case 0:
         setState(() {
           widget.pairList
-              .sort((a, b) => a.pairingData.compareTo(b.pairingData));
+              .sort((a, b) => b.pairingData.compareTo(a.pairingData));
         });
         break;
       case 1:
@@ -81,6 +81,29 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
                     ],
                   ),
                   secondaryActions: [
+                    GestureDetector(
+                      onTap: () {
+                        _globalMethods.showDeletingDialog(
+                          context,
+                          "Przenieś do archiwum",
+                          "Napewno ustawić wybraną parę jako nie aktywną? \nNie można cofnąć operacji",
+                          (_) {
+                            _movingToArchive(
+                                widget.pairList[index].id,
+                                widget.pairList[index].femaleRingNumber,
+                                widget.pairList[index].maleRingNumber);
+                          },
+                          null,
+                        );
+                      },
+                      child: _globalMethods.createActionItem(
+                        context,
+                        Colors.indigo,
+                        MaterialCommunityIcons.archive,
+                        "Przenieś do archiwum",
+                        4,
+                      ),
+                    ),
                     GestureDetector(
                       onTap: () {
                         _globalMethods.showDeletingDialog(
@@ -299,13 +322,54 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
     }
   }
 
+  Future<void> _movingToArchive(
+      String id, String femaleId, String maleID) async {
+    final _firebaseUser = FirebaseAuth.instance.currentUser;
+    bool result = await DataConnectionChecker().hasConnection;
+
+    if (!result) {
+      Navigator.of(context).pop();
+      _globalMethods.showMaterialDialog(context,
+          "Operacja nieudana, nieznany błąd lub brak połączenia z internetem.");
+    } else {
+      widget.parrotList.forEach((parr) {
+        if (parr.ringNumber == femaleId) {
+          chosenFemaleParrot = parr;
+        } else if (parr.ringNumber == maleID) {
+          chosenMaleParrot = parr;
+        }
+      });
+      try {
+        Navigator.of(context).pop();
+        await _parrotPairDataHelper
+            .moveToArchive(
+          _firebaseUser.uid,
+          widget.race,
+          id,
+          chosenFemaleParrot,
+          chosenMaleParrot,
+        )
+            .then(
+          (_) {
+            _globalMethods.showMaterialDialog(
+                context, "Przesunięto do archiwum");
+          },
+        );
+      } catch (e) {
+        Navigator.of(context).pop();
+        _globalMethods.showMaterialDialog(context,
+            "Operacja nie udana, nieznany błąd lub brak połączenia z internetem.");
+      }
+    }
+  }
+
   Container _sortingColumn(BuildContext context) {
     return Container(
       width: double.infinity,
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(11.0),
+            padding: const EdgeInsets.all(4.0),
             child: Text(
               "Sortowanie listy par",
               style: TextStyle(
@@ -317,17 +381,17 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
           GroupButton(
             isRadio: true,
             spacing: 5,
-            buttonHeight: 40,
-            buttonWidth: 160,
+            buttonHeight: 25,
+            buttonWidth: 140,
             unselectedColor: Theme.of(context).hintColor,
             selectedColor: Theme.of(context).accentColor,
             selectedTextStyle: TextStyle(
               color: Theme.of(context).textSelectionColor,
-              fontSize: 16,
+              fontSize: 12,
             ),
             unselectedTextStyle: TextStyle(
               color: Theme.of(context).textSelectionColor,
-              fontSize: 14,
+              fontSize: 12,
             ),
             onSelected: (index, isSelected) => _sortingBy(index),
             buttons: ["Data Parowania", "Kolor"],
