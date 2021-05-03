@@ -136,6 +136,7 @@ class _ChildrenListState extends State<ChildrenList> {
           color: Theme.of(context).textSelectionColor,
           fontSize: 14,
         ),
+        textAlign: TextAlign.center,
       ),
     );
   }
@@ -255,6 +256,6 @@ class _ChildrenListState extends State<ChildrenList> {
 
       _childrenCount++;
     });
-    _childrenList.sort((a, b) => a.broodDate.compareTo(b.broodDate));
+    _childrenList.sort((a, b) => b.broodDate.compareTo(a.broodDate));
   }
 }

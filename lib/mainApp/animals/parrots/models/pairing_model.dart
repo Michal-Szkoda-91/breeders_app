@@ -9,6 +9,7 @@ class ParrotPairing {
   final String femaleRingNumber;
   final String pairingData;
   final String pairColor;
+  final String isArchive;
 
   ParrotPairing({
     this.id,
@@ -16,6 +17,7 @@ class ParrotPairing {
     this.femaleRingNumber,
     this.pairingData,
     this.pairColor,
+    this.isArchive,
   });
 }
 
@@ -37,6 +39,7 @@ class ParrotPairDataHelper {
       "Female Ring": "${pair.femaleRingNumber}",
       "Pairing Data": "${pair.pairingData}",
       "Pair Color": "${pair.pairColor}",
+      "Is Archive": "false",
     }, SetOptions(merge: true)).then((_) {
       parrotList.updateParrot(
           parrot: maleParrot, uid: uid, pairRingNumber: pair.femaleRingNumber);
@@ -96,6 +99,25 @@ class ParrotPairDataHelper {
         .doc(id)
         .delete()
         .then((_) {
+      parrotList.updateParrot(
+          parrot: maleParrot, uid: uid, pairRingNumber: "brak");
+      parrotList.updateParrot(
+          parrot: femaleParrot, uid: uid, pairRingNumber: "brak");
+      print("Pair deleted");
+    }).catchError((err) {
+      print("error occured $err");
+    });
+  }
+
+  Future<void> moveToArchive(String uid, String race, String id,
+      Parrot femaleParrot, Parrot maleParrot) async {
+    final CollectionReference breedCollection =
+        FirebaseFirestore.instance.collection(uid);
+    ParrotDataHelper parrotList = ParrotDataHelper();
+
+    await breedCollection.doc(race).collection("Pairs").doc(id).update({
+      "Is Archive": "true",
+    }).then((_) {
       parrotList.updateParrot(
           parrot: maleParrot, uid: uid, pairRingNumber: "brak");
       parrotList.updateParrot(

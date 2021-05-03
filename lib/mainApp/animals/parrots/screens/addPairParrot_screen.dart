@@ -141,6 +141,9 @@ class _AddPairScreenState extends State<AddPairScreen> {
                     ),
                   ),
                 ],
+              ),
+              SizedBox(
+                height: 150,
               )
             ],
           ),
