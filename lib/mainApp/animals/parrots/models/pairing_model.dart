@@ -8,6 +8,7 @@ class ParrotPairing {
   final String maleRingNumber;
   final String femaleRingNumber;
   final String pairingData;
+  final String showEggsDate;
   final String pairColor;
   final String isArchive;
 
@@ -16,6 +17,7 @@ class ParrotPairing {
     this.maleRingNumber,
     this.femaleRingNumber,
     this.pairingData,
+    this.showEggsDate,
     this.pairColor,
     this.isArchive,
   });
@@ -40,6 +42,7 @@ class ParrotPairDataHelper {
       "Pairing Data": "${pair.pairingData}",
       "Pair Color": "${pair.pairColor}",
       "Is Archive": "false",
+      "Show Eggs Date": "brak",
     }, SetOptions(merge: true)).then((_) {
       parrotList.updateParrot(
           parrot: maleParrot, uid: uid, pairRingNumber: pair.femaleRingNumber);
@@ -122,7 +125,20 @@ class ParrotPairDataHelper {
           parrot: maleParrot, uid: uid, pairRingNumber: "brak");
       parrotList.updateParrot(
           parrot: femaleParrot, uid: uid, pairRingNumber: "brak");
-      print("Pair deleted");
+      print("Pair updated");
+    }).catchError((err) {
+      print("error occured $err");
+    });
+  }
+
+  Future<void> setEggIncubationTime(
+      String uid, String race, String id, String date) async {
+    final CollectionReference breedCollection =
+        FirebaseFirestore.instance.collection(uid);
+    await breedCollection.doc(race).collection("Pairs").doc(id).update({
+      "Show Eggs Date": "$date",
+    }).then((_) {
+      print("Pair update");
     }).catchError((err) {
       print("error occured $err");
     });

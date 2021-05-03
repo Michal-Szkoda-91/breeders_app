@@ -1,6 +1,7 @@
 import 'package:breeders_app/mainApp/animals/parrots/screens/addPairParrot_screen.dart';
 import 'package:breeders_app/mainApp/animals/parrots/screens/pairList_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'mainApp/animals/parrots/screens/addParrot_screen.dart';
@@ -10,6 +11,7 @@ import 'fireInitialization/initWidget.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(MyApp());
 }
 

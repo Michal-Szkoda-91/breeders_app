@@ -154,6 +154,7 @@ class _PairListScreenState extends State<PairListScreen> {
             maleRingNumber: val.data()['Male Ring'],
             pairColor: val.data()['Pair Color'],
             isArchive: val.data()['Is Archive'],
+            showEggsDate: val.data()['Show Eggs Date'],
           ));
         }
       } else {
@@ -165,6 +166,7 @@ class _PairListScreenState extends State<PairListScreen> {
             maleRingNumber: val.data()['Male Ring'],
             pairColor: val.data()['Pair Color'],
             isArchive: val.data()['Is Archive'],
+            showEggsDate: val.data()['Show Eggs Date'],
           ));
         }
       }

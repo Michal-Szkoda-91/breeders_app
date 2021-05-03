@@ -11,6 +11,7 @@ import 'package:group_button/group_button.dart';
 
 import 'add_child_button.dart';
 import 'children_list.dart';
+import 'egg_expansionTile.dart';
 import 'parrotDialogInformation.dart';
 
 class ParrotPairCard extends StatefulWidget {
@@ -175,6 +176,14 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
             ),
             const SizedBox(
               height: 10,
+            ),
+            Divider(
+              color: Theme.of(context).textSelectionColor,
+            ),
+            EggExpansionTile(widget.pairList[index].showEggsDate, widget.race,
+                widget.pairList[index].id),
+            Divider(
+              color: Theme.of(context).textSelectionColor,
             ),
             widget.pairList[index].isArchive == "false"
                 ? AddPairChildButton(
