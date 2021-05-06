@@ -1,4 +1,5 @@
 import 'package:breeders_app/mainApp/animals/parrots/models/pairing_model.dart';
+import 'package:breeders_app/mainApp/animals/parrots/models/parrotsRace_list.dart';
 import 'package:breeders_app/models/global_methods.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -19,43 +20,126 @@ class EggExpansionTile extends StatefulWidget {
 class _EggExpansionTileState extends State<EggExpansionTile> {
   GlobalMethods _globalMethods = GlobalMethods();
   ParrotPairDataHelper _parrotPairDataHelper = ParrotPairDataHelper();
+  ParrotsRace _parrotsRace = new ParrotsRace();
+
+  int daysToBorn = 0;
+  int incubationDuration = 0;
+  String bornTimeString = "";
+
+  @override
+  void initState() {
+    super.initState();
+    _parrotsRace.parrotsRaceList.forEach((element) {
+      if (element['name'] == widget.raceName) {
+        incubationDuration = element['icubationTime'];
+      }
+    });
+    _countData();
+  }
+
+  void _countData() {
+    setState(() {
+      if (widget.showEggDate != "brak") {
+        //subtraction data
+        DateTime today = DateTime.now();
+        DateTime incubationTime = DateTime.parse(widget.showEggDate);
+        DateTime bornTime =
+            incubationTime.add(Duration(days: incubationDuration));
+        daysToBorn = bornTime.difference(today).inDays;
+        bornTimeString = DateFormat("yyyy-MM-dd").format(bornTime);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    print(widget.showEggDate);
     return ExpansionTile(
-      title: Row(
+      title: Column(
         children: [
-          Text(
-            widget.showEggDate != "brak"
-                ? "Brak jajek"
-                : "Pozostało dni do wylęgu:",
-            style: TextStyle(
-              color: Theme.of(context).textSelectionColor,
-              fontSize: 16,
-            ),
+          Row(
+            children: [
+              Text(
+                widget.showEggDate == "brak"
+                    ? "Brak jajek"
+                    : "Pozostało dni do wylęgu:",
+                style: TextStyle(
+                  color: Theme.of(context).textSelectionColor,
+                  fontSize: 16,
+                ),
+              ),
+              Spacer(),
+              widget.showEggDate != "brak"
+                  ? Container(
+                      width: 35,
+                      height: 35,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: daysToBorn <= 6 && daysToBorn > 3
+                            ? Colors.orange
+                            : daysToBorn <= 3
+                                ? Colors.red
+                                : Theme.of(context).primaryColor,
+                        border: Border.all(
+                          color: Theme.of(context).textSelectionColor,
+                        ),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(20),
+                        ),
+                      ),
+                      child: Text(
+                        daysToBorn < 0 ? "-" : daysToBorn.toString(),
+                        style: TextStyle(
+                          color: Theme.of(context).textSelectionColor,
+                          fontSize: 20,
+                        ),
+                      ),
+                    )
+                  : Center(),
+            ],
           ),
-          Spacer(),
-          widget.showEggDate == "brak"
-              ? Container(
-                  width: 35,
-                  height: 35,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor,
-                    border: Border.all(
-                      color: Theme.of(context).textSelectionColor,
+          SizedBox(
+            height: 5,
+          ),
+          widget.showEggDate != "brak"
+              ? Row(
+                  children: [
+                    Text(
+                      "start inkubacji: ",
+                      style: TextStyle(
+                        color: Theme.of(context).hintColor,
+                        fontSize: 14,
+                      ),
                     ),
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(20),
+                    Spacer(),
+                    Text(
+                      widget.showEggDate,
+                      style: TextStyle(
+                        color: Theme.of(context).textSelectionColor,
+                        fontSize: 14,
+                      ),
                     ),
-                  ),
-                  child: Text(
-                    "2",
-                    style: TextStyle(
-                      color: Theme.of(context).textSelectionColor,
-                      fontSize: 20,
+                  ],
+                )
+              : Center(),
+          widget.showEggDate != "brak"
+              ? Row(
+                  children: [
+                    Text(
+                      "data wylęgu: ",
+                      style: TextStyle(
+                        color: Theme.of(context).hintColor,
+                        fontSize: 14,
+                      ),
                     ),
-                  ),
+                    Spacer(),
+                    Text(
+                      bornTimeString,
+                      style: TextStyle(
+                        color: Theme.of(context).textSelectionColor,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ],
                 )
               : Center(),
         ],
@@ -112,6 +196,7 @@ class _EggExpansionTileState extends State<EggExpansionTile> {
           color: Theme.of(context).textSelectionColor,
         ),
         onPressed: () {
+          _countData();
           showDatePicker(
             context: context,
             locale: const Locale("pl", "PL"),
@@ -154,6 +239,7 @@ class _EggExpansionTileState extends State<EggExpansionTile> {
         )
             .then(
           (_) {
+            _countData();
             date != "brak"
                 ? _globalMethods.showMaterialDialog(
                     context, "Ustawiono datę rozpoczęcia inkubacji")
