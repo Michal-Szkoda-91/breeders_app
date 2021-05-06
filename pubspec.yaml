@@ -46,6 +46,8 @@ dependencies:
   data_connection_checker: ^0.3.4
   group_button: ^1.3.0
   diacritic: ^0.1.1
+  draggable_scrollbar_sliver: ^0.0.3
+
 
 dev_dependencies:
   flutter_test:

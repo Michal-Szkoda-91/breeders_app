@@ -3,6 +3,7 @@ import 'package:breeders_app/mainApp/animals/parrots/models/children_model.dart'
 import 'package:breeders_app/mainApp/animals/parrots/models/pairing_model.dart';
 import 'package:breeders_app/models/global_methods.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
+import 'package:draggable_scrollbar_sliver/draggable_scrollbar_sliver.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -29,6 +30,7 @@ class AddParrotScreen extends StatefulWidget {
 class _RaceListScreenState extends State<AddParrotScreen> {
   final AuthService _auth = AuthService();
   final firebaseUser = FirebaseAuth.instance.currentUser;
+  ScrollController _rrectController = ScrollController();
 
   final _formKey = GlobalKey<FormState>();
   GlobalMethods _globalMethods = GlobalMethods();
@@ -105,145 +107,149 @@ class _RaceListScreenState extends State<AddParrotScreen> {
             widget.parrot != null ? Text("Edycja") : Text("Dodawanie Papugi"),
       ),
       body: MainBackground(
-          child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 20,
-        ),
+          child: DraggableScrollbar.rrect(
+        controller: _rrectController,
+        heightScrollThumb: 100,
+        backgroundColor: Theme.of(context).accentColor,
         child: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(height: _sizedBoxHeight),
-              customTitle(context),
-              SizedBox(height: 30),
-              Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    //
-                    //******************************************************* */
-                    //Sex
-                    widget.parrot != null
-                        ? widget.parrot.pairRingNumber == "brak"
-                            ? genderSwitchRow(context, sex)
-                            : infoText(context, widget.parrot.sex)
-                        : genderSwitchRow(context, sex),
-                    widget.pair != null
-                        ? Center()
-                        : SizedBox(height: _sizedBoxHeight),
-                    //
-                    //******************************************************* */
-                    //Ring number
-                    infoText(context, "Numer obrączki"),
-                    SizedBox(height: _sizedBoxHeight),
-                    widget.parrot != null
-                        ? infoText(context, widget.parrot.ringNumber)
-                        : ringNumberRow(
-                            context,
-                            _regExpCountry,
-                            node,
-                            _regExpYear,
-                            _regExpNumber,
-                            country,
-                            year,
-                            symbol,
-                            parrotNumber,
-                          ),
-                    widget.pair != null
-                        ? Center()
-                        : SizedBox(height: _sizedBoxHeight),
+          controller: _rrectController,
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              children: [
+                SizedBox(height: _sizedBoxHeight),
+                customTitle(context),
+                SizedBox(height: 30),
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      //
+                      //******************************************************* */
+                      //Sex
+                      widget.parrot != null
+                          ? widget.parrot.pairRingNumber == "brak"
+                              ? genderSwitchRow(context, sex)
+                              : infoText(context, widget.parrot.sex)
+                          : genderSwitchRow(context, sex),
+                      widget.pair != null
+                          ? Center()
+                          : SizedBox(height: _sizedBoxHeight),
+                      //
+                      //******************************************************* */
+                      //Ring number
+                      infoText(context, "Numer obrączki"),
+                      SizedBox(height: _sizedBoxHeight),
+                      widget.parrot != null
+                          ? infoText(context, widget.parrot.ringNumber)
+                          : ringNumberRow(
+                              context,
+                              _regExpCountry,
+                              node,
+                              _regExpYear,
+                              _regExpNumber,
+                              country,
+                              year,
+                              symbol,
+                              parrotNumber,
+                            ),
+                      widget.pair != null
+                          ? Center()
+                          : SizedBox(height: _sizedBoxHeight),
 
-                    //
-                    //  Born Time
-                    //
-                    SizedBox(height: _sizedBoxHeight),
-                    widget.pair != null
-                        ? Row(
-                            children: [
-                              Spacer(),
-                              buildRowCalendar(context),
-                              Spacer(),
-                            ],
-                          )
-                        : SizedBox(height: _sizedBoxHeight),
+                      //
+                      //  Born Time
+                      //
+                      SizedBox(height: _sizedBoxHeight),
+                      widget.pair != null
+                          ? Row(
+                              children: [
+                                Spacer(),
+                                buildRowCalendar(context),
+                                Spacer(),
+                              ],
+                            )
+                          : SizedBox(height: _sizedBoxHeight),
 
-                    //
-                    //******************************************************* */
-                    //Color
-                    SizedBox(height: _sizedBoxHeight),
-                    customTextFormField(
-                      context: context,
-                      node: node,
-                      hint: 'Wprowadż barwę papugi',
-                      icon: Icons.color_lens,
-                      mainValue: 'parrotColor',
-                      maxlines: 1,
-                      maxLength: 30,
-                      initvalue: parrotColor,
-                    ),
-                    SizedBox(height: _sizedBoxHeight),
+                      //
+                      //******************************************************* */
+                      //Color
+                      SizedBox(height: _sizedBoxHeight),
+                      customTextFormField(
+                        context: context,
+                        node: node,
+                        hint: 'Wprowadż barwę papugi',
+                        icon: Icons.color_lens,
+                        mainValue: 'parrotColor',
+                        maxlines: 1,
+                        maxLength: 30,
+                        initvalue: parrotColor,
+                      ),
+                      SizedBox(height: _sizedBoxHeight),
 
-                    //
-                    //******************************************************* */
-                    //Fission
-                    widget.pair != null
-                        ? Center()
-                        : customTextFormField(
-                            context: context,
-                            node: node,
-                            hint: 'Jakie rozszczepienie',
-                            icon: Icons.star_border_purple500_outlined,
-                            mainValue: 'fission',
-                            maxlines: 2,
-                            maxLength: 50,
-                            initvalue: fission,
-                          ),
-                    widget.pair != null
-                        ? Center()
-                        : SizedBox(height: _sizedBoxHeight), //
-                    //******************************************************* */
-                    //cage number
-                    widget.pair != null
-                        ? Center()
-                        : customTextFormField(
-                            context: context,
-                            node: node,
-                            hint: 'Numer / nazwa klatki',
-                            icon: Icons.home_outlined,
-                            mainValue: 'cageNumber',
-                            maxlines: 1,
-                            maxLength: 30,
-                            initvalue: cageNumber,
-                          ),
-                    widget.pair != null
-                        ? Center()
-                        : SizedBox(height: _sizedBoxHeight),
-                    //
-                    //******************************************************* */
-                    //notes
-                    widget.pair != null
-                        ? Center()
-                        : customTextFormField(
-                            context: context,
-                            node: node,
-                            hint: 'Notatka / Dodatkowa informacja',
-                            icon: Icons.home_outlined,
-                            mainValue: 'notes',
-                            maxlines: 10,
-                            maxLength: 100,
-                            initvalue: notes,
-                          ),
-                  ],
+                      //
+                      //******************************************************* */
+                      //Fission
+                      widget.pair != null
+                          ? Center()
+                          : customTextFormField(
+                              context: context,
+                              node: node,
+                              hint: 'Jakie rozszczepienie',
+                              icon: Icons.star_border_purple500_outlined,
+                              mainValue: 'fission',
+                              maxlines: 2,
+                              maxLength: 50,
+                              initvalue: fission,
+                            ),
+                      widget.pair != null
+                          ? Center()
+                          : SizedBox(height: _sizedBoxHeight), //
+                      //******************************************************* */
+                      //cage number
+                      widget.pair != null
+                          ? Center()
+                          : customTextFormField(
+                              context: context,
+                              node: node,
+                              hint: 'Numer / nazwa klatki',
+                              icon: Icons.home_outlined,
+                              mainValue: 'cageNumber',
+                              maxlines: 1,
+                              maxLength: 30,
+                              initvalue: cageNumber,
+                            ),
+                      widget.pair != null
+                          ? Center()
+                          : SizedBox(height: _sizedBoxHeight),
+                      //
+                      //******************************************************* */
+                      //notes
+                      widget.pair != null
+                          ? Center()
+                          : customTextFormField(
+                              context: context,
+                              node: node,
+                              hint: 'Notatka / Dodatkowa informacja',
+                              icon: Icons.home_outlined,
+                              mainValue: 'notes',
+                              maxlines: 10,
+                              maxLength: 100,
+                              initvalue: notes,
+                            ),
+                    ],
+                  ),
                 ),
-              ),
-              SizedBox(height: _sizedBoxHeight),
-              (widget.parrot == null && widget.pair == null)
-                  ? _addParrotConfimButton(context)
-                  : widget.pair == null
-                      ? _editParrotConfirmButton(context)
-                      : _addParrotConfimButtonChild(context),
-              SizedBox(height: 200),
-            ],
+                SizedBox(height: _sizedBoxHeight),
+                (widget.parrot == null && widget.pair == null)
+                    ? _addParrotConfimButton(context)
+                    : widget.pair == null
+                        ? _editParrotConfirmButton(context)
+                        : _addParrotConfimButtonChild(context),
+                SizedBox(height: 200),
+              ],
+            ),
           ),
         ),
       )),

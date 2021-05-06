@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:breeders_app/mainApp/animals/parrots/screens/pairList_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
+import 'package:draggable_scrollbar_sliver/draggable_scrollbar_sliver.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -28,6 +29,7 @@ class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
   final firebaseUser = FirebaseAuth.instance.currentUser;
   GlobalMethods _globalMethods = GlobalMethods();
   ParrotDataHelper _parrotDataHelper = ParrotDataHelper();
+  ScrollController _rrectController = ScrollController();
   int _parrotCount;
   List<String> parrotRingList = [''];
   List<Parrot> parrotList = [];
@@ -35,37 +37,46 @@ class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: ListView.builder(
-        itemCount: widget.activeRaceList.length,
-        itemBuilder: (context, index) {
-          return StreamBuilder<QuerySnapshot>(
-            stream: FirebaseFirestore.instance
-                .collection(firebaseUser.uid)
-                .doc(widget.activeRaceList[index])
-                .collection("Birds")
-                .snapshots(),
-            builder:
-                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-              if (snapshot.hasError) return Text('Błąd danych');
-              switch (snapshot.connectionState) {
-                case ConnectionState.waiting:
-                  return Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(50.0),
-                      child: CircularProgressIndicator(),
-                    ),
-                  );
-                default:
-                  _countParrot(snapshot);
-                  return Column(
-                    children: [
-                      createSlidableCard(context, index, _parrotCount),
-                    ],
-                  );
-              }
-            },
-          );
-        },
+      child: DraggableScrollbar.rrect(
+        controller: _rrectController,
+        heightScrollThumb: 100,
+        backgroundColor: Theme.of(context).accentColor,
+        child: ListView.builder(
+          itemCount: widget.activeRaceList.length,
+          controller: _rrectController,
+          itemBuilder: (context, index) {
+            return StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection(firebaseUser.uid)
+                  .doc(widget.activeRaceList[index])
+                  .collection("Birds")
+                  .snapshots(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (snapshot.hasError) return Text('Błąd danych');
+                switch (snapshot.connectionState) {
+                  case ConnectionState.waiting:
+                    return Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(50.0),
+                        child: CircularProgressIndicator(),
+                      ),
+                    );
+                  default:
+                    _countParrot(snapshot);
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 20),
+                      child: Column(
+                        children: [
+                          createSlidableCard(context, index, _parrotCount),
+                        ],
+                      ),
+                    );
+                }
+              },
+            );
+          },
+        ),
       ),
     );
   }

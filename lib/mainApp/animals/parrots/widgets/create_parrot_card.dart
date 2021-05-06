@@ -1,4 +1,5 @@
 import 'package:data_connection_checker/data_connection_checker.dart';
+import 'package:draggable_scrollbar_sliver/draggable_scrollbar_sliver.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
@@ -25,6 +26,7 @@ class ParrotCard extends StatefulWidget {
 class _ParrotCardState extends State<ParrotCard> {
   GlobalMethods _globalMethods = GlobalMethods();
   ParrotDataHelper _parrotHelper = ParrotDataHelper();
+  ScrollController _rrectController = ScrollController();
 
   _sortingBy(int index) {
     switch (index) {
@@ -68,97 +70,105 @@ class _ParrotCardState extends State<ParrotCard> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Column(
-          children: [
-            SizedBox(
-              height: 10,
-            ),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Container(
-                width: 1150,
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        _createTitleRow(context, "", 50.0, 6),
-                        _createTitleRow(context, "Nr", 50.0, 0),
-                        _createTitleRow(context, "Nr obrączki", 150.0, 1),
-                        _createTitleRow(context, "Para", 150.0, 5),
-                        _createTitleRow(context, "Kolor", 150.0, 2),
-                        _createTitleRow(context, "Rozszczepienie", 200.0, 3),
-                        _createTitleRow(context, "Nr klatki", 150.0, 4),
-                        _createTitleRow(context, "Notatki", 150.0, 0),
-                        SizedBox(
-                          width: 100,
-                        ),
-                      ],
-                    ),
-                    ListView.builder(
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: widget._createdParrotList.length,
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        return Container(
-                          width: 950,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 10),
-                                child: _genderIcon(context, index),
-                              ),
-                              _createContentRow(
-                                  context, (index + 1).toString(), 50.0),
-                              _createContentRow(
-                                context,
-                                widget._createdParrotList[index].ringNumber,
-                                150.0,
-                              ),
-                              _createContentRowPair(
-                                context,
-                                widget._createdParrotList[index].pairRingNumber,
-                                150.0,
-                                index,
-                              ),
-                              _createContentRow(
-                                context,
-                                widget._createdParrotList[index].color,
-                                150.0,
-                              ),
-                              _createContentRowNotes(
-                                  context,
-                                  widget._createdParrotList[index].fission,
-                                  200.0),
-                              _createContentRow(
-                                context,
-                                widget._createdParrotList[index].cageNumber,
-                                150.0,
-                              ),
-                              _createContentRowNotes(
-                                context,
-                                widget._createdParrotList[index].notes,
-                                150.0,
-                              ),
-                              _createInteractiveRow(index),
-                            ],
+    return DraggableScrollbar.rrect(
+      controller: _rrectController,
+      
+      heightScrollThumb: 100,
+      backgroundColor: Theme.of(context).accentColor,
+      child: SingleChildScrollView(
+        controller: _rrectController,
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            children: [
+              SizedBox(
+                height: 10,
+              ),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Container(
+                  width: 1150,
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          _createTitleRow(context, "", 50.0, 6),
+                          _createTitleRow(context, "Nr", 50.0, 0),
+                          _createTitleRow(context, "Nr obrączki", 150.0, 1),
+                          _createTitleRow(context, "Para", 150.0, 5),
+                          _createTitleRow(context, "Kolor", 150.0, 2),
+                          _createTitleRow(context, "Rozszczepienie", 200.0, 3),
+                          _createTitleRow(context, "Nr klatki", 150.0, 4),
+                          _createTitleRow(context, "Notatki", 150.0, 0),
+                          SizedBox(
+                            width: 100,
                           ),
-                        );
-                      },
-                    ),
-                    SizedBox(
-                      height: 25,
-                    ),
-                  ],
+                        ],
+                      ),
+                      ListView.builder(
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: widget._createdParrotList.length,
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          return Container(
+                            width: 950,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10),
+                                  child: _genderIcon(context, index),
+                                ),
+                                _createContentRow(
+                                    context, (index + 1).toString(), 50.0),
+                                _createContentRow(
+                                  context,
+                                  widget._createdParrotList[index].ringNumber,
+                                  150.0,
+                                ),
+                                _createContentRowPair(
+                                  context,
+                                  widget
+                                      ._createdParrotList[index].pairRingNumber,
+                                  150.0,
+                                  index,
+                                ),
+                                _createContentRow(
+                                  context,
+                                  widget._createdParrotList[index].color,
+                                  150.0,
+                                ),
+                                _createContentRowNotes(
+                                    context,
+                                    widget._createdParrotList[index].fission,
+                                    200.0),
+                                _createContentRow(
+                                  context,
+                                  widget._createdParrotList[index].cageNumber,
+                                  150.0,
+                                ),
+                                _createContentRowNotes(
+                                  context,
+                                  widget._createdParrotList[index].notes,
+                                  150.0,
+                                ),
+                                _createInteractiveRow(index),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                      SizedBox(
+                        height: 25,
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

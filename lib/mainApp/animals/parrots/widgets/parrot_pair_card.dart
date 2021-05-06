@@ -3,6 +3,7 @@ import 'package:breeders_app/mainApp/animals/parrots/models/pairing_model.dart';
 import 'package:breeders_app/mainApp/animals/parrots/models/parrot_model.dart';
 import 'package:breeders_app/models/global_methods.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
+import 'package:draggable_scrollbar_sliver/draggable_scrollbar_sliver.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
@@ -33,6 +34,7 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
   ParrotPairDataHelper _parrotPairDataHelper = ParrotPairDataHelper();
   Parrot chosenMaleParrot;
   Parrot chosenFemaleParrot;
+  ScrollController _rrectController = ScrollController();
 
   _sortingBy(int index) {
     switch (index) {
@@ -54,88 +56,94 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      physics: ScrollPhysics(),
-      child: Column(
-        children: [
-          _sortingColumn(context),
-          SizedBox(
-            height: 15,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: ListView.builder(
-              physics: NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: widget.pairList.length,
-              itemBuilder: (context, index) {
-                return Slidable(
-                  actionPane: SlidableDrawerActionPane(),
-                  actionExtentRatio: 0.35,
-                  closeOnScroll: true,
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: _createCard(context, index),
-                      ),
-                      _globalMethods.arrowConteiner,
-                    ],
-                  ),
-                  secondaryActions: [
-                    GestureDetector(
-                      onTap: () {
-                        _globalMethods.showDeletingDialog(
-                          context,
-                          "Usuń parę",
-                          "Napewno usunąć wybraną parę z hodowli?",
-                          (_) {
-                            _deletePair(
-                                widget.pairList[index].id,
-                                widget.pairList[index].femaleRingNumber,
-                                widget.pairList[index].maleRingNumber);
-                          },
-                          null,
-                        );
-                      },
-                      child: _globalMethods.createActionItem(
-                        context,
-                        Colors.red,
-                        MaterialCommunityIcons.delete,
-                        "Usuń Parę",
-                        4,
-                      ),
-                    ),
-                    widget.pairList[index].isArchive == "false"
-                        ? GestureDetector(
-                            onTap: () {
-                              _globalMethods.showDeletingDialog(
-                                context,
-                                "Przenieś do archiwum",
-                                "Napewno ustawić wybraną parę jako nie aktywną? \nNie można cofnąć operacji",
-                                (_) {
-                                  _movingToArchive(
-                                      widget.pairList[index].id,
-                                      widget.pairList[index].femaleRingNumber,
-                                      widget.pairList[index].maleRingNumber);
-                                },
-                                null,
-                              );
-                            },
-                            child: _globalMethods.createActionItem(
-                              context,
-                              Colors.indigo,
-                              MaterialCommunityIcons.archive,
-                              "Przenieś do archiwum",
-                              4,
-                            ),
-                          )
-                        : null,
-                  ],
-                );
-              },
+    return DraggableScrollbar.rrect(
+      controller: _rrectController,
+      heightScrollThumb: 100,
+      backgroundColor: Theme.of(context).accentColor,
+      child: SingleChildScrollView(
+        controller: _rrectController,
+        physics: ScrollPhysics(),
+        child: Column(
+          children: [
+            _sortingColumn(context),
+            SizedBox(
+              height: 15,
             ),
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: ListView.builder(
+                physics: NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: widget.pairList.length,
+                itemBuilder: (context, index) {
+                  return Slidable(
+                    actionPane: SlidableDrawerActionPane(),
+                    actionExtentRatio: 0.35,
+                    closeOnScroll: true,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: _createCard(context, index),
+                        ),
+                        _globalMethods.arrowConteiner,
+                      ],
+                    ),
+                    secondaryActions: [
+                      GestureDetector(
+                        onTap: () {
+                          _globalMethods.showDeletingDialog(
+                            context,
+                            "Usuń parę",
+                            "Napewno usunąć wybraną parę z hodowli?",
+                            (_) {
+                              _deletePair(
+                                  widget.pairList[index].id,
+                                  widget.pairList[index].femaleRingNumber,
+                                  widget.pairList[index].maleRingNumber);
+                            },
+                            null,
+                          );
+                        },
+                        child: _globalMethods.createActionItem(
+                          context,
+                          Colors.red,
+                          MaterialCommunityIcons.delete,
+                          "Usuń Parę",
+                          4,
+                        ),
+                      ),
+                      widget.pairList[index].isArchive == "false"
+                          ? GestureDetector(
+                              onTap: () {
+                                _globalMethods.showDeletingDialog(
+                                  context,
+                                  "Przenieś do archiwum",
+                                  "Napewno ustawić wybraną parę jako nie aktywną? \nNie można cofnąć operacji",
+                                  (_) {
+                                    _movingToArchive(
+                                        widget.pairList[index].id,
+                                        widget.pairList[index].femaleRingNumber,
+                                        widget.pairList[index].maleRingNumber);
+                                  },
+                                  null,
+                                );
+                              },
+                              child: _globalMethods.createActionItem(
+                                context,
+                                Colors.indigo,
+                                MaterialCommunityIcons.archive,
+                                "Przenieś do archiwum",
+                                4,
+                              ),
+                            )
+                          : null,
+                    ],
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -148,66 +156,60 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
       shadowColor: Theme.of(context).cardColor,
       child: Padding(
         padding: const EdgeInsets.all(10.0),
-        child: ExpansionTile(
-            title: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _createInfoRow(
-                  context,
-                  "Data utworzenia pary: ",
-                  widget.pairList[index].pairingData,
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          _createInfoRow(
+            context,
+            "Data utworzenia pary: ",
+            widget.pairList[index].pairingData,
+          ),
+          const SizedBox(height: 3),
+          _createInfoRow(
+            context,
+            "Kolor Pary: ",
+            widget.pairList[index].pairColor,
+          ),
+          const SizedBox(height: 3),
+          _createInfoRowParrot(
+            context,
+            "Samica(0,1): ",
+            widget.pairList[index].femaleRingNumber,
+          ),
+          const SizedBox(height: 3),
+          _createInfoRowParrot(
+            context,
+            "Samiec(1,0): ",
+            widget.pairList[index].maleRingNumber,
+          ),
+          const SizedBox(
+            height: 3,
+          ),
+          Divider(
+            color: Theme.of(context).textSelectionColor,
+          ),
+          EggExpansionTile(
+            widget.pairList[index].showEggsDate,
+            widget.race,
+            widget.pairList[index].id,
+          ),
+          Divider(
+            color: Theme.of(context).textSelectionColor,
+          ),
+          widget.pairList[index].isArchive == "false"
+              ? AddPairChildButton(
+                  pair: widget.pairList[index],
+                  raceName: widget.race,
+                )
+              : SizedBox(
+                  height: 1,
                 ),
-                const SizedBox(height: 10),
-                _createInfoRow(
-                  context,
-                  "Kolor Pary: ",
-                  widget.pairList[index].pairColor,
-                ),
-                const SizedBox(height: 10),
-                _createInfoRowParrot(
-                  context,
-                  "Samica(0,1): ",
-                  widget.pairList[index].femaleRingNumber,
-                ),
-                const SizedBox(height: 10),
-                _createInfoRowParrot(
-                  context,
-                  "Samiec(1,0): ",
-                  widget.pairList[index].maleRingNumber,
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-              ],
-            ),
-            children: [
-              Divider(
-                color: Theme.of(context).textSelectionColor,
-              ),
-              EggExpansionTile(
-                widget.pairList[index].showEggsDate,
-                widget.race,
-                widget.pairList[index].id,
-              ),
-              Divider(
-                color: Theme.of(context).textSelectionColor,
-              ),
-              widget.pairList[index].isArchive == "false"
-                  ? AddPairChildButton(
-                      pair: widget.pairList[index],
-                      raceName: widget.race,
-                    )
-                  : SizedBox(
-                      height: 1,
-                    ),
-              const SizedBox(
-                height: 10,
-              ),
-              ChildrenList(
-                pairId: widget.pairList[index].id,
-                raceName: widget.race,
-              ),
-            ]),
+          const SizedBox(
+            height: 3,
+          ),
+          ChildrenList(
+            pairId: widget.pairList[index].id,
+            raceName: widget.race,
+          ),
+        ]),
       ),
     );
   }
