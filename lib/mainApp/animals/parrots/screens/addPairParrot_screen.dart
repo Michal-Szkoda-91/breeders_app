@@ -4,6 +4,7 @@ import 'package:breeders_app/models/global_methods.dart';
 import 'package:breeders_app/services/auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
+import 'package:draggable_scrollbar_sliver/draggable_scrollbar_sliver.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
@@ -31,6 +32,7 @@ class _AddPairScreenState extends State<AddPairScreen> {
   GlobalMethods _globalMethods = GlobalMethods();
   ParrotDataHelper dataProvider = ParrotDataHelper();
   ParrotPairDataHelper _parrotPairDataHelper = ParrotPairDataHelper();
+  ScrollController _rrectController = ScrollController();
 
   List<Parrot> _allParrotList = [];
   List<Parrot> _maleParrotList = [];
@@ -110,42 +112,48 @@ class _AddPairScreenState extends State<AddPairScreen> {
         ),
       ),
       body: MainBackground(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              _streamBuilder,
-              const SizedBox(height: 15),
-              _createForm(context, node),
-              const SizedBox(height: 15),
-              buildRowCalendar(context),
-              const SizedBox(height: 25),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  FlatButton(
-                    color: Theme.of(context).backgroundColor,
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: _createInfoText(
-                      context,
-                      'Anuluj',
+        child: DraggableScrollbar.rrect(
+          controller: _rrectController,
+          heightScrollThumb: 100,
+          backgroundColor: Theme.of(context).accentColor,
+          child: SingleChildScrollView(
+            controller: _rrectController,
+            child: Column(
+              children: [
+                _streamBuilder,
+                const SizedBox(height: 15),
+                _createForm(context, node),
+                const SizedBox(height: 15),
+                buildRowCalendar(context),
+                const SizedBox(height: 25),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    FlatButton(
+                      color: Theme.of(context).backgroundColor,
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: _createInfoText(
+                        context,
+                        'Anuluj',
+                      ),
                     ),
-                  ),
-                  FlatButton(
-                    color: Theme.of(context).backgroundColor,
-                    onPressed: _createPair,
-                    child: _createInfoText(
-                      context,
-                      'Utwórz parę',
+                    FlatButton(
+                      color: Theme.of(context).backgroundColor,
+                      onPressed: _createPair,
+                      child: _createInfoText(
+                        context,
+                        'Utwórz parę',
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 150,
-              )
-            ],
+                  ],
+                ),
+                SizedBox(
+                  height: 150,
+                )
+              ],
+            ),
           ),
         ),
       ),
