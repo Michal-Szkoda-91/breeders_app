@@ -11,7 +11,7 @@ class ImageContainerChinchila extends StatelessWidget {
       alignment: Alignment.center,
       child: ClipOval(
         child: Image.asset(
-          "assets/image/chinchila.jpg",
+          "assets/image/parrot.jpg",
           fit: BoxFit.cover,
           height: 100,
           width: 100,

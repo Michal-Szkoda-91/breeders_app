@@ -148,60 +148,66 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
       shadowColor: Theme.of(context).cardColor,
       child: Padding(
         padding: const EdgeInsets.all(10.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _createInfoRow(
-              context,
-              "Data utworzenia pary: ",
-              widget.pairList[index].pairingData,
+        child: ExpansionTile(
+            title: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _createInfoRow(
+                  context,
+                  "Data utworzenia pary: ",
+                  widget.pairList[index].pairingData,
+                ),
+                const SizedBox(height: 10),
+                _createInfoRow(
+                  context,
+                  "Kolor Pary: ",
+                  widget.pairList[index].pairColor,
+                ),
+                const SizedBox(height: 10),
+                _createInfoRowParrot(
+                  context,
+                  "Samica(0,1): ",
+                  widget.pairList[index].femaleRingNumber,
+                ),
+                const SizedBox(height: 10),
+                _createInfoRowParrot(
+                  context,
+                  "Samiec(1,0): ",
+                  widget.pairList[index].maleRingNumber,
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+              ],
             ),
-            const SizedBox(height: 10),
-            _createInfoRow(
-              context,
-              "Kolor Pary: ",
-              widget.pairList[index].pairColor,
-            ),
-            const SizedBox(height: 10),
-            _createInfoRowParrot(
-              context,
-              "Samica(0,1): ",
-              widget.pairList[index].femaleRingNumber,
-            ),
-            const SizedBox(height: 10),
-            _createInfoRowParrot(
-              context,
-              "Samiec(1,0): ",
-              widget.pairList[index].maleRingNumber,
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Divider(
-              color: Theme.of(context).textSelectionColor,
-            ),
-            EggExpansionTile(widget.pairList[index].showEggsDate, widget.race,
-                widget.pairList[index].id),
-            Divider(
-              color: Theme.of(context).textSelectionColor,
-            ),
-            widget.pairList[index].isArchive == "false"
-                ? AddPairChildButton(
-                    pair: widget.pairList[index],
-                    raceName: widget.race,
-                  )
-                : SizedBox(
-                    height: 1,
-                  ),
-            const SizedBox(
-              height: 10,
-            ),
-            ChildrenList(
-              pairId: widget.pairList[index].id,
-              raceName: widget.race,
-            ),
-          ],
-        ),
+            children: [
+              Divider(
+                color: Theme.of(context).textSelectionColor,
+              ),
+              EggExpansionTile(
+                widget.pairList[index].showEggsDate,
+                widget.race,
+                widget.pairList[index].id,
+              ),
+              Divider(
+                color: Theme.of(context).textSelectionColor,
+              ),
+              widget.pairList[index].isArchive == "false"
+                  ? AddPairChildButton(
+                      pair: widget.pairList[index],
+                      raceName: widget.race,
+                    )
+                  : SizedBox(
+                      height: 1,
+                    ),
+              const SizedBox(
+                height: 10,
+              ),
+              ChildrenList(
+                pairId: widget.pairList[index].id,
+                raceName: widget.race,
+              ),
+            ]),
       ),
     );
   }

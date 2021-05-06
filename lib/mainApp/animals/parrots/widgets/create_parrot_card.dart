@@ -25,7 +25,6 @@ class ParrotCard extends StatefulWidget {
 class _ParrotCardState extends State<ParrotCard> {
   GlobalMethods _globalMethods = GlobalMethods();
   ParrotDataHelper _parrotHelper = ParrotDataHelper();
-  int _sortingNumber = 1;
 
   _sortingBy(int index) {
     switch (index) {
@@ -33,40 +32,34 @@ class _ParrotCardState extends State<ParrotCard> {
         setState(() {
           widget._createdParrotList
               .sort((a, b) => a.ringNumber.compareTo(b.ringNumber));
-          _sortingNumber = 1;
         });
         break;
       case 2:
         setState(() {
           widget._createdParrotList.sort((a, b) => a.color.compareTo(b.color));
-          _sortingNumber = 2;
         });
         break;
       case 3:
         setState(() {
           widget._createdParrotList
               .sort((a, b) => a.fission.compareTo(b.fission));
-          _sortingNumber = 3;
         });
         break;
       case 4:
         setState(() {
           widget._createdParrotList
               .sort((a, b) => a.cageNumber.compareTo(b.cageNumber));
-          _sortingNumber = 4;
         });
         break;
       case 5:
         setState(() {
           widget._createdParrotList
               .sort((a, b) => a.pairRingNumber.compareTo(b.pairRingNumber));
-          _sortingNumber = 5;
         });
         break;
       case 6:
         setState(() {
           widget._createdParrotList.sort((a, b) => a.sex.compareTo(b.sex));
-          _sortingNumber = 6;
         });
         break;
       default:
