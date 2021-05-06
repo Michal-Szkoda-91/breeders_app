@@ -3,6 +3,7 @@ import 'package:breeders_app/mainApp/animals/parrots/widgets/parrots_race_AddDro
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:diacritic/diacritic.dart';
 
 import '../widgets/create_race_listTile.dart';
 import '../../../../services/auth.dart';
@@ -74,5 +75,7 @@ class _ParrotsRaceListScreenState extends State<ParrotsRaceListScreen> {
     snapshot.data.docs.forEach((val) {
       _activeRaceList.add(val.id);
     });
+    _activeRaceList
+        .sort((a, b) => removeDiacritics(a).compareTo(removeDiacritics(b)));
   }
 }
