@@ -57,14 +57,39 @@ class _CreateParrotsDropdownButtonState
               ),
               Container(
                 width: MediaQuery.of(context).size.width * 0.50,
-                child: AutoSizeText(
-                  value['name'],
-                  maxLines: 1,
-                  style: TextStyle(
-                    color: Theme.of(context).textSelectionColor,
-                    fontSize: 20,
-                  ),
-                ),
+                child: value['lac'] != "brak"
+                    ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          AutoSizeText(
+                            value['name'],
+                            maxLines: 1,
+                            style: TextStyle(
+                              color: Theme.of(context).textSelectionColor,
+                              fontSize: 18,
+                            ),
+                          ),
+                          AutoSizeText(
+                            value['lac'],
+                            maxLines: 1,
+                            style: TextStyle(
+                              color: Theme.of(context).hintColor,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
+                      )
+                    : Container(
+                        width: MediaQuery.of(context).size.width * 0.50,
+                        child: AutoSizeText(
+                          value['name'],
+                          maxLines: 1,
+                          style: TextStyle(
+                            color: Theme.of(context).textSelectionColor,
+                            fontSize: 20,
+                          ),
+                        ),
+                      ),
               ),
             ],
           ),

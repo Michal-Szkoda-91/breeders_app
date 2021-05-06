@@ -45,6 +45,7 @@ dependencies:
   pull_to_reveal: ^0.0.2
   data_connection_checker: ^0.3.4
   group_button: ^1.3.0
+  diacritic: ^0.1.1
 
 dev_dependencies:
   flutter_test:
@@ -74,6 +75,17 @@ flutter:
     - assets/image/parrotsRace/Nimfa.jpg
     - assets/image/parrotsRace/Rozella.jpg
     - assets/image/parrotsRace/Świergotka.jpg
+    - assets/image/parrotsRace/Kakadu.jpg
+    - assets/image/parrotsRace/Ara.jpg
+    - assets/image/parrotsRace/Modrolotka.jpg
+    - assets/image/parrotsRace/Łąkówka.jpg
+    - assets/image/parrotsRace/Mnicha.jpg
+    - assets/image/parrotsRace/Rudosterka.jpg
+    - assets/image/parrotsRace/Amazonka.jpg
+    - assets/image/parrotsRace/Konura.jpg
+    - assets/image/parrotsRace/Barwinka.jpg
+    - assets/image/parrotsRace/Nierozłączka.jpg
+    - assets/image/parrotsRace/Papużka_falista.jpg
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
