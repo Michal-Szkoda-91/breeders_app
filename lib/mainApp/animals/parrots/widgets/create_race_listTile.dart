@@ -111,7 +111,8 @@ class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
             Expanded(
               child: Container(
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
+                  borderRadius: BorderRadius.circular(10),
+                  // color: Colors.red,
                 ),
                 child: createCard(
                     context, index, widget.activeRaceList[index], parrotCount),
@@ -133,7 +134,7 @@ class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
             );
           },
           child: _globalMethods.createActionItem(context, Colors.red,
-              MaterialCommunityIcons.delete, "Usuń hodowlę", 14),
+              MaterialCommunityIcons.delete, "Usuń hodowlę", 26),
         ),
       ],
     );
@@ -162,124 +163,144 @@ class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
     );
   }
 
-  Card createCard(
+  Widget createCard(
       BuildContext context, int index, String raceName, int parrotCount) {
-    return Card(
-      color: Colors.transparent,
-      shadowColor: Theme.of(context).cardColor,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Stack(
+      children: [
+        Card(
+          margin: const EdgeInsets.only(
+            left: 15,
+            top: 15,
+            bottom: 15,
+          ),
+          color: Colors.transparent,
+          shadowColor: Theme.of(context).cardColor,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Column(
               children: [
-                CircleAvatar(
-                  radius: 40,
-                  backgroundColor: Theme.of(context).primaryColor,
-                  child: CircleAvatar(
-                    radius: 37,
-                    backgroundImage: AssetImage(
-                      "assets/image/parrotsRace/${widget.activeRaceList[index]}.jpg",
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Container(
-                      child: AutoSizeText(
-                        widget.activeRaceList[index],
-                        maxLines: 1,
-                        style: TextStyle(
-                          color: Theme.of(context).textSelectionColor,
-                          fontSize: 20,
-                        ),
-                      ),
+                    CircleAvatar(
+                      radius: 40,
+                      backgroundColor: Colors.transparent,
+                      child: Center(),
                     ),
                     SizedBox(
-                      height: 10,
+                      width: 7,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
+                          width: MediaQuery.of(context).size.width * 0.49,
                           child: AutoSizeText(
-                            "Ilość ptaków: ",
+                            widget.activeRaceList[index],
                             maxLines: 1,
-                            style: TextStyle(
-                              color: Theme.of(context).textSelectionColor,
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: 10),
-                        Container(
-                          width: 35,
-                          height: 35,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).primaryColor,
-                            border: Border.all(
-                              color: Theme.of(context).textSelectionColor,
-                            ),
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(20),
-                            ),
-                          ),
-                          child: Text(
-                            parrotCount.toString(),
                             style: TextStyle(
                               color: Theme.of(context).textSelectionColor,
                               fontSize: 20,
                             ),
                           ),
                         ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Container(
+                              width: MediaQuery.of(context).size.width * 0.35,
+                              child: AutoSizeText(
+                                "Ilość ptaków: ",
+                                maxLines: 1,
+                                style: TextStyle(
+                                  color: Theme.of(context).textSelectionColor,
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: 6),
+                            Container(
+                              width: 33,
+                              height: 33,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).primaryColor,
+                                border: Border.all(
+                                  color: Theme.of(context).textSelectionColor,
+                                ),
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(18),
+                                ),
+                              ),
+                              child: Text(
+                                parrotCount.toString(),
+                                style: TextStyle(
+                                  color: Theme.of(context).textSelectionColor,
+                                  fontSize: 20,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ],
+                    ),
+                    Spacer(),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        _navigateToPairingList(raceName);
+                      },
+                      child: _globalMethods.createActionItem(
+                          context,
+                          Colors.pink[300],
+                          MaterialCommunityIcons.heart_multiple,
+                          "Parowanie",
+                          5),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        _navigateToParrotsList(raceName);
+                      },
+                      child: _globalMethods.createActionItem(
+                        context,
+                        Colors.blueAccent,
+                        MaterialCommunityIcons.home_group,
+                        "Hodowla",
+                        5,
+                      ),
                     ),
                   ],
                 ),
-                Spacer(),
               ],
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    _navigateToPairingList(raceName);
-                  },
-                  child: _globalMethods.createActionItem(
-                      context,
-                      Colors.pink[300],
-                      MaterialCommunityIcons.heart_multiple,
-                      "Parowanie",
-                      5),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    _navigateToParrotsList(raceName);
-                  },
-                  child: _globalMethods.createActionItem(
-                    context,
-                    Colors.blueAccent,
-                    MaterialCommunityIcons.home_group,
-                    "Hodowla",
-                    5,
-                  ),
-                ),
-              ],
-            ),
-          ],
+          ),
         ),
-      ),
+        Positioned(
+          left: 0,
+          top: 0,
+          child: CircleAvatar(
+            radius: 44,
+            backgroundColor: Theme.of(context).primaryColor,
+            child: CircleAvatar(
+              radius: 42,
+              backgroundImage: AssetImage(
+                "assets/image/parrotsRace/${widget.activeRaceList[index]}.jpg",
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
   Future<void> _deleteRace(String name) async {
-    bool result = await DataConnectionChecker().hasConnection;
+    bool result = await _globalMethods.checkInternetConnection(context);
 
     if (!result) {
       Navigator.of(context).pop();

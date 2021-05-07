@@ -72,7 +72,6 @@ class _ParrotCardState extends State<ParrotCard> {
   Widget build(BuildContext context) {
     return DraggableScrollbar.rrect(
       controller: _rrectController,
-      
       heightScrollThumb: 100,
       backgroundColor: Theme.of(context).accentColor,
       child: SingleChildScrollView(
@@ -463,7 +462,7 @@ class _ParrotCardState extends State<ParrotCard> {
 
   Future<void> _deleteParrot(String ring, Parrot parrot) async {
     final _firebaseUser = FirebaseAuth.instance.currentUser;
-    bool result = await DataConnectionChecker().hasConnection;
+    bool result = await _globalMethods.checkInternetConnection(context);
 
     if (!result) {
       Navigator.of(context).pop();

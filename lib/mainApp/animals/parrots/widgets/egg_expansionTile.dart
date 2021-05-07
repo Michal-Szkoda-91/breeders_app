@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:breeders_app/mainApp/animals/parrots/models/pairing_model.dart';
 import 'package:breeders_app/mainApp/animals/parrots/models/parrotsRace_list.dart';
 import 'package:breeders_app/models/global_methods.dart';
@@ -58,20 +59,24 @@ class _EggExpansionTileState extends State<EggExpansionTile> {
         children: [
           Row(
             children: [
-              Text(
-                widget.showEggDate == "brak"
-                    ? "Brak jajek"
-                    : "Pozostało dni do wylęgu:",
-                style: TextStyle(
-                  color: Theme.of(context).textSelectionColor,
-                  fontSize: 16,
+              Container(
+                width: MediaQuery.of(context).size.width * 0.45,
+                child: AutoSizeText(
+                  widget.showEggDate == "brak"
+                      ? "Brak jajek"
+                      : "Pozostało dni do wylęgu:",
+                  maxLines: 1,
+                  style: TextStyle(
+                    color: Theme.of(context).textSelectionColor,
+                    fontSize: 16,
+                  ),
                 ),
               ),
               Spacer(),
               widget.showEggDate != "brak"
                   ? Container(
-                      width: 35,
-                      height: 35,
+                      width: 33,
+                      height: 33,
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
                         color: daysToBorn <= 6 && daysToBorn > 3
@@ -83,14 +88,14 @@ class _EggExpansionTileState extends State<EggExpansionTile> {
                           color: Theme.of(context).textSelectionColor,
                         ),
                         borderRadius: BorderRadius.all(
-                          Radius.circular(20),
+                          Radius.circular(18),
                         ),
                       ),
                       child: Text(
                         daysToBorn < 0 ? "-" : daysToBorn.toString(),
                         style: TextStyle(
                           color: Theme.of(context).textSelectionColor,
-                          fontSize: 20,
+                          fontSize: 18,
                         ),
                       ),
                     )
@@ -103,11 +108,16 @@ class _EggExpansionTileState extends State<EggExpansionTile> {
           widget.showEggDate != "brak"
               ? Row(
                   children: [
-                    Text(
-                      "start inkubacji: ",
-                      style: TextStyle(
-                        color: Theme.of(context).hintColor,
-                        fontSize: 14,
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.40,
+                      child: AutoSizeText(
+                        "Start inkubacji: ",
+                        maxLines: 1,
+                        style: TextStyle(
+                          color: Theme.of(context).hintColor,
+                          fontSize:
+                              MediaQuery.of(context).size.width < 330 ? 10 : 14,
+                        ),
                       ),
                     ),
                     Spacer(),
@@ -115,7 +125,8 @@ class _EggExpansionTileState extends State<EggExpansionTile> {
                       widget.showEggDate,
                       style: TextStyle(
                         color: Theme.of(context).textSelectionColor,
-                        fontSize: 14,
+                        fontSize:
+                            MediaQuery.of(context).size.width < 330 ? 10 : 14,
                       ),
                     ),
                   ],
@@ -124,11 +135,16 @@ class _EggExpansionTileState extends State<EggExpansionTile> {
           widget.showEggDate != "brak"
               ? Row(
                   children: [
-                    Text(
-                      "data wylęgu: ",
-                      style: TextStyle(
-                        color: Theme.of(context).hintColor,
-                        fontSize: 14,
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.40,
+                      child: AutoSizeText(
+                        "data wylęgu: ",
+                        maxLines: 1,
+                        style: TextStyle(
+                          color: Theme.of(context).hintColor,
+                          fontSize:
+                              MediaQuery.of(context).size.width < 330 ? 10 : 14,
+                        ),
                       ),
                     ),
                     Spacer(),
@@ -136,7 +152,8 @@ class _EggExpansionTileState extends State<EggExpansionTile> {
                       bornTimeString,
                       style: TextStyle(
                         color: Theme.of(context).textSelectionColor,
-                        fontSize: 14,
+                        fontSize:
+                            MediaQuery.of(context).size.width < 330 ? 10 : 14,
                       ),
                     ),
                   ],
@@ -222,9 +239,10 @@ class _EggExpansionTileState extends State<EggExpansionTile> {
 
   Future<void> _setEggsDate(String date) async {
     final _firebaseUser = FirebaseAuth.instance.currentUser;
-    bool result = await DataConnectionChecker().hasConnection;
+    bool result = await _globalMethods.checkInternetConnection(context);
 
     if (!result) {
+      Navigator.of(context).pop();
       Navigator.of(context).pop();
       _globalMethods.showMaterialDialog(context,
           "Operacja nieudana, nieznany błąd lub brak połączenia z internetem.");

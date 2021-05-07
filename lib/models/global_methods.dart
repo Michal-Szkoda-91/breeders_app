@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:breeders_app/mainApp/animals/parrots/models/parrot_model.dart';
 import 'package:flutter/material.dart';
+import 'dart:io';
 
 class GlobalMethods {
   //arrow container
@@ -126,5 +127,21 @@ class GlobalMethods {
         ),
       ),
     );
+  }
+
+  Future<bool> checkInternetConnection(BuildContext context) async {
+    try {
+      showMaterialDialog(context, "Sprawdzanie połączenia z internetem...");
+
+      final result = await InternetAddress.lookup('google.com');
+      Navigator.of(context).pop();
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        return true;
+      }
+    } on SocketException catch (e) {
+      print(e);
+      return false;
+    }
+    return false;
   }
 }

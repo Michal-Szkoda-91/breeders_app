@@ -148,68 +148,76 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
     );
   }
 
-  Card _createCard(BuildContext context, int index) {
-    return Card(
-      color: widget.pairList[index].isArchive == "false"
-          ? Colors.transparent
-          : Colors.grey[700],
-      shadowColor: Theme.of(context).cardColor,
-      child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          _createInfoRow(
-            context,
-            "Data utworzenia pary: ",
-            widget.pairList[index].pairingData,
-          ),
-          const SizedBox(height: 3),
-          _createInfoRow(
-            context,
-            "Kolor Pary: ",
-            widget.pairList[index].pairColor,
-          ),
-          const SizedBox(height: 3),
-          _createInfoRowParrot(
-            context,
-            "Samica(0,1): ",
-            widget.pairList[index].femaleRingNumber,
-          ),
-          const SizedBox(height: 3),
-          _createInfoRowParrot(
-            context,
-            "Samiec(1,0): ",
-            widget.pairList[index].maleRingNumber,
-          ),
-          const SizedBox(
-            height: 3,
-          ),
-          Divider(
-            color: Theme.of(context).textSelectionColor,
-          ),
-          EggExpansionTile(
-            widget.pairList[index].showEggsDate,
-            widget.race,
-            widget.pairList[index].id,
-          ),
-          Divider(
-            color: Theme.of(context).textSelectionColor,
-          ),
-          widget.pairList[index].isArchive == "false"
-              ? AddPairChildButton(
-                  pair: widget.pairList[index],
-                  raceName: widget.race,
-                )
-              : SizedBox(
-                  height: 1,
-                ),
-          const SizedBox(
-            height: 3,
-          ),
-          ChildrenList(
-            pairId: widget.pairList[index].id,
-            raceName: widget.race,
-          ),
-        ]),
+  Widget _createCard(BuildContext context, int index) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 25),
+      child: Card(
+        color: widget.pairList[index].isArchive == "false"
+            ? Colors.transparent
+            : Colors.grey[700],
+        shadowColor: Theme.of(context).cardColor,
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            _createInfoRow(
+              context,
+              "Data utworzenia pary: ",
+              widget.pairList[index].pairingData,
+            ),
+            const SizedBox(height: 3),
+            _createInfoRow(
+              context,
+              "Kolor Pary: ",
+              widget.pairList[index].pairColor,
+            ),
+            const SizedBox(height: 3),
+            _createInfoRowParrot(
+              context,
+              "Samica(0,1): ",
+              widget.pairList[index].femaleRingNumber,
+            ),
+            const SizedBox(height: 3),
+            _createInfoRowParrot(
+              context,
+              "Samiec(1,0): ",
+              widget.pairList[index].maleRingNumber,
+            ),
+            const SizedBox(
+              height: 3,
+            ),
+            widget.pairList[index].isArchive == "false"
+                ? Divider(
+                    color: Theme.of(context).textSelectionColor,
+                  )
+                : Center(),
+            widget.pairList[index].isArchive == "false"
+                ? EggExpansionTile(
+                    widget.pairList[index].showEggsDate,
+                    widget.race,
+                    widget.pairList[index].id,
+                  )
+                : Center(),
+            Divider(
+              color: Theme.of(context).textSelectionColor,
+            ),
+            widget.pairList[index].isArchive == "false"
+                ? AddPairChildButton(
+                    pair: widget.pairList[index],
+                    raceName: widget.race,
+                  )
+                : SizedBox(
+                    height: 1,
+                  ),
+            const SizedBox(
+              height: 3,
+            ),
+            ChildrenList(
+              pairId: widget.pairList[index].id,
+              raceName: widget.race,
+            ),
+          ]),
+        ),
       ),
     );
   }
@@ -309,9 +317,11 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
 
   Future<void> _deletePair(String id, String femaleId, String maleID) async {
     final _firebaseUser = FirebaseAuth.instance.currentUser;
-    bool result = await DataConnectionChecker().hasConnection;
+    bool result = await _globalMethods.checkInternetConnection(context);
 
     if (!result) {
+      Navigator.of(context).pop();
+      Navigator.of(context).pop();
       Navigator.of(context).pop();
       _globalMethods.showMaterialDialog(context,
           "Operacja nieudana, nieznany błąd lub brak połączenia z internetem.");
@@ -350,9 +360,10 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
   Future<void> _movingToArchive(
       String id, String femaleId, String maleID) async {
     final _firebaseUser = FirebaseAuth.instance.currentUser;
-    bool result = await DataConnectionChecker().hasConnection;
+    bool result = await _globalMethods.checkInternetConnection(context);
 
     if (!result) {
+      Navigator.of(context).pop();
       Navigator.of(context).pop();
       _globalMethods.showMaterialDialog(context,
           "Operacja nieudana, nieznany błąd lub brak połączenia z internetem.");
