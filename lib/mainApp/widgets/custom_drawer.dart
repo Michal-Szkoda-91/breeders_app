@@ -25,7 +25,7 @@ class CustomDrawer extends StatelessWidget {
             const SizedBox(
               height: 10,
             ),
-            const ImageContainerChinchila(),
+            const ImageContainerParrotSmall(),
             Padding(
               padding: const EdgeInsets.all(14.0),
               child: Text(

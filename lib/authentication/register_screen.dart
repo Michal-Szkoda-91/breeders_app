@@ -1,3 +1,4 @@
+import 'package:draggable_scrollbar_sliver/draggable_scrollbar_sliver.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 
@@ -12,6 +13,7 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
+  ScrollController _rrectController = ScrollController();
 
   bool _isLoading = false;
 
@@ -48,151 +50,157 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ? Center(
             child: CircularProgressIndicator(),
           )
-        : SingleChildScrollView(
-            child: Column(
-              children: [
-                SizedBox(height: _sizedBoxHeight),
-                Text(
-                  'Utwórz konto',
-                  style: TextStyle(
-                    color: Theme.of(context).textSelectionColor,
-                    fontSize: 24,
-                  ),
-                ),
-                SizedBox(height: _sizedBoxHeight),
-                const ImageContainerParrot(),
-                SizedBox(height: _sizedBoxHeight),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      children: [
-                        //
-                        //******************************************************* */
-                        //Email Form
-                        TextFormField(
-                          style: customTextStyle(context),
-                          cursorColor: Theme.of(context).textSelectionColor,
-                          decoration: _createInputDecoration(
-                            context,
-                            'Email',
-                            Icons.email,
-                            false,
-                            null,
-                          ),
-                          validator: (val) {
-                            if (val.isEmpty) {
-                              return 'Wprowadź email';
-                            } else if (!EmailValidator.validate(val)) {
-                              return 'Nieprawidłowy email';
-                            } else {
-                              return null;
-                            }
-                          },
-                          onChanged: (val) {
-                            setState(() {
-                              email = val;
-                            });
-                          },
-                          onEditingComplete: () => node.nextFocus(),
-                        ),
-                        SizedBox(height: _sizedBoxHeight),
-                        //
-                        //******************************************************* */
-                        //Password Form
-                        TextFormField(
-                          style: customTextStyle(context),
-                          cursorColor: Theme.of(context).textSelectionColor,
-                          decoration: _createInputDecoration(
-                            context,
-                            'Hasło',
-                            Icons.lock_outlined,
-                            true,
-                            1,
-                          ),
-                          validator: (val) {
-                            if (val.isEmpty) {
-                              return 'Wprowadź hasło';
-                            } else if (!_regExpPassword.hasMatch(val)) {
-                              return 'Nieprawidłowe hasło';
-                            } else {
-                              return null;
-                            }
-                          },
-                          obscureText: _passwordObscure,
-                          onChanged: (val) {
-                            setState(() {
-                              password = val;
-                            });
-                          },
-                          onEditingComplete: () => node.nextFocus(),
-                        ),
-                        SizedBox(height: _sizedBoxHeight),
-                        //
-                        //******************************************************* */
-                        // Repeat Password Form
-                        TextFormField(
-                          style: customTextStyle(context),
-                          cursorColor: Theme.of(context).textSelectionColor,
-                          decoration: _createInputDecoration(
-                            context,
-                            'Potwierdź hasło',
-                            Icons.lock_outlined,
-                            true,
-                            2,
-                          ),
-                          validator: (val) {
-                            if (val.isEmpty) {
-                              return 'Potwierdź hasło';
-                            } else if (!_regExpPassword.hasMatch(val)) {
-                              return 'Nieprawidłowe hasło';
-                            } else if (val != password) {
-                              return 'Hasła muszą być identyczne';
-                            } else {
-                              return null;
-                            }
-                          },
-                          obscureText: _passwordSecondObscure,
-                          onChanged: (val) {
-                            setState(() {
-                              passwordRepeated = val;
-                            });
-                          },
-                          //dodac tu fnkcje jak po klikniecu zaloguj
-                          onEditingComplete: _createAccount,
-                        ),
-                        SizedBox(height: _sizedBoxHeight),
-                        Row(
-                          children: [
-                            const Expanded(
-                              child: const SizedBox(),
-                            ),
-                            FlatButton(
-                              child: Text(
-                                'Utwórz konto',
-                                style: TextStyle(
-                                  color: Theme.of(context).textSelectionColor,
-                                ),
-                              ),
-                              //confirm to registration
-                              onPressed: _createAccount,
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: _sizedBoxHeight),
-                        Text(
-                          error,
-                          style: TextStyle(
-                            color: Colors.redAccent,
-                            fontSize: 16,
-                          ),
-                        ),
-                      ],
+        : DraggableScrollbar.rrect(
+            controller: _rrectController,
+            heightScrollThumb: 100,
+            backgroundColor: Theme.of(context).accentColor,
+            child: SingleChildScrollView(
+              controller: _rrectController,
+              child: Column(
+                children: [
+                  SizedBox(height: _sizedBoxHeight),
+                  Text(
+                    'Utwórz konto',
+                    style: TextStyle(
+                      color: Theme.of(context).textSelectionColor,
+                      fontSize: 24,
                     ),
                   ),
-                )
-              ],
+                  SizedBox(height: _sizedBoxHeight),
+                  const ImageContainerParrot(),
+                  SizedBox(height: _sizedBoxHeight),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 30),
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          //
+                          //******************************************************* */
+                          //Email Form
+                          TextFormField(
+                            style: customTextStyle(context),
+                            cursorColor: Theme.of(context).textSelectionColor,
+                            decoration: _createInputDecoration(
+                              context,
+                              'Email',
+                              Icons.email,
+                              false,
+                              null,
+                            ),
+                            validator: (val) {
+                              if (val.isEmpty) {
+                                return 'Wprowadź email';
+                              } else if (!EmailValidator.validate(val)) {
+                                return 'Nieprawidłowy email';
+                              } else {
+                                return null;
+                              }
+                            },
+                            onChanged: (val) {
+                              setState(() {
+                                email = val;
+                              });
+                            },
+                            onEditingComplete: () => node.nextFocus(),
+                          ),
+                          SizedBox(height: _sizedBoxHeight),
+                          //
+                          //******************************************************* */
+                          //Password Form
+                          TextFormField(
+                            style: customTextStyle(context),
+                            cursorColor: Theme.of(context).textSelectionColor,
+                            decoration: _createInputDecoration(
+                              context,
+                              'Hasło',
+                              Icons.lock_outlined,
+                              true,
+                              1,
+                            ),
+                            validator: (val) {
+                              if (val.isEmpty) {
+                                return 'Wprowadź hasło';
+                              } else if (!_regExpPassword.hasMatch(val)) {
+                                return 'Nieprawidłowe hasło';
+                              } else {
+                                return null;
+                              }
+                            },
+                            obscureText: _passwordObscure,
+                            onChanged: (val) {
+                              setState(() {
+                                password = val;
+                              });
+                            },
+                            onEditingComplete: () => node.nextFocus(),
+                          ),
+                          SizedBox(height: _sizedBoxHeight),
+                          //
+                          //******************************************************* */
+                          // Repeat Password Form
+                          TextFormField(
+                            style: customTextStyle(context),
+                            cursorColor: Theme.of(context).textSelectionColor,
+                            decoration: _createInputDecoration(
+                              context,
+                              'Potwierdź hasło',
+                              Icons.lock_outlined,
+                              true,
+                              2,
+                            ),
+                            validator: (val) {
+                              if (val.isEmpty) {
+                                return 'Potwierdź hasło';
+                              } else if (!_regExpPassword.hasMatch(val)) {
+                                return 'Nieprawidłowe hasło';
+                              } else if (val != password) {
+                                return 'Hasła muszą być identyczne';
+                              } else {
+                                return null;
+                              }
+                            },
+                            obscureText: _passwordSecondObscure,
+                            onChanged: (val) {
+                              setState(() {
+                                passwordRepeated = val;
+                              });
+                            },
+                            //dodac tu fnkcje jak po klikniecu zaloguj
+                            onEditingComplete: _createAccount,
+                          ),
+                          SizedBox(height: _sizedBoxHeight),
+                          Row(
+                            children: [
+                              const Expanded(
+                                child: const SizedBox(),
+                              ),
+                              FlatButton(
+                                child: Text(
+                                  'Utwórz konto',
+                                  style: TextStyle(
+                                    color: Theme.of(context).textSelectionColor,
+                                  ),
+                                ),
+                                //confirm to registration
+                                onPressed: _createAccount,
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: _sizedBoxHeight),
+                          Text(
+                            error,
+                            style: TextStyle(
+                              color: Colors.redAccent,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              ),
             ),
           );
   }

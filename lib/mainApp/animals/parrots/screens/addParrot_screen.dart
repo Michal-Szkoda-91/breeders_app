@@ -590,12 +590,13 @@ class _RaceListScreenState extends State<AddParrotScreen> {
       _globalMethods.showMaterialDialog(
           context, "Nie udało się dodać papugi, nie pełne dane");
     } else {
-      bool result = await DataConnectionChecker().hasConnection;
+      bool result = await _globalMethods.checkInternetConnection(context);
       setState(() {
         ringNumber = "$country-$year-$symbol-$parrotNumber";
       });
 
       if (!result) {
+        Navigator.of(context).pop();
         _globalMethods.showMaterialDialog(
             context, "brak połączenia z internetem.");
         return;
@@ -637,12 +638,13 @@ class _RaceListScreenState extends State<AddParrotScreen> {
       _globalMethods.showMaterialDialog(
           context, "Nie udało się dodać papugi, nie pełne dane");
     } else {
-      bool result = await DataConnectionChecker().hasConnection;
+      bool result = await _globalMethods.checkInternetConnection(context);
       setState(() {
         ringNumber = "$country-$year-$symbol-$parrotNumber";
       });
 
       if (!result) {
+        Navigator.of(context).pop();
         _globalMethods.showMaterialDialog(
             context, "brak połączenia z internetem.");
         return;
@@ -680,8 +682,10 @@ class _RaceListScreenState extends State<AddParrotScreen> {
       _globalMethods.showMaterialDialog(
           context, "Nie udało się edytować papugi, nie pełne dane");
     } else {
-      bool result = await DataConnectionChecker().hasConnection;
+      bool result = await _globalMethods.checkInternetConnection(context);
+
       if (!result) {
+        Navigator.of(context).pop();
         _globalMethods.showMaterialDialog(
             context, "brak połączenia z internetem.");
         return;

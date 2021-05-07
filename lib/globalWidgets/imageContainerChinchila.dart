@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class ImageContainerChinchila extends StatelessWidget {
-  const ImageContainerChinchila({
+class ImageContainerParrotSmall extends StatelessWidget {
+  const ImageContainerParrotSmall({
     Key key,
   }) : super(key: key);
 

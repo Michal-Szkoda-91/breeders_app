@@ -459,9 +459,10 @@ class _AddPairScreenState extends State<AddPairScreen> {
           context, "Nie można utworzyć pary, niepełne dane");
       return;
     } else {
-      bool result = await DataConnectionChecker().hasConnection;
+      bool result = await _globalMethods.checkInternetConnection(context);
 
       if (!result) {
+        Navigator.of(context).pop();
         _globalMethods.showMaterialDialog(context,
             "Operacja nieudana, nieznany błąd lub brak połączenia z internetem.");
       } else {

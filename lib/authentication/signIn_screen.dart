@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:draggable_scrollbar_sliver/draggable_scrollbar_sliver.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 
@@ -13,6 +14,7 @@ class SignInScreen extends StatefulWidget {
 class _SignInScreenState extends State<SignInScreen> {
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
+  ScrollController _rrectController = ScrollController();
 
   bool _isLoading;
   @protected
@@ -40,117 +42,123 @@ class _SignInScreenState extends State<SignInScreen> {
         ? Center(
             child: CircularProgressIndicator(),
           )
-        : SingleChildScrollView(
-            child: Column(
-              children: [
-                SizedBox(height: _sizedBoxHeight),
-                Text(
-                  'Zaloguj się',
-                  style: TextStyle(
-                    color: Theme.of(context).textSelectionColor,
-                    fontSize: 24,
-                  ),
-                ),
-                SizedBox(height: _sizedBoxHeight),
-                const ImageContainerParrot(),
-                SizedBox(height: _sizedBoxHeight),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      children: [
-                        //
-                        //******************************************************* */
-                        //Email Form
-                        TextFormField(
-                          style: customTextStyle(context),
-                          cursorColor: Theme.of(context).textSelectionColor,
-                          decoration: _createInputDecoration(
-                            context,
-                            'Email',
-                            Icons.email,
-                            false,
-                          ),
-                          validator: (val) {
-                            if (val.isEmpty) {
-                              return 'Wprowadź email';
-                            } else if (!EmailValidator.validate(val)) {
-                              return 'Nieprawidłowy email';
-                            } else {
-                              return null;
-                            }
-                          },
-                          onChanged: (val) {
-                            setState(() {
-                              email = val;
-                            });
-                          },
-                          onEditingComplete: () => node.nextFocus(),
-                        ),
-                        SizedBox(height: _sizedBoxHeight),
-                        //
-                        //******************************************************* */
-                        //Password Form
-                        TextFormField(
-                          style: customTextStyle(context),
-                          cursorColor: Theme.of(context).textSelectionColor,
-                          decoration: _createInputDecoration(
-                            context,
-                            'Hasło',
-                            Icons.lock_outlined,
-                            true,
-                          ),
-                          validator: (val) {
-                            if (val.isEmpty) {
-                              return 'Wprowadź hasło';
-                            } else if (!_regExpPassword.hasMatch(val)) {
-                              return 'Nieprawidłowe hasło';
-                            } else {
-                              return null;
-                            }
-                          },
-                          obscureText: _passwordObscure,
-                          onChanged: (val) {
-                            setState(() {
-                              password = val;
-                            });
-                          },
-                          onEditingComplete: confirmSignIn,
-                        ),
-                        SizedBox(height: _sizedBoxHeight),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: SizedBox(),
-                            ),
-                            FlatButton(
-                              child: Text(
-                                'Zaloguj się',
-                                style: TextStyle(
-                                  color: Theme.of(context).textSelectionColor,
-                                  fontSize: 16,
-                                ),
-                              ),
-                              onPressed: confirmSignIn,
-                            ),
-                          ],
-                        ),
-                        Text(
-                          error,
-                          style: TextStyle(
-                            color: Colors.redAccent,
-                            fontSize: 16,
-                          ),
-                        ),
-                        SizedBox(height: _sizedBoxHeight),
-                        _createGoogleButton(context, _googleSingIn),
-                        SizedBox(height: _sizedBoxHeight),
-                      ],
+        : DraggableScrollbar.rrect(
+            controller: _rrectController,
+            heightScrollThumb: 100,
+            backgroundColor: Theme.of(context).accentColor,
+            child: SingleChildScrollView(
+              controller: _rrectController,
+              child: Column(
+                children: [
+                  SizedBox(height: _sizedBoxHeight),
+                  Text(
+                    'Zaloguj się',
+                    style: TextStyle(
+                      color: Theme.of(context).textSelectionColor,
+                      fontSize: 24,
                     ),
                   ),
-                ),
-              ],
+                  SizedBox(height: _sizedBoxHeight),
+                  const ImageContainerParrot(),
+                  SizedBox(height: _sizedBoxHeight),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 30),
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          //
+                          //******************************************************* */
+                          //Email Form
+                          TextFormField(
+                            style: customTextStyle(context),
+                            cursorColor: Theme.of(context).textSelectionColor,
+                            decoration: _createInputDecoration(
+                              context,
+                              'Email',
+                              Icons.email,
+                              false,
+                            ),
+                            validator: (val) {
+                              if (val.isEmpty) {
+                                return 'Wprowadź email';
+                              } else if (!EmailValidator.validate(val)) {
+                                return 'Nieprawidłowy email';
+                              } else {
+                                return null;
+                              }
+                            },
+                            onChanged: (val) {
+                              setState(() {
+                                email = val;
+                              });
+                            },
+                            onEditingComplete: () => node.nextFocus(),
+                          ),
+                          SizedBox(height: _sizedBoxHeight),
+                          //
+                          //******************************************************* */
+                          //Password Form
+                          TextFormField(
+                            style: customTextStyle(context),
+                            cursorColor: Theme.of(context).textSelectionColor,
+                            decoration: _createInputDecoration(
+                              context,
+                              'Hasło',
+                              Icons.lock_outlined,
+                              true,
+                            ),
+                            validator: (val) {
+                              if (val.isEmpty) {
+                                return 'Wprowadź hasło';
+                              } else if (!_regExpPassword.hasMatch(val)) {
+                                return 'Nieprawidłowe hasło';
+                              } else {
+                                return null;
+                              }
+                            },
+                            obscureText: _passwordObscure,
+                            onChanged: (val) {
+                              setState(() {
+                                password = val;
+                              });
+                            },
+                            onEditingComplete: confirmSignIn,
+                          ),
+                          SizedBox(height: _sizedBoxHeight),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: SizedBox(),
+                              ),
+                              FlatButton(
+                                child: Text(
+                                  'Zaloguj się',
+                                  style: TextStyle(
+                                    color: Theme.of(context).textSelectionColor,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                onPressed: confirmSignIn,
+                              ),
+                            ],
+                          ),
+                          Text(
+                            error,
+                            style: TextStyle(
+                              color: Colors.redAccent,
+                              fontSize: 16,
+                            ),
+                          ),
+                          SizedBox(height: _sizedBoxHeight),
+                          _createGoogleButton(context, _googleSingIn),
+                          SizedBox(height: _sizedBoxHeight),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           );
   }
