@@ -2,7 +2,6 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:breeders_app/mainApp/animals/parrots/models/pairing_model.dart';
 import 'package:breeders_app/mainApp/animals/parrots/models/parrotsRace_list.dart';
 import 'package:breeders_app/models/global_methods.dart';
-import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
