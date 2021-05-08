@@ -1,8 +1,4 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:breeders_app/mainApp/animals/parrots/models/pairing_model.dart';
-import 'package:breeders_app/mainApp/animals/parrots/models/parrot_model.dart';
-import 'package:breeders_app/models/global_methods.dart';
-import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:draggable_scrollbar_sliver/draggable_scrollbar_sliver.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +6,9 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:group_button/group_button.dart';
 
+import 'package:breeders_app/mainApp/animals/parrots/models/pairing_model.dart';
+import 'package:breeders_app/mainApp/animals/parrots/models/parrot_model.dart';
+import 'package:breeders_app/models/global_methods.dart';
 import 'add_child_button.dart';
 import 'children_list.dart';
 import 'egg_expansionTile.dart';
