@@ -728,7 +728,7 @@ class _RaceListScreenState extends State<AddParrotScreen> {
     );
   }
 
-  Row customTitle(BuildContext context) {
+  Widget customTitle(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [

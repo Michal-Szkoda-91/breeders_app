@@ -1,9 +1,14 @@
+import 'dart:io';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:path/path.dart';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:draggable_scrollbar_sliver/draggable_scrollbar_sliver.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 import 'package:breeders_app/mainApp/animals/parrots/models/pairing_model.dart';
@@ -32,6 +37,8 @@ class _AddPairScreenState extends State<AddPairScreen> {
   ParrotDataHelper dataProvider = ParrotDataHelper();
   ParrotPairDataHelper _parrotPairDataHelper = ParrotPairDataHelper();
   ScrollController _rrectController = ScrollController();
+  bool _isPhotoChoosen = false;
+  File _image = new File('assets/image/parrotsRace/parrot_pair.jpg');
 
   List<Parrot> _allParrotList = [];
   List<Parrot> _maleParrotList = [];
@@ -41,9 +48,11 @@ class _AddPairScreenState extends State<AddPairScreen> {
   Parrot _femaleParrotChoosen;
   Parrot _maleParrotChoosen;
   String pairColor = "";
+  String pictureUrl = "brak";
   ParrotPairing pair;
   String pairTime =
       DateFormat("yyyy-MM-dd", 'pl_PL').format(DateTime.now()).toString();
+  bool _isLoading = false;
 
   void _createListsOfParrot(List<Parrot> allParrotsList) {
     _maleParrotList.clear();
@@ -97,64 +106,218 @@ class _AddPairScreenState extends State<AddPairScreen> {
     );
   }
 
+  Future getImageFromGalery() async {
+    var image = await ImagePicker.pickImage(
+        source: ImageSource.gallery, imageQuality: 30);
+    setState(() {
+      if (image == null) {
+        return;
+      } else {
+        _image = image;
+        _isPhotoChoosen = false;
+      }
+    });
+  }
+
+  Future getImageFromCamera() async {
+    var image = await ImagePicker.pickImage(
+        source: ImageSource.camera, imageQuality: 30);
+    setState(() {
+      if (image == null) {
+        return;
+      } else {
+        _image = image;
+        _isPhotoChoosen = false;
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final node = FocusScope.of(context);
     return Scaffold(
-      endDrawer: CustomDrawer(auth: _auth),
-      endDrawerEnableOpenDragGesture: false,
-      backgroundColor: Colors.transparent,
-      appBar: AppBar(
-        title: AutoSizeText(
-          "Parowanie - ${widget.raceName}",
-          maxLines: 1,
+        endDrawer: CustomDrawer(auth: _auth),
+        endDrawerEnableOpenDragGesture: false,
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          title: AutoSizeText(
+            "Parowanie - ${widget.raceName}",
+            maxLines: 1,
+          ),
         ),
-      ),
-      body: MainBackground(
-        child: DraggableScrollbar.rrect(
-          controller: _rrectController,
-          heightScrollThumb: 100,
-          backgroundColor: Theme.of(context).accentColor,
-          child: SingleChildScrollView(
-            controller: _rrectController,
-            child: Column(
-              children: [
-                _streamBuilder,
-                const SizedBox(height: 15),
-                _createForm(context, node),
-                const SizedBox(height: 15),
-                buildRowCalendar(context),
-                const SizedBox(height: 25),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    FlatButton(
-                      color: Theme.of(context).backgroundColor,
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: _createInfoText(
-                        context,
-                        'Anuluj',
-                      ),
+        body: !_isLoading
+            ? MainBackground(
+                child: DraggableScrollbar.rrect(
+                  controller: _rrectController,
+                  heightScrollThumb: 100,
+                  backgroundColor: Theme.of(context).accentColor,
+                  child: SingleChildScrollView(
+                    controller: _rrectController,
+                    child: Column(
+                      children: [
+                        _createTitle(context),
+                        _streamBuilder,
+                        const SizedBox(height: 15),
+                        _createForm(context, node),
+                        const SizedBox(height: 15),
+                        buildRowCalendar(context),
+                        const SizedBox(height: 25),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            FlatButton(
+                              color: Theme.of(context).backgroundColor,
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: _createInfoText(
+                                context,
+                                'Anuluj',
+                              ),
+                            ),
+                            FlatButton(
+                              color: Theme.of(context).backgroundColor,
+                              onPressed: () {
+                                _createPair(context);
+                              },
+                              child: _createInfoText(
+                                context,
+                                'Utwórz parę',
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 150,
+                        )
+                      ],
                     ),
-                    FlatButton(
-                      color: Theme.of(context).backgroundColor,
-                      onPressed: _createPair,
-                      child: _createInfoText(
-                        context,
-                        'Utwórz parę',
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
-                SizedBox(
-                  height: 150,
-                )
+              )
+            : MainBackground(
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              ));
+  }
+
+  Widget _createTitle(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Stack(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              CircleAvatar(
+                radius: 50,
+                backgroundColor: Theme.of(context).backgroundColor,
+                child: CircleAvatar(
+                  radius: 46,
+                  backgroundImage: AssetImage(
+                    _image.path,
+                  ),
+                ),
+              ),
+              Spacer(),
+              Container(
+                width: MediaQuery.of(context).size.width * 0.5,
+                child: AutoSizeText(
+                  widget.raceName,
+                  maxLines: 1,
+                  style: TextStyle(
+                    fontSize: 24,
+                    color: Theme.of(context).textSelectionColor,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Positioned(
+            left: 60,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                CircleAvatar(
+                  backgroundColor: Theme.of(context).backgroundColor,
+                  radius: 25,
+                  child: IconButton(
+                    padding: EdgeInsets.zero,
+                    icon: Icon(
+                      Icons.camera_alt_outlined,
+                      size: 35,
+                      color: Theme.of(context).textSelectionColor,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _isPhotoChoosen = true;
+                      });
+                    },
+                  ),
+                ),
+                _isPhotoChoosen
+                    ? Row(
+                        children: [
+                          //add photo from galery
+                          CircleAvatar(
+                            backgroundColor: Theme.of(context).accentColor,
+                            radius: 25,
+                            child: IconButton(
+                              padding: EdgeInsets.zero,
+                              icon: Icon(
+                                Icons.folder,
+                                size: 35,
+                                color: Theme.of(context).textSelectionColor,
+                              ),
+                              onPressed: () {
+                                getImageFromGalery();
+                              },
+                            ),
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          //add photo from camera
+                          CircleAvatar(
+                            backgroundColor: Theme.of(context).accentColor,
+                            radius: 25,
+                            child: IconButton(
+                              padding: EdgeInsets.zero,
+                              icon: Icon(
+                                Icons.camera,
+                                size: 35,
+                                color: Theme.of(context).textSelectionColor,
+                              ),
+                              onPressed: () {
+                                getImageFromCamera();
+                              },
+                            ),
+                          ),
+                        ],
+                      )
+                    : Row(
+                        children: [
+                          CircleAvatar(
+                            backgroundColor: Colors.transparent,
+                            radius: 25,
+                            child: Center(),
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          CircleAvatar(
+                            backgroundColor: Colors.transparent,
+                            radius: 25,
+                            child: Center(),
+                          ),
+                        ],
+                      ),
               ],
             ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -450,7 +613,7 @@ class _AddPairScreenState extends State<AddPairScreen> {
     );
   }
 
-  Future<void> _createPair() async {
+  Future<void> _createPair(BuildContext context) async {
     if (_choosenFeMaleParrotRingNumber == null ||
         _choosenFeMaleParrotRingNumber == null ||
         !_formKey.currentState.validate()) {
@@ -472,6 +635,7 @@ class _AddPairScreenState extends State<AddPairScreen> {
             maleRingNumber: _choosenMaleParrotRingNumber,
             pairingData: pairTime,
             pairColor: pairColor,
+            picUrl: pictureUrl,
           );
           print(_createdPair.id + "wybrana ID");
           _maleParrotList.forEach((parrot) {
@@ -497,8 +661,16 @@ class _AddPairScreenState extends State<AddPairScreen> {
               .then((_) {
             _choosenFeMaleParrotRingNumber = null;
             _choosenMaleParrotRingNumber = null;
-            Navigator.of(context).pop();
-            _globalMethods.showMaterialDialog(context, "Utworzono parę");
+            setState(() {
+              _isLoading = true;
+            });
+            sendPicture(context).then((_) {
+              setState(() {
+                _isLoading = false;
+              });
+              Navigator.of(context).pop();
+              _globalMethods.showMaterialDialog(context, "Utworzono parę");
+            });
           });
         } catch (e) {
           _globalMethods.showMaterialDialog(context, "Operacja nieudana");
@@ -559,5 +731,20 @@ class _AddPairScreenState extends State<AddPairScreen> {
         ),
       ),
     );
+  }
+
+  Future sendPicture(BuildContext context) async {
+    if (_image.path == 'assets/image/parrotsRace/parrot_pair.jpg' ||
+        _image.path.isEmpty) {
+      return;
+    } else {
+      setState(() {
+        pictureUrl = basename(_image.path);
+      });
+      print("NAZWA:: $pictureUrl");
+      Reference ref = FirebaseStorage.instance.ref().child(pictureUrl);
+      UploadTask uploadTask = ref.putFile(_image);
+      await uploadTask;
+    }
   }
 }
