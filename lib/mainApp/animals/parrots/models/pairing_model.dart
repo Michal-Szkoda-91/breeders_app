@@ -11,6 +11,7 @@ class ParrotPairing {
   final String showEggsDate;
   final String pairColor;
   final String isArchive;
+  final String picUrl;
 
   ParrotPairing({
     this.id,
@@ -20,6 +21,7 @@ class ParrotPairing {
     this.showEggsDate,
     this.pairColor,
     this.isArchive,
+    this.picUrl,
   });
 }
 
@@ -43,6 +45,7 @@ class ParrotPairDataHelper {
       "Pair Color": "${pair.pairColor}",
       "Is Archive": "false",
       "Show Eggs Date": "brak",
+      "Pic Url": "${pair.picUrl}",
     }, SetOptions(merge: true)).then((_) {
       parrotList.updateParrot(
           parrot: maleParrot, uid: uid, pairRingNumber: pair.femaleRingNumber);

@@ -1,4 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:breeders_app/mainApp/animals/parrots/screens/addPairParrot_screen.dart';
+import 'package:breeders_app/mainApp/animals/parrots/screens/pairList_screen.dart';
 import 'package:draggable_scrollbar_sliver/draggable_scrollbar_sliver.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -34,6 +36,7 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
   Parrot chosenMaleParrot;
   Parrot chosenFemaleParrot;
   ScrollController _rrectController = ScrollController();
+  bool _isLoading = false;
 
   _sortingBy(int index) {
     switch (index) {
@@ -55,71 +58,48 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
 
   @override
   Widget build(BuildContext context) {
-    return DraggableScrollbar.rrect(
-      controller: _rrectController,
-      heightScrollThumb: 100,
-      backgroundColor: Theme.of(context).accentColor,
-      child: SingleChildScrollView(
-        controller: _rrectController,
-        physics: ScrollPhysics(),
-        child: Column(
-          children: [
-            _sortingColumn(context),
-            SizedBox(
-              height: 15,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: ListView.builder(
-                physics: NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: widget.pairList.length,
-                itemBuilder: (context, index) {
-                  return Slidable(
-                    actionPane: SlidableDrawerActionPane(),
-                    actionExtentRatio: 0.35,
-                    closeOnScroll: true,
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: _createCard(context, index),
-                        ),
-                        _globalMethods.arrowConteiner,
-                      ],
-                    ),
-                    secondaryActions: [
-                      GestureDetector(
-                        onTap: () {
-                          _globalMethods.showDeletingDialog(
-                            context,
-                            "Usuń parę",
-                            "Napewno usunąć wybraną parę z hodowli?",
-                            (_) {
-                              _deletePair(
-                                  widget.pairList[index].id,
-                                  widget.pairList[index].femaleRingNumber,
-                                  widget.pairList[index].maleRingNumber);
-                            },
-                            null,
-                          );
-                        },
-                        child: _globalMethods.createActionItem(
-                          context,
-                          Colors.red,
-                          MaterialCommunityIcons.delete,
-                          "Usuń Parę",
-                          4,
-                        ),
-                      ),
-                      widget.pairList[index].isArchive == "false"
-                          ? GestureDetector(
+    return !_isLoading
+        ? DraggableScrollbar.rrect(
+            controller: _rrectController,
+            heightScrollThumb: 100,
+            backgroundColor: Theme.of(context).accentColor,
+            child: SingleChildScrollView(
+              controller: _rrectController,
+              physics: ScrollPhysics(),
+              child: Column(
+                children: [
+                  _sortingColumn(context),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: widget.pairList.length,
+                      itemBuilder: (context, index) {
+                        return Slidable(
+                          actionPane: SlidableDrawerActionPane(),
+                          actionExtentRatio: 0.35,
+                          closeOnScroll: true,
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: _createCard(context, index),
+                              ),
+                              _globalMethods.arrowConteiner,
+                            ],
+                          ),
+                          secondaryActions: [
+                            GestureDetector(
                               onTap: () {
                                 _globalMethods.showDeletingDialog(
                                   context,
-                                  "Przenieś do archiwum",
-                                  "Napewno ustawić wybraną parę jako nie aktywną? \nNie można cofnąć operacji",
+                                  "Usuń parę",
+                                  "Napewno usunąć wybraną parę z hodowli?",
                                   (_) {
-                                    _movingToArchive(
+                                    _deletePair(
                                         widget.pairList[index].id,
                                         widget.pairList[index].femaleRingNumber,
                                         widget.pairList[index].maleRingNumber);
@@ -129,22 +109,51 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
                               },
                               child: _globalMethods.createActionItem(
                                 context,
-                                Colors.indigo,
-                                MaterialCommunityIcons.archive,
-                                "Przenieś do archiwum",
-                                4,
+                                Colors.red,
+                                MaterialCommunityIcons.delete,
+                                "Usuń Parę",
+                                30,
                               ),
-                            )
-                          : null,
-                    ],
-                  );
-                },
+                            ),
+                            widget.pairList[index].isArchive == "false"
+                                ? GestureDetector(
+                                    onTap: () {
+                                      _globalMethods.showDeletingDialog(
+                                        context,
+                                        "Przenieś do archiwum",
+                                        "Napewno ustawić wybraną parę jako nie aktywną? \nNie można cofnąć operacji",
+                                        (_) {
+                                          _movingToArchive(
+                                              widget.pairList[index].id,
+                                              widget.pairList[index]
+                                                  .femaleRingNumber,
+                                              widget.pairList[index]
+                                                  .maleRingNumber);
+                                        },
+                                        null,
+                                      );
+                                    },
+                                    child: _globalMethods.createActionItem(
+                                      context,
+                                      Colors.indigo,
+                                      MaterialCommunityIcons.archive,
+                                      "Przenieś do archiwum",
+                                      30,
+                                    ),
+                                  )
+                                : null,
+                          ],
+                        );
+                      },
+                    ),
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
-      ),
-    );
+          )
+        : Center(
+            child: CircularProgressIndicator(),
+          );
   }
 
   Widget _createCard(BuildContext context, int index) {
@@ -321,7 +330,15 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
     if (!result) {
       Navigator.of(context).pop();
       Navigator.of(context).pop();
-      Navigator.of(context).pop();
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => PairListScreen(
+            raceName: widget.race,
+            parrotList: widget.parrotList,
+          ),
+        ),
+      );
       _globalMethods.showMaterialDialog(context,
           "Operacja nieudana, nieznany błąd lub brak połączenia z internetem.");
     } else {
@@ -334,6 +351,9 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
       });
       try {
         Navigator.of(context).pop();
+        setState(() {
+          _isLoading = true;
+        });
         await _parrotPairDataHelper
             .deletePair(
           _firebaseUser.uid,
@@ -346,6 +366,18 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
           (_) {
             _globalMethods.showMaterialDialog(
                 context, "Usunięto wybraną parę papug");
+            setState(() {
+              _isLoading = false;
+            });
+            Navigator.of(context).pop();
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (BuildContext context) => PairListScreen(
+                  raceName: widget.race,
+                  parrotList: widget.parrotList,
+                ),
+              ),
+            );
           },
         );
       } catch (e) {
