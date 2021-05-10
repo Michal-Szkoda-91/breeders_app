@@ -629,42 +629,44 @@ class _AddPairScreenState extends State<AddPairScreen> {
             "Operacja nieudana, nieznany błąd lub brak połączenia z internetem.");
       } else {
         setState(() {
-          _createdPair = ParrotPairing(
-            id: "$_choosenFeMaleParrotRingNumber - $_choosenMaleParrotRingNumber - ${DateTime.now()}",
-            femaleRingNumber: _choosenFeMaleParrotRingNumber,
-            maleRingNumber: _choosenMaleParrotRingNumber,
-            pairingData: pairTime,
-            pairColor: pairColor,
-            picUrl: pictureUrl,
-          );
-          print(_createdPair.id + "wybrana ID");
-          _maleParrotList.forEach((parrot) {
-            if (parrot.ringNumber == _choosenMaleParrotRingNumber) {
-              _maleParrotChoosen = parrot;
-            }
-          });
-          _femaleParrotList.forEach((parrot) {
-            if (parrot.ringNumber == _choosenFeMaleParrotRingNumber) {
-              _femaleParrotChoosen = parrot;
-            }
-          });
+          _isLoading = true;
         });
         try {
-          await _parrotPairDataHelper
-              .createPairCollection(
-            uid: firebaseUser.uid,
-            pair: _createdPair,
-            race: widget.raceName,
-            maleParrot: _maleParrotChoosen,
-            femaleParrot: _femaleParrotChoosen,
-          )
-              .then((_) {
-            _choosenFeMaleParrotRingNumber = null;
-            _choosenMaleParrotRingNumber = null;
+          await sendPicture(context).then((_) {
             setState(() {
-              _isLoading = true;
+              _createdPair = ParrotPairing(
+                id: "$_choosenFeMaleParrotRingNumber - $_choosenMaleParrotRingNumber - ${DateTime.now()}",
+                femaleRingNumber: _choosenFeMaleParrotRingNumber,
+                maleRingNumber: _choosenMaleParrotRingNumber,
+                pairingData: pairTime,
+                pairColor: pairColor,
+                picUrl: pictureUrl,
+              );
+              print(_createdPair.id + "wybrana ID");
+              _maleParrotList.forEach((parrot) {
+                if (parrot.ringNumber == _choosenMaleParrotRingNumber) {
+                  _maleParrotChoosen = parrot;
+                }
+              });
+              _femaleParrotList.forEach((parrot) {
+                if (parrot.ringNumber == _choosenFeMaleParrotRingNumber) {
+                  _femaleParrotChoosen = parrot;
+                }
+              });
             });
-            sendPicture(context).then((_) {
+          }).then((_) async {
+            await _parrotPairDataHelper
+                .createPairCollection(
+              uid: firebaseUser.uid,
+              pair: _createdPair,
+              race: widget.raceName,
+              maleParrot: _maleParrotChoosen,
+              femaleParrot: _femaleParrotChoosen,
+            )
+                .then((_) {
+              _choosenFeMaleParrotRingNumber = null;
+              _choosenMaleParrotRingNumber = null;
+
               setState(() {
                 _isLoading = false;
               });
@@ -673,6 +675,9 @@ class _AddPairScreenState extends State<AddPairScreen> {
             });
           });
         } catch (e) {
+          setState(() {
+            _isLoading = false;
+          });
           _globalMethods.showMaterialDialog(context, "Operacja nieudana");
         }
       }
@@ -734,8 +739,7 @@ class _AddPairScreenState extends State<AddPairScreen> {
   }
 
   Future sendPicture(BuildContext context) async {
-    if (_image.path == 'assets/image/parrotsRace/parrot_pair.jpg' ||
-        _image.path.isEmpty) {
+    if (_image.path == 'assets/image/parrotsRace/parrot_pair.jpg') {
       return;
     } else {
       setState(() {

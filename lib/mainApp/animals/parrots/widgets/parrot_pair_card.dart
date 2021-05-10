@@ -342,6 +342,9 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
       _globalMethods.showMaterialDialog(context,
           "Operacja nieudana, nieznany błąd lub brak połączenia z internetem.");
     } else {
+      setState(() {
+        _isLoading = true;
+      });
       widget.parrotList.forEach((parr) {
         if (parr.ringNumber == femaleId) {
           chosenFemaleParrot = parr;
@@ -351,9 +354,7 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
       });
       try {
         Navigator.of(context).pop();
-        setState(() {
-          _isLoading = true;
-        });
+
         await _parrotPairDataHelper
             .deletePair(
           _firebaseUser.uid,
@@ -369,18 +370,12 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
             setState(() {
               _isLoading = false;
             });
-            Navigator.of(context).pop();
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(
-                builder: (BuildContext context) => PairListScreen(
-                  raceName: widget.race,
-                  parrotList: widget.parrotList,
-                ),
-              ),
-            );
           },
         );
       } catch (e) {
+        setState(() {
+          _isLoading = false;
+        });
         Navigator.of(context).pop();
         _globalMethods.showMaterialDialog(context,
             "Operacja nie udana, nieznany błąd lub brak połączenia z internetem.");
