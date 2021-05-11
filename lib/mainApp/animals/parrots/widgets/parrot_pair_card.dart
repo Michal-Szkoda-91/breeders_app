@@ -3,6 +3,7 @@ import 'package:breeders_app/mainApp/animals/parrots/screens/addPairParrot_scree
 import 'package:breeders_app/mainApp/animals/parrots/screens/pairList_screen.dart';
 import 'package:draggable_scrollbar_sliver/draggable_scrollbar_sliver.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -79,71 +80,7 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
                       shrinkWrap: true,
                       itemCount: widget.pairList.length,
                       itemBuilder: (context, index) {
-                        return Slidable(
-                          actionPane: SlidableDrawerActionPane(),
-                          actionExtentRatio: 0.35,
-                          closeOnScroll: true,
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: _createCard(context, index),
-                              ),
-                              _globalMethods.arrowConteiner,
-                            ],
-                          ),
-                          secondaryActions: [
-                            GestureDetector(
-                              onTap: () {
-                                _globalMethods.showDeletingDialog(
-                                  context,
-                                  "Usuń parę",
-                                  "Napewno usunąć wybraną parę z hodowli?",
-                                  (_) {
-                                    _deletePair(
-                                        widget.pairList[index].id,
-                                        widget.pairList[index].femaleRingNumber,
-                                        widget.pairList[index].maleRingNumber);
-                                  },
-                                  null,
-                                );
-                              },
-                              child: _globalMethods.createActionItem(
-                                context,
-                                Colors.red,
-                                MaterialCommunityIcons.delete,
-                                "Usuń Parę",
-                                30,
-                              ),
-                            ),
-                            widget.pairList[index].isArchive == "false"
-                                ? GestureDetector(
-                                    onTap: () {
-                                      _globalMethods.showDeletingDialog(
-                                        context,
-                                        "Przenieś do archiwum",
-                                        "Napewno ustawić wybraną parę jako nie aktywną? \nNie można cofnąć operacji",
-                                        (_) {
-                                          _movingToArchive(
-                                              widget.pairList[index].id,
-                                              widget.pairList[index]
-                                                  .femaleRingNumber,
-                                              widget.pairList[index]
-                                                  .maleRingNumber);
-                                        },
-                                        null,
-                                      );
-                                    },
-                                    child: _globalMethods.createActionItem(
-                                      context,
-                                      Colors.indigo,
-                                      MaterialCommunityIcons.archive,
-                                      "Przenieś do archiwum",
-                                      30,
-                                    ),
-                                  )
-                                : null,
-                          ],
-                        );
+                        return _createCard(context, index);
                       },
                     ),
                   ),
@@ -157,76 +94,139 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
   }
 
   Widget _createCard(BuildContext context, int index) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 25),
-      child: Card(
-        color: widget.pairList[index].isArchive == "false"
-            ? Colors.transparent
-            : Colors.grey[700],
-        shadowColor: Theme.of(context).cardColor,
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            _createInfoRow(
-              context,
-              "Data utworzenia pary: ",
-              widget.pairList[index].pairingData,
-            ),
-            const SizedBox(height: 3),
-            _createInfoRow(
-              context,
-              "Kolor Pary: ",
-              widget.pairList[index].pairColor,
-            ),
-            const SizedBox(height: 3),
-            _createInfoRowParrot(
-              context,
-              "Samica(0,1): ",
-              widget.pairList[index].femaleRingNumber,
-            ),
-            const SizedBox(height: 3),
-            _createInfoRowParrot(
-              context,
-              "Samiec(1,0): ",
-              widget.pairList[index].maleRingNumber,
-            ),
-            const SizedBox(
-              height: 3,
-            ),
-            widget.pairList[index].isArchive == "false"
-                ? Divider(
-                    color: Theme.of(context).textSelectionColor,
-                  )
-                : Center(),
-            widget.pairList[index].isArchive == "false"
-                ? EggExpansionTile(
-                    widget.pairList[index].showEggsDate,
-                    widget.race,
-                    widget.pairList[index].id,
-                  )
-                : Center(),
-            Divider(
-              color: Theme.of(context).textSelectionColor,
-            ),
-            widget.pairList[index].isArchive == "false"
-                ? AddPairChildButton(
-                    pair: widget.pairList[index],
-                    raceName: widget.race,
-                  )
-                : SizedBox(
-                    height: 1,
+    return Stack(
+      children: [
+        Card(
+          margin: const EdgeInsets.only(
+            left: 15,
+            right: 10,
+            top: 80,
+            bottom: 15,
+          ),
+          color: widget.pairList[index].isArchive == "false"
+              ? Colors.transparent
+              : Colors.grey[700],
+          shadowColor: Theme.of(context).cardColor,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(10.0, 40.0, 10.0, 10.0),
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              _createInfoRow(
+                context,
+                "Data utworzenia pary: ",
+                widget.pairList[index].pairingData,
+              ),
+              const SizedBox(height: 3),
+              _createInfoRow(
+                context,
+                "Kolor Pary: ",
+                widget.pairList[index].pairColor,
+              ),
+              const SizedBox(height: 3),
+              _createInfoRowParrot(
+                context,
+                "Samica(0,1): ",
+                widget.pairList[index].femaleRingNumber,
+              ),
+              const SizedBox(height: 3),
+              _createInfoRowParrot(
+                context,
+                "Samiec(1,0): ",
+                widget.pairList[index].maleRingNumber,
+              ),
+              Divider(
+                color: Theme.of(context).textSelectionColor,
+              ),
+              Row(
+                children: [
+                  IconButton(
+                    icon: Icon(
+                      MaterialCommunityIcons.delete,
+                      color: Colors.red,
+                    ),
+                    onPressed: () {
+                      _globalMethods.showDeletingDialog(
+                        context,
+                        "Usuń parę",
+                        "Napewno usunąć wybraną parę z hodowli?",
+                        (_) {
+                          _deletePair(
+                              widget.pairList[index].id,
+                              widget.pairList[index].femaleRingNumber,
+                              widget.pairList[index].maleRingNumber);
+                        },
+                        null,
+                      );
+                    },
                   ),
-            const SizedBox(
-              height: 3,
-            ),
-            ChildrenList(
-              pairId: widget.pairList[index].id,
-              raceName: widget.race,
-            ),
-          ]),
+                  IconButton(
+                    icon: Icon(
+                      MaterialCommunityIcons.archive,
+                      color: Colors.blueAccent,
+                    ),
+                    onPressed: () {
+                      _globalMethods.showDeletingDialog(
+                        context,
+                        "Przenieś do archiwum",
+                        "Napewno ustawić wybraną parę jako nie aktywną? \nNie można cofnąć operacji",
+                        (_) {
+                          _movingToArchive(
+                              widget.pairList[index].id,
+                              widget.pairList[index].femaleRingNumber,
+                              widget.pairList[index].maleRingNumber);
+                        },
+                        null,
+                      );
+                    },
+                  )
+                ],
+              ),
+              const SizedBox(
+                height: 3,
+              ),
+              widget.pairList[index].isArchive == "false"
+                  ? Divider(
+                      color: Theme.of(context).textSelectionColor,
+                    )
+                  : Center(),
+              widget.pairList[index].isArchive == "false"
+                  ? EggExpansionTile(
+                      widget.pairList[index].showEggsDate,
+                      widget.race,
+                      widget.pairList[index].id,
+                    )
+                  : Center(),
+              Divider(
+                color: Theme.of(context).textSelectionColor,
+              ),
+              widget.pairList[index].isArchive == "false"
+                  ? AddPairChildButton(
+                      pair: widget.pairList[index],
+                      raceName: widget.race,
+                    )
+                  : SizedBox(
+                      height: 1,
+                    ),
+              const SizedBox(
+                height: 3,
+              ),
+              ChildrenList(
+                pairId: widget.pairList[index].id,
+                raceName: widget.race,
+              ),
+            ]),
+          ),
         ),
-      ),
+        widget.pairList[index].picUrl == "brak"
+            ? PairCircleAvatar(
+                picUrl: widget.pairList[index].picUrl,
+                isAssets: true,
+              )
+            : PairCircleAvatar(
+                picUrl: widget.pairList[index].picUrl,
+                isAssets: false,
+              ),
+      ],
     );
   }
 
@@ -460,6 +460,90 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
           )
         ],
       ),
+    );
+  }
+}
+
+class PairCircleAvatar extends StatefulWidget {
+  const PairCircleAvatar({
+    @required this.picUrl,
+    this.isAssets,
+  });
+
+  final String picUrl;
+  final bool isAssets;
+
+  @override
+  _PairCircleAvatarState createState() => _PairCircleAvatarState();
+}
+
+class _PairCircleAvatarState extends State<PairCircleAvatar> {
+  String takenURL;
+  Future _getImage(String basicUrl) async {
+    final ref = FirebaseStorage.instance.ref().child(basicUrl);
+    takenURL = await ref.getDownloadURL();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: _getImage(widget.picUrl),
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        switch (snapshot.connectionState) {
+          case ConnectionState.waiting:
+            {
+              return Positioned.fill(
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  child: CircleAvatar(
+                    radius: 60,
+                    backgroundColor: Theme.of(context).primaryColor,
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  ),
+                ),
+              );
+            }
+            break;
+          case ConnectionState.done:
+            {
+              return Positioned.fill(
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  child: CircleAvatar(
+                    radius: 60,
+                    backgroundColor: Theme.of(context).primaryColor,
+                    child: CircleAvatar(
+                      radius: 57,
+                      backgroundImage: widget.isAssets
+                          ? AssetImage(
+                              "assets/image/parrotsRace/parrot_pair.jpg")
+                          : NetworkImage("$takenURL"),
+                    ),
+                  ),
+                ),
+              );
+            }
+            break;
+          default:
+            {
+              return Positioned.fill(
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  child: CircleAvatar(
+                      radius: 60,
+                      backgroundColor: Theme.of(context).primaryColor,
+                      child: CircleAvatar(
+                        radius: 57,
+                        backgroundImage: AssetImage(
+                            "assets/image/parrotsRace/parrot_pair.jpg"),
+                      )),
+                ),
+              );
+            }
+        }
+      },
     );
   }
 }
