@@ -109,27 +109,28 @@ class _AddPairScreenState extends State<AddPairScreen> {
   Future getImageFromGalery() async {
     var image = await ImagePicker.pickImage(
         source: ImageSource.gallery, imageQuality: 30);
-    setState(() {
-      if (image == null) {
-        return;
-      } else {
+
+    if (image == null) {
+      return;
+    } else {
+      setState(() {
         _image = image;
         _isPhotoChoosen = false;
-      }
-    });
+      });
+    }
   }
 
   Future getImageFromCamera() async {
     var image = await ImagePicker.pickImage(
         source: ImageSource.camera, imageQuality: 30);
-    setState(() {
-      if (image == null) {
-        return;
-      } else {
+    if (image == null) {
+      return;
+    } else {
+      setState(() {
         _image = image;
         _isPhotoChoosen = false;
-      }
-    });
+      });
+    }
   }
 
   @override
