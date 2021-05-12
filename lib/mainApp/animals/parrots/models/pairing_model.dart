@@ -1,5 +1,6 @@
 import 'package:breeders_app/mainApp/animals/parrots/models/parrot_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 import 'children_model.dart';
 
@@ -79,7 +80,7 @@ class ParrotPairDataHelper {
   }
 
   Future<void> deletePair(String uid, String race, String id,
-      Parrot femaleParrot, Parrot maleParrot) async {
+      Parrot femaleParrot, Parrot maleParrot, String picUrl) async {
     final CollectionReference breedCollection =
         FirebaseFirestore.instance.collection(uid);
     ParrotDataHelper parrotList = ParrotDataHelper();
@@ -113,6 +114,15 @@ class ParrotPairDataHelper {
     }).catchError((err) {
       print("error occured $err");
     });
+
+    //Delete picture from storage
+    try {
+      final ref = FirebaseStorage.instance.ref().child(picUrl);
+      await ref.delete();
+      print("Pair deleted");
+    } catch (e) {
+      print("error occured $e");
+    }
   }
 
   Future<void> moveToArchive(String uid, String race, String id,
