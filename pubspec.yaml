@@ -51,9 +51,18 @@ dependencies:
   image_picker: ^0.6.7+22
 
 
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: ^0.7.5
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon/parrot_launcher.png"
+  adaptive_icon_background: "#191919"
+  adaptive_icon_foreground: "assets/icon/parrot_launcher.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -72,6 +81,7 @@ flutter:
     - assets/image/parrot.jpg
     - assets/image/google_logo.png
     - assets/image/animal_Icon.jpg
+    - assets/icon/splash.png
     #Parrots race
     - assets/image/parrotsRace/parrot_Icon.jpg
     - assets/image/parrotsRace/Aleksandretta.jpg
