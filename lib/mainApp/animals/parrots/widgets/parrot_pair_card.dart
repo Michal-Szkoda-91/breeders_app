@@ -1,14 +1,12 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:breeders_app/mainApp/animals/parrots/screens/addPairParrot_screen.dart';
-import 'package:breeders_app/mainApp/animals/parrots/screens/pairList_screen.dart';
 import 'package:draggable_scrollbar_sliver/draggable_scrollbar_sliver.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:group_button/group_button.dart';
 
+import 'package:breeders_app/mainApp/animals/parrots/screens/pairList_screen.dart';
 import 'package:breeders_app/mainApp/animals/parrots/models/pairing_model.dart';
 import 'package:breeders_app/mainApp/animals/parrots/models/parrot_model.dart';
 import 'package:breeders_app/models/global_methods.dart';
@@ -137,53 +135,7 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
               Divider(
                 color: Theme.of(context).textSelectionColor,
               ),
-              Row(
-                children: [
-                  IconButton(
-                    icon: Icon(
-                      MaterialCommunityIcons.delete,
-                      color: Colors.red,
-                    ),
-                    onPressed: () {
-                      _globalMethods.showDeletingDialog(
-                        context,
-                        "Usuń parę",
-                        "Napewno usunąć wybraną parę z hodowli?",
-                        (_) {
-                          _deletePair(
-                              widget.pairList[index].id,
-                              widget.pairList[index].femaleRingNumber,
-                              widget.pairList[index].maleRingNumber);
-                        },
-                        null,
-                      );
-                    },
-                  ),
-                  IconButton(
-                    icon: Icon(
-                      MaterialCommunityIcons.archive,
-                      color: Colors.blueAccent,
-                    ),
-                    onPressed: () {
-                      _globalMethods.showDeletingDialog(
-                        context,
-                        "Przenieś do archiwum",
-                        "Napewno ustawić wybraną parę jako nie aktywną? \nNie można cofnąć operacji",
-                        (_) {
-                          _movingToArchive(
-                              widget.pairList[index].id,
-                              widget.pairList[index].femaleRingNumber,
-                              widget.pairList[index].maleRingNumber);
-                        },
-                        null,
-                      );
-                    },
-                  )
-                ],
-              ),
-              const SizedBox(
-                height: 3,
-              ),
+              _deleteAndArchiveButtons(context, index),
               widget.pairList[index].isArchive == "false"
                   ? Divider(
                       color: Theme.of(context).textSelectionColor,
@@ -226,6 +178,67 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
                 picUrl: widget.pairList[index].picUrl,
                 isAssets: false,
               ),
+      ],
+    );
+  }
+
+  Row _deleteAndArchiveButtons(BuildContext context, int index) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        FlatButton.icon(
+          label: Text(
+            "Usuń Parę",
+            style: TextStyle(
+              color: Colors.red,
+            ),
+          ),
+          icon: Icon(
+            MaterialCommunityIcons.delete,
+            color: Colors.red,
+          ),
+          onPressed: () {
+            _globalMethods.showDeletingDialog(
+              context,
+              "Usuń parę",
+              "Napewno usunąć wybraną parę z hodowli?",
+              (_) {
+                _deletePair(
+                    widget.pairList[index].id,
+                    widget.pairList[index].femaleRingNumber,
+                    widget.pairList[index].maleRingNumber,
+                    widget.pairList[index].picUrl);
+              },
+              null,
+            );
+          },
+        ),
+        FlatButton.icon(
+          label: Text(
+            "Do Archiwum",
+            style: TextStyle(
+              color: Colors.blueAccent,
+            ),
+          ),
+          icon: Icon(
+            MaterialCommunityIcons.archive,
+            color: Colors.blueAccent,
+          ),
+          onPressed: () {
+            _globalMethods.showDeletingDialog(
+              context,
+              "Przenieś do archiwum",
+              "Napewno ustawić wybraną parę jako nie aktywną? \nNie można cofnąć operacji",
+              (_) {
+                _movingToArchive(
+                    widget.pairList[index].id,
+                    widget.pairList[index].femaleRingNumber,
+                    widget.pairList[index].maleRingNumber);
+              },
+              null,
+            );
+          },
+        )
       ],
     );
   }
@@ -323,7 +336,7 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
     );
   }
 
-  Future<void> _deletePair(String id, String femaleId, String maleID) async {
+  Future<void> _deletePair(String id, String femaleId, String maleID, String picUrl) async {
     final _firebaseUser = FirebaseAuth.instance.currentUser;
     bool result = await _globalMethods.checkInternetConnection(context);
 
@@ -362,6 +375,7 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
           id,
           chosenFemaleParrot,
           chosenMaleParrot,
+          picUrl
         )
             .then(
           (_) {
@@ -479,6 +493,8 @@ class PairCircleAvatar extends StatefulWidget {
 
 class _PairCircleAvatarState extends State<PairCircleAvatar> {
   String takenURL;
+  bool isMaximaze = false;
+
   Future _getImage(String basicUrl) async {
     final ref = FirebaseStorage.instance.ref().child(basicUrl);
     takenURL = await ref.getDownloadURL();
@@ -486,21 +502,22 @@ class _PairCircleAvatarState extends State<PairCircleAvatar> {
 
   @override
   Widget build(BuildContext context) {
+    takenURL = null;
     return FutureBuilder(
       future: _getImage(widget.picUrl),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.waiting:
             {
-              return Positioned.fill(
-                child: Align(
-                  alignment: Alignment.topCenter,
-                  child: CircleAvatar(
-                    radius: 60,
-                    backgroundColor: Theme.of(context).primaryColor,
-                    child: Center(
-                      child: CircularProgressIndicator(),
-                    ),
+              return Align(
+                alignment: Alignment.topCenter,
+                child: CircleAvatar(
+                  radius: isMaximaze
+                      ? (MediaQuery.of(context).size.width / 2) - 15
+                      : 60,
+                  backgroundColor: Theme.of(context).primaryColor,
+                  child: Center(
+                    child: CircularProgressIndicator(),
                   ),
                 ),
               );
@@ -508,15 +525,24 @@ class _PairCircleAvatarState extends State<PairCircleAvatar> {
             break;
           case ConnectionState.done:
             {
-              return Positioned.fill(
+              return GestureDetector(
+                onTap: () {
+                  setState(() {
+                    isMaximaze = !isMaximaze;
+                  });
+                },
                 child: Align(
                   alignment: Alignment.topCenter,
                   child: CircleAvatar(
-                    radius: 60,
+                    radius: isMaximaze
+                        ? (MediaQuery.of(context).size.width / 2) - 10
+                        : 60,
                     backgroundColor: Theme.of(context).primaryColor,
                     child: CircleAvatar(
-                      radius: 57,
-                      backgroundImage: widget.isAssets
+                      radius: isMaximaze
+                          ? (MediaQuery.of(context).size.width / 2) - 15
+                          : 57,
+                      backgroundImage: widget.isAssets || takenURL == null
                           ? AssetImage(
                               "assets/image/parrotsRace/parrot_pair.jpg")
                           : NetworkImage("$takenURL"),
@@ -526,19 +552,23 @@ class _PairCircleAvatarState extends State<PairCircleAvatar> {
               );
             }
             break;
+
           default:
             {
-              return Positioned.fill(
-                child: Align(
-                  alignment: Alignment.topCenter,
+              return Align(
+                alignment: Alignment.topCenter,
+                child: CircleAvatar(
+                  radius: isMaximaze
+                      ? (MediaQuery.of(context).size.width / 2) - 10
+                      : 60,
+                  backgroundColor: Theme.of(context).primaryColor,
                   child: CircleAvatar(
-                      radius: 60,
-                      backgroundColor: Theme.of(context).primaryColor,
-                      child: CircleAvatar(
-                        radius: 57,
-                        backgroundImage: AssetImage(
-                            "assets/image/parrotsRace/parrot_pair.jpg"),
-                      )),
+                    radius: isMaximaze
+                        ? (MediaQuery.of(context).size.width / 2) - 15
+                        : 57,
+                    backgroundImage:
+                        AssetImage("assets/image/parrotsRace/parrot_pair.jpg"),
+                  ),
                 ),
               );
             }

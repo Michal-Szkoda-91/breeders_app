@@ -39,6 +39,7 @@ class _AddPairScreenState extends State<AddPairScreen> {
   ScrollController _rrectController = ScrollController();
   bool _isPhotoChoosen = false;
   File _image = new File('assets/image/parrotsRace/parrot_pair.jpg');
+  bool _isBlinking = false;
 
   List<Parrot> _allParrotList = [];
   List<Parrot> _maleParrotList = [];
@@ -189,7 +190,7 @@ class _AddPairScreenState extends State<AddPairScreen> {
                           ],
                         ),
                         SizedBox(
-                          height: 150,
+                          height: 200,
                         )
                       ],
                     ),
@@ -242,8 +243,10 @@ class _AddPairScreenState extends State<AddPairScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 CircleAvatar(
-                  backgroundColor: Theme.of(context).backgroundColor,
-                  radius: 25,
+                  backgroundColor: _isBlinking
+                      ? Colors.orange
+                      : Theme.of(context).backgroundColor,
+                  radius: _isBlinking ? 30 : 25,
                   child: IconButton(
                     padding: EdgeInsets.zero,
                     icon: Icon(
@@ -629,57 +632,177 @@ class _AddPairScreenState extends State<AddPairScreen> {
         _globalMethods.showMaterialDialog(context,
             "Operacja nieudana, nieznany błąd lub brak połączenia z internetem.");
       } else {
-        setState(() {
-          _isLoading = true;
-        });
-        try {
-          await sendPicture(context).then((_) {
-            setState(() {
-              _createdPair = ParrotPairing(
-                id: "$_choosenFeMaleParrotRingNumber - $_choosenMaleParrotRingNumber - ${DateTime.now()}",
-                femaleRingNumber: _choosenFeMaleParrotRingNumber,
-                maleRingNumber: _choosenMaleParrotRingNumber,
-                pairingData: pairTime,
-                pairColor: pairColor,
-                picUrl: pictureUrl,
-              );
-              print(_createdPair.id + "wybrana ID");
-              _maleParrotList.forEach((parrot) {
-                if (parrot.ringNumber == _choosenMaleParrotRingNumber) {
-                  _maleParrotChoosen = parrot;
-                }
-              });
-              _femaleParrotList.forEach((parrot) {
-                if (parrot.ringNumber == _choosenFeMaleParrotRingNumber) {
-                  _femaleParrotChoosen = parrot;
-                }
-              });
-            });
-          }).then((_) async {
-            await _parrotPairDataHelper
-                .createPairCollection(
-              uid: firebaseUser.uid,
-              pair: _createdPair,
-              race: widget.raceName,
-              maleParrot: _maleParrotChoosen,
-              femaleParrot: _femaleParrotChoosen,
-            )
-                .then((_) {
-              _choosenFeMaleParrotRingNumber = null;
-              _choosenMaleParrotRingNumber = null;
+        if (_image.path == 'assets/image/parrotsRace/parrot_pair.jpg') {
+          print("________________________-$pictureUrl");
+          showDialog(
+            barrierDismissible: false,
+            context: context,
+            child: AlertDialog(
+              backgroundColor: Theme.of(context).backgroundColor,
+              title: Text(
+                "Uwaga!",
+                style: TextStyle(
+                  color: Theme.of(context).textSelectionColor,
+                ),
+              ),
+              content: Text(
+                "Nie wybrano zdjęcia par.. czy mimo to chcesz kontynuwać? Nie będzie tej możliwości po utworzeniu pary.",
+                style: TextStyle(
+                  color: Theme.of(context).textSelectionColor,
+                ),
+              ),
+              actions: [
+                Row(
+                  children: [
+                    FlatButton(
+                      child: Text(
+                        "Kontynuuj",
+                        style: TextStyle(
+                            color: Theme.of(context).textSelectionColor,
+                            fontSize: 16),
+                      ),
+                      onPressed: () async {
+                        Navigator.of(context).pop();
+                        setState(() {
+                          _isLoading = true;
+                        });
+                        try {
+                          await sendPicture(context).then((_) {
+                            setState(() {
+                              _createdPair = ParrotPairing(
+                                id: "$_choosenFeMaleParrotRingNumber - $_choosenMaleParrotRingNumber - ${DateTime.now()}",
+                                femaleRingNumber:
+                                    _choosenFeMaleParrotRingNumber,
+                                maleRingNumber: _choosenMaleParrotRingNumber,
+                                pairingData: pairTime,
+                                pairColor: pairColor,
+                                picUrl: pictureUrl,
+                              );
+                              print(_createdPair.id + "wybrana ID");
+                              _maleParrotList.forEach((parrot) {
+                                if (parrot.ringNumber ==
+                                    _choosenMaleParrotRingNumber) {
+                                  _maleParrotChoosen = parrot;
+                                }
+                              });
+                              _femaleParrotList.forEach((parrot) {
+                                if (parrot.ringNumber ==
+                                    _choosenFeMaleParrotRingNumber) {
+                                  _femaleParrotChoosen = parrot;
+                                }
+                              });
+                            });
+                          }).then((_) async {
+                            await _parrotPairDataHelper
+                                .createPairCollection(
+                              uid: firebaseUser.uid,
+                              pair: _createdPair,
+                              race: widget.raceName,
+                              maleParrot: _maleParrotChoosen,
+                              femaleParrot: _femaleParrotChoosen,
+                            )
+                                .then((_) {
+                              _choosenFeMaleParrotRingNumber = null;
+                              _choosenMaleParrotRingNumber = null;
 
-              setState(() {
-                _isLoading = false;
-              });
-              Navigator.of(context).pop();
-              _globalMethods.showMaterialDialog(context, "Utworzono parę");
-            });
-          });
-        } catch (e) {
+                              setState(() {
+                                _isLoading = false;
+                              });
+                              Navigator.of(context).pop();
+                              _globalMethods.showMaterialDialog(
+                                  context, "Utworzono parę");
+                            });
+                          });
+                        } catch (e) {
+                          setState(() {
+                            _isLoading = false;
+                          });
+                          _globalMethods.showMaterialDialog(
+                              context, "Operacja nieudana");
+                        }
+                      },
+                    ),
+                    FlatButton(
+                      child: Text(
+                        "Uzupełnij zdjęcie",
+                        style: TextStyle(
+                            color: Theme.of(context).textSelectionColor,
+                            fontSize: 16),
+                      ),
+                      onPressed: () {
+                        FocusScope.of(context).requestFocus(new FocusNode());
+                        Navigator.of(context).pop();
+                        _rrectController
+                            .animateTo(
+                          0.0,
+                          curve: Curves.easeOut,
+                          duration: const Duration(
+                            milliseconds: 400,
+                          ),
+                        )
+                            .then((_) {
+                          _blinkingCamera();
+                        });
+                      },
+                    )
+                  ],
+                )
+              ],
+            ),
+          );
+        } else {
           setState(() {
-            _isLoading = false;
+            _isLoading = true;
           });
-          _globalMethods.showMaterialDialog(context, "Operacja nieudana");
+          try {
+            await sendPicture(context).then((_) {
+              setState(() {
+                _createdPair = ParrotPairing(
+                  id: "$_choosenFeMaleParrotRingNumber - $_choosenMaleParrotRingNumber - ${DateTime.now()}",
+                  femaleRingNumber: _choosenFeMaleParrotRingNumber,
+                  maleRingNumber: _choosenMaleParrotRingNumber,
+                  pairingData: pairTime,
+                  pairColor: pairColor,
+                  picUrl: pictureUrl,
+                );
+                print(_createdPair.id + "wybrana ID");
+                _maleParrotList.forEach((parrot) {
+                  if (parrot.ringNumber == _choosenMaleParrotRingNumber) {
+                    _maleParrotChoosen = parrot;
+                  }
+                });
+                _femaleParrotList.forEach((parrot) {
+                  if (parrot.ringNumber == _choosenFeMaleParrotRingNumber) {
+                    _femaleParrotChoosen = parrot;
+                  }
+                });
+              });
+            }).then((_) async {
+              await _parrotPairDataHelper
+                  .createPairCollection(
+                uid: firebaseUser.uid,
+                pair: _createdPair,
+                race: widget.raceName,
+                maleParrot: _maleParrotChoosen,
+                femaleParrot: _femaleParrotChoosen,
+              )
+                  .then((_) {
+                _choosenFeMaleParrotRingNumber = null;
+                _choosenMaleParrotRingNumber = null;
+
+                setState(() {
+                  _isLoading = false;
+                });
+                Navigator.of(context).pop();
+                _globalMethods.showMaterialDialog(context, "Utworzono parę");
+              });
+            });
+          } catch (e) {
+            setState(() {
+              _isLoading = false;
+            });
+            _globalMethods.showMaterialDialog(context, "Operacja nieudana");
+          }
         }
       }
     }
@@ -751,5 +874,40 @@ class _AddPairScreenState extends State<AddPairScreen> {
       UploadTask uploadTask = ref.putFile(_image);
       await uploadTask;
     }
+  }
+
+  _blinkingCamera() async {
+    setState(() {
+      _isBlinking = true;
+    });
+    await Future.delayed(Duration(milliseconds: 200));
+    setState(() {
+      _isBlinking = false;
+    });
+    await Future.delayed(Duration(milliseconds: 200));
+    setState(() {
+      _isBlinking = true;
+    });
+    await Future.delayed(Duration(milliseconds: 200));
+    setState(() {
+      _isBlinking = false;
+    });
+    await Future.delayed(Duration(milliseconds: 200));
+    setState(() {
+      _isBlinking = true;
+    });
+    await Future.delayed(Duration(milliseconds: 200));
+    setState(() {
+      _isBlinking = false;
+    });
+    await Future.delayed(Duration(milliseconds: 200));
+
+    setState(() {
+      _isBlinking = true;
+    });
+    await Future.delayed(Duration(milliseconds: 200));
+    setState(() {
+      _isBlinking = false;
+    });
   }
 }
