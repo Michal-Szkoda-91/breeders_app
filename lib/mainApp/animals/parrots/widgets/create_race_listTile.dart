@@ -127,7 +127,7 @@ class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
             _globalMethods.showDeletingDialog(
               context,
               widget.activeRaceList[index],
-              "Czy chcesz usunąć wszystkie papugi z hodowli? \nNie można tego cofnąć.",
+              "Czy chcesz usunąć wszystkie papugi z hodowli? Usunięte zostaną również pary wraz z danymi o inkubacji i potomstwu.\n\nOPERACJI NIE MOŻNA PÓZNIEJ COFNĄĆ!!!",
               _deleteRace,
               null,
             );
@@ -303,22 +303,19 @@ class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
 
     if (!result) {
       Navigator.of(context).pop();
-      _globalMethods.showMaterialDialog(context,
-          "Operacja nieudana, nieznany błąd lub brak połączenia z internetem.");
+      _globalMethods.showMaterialDialog(
+          context, "brak połączenia z internetem.");
     } else {
-      try {
-        Navigator.of(context).pop();
-        await _parrotDataHelper.deleteRaceList(firebaseUser.uid, name).then(
-          (_) {
-            _globalMethods.showMaterialDialog(
-                context, "Usunięto wszystkie papugi z rasy $name");
-          },
-        );
-      } catch (e) {
-        Navigator.of(context).pop();
+      Navigator.of(context).pop();
+      await _parrotDataHelper.deleteRaceList(firebaseUser.uid, name).then(
+        (_) {
+          _globalMethods.showMaterialDialog(context,
+              "Usunięto wszystkie papugi z rasy $name wraz ze wszystkimi parami i danymi.");
+        },
+      ).catchError((error) {
         _globalMethods.showMaterialDialog(context,
-            "Operacja nie udana, nieznany błąd lub brak połączenia z internetem.");
-      }
+            "Operacja nieudana, nieznany błąd, spróbuj ponownie pózniej");
+      });
     }
   }
 }

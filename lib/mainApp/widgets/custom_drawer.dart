@@ -1,8 +1,9 @@
-import 'package:breeders_app/main.dart';
 import 'package:flutter/material.dart';
 
 import '../../globalWidgets/imageContainerChinchila.dart';
 import '../../services/auth.dart';
+import 'incubation_drawer_info.dart';
+import 'logoutButton.dart';
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({
@@ -15,57 +16,43 @@ class CustomDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Drawer(
-      child: Container(
-        decoration: BoxDecoration(
-          color: Theme.of(context).backgroundColor,
-        ),
-        child: ListView(
-          children: [
-            const SizedBox(
-              height: 10,
-            ),
-            const ImageContainerParrotSmall(),
-            Padding(
-              padding: const EdgeInsets.all(14.0),
-              child: Text(
-                "Moja Hodowla",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).textSelectionColor,
-                ),
-                textAlign: TextAlign.center,
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.75,
+      child: Drawer(
+        child: Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).backgroundColor,
+          ),
+          child: ListView(
+            children: [
+              const SizedBox(
+                height: 10,
               ),
-            ),
-            Divider(
-              thickness: 2,
-            ),
-            FlatButton.icon(
-              icon: Icon(
-                Icons.logout,
-                color: Theme.of(context).textSelectionColor,
-                size: 30,
-              ),
-              label: Text(
-                'Wyloguj',
-                style: TextStyle(
-                  color: Theme.of(context).textSelectionColor,
-                  fontSize: 16,
-                ),
-              ),
-              onPressed: () async {
-                await _auth.signOut();
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(
-                    builder: ((context) => MyApp()),
+              const ImageContainerParrotSmall(),
+              Padding(
+                padding: const EdgeInsets.all(14.0),
+                child: Text(
+                  "Moja Hodowla Papug",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).textSelectionColor,
                   ),
-                  (Route<dynamic> route) => false,
-                );
-              },
-            )
-          ],
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              const Divider(
+                thickness: 2,
+              ),
+              SizedBox(height: 10),
+              IncubationInformation(),
+              SizedBox(height: 10),
+              const Divider(
+                thickness: 2,
+              ),
+              LogoutButton(auth: _auth),
+            ],
+          ),
         ),
       ),
     );

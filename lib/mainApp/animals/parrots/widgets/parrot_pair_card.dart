@@ -213,32 +213,34 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
             );
           },
         ),
-        FlatButton.icon(
-          label: Text(
-            "Do Archiwum",
-            style: TextStyle(
-              color: Colors.blueAccent,
-            ),
-          ),
-          icon: Icon(
-            MaterialCommunityIcons.archive,
-            color: Colors.blueAccent,
-          ),
-          onPressed: () {
-            _globalMethods.showDeletingDialog(
-              context,
-              "Przenieś do archiwum",
-              "Napewno ustawić wybraną parę jako nie aktywną? \nNie można cofnąć operacji",
-              (_) {
-                _movingToArchive(
-                    widget.pairList[index].id,
-                    widget.pairList[index].femaleRingNumber,
-                    widget.pairList[index].maleRingNumber);
-              },
-              null,
-            );
-          },
-        )
+        widget.pairList[index].isArchive == "false"
+            ? FlatButton.icon(
+                label: Text(
+                  "Do Archiwum",
+                  style: TextStyle(
+                    color: Colors.blueAccent,
+                  ),
+                ),
+                icon: Icon(
+                  MaterialCommunityIcons.archive,
+                  color: Colors.blueAccent,
+                ),
+                onPressed: () {
+                  _globalMethods.showDeletingDialog(
+                    context,
+                    "Przenieś do archiwum",
+                    "Napewno ustawić wybraną parę jako nie aktywną? \nNie można cofnąć operacji",
+                    (_) {
+                      _movingToArchive(
+                          widget.pairList[index].id,
+                          widget.pairList[index].femaleRingNumber,
+                          widget.pairList[index].maleRingNumber);
+                    },
+                    null,
+                  );
+                },
+              )
+            : Center(),
       ],
     );
   }
@@ -336,7 +338,8 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
     );
   }
 
-  Future<void> _deletePair(String id, String femaleId, String maleID, String picUrl) async {
+  Future<void> _deletePair(
+      String id, String femaleId, String maleID, String picUrl) async {
     final _firebaseUser = FirebaseAuth.instance.currentUser;
     bool result = await _globalMethods.checkInternetConnection(context);
 
@@ -365,35 +368,31 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
           chosenMaleParrot = parr;
         }
       });
-      try {
-        Navigator.of(context).pop();
 
-        await _parrotPairDataHelper
-            .deletePair(
-          _firebaseUser.uid,
-          widget.race,
-          id,
-          chosenFemaleParrot,
-          chosenMaleParrot,
-          picUrl
-        )
-            .then(
-          (_) {
-            _globalMethods.showMaterialDialog(
-                context, "Usunięto wybraną parę papug");
-            setState(() {
-              _isLoading = false;
-            });
-          },
-        );
-      } catch (e) {
+      Navigator.of(context).pop();
+
+      await _parrotPairDataHelper
+          .deletePair(
+        _firebaseUser.uid,
+        widget.race,
+        id,
+        chosenFemaleParrot,
+        chosenMaleParrot,
+        picUrl,
+      )
+          .then((_) {
+        _globalMethods.showMaterialDialog(
+            context, "Usunięto wybraną parę papug");
         setState(() {
           _isLoading = false;
         });
-        Navigator.of(context).pop();
+      }).catchError((error) {
+        setState(() {
+          _isLoading = false;
+        });
         _globalMethods.showMaterialDialog(context,
-            "Operacja nie udana, nieznany błąd lub brak połączenia z internetem.");
-      }
+            "Operacja nieudana, nieznany błąd, spróbuj ponownie pózniej");
+      });
     }
   }
 
@@ -415,27 +414,24 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
           chosenMaleParrot = parr;
         }
       });
-      try {
-        Navigator.of(context).pop();
-        await _parrotPairDataHelper
-            .moveToArchive(
-          _firebaseUser.uid,
-          widget.race,
-          id,
-          chosenFemaleParrot,
-          chosenMaleParrot,
-        )
-            .then(
-          (_) {
-            _globalMethods.showMaterialDialog(
-                context, "Przesunięto do archiwum");
-          },
-        );
-      } catch (e) {
-        Navigator.of(context).pop();
+
+      Navigator.of(context).pop();
+      await _parrotPairDataHelper
+          .moveToArchive(
+        _firebaseUser.uid,
+        widget.race,
+        id,
+        chosenFemaleParrot,
+        chosenMaleParrot,
+      )
+          .then(
+        (_) {
+          _globalMethods.showMaterialDialog(context, "Przesunięto do archiwum");
+        },
+      ).catchError((error) {
         _globalMethods.showMaterialDialog(context,
-            "Operacja nie udana, nieznany błąd lub brak połączenia z internetem.");
-      }
+            "Operacja nieudana, nieznany błąd, spróbuj ponownie pózniej");
+      });
     }
   }
 
