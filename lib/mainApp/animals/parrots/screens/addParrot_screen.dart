@@ -624,23 +624,25 @@ class _RaceListScreenState extends State<AddParrotScreen> {
               notes: notes,
               sex: sexName);
         });
-        try {
-          dataProvider
-              .createParrotCollection(
-            uid: firebaseUser.uid,
-            parrot: _createdParrot,
-          )
-              .then((_) {
-            setState(() {
-              _isLoading = false;
-            });
-            Navigator.of(context).pop();
-            _globalMethods.showMaterialDialog(context, "Dodano Papugę");
+
+        dataProvider
+            .createParrotCollection(
+          uid: firebaseUser.uid,
+          parrot: _createdParrot,
+        )
+            .then((_) {
+          setState(() {
+            _isLoading = false;
           });
-        } catch (e) {
+          Navigator.of(context).pop();
+          _globalMethods.showMaterialDialog(context, "Dodano Papugę");
+        }).catchError((error) {
+          setState(() {
+            _isLoading = false;
+          });
           _globalMethods.showMaterialDialog(context,
-              "Operacja nieudana, nieznany błąd lub brak połączenia z internetem!");
-        }
+              "Operacja nieudana, nieznany błąd, spróbuj ponownie pózniej");
+        });
       }
     }
   }
@@ -670,25 +672,27 @@ class _RaceListScreenState extends State<AddParrotScreen> {
             ringNumber: ringNumber,
           );
         });
-        try {
-          pairDataprovider
-              .createChild(
-            uid: firebaseUser.uid,
-            race: widget.race,
-            child: _createdChild,
-            pairId: widget.pair.id,
-          )
-              .then((_) {
-            setState(() {
-              _isLoading = false;
-            });
-            Navigator.of(context).pop();
-            _globalMethods.showMaterialDialog(context, "Utworzono potomka");
+
+        pairDataprovider
+            .createChild(
+          uid: firebaseUser.uid,
+          race: widget.race,
+          child: _createdChild,
+          pairId: widget.pair.id,
+        )
+            .then((_) {
+          setState(() {
+            _isLoading = false;
           });
-        } catch (e) {
+          Navigator.of(context).pop();
+          _globalMethods.showMaterialDialog(context, "Utworzono potomka");
+        }).catchError((error) {
+          setState(() {
+            _isLoading = false;
+          });
           _globalMethods.showMaterialDialog(context,
-              "Operacja nieudana, nieznany błąd lub brak połączenia z internetem!");
-        }
+              "Operacja nieudana, nieznany błąd, spróbuj ponownie pózniej");
+        });
       }
     }
   }
@@ -719,24 +723,27 @@ class _RaceListScreenState extends State<AddParrotScreen> {
               sex: sexName,
               pairRingNumber: widget.parrot.pairRingNumber);
         });
-        try {
-          dataProvider
-              .updateParrot(
-            uid: firebaseUser.uid,
-            parrot: _createdParrot,
-            pairRingNumber: _createdParrot.pairRingNumber,
-          )
-              .then((_) {
-            setState(() {
-              _isLoading = false;
-            });
-            Navigator.of(context).pop();
-            _globalMethods.showMaterialDialog(context, "Edytowano dane");
+
+        dataProvider
+            .updateParrot(
+          uid: firebaseUser.uid,
+          parrot: _createdParrot,
+          pairRingNumber: _createdParrot.pairRingNumber,
+        )
+            .then((_) {
+          setState(() {
+            _isLoading = false;
           });
-        } catch (e) {
+          Navigator.of(context).pop();
+          _globalMethods.showMaterialDialog(context, "Edytowano dane");
+        }).catchError((error) {
+          setState(() {
+            _isLoading = false;
+          });
           _globalMethods.showMaterialDialog(context,
-              "Operacja nieudana, nieznany błąd lub brak połączenia z internetem.");
-        }
+              "Operacja nieudana, nieznany błąd, spróbuj ponownie pózniej");
+        });
+        ;
       }
     }
   }

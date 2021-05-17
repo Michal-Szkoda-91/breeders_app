@@ -188,7 +188,7 @@ class _ParrotCardState extends State<ParrotCard> {
                           shrinkWrap: true,
                           itemBuilder: (context, index) {
                             return Container(
-                              width: 130,
+                              width: 260,
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceAround,
@@ -295,7 +295,7 @@ class _ParrotCardState extends State<ParrotCard> {
   Container _createContentRowPair(BuildContext context, String title,
       double width, int index, bool isPair) {
     return Container(
-      padding: EdgeInsets.all(3.0),
+      padding: EdgeInsets.all(1.0),
       decoration: BoxDecoration(
         border: Border(
           right: BorderSide(color: Colors.black, width: 1.0),
@@ -310,7 +310,7 @@ class _ParrotCardState extends State<ParrotCard> {
               title,
               style: TextStyle(
                 color: Theme.of(context).textSelectionColor,
-                fontSize: 14,
+                fontSize: 12,
               ),
               textAlign: TextAlign.center,
             )
@@ -440,7 +440,7 @@ class _ParrotCardState extends State<ParrotCard> {
               ),
               content: ParrotDialogInformation(
                 parrotRace: widget._createdParrotList[index].race,
-                parrotRing: widget._createdParrotList[index].ringNumber,
+                parrotRing: title,
               ),
               actions: <Widget>[
                 FlatButton(
@@ -465,8 +465,9 @@ class _ParrotCardState extends State<ParrotCard> {
             color: Colors.black45,
           ),
           padding: EdgeInsets.all(10),
-          child: Text(
+          child: AutoSizeText(
             title,
+            maxLines: 2,
             style: _cretedTextStyle(context),
           ),
         ),
@@ -529,22 +530,24 @@ class _ParrotCardState extends State<ParrotCard> {
 
     if (!result) {
       Navigator.of(context).pop();
-      _globalMethods.showMaterialDialog(context,
-          "Operacja nieudana, nieznany błąd lub brak połączenia z internetem.");
+      _globalMethods.showMaterialDialog(
+          context, "brak połączenia z internetem.");
     } else {
-      try {
-        Navigator.of(context).pop();
-        await _parrotHelper.deleteParrot(_firebaseUser.uid, parrot).then(
-          (_) {
-            _globalMethods.showMaterialDialog(context,
-                "Usunięto papugę o numerze obrączki ${parrot.ringNumber}");
-          },
-        );
-      } catch (e) {
-        Navigator.of(context).pop();
+      Navigator.of(context).pop();
+      await _parrotHelper
+          .deleteParrot(
+        _firebaseUser.uid,
+        parrot,
+      )
+          .then(
+        (_) {
+          _globalMethods.showMaterialDialog(context,
+              "Usunięto papugę o numerze obrączki ${parrot.ringNumber}");
+        },
+      ).catchError((error) {
         _globalMethods.showMaterialDialog(context,
-            "Operacja nie udana, nieznany błąd lub brak połączenia z internetem.");
-      }
+            "Operacja nieudana, nieznany błąd, spróbuj ponownie pózniej");
+      });
     }
   }
 
