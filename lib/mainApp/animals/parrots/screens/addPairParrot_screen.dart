@@ -138,70 +138,71 @@ class _AddPairScreenState extends State<AddPairScreen> {
   Widget build(BuildContext context) {
     final node = FocusScope.of(context);
     return Scaffold(
-        endDrawer: CustomDrawer(auth: _auth),
-        endDrawerEnableOpenDragGesture: false,
-        backgroundColor: Colors.transparent,
-        appBar: AppBar(
-          title: AutoSizeText(
-            "Parowanie - ${widget.raceName}",
-            maxLines: 1,
-          ),
+      endDrawer: CustomDrawer(auth: _auth),
+      endDrawerEnableOpenDragGesture: false,
+      backgroundColor: Colors.transparent,
+      appBar: AppBar(
+        title: AutoSizeText(
+          "Parowanie - ${widget.raceName}",
+          maxLines: 1,
         ),
-        body: !_isLoading
-            ? MainBackground(
-                child: DraggableScrollbar.rrect(
+      ),
+      body: !_isLoading
+          ? MainBackground(
+              child: DraggableScrollbar.rrect(
+                controller: _rrectController,
+                heightScrollThumb: 100,
+                backgroundColor: Theme.of(context).accentColor,
+                child: SingleChildScrollView(
                   controller: _rrectController,
-                  heightScrollThumb: 100,
-                  backgroundColor: Theme.of(context).accentColor,
-                  child: SingleChildScrollView(
-                    controller: _rrectController,
-                    child: Column(
-                      children: [
-                        _createTitle(context),
-                        _streamBuilder,
-                        const SizedBox(height: 15),
-                        _createForm(context, node),
-                        const SizedBox(height: 15),
-                        buildRowCalendar(context),
-                        const SizedBox(height: 25),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            FlatButton(
-                              color: Theme.of(context).backgroundColor,
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: _createInfoText(
-                                context,
-                                'Anuluj',
-                              ),
+                  child: Column(
+                    children: [
+                      _createTitle(context),
+                      _streamBuilder,
+                      const SizedBox(height: 15),
+                      _createForm(context, node),
+                      const SizedBox(height: 15),
+                      buildRowCalendar(context),
+                      const SizedBox(height: 25),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          FlatButton(
+                            color: Theme.of(context).backgroundColor,
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: _createInfoText(
+                              context,
+                              'Anuluj',
                             ),
-                            FlatButton(
-                              color: Theme.of(context).backgroundColor,
-                              onPressed: () {
-                                _sendPictureToStorage(context);
-                              },
-                              child: _createInfoText(
-                                context,
-                                'Utwórz parę',
-                              ),
+                          ),
+                          FlatButton(
+                            color: Theme.of(context).backgroundColor,
+                            onPressed: () {
+                              _sendPictureToStorage(context);
+                            },
+                            child: _createInfoText(
+                              context,
+                              'Utwórz parę',
                             ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 200,
-                        )
-                      ],
-                    ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 200,
+                      )
+                    ],
                   ),
                 ),
-              )
-            : MainBackground(
-                child: Center(
-                  child: CircularProgressIndicator(),
-                ),
-              ));
+              ),
+            )
+          : MainBackground(
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            ),
+    );
   }
 
   Widget _createTitle(BuildContext context) {
@@ -688,7 +689,12 @@ class _AddPairScreenState extends State<AddPairScreen> {
         ),
       );
     } else {
-      _createPair(context);
+      await sendPicture(context).then((_) {
+        _createPair(context);
+      }).catchError((error) {
+        _globalMethods.showMaterialDialog(
+            context, "Nie udało się wczytać zdjęcia, Spróbuj ponownie póżniej");
+      });
     }
   }
 

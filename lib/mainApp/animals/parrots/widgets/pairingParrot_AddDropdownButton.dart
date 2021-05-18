@@ -28,56 +28,45 @@ class _CreatePairingParrotDropdownButtonState
         _navigateToAddPairParrotScreen(widget.raceName);
       },
       child: Container(
-        color: Colors.transparent,
-        child: Column(
+        height: 60,
+        width: MediaQuery.of(context).size.width * 0.72,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(
+            Radius.circular(8),
+          ),
+          color: Theme.of(context).backgroundColor,
+        ),
+        child: new Row(
           children: [
-            SizedBox(
-              height: 4,
+            SizedBox(width: 10),
+            CircleAvatar(
+              radius: 25,
+              backgroundColor: Theme.of(context).primaryColor,
+              child: CircleAvatar(
+                radius: 22,
+                backgroundImage: AssetImage(
+                  url,
+                ),
+              ),
             ),
-            new Row(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                  ),
-                  child: CircleAvatar(
-                    radius: 20,
-                    backgroundColor: Theme.of(context).primaryColor,
-                    child: CircleAvatar(
-                      radius: 20,
-                      backgroundImage: AssetImage(
-                        url,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                AutoSizeText(
-                  name,
-                  maxLines: 1,
-                  style: TextStyle(
-                    color: Theme.of(context).textSelectionColor,
-                    fontSize: 18,
-                  ),
-                ),
-                Expanded(
-                  child: SizedBox(),
-                ),
-                Icon(
-                  Icons.add,
-                  color: Theme.of(context).textSelectionColor,
-                  size: 30,
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-              ],
+            SizedBox(width: 10),
+            AutoSizeText(
+              name,
+              maxLines: 1,
+              style: TextStyle(
+                color: Theme.of(context).textSelectionColor,
+                fontSize: 18,
+              ),
             ),
-            Divider(
+            Expanded(
+              child: SizedBox(),
+            ),
+            Icon(
+              Icons.add,
               color: Theme.of(context).textSelectionColor,
+              size: 30,
             ),
+            SizedBox(width: 10),
           ],
         ),
       ),
