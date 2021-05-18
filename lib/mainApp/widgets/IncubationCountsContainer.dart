@@ -1,0 +1,58 @@
+import 'package:flutter/material.dart';
+
+class IncubationCountsContainer extends StatelessWidget {
+  const IncubationCountsContainer({
+    Key key,
+    @required int incubationTimes,
+  })  : _incubationTimes = incubationTimes,
+        super(key: key);
+
+  final int _incubationTimes;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 5),
+      child: Container(
+        padding: EdgeInsets.all(7),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(14),
+          color: Colors.black45,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Text(
+              "Aktywnych inkubacji:",
+              style: TextStyle(
+                color: Theme.of(context).textSelectionColor,
+                fontSize: 16,
+              ),
+            ),
+            Container(
+              width: 33,
+              height: 33,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: Theme.of(context).primaryColor,
+                border: Border.all(
+                  color: Theme.of(context).textSelectionColor,
+                ),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(18),
+                ),
+              ),
+              child: Text(
+                _incubationTimes.toString(),
+                style: TextStyle(
+                  color: Theme.of(context).textSelectionColor,
+                  fontSize: 20,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

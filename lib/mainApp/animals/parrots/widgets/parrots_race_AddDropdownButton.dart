@@ -22,94 +22,104 @@ class _CreateParrotsDropdownButtonState
 
   @override
   Widget build(BuildContext context) {
-    return DropdownButton(
-      value: _parrotsRace.parrotsRaceList[0],
-      itemHeight: 60,
-      isExpanded: true,
-      icon: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Icon(
-          Icons.add,
-          size: 30,
-          color: Theme.of(context).textSelectionColor,
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(
+          Radius.circular(8),
+        ),
+        color: Theme.of(context).backgroundColor,
+      ),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton(
+          value: _parrotsRace.parrotsRaceList[0],
+          itemHeight: 60,
+          // isExpanded: true,
+          icon: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Icon(
+              Icons.add,
+              size: 30,
+              color: Theme.of(context).textSelectionColor,
+            ),
+          ),
+          dropdownColor: Theme.of(context).backgroundColor,
+          items: _parrotsRace.parrotsRaceList.map((value) {
+            return DropdownMenuItem(
+              value: value,
+              child: new Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 5),
+                    child: CircleAvatar(
+                        radius: 25,
+                        backgroundColor: Theme.of(context).primaryColor,
+                        child: CircleAvatar(
+                          radius: 22,
+                          backgroundImage: AssetImage(
+                            value['url'],
+                          ),
+                        )),
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.35,
+                    child: value['lac'] != "brak"
+                        ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              AutoSizeText(
+                                value['name'],
+                                maxLines: 1,
+                                style: TextStyle(
+                                  color: Theme.of(context).textSelectionColor,
+                                  fontSize: 18,
+                                ),
+                              ),
+                              AutoSizeText(
+                                value['lac'],
+                                maxLines: 1,
+                                style: TextStyle(
+                                  color: Theme.of(context).hintColor,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ],
+                          )
+                        : Container(
+                            width: MediaQuery.of(context).size.width * 0.50,
+                            child: AutoSizeText(
+                              value['name'],
+                              maxLines: 1,
+                              style: TextStyle(
+                                color: Theme.of(context).textSelectionColor,
+                                fontSize: 20,
+                              ),
+                            ),
+                          ),
+                  ),
+                ],
+              ),
+            );
+          }).toList(),
+          onChanged: (value) {
+            if (value['name'] != 'Dodaj Papugę') {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AddParrotScreen(
+                    parrotMap: value,
+                    parrot: null,
+                  ),
+                ),
+              );
+            } else {
+              return;
+            }
+          },
         ),
       ),
-      dropdownColor: Theme.of(context).backgroundColor,
-      items: _parrotsRace.parrotsRaceList.map((value) {
-        return DropdownMenuItem(
-          value: value,
-          child: new Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: CircleAvatar(
-                    radius: 25,
-                    backgroundColor: Theme.of(context).primaryColor,
-                    child: CircleAvatar(
-                      radius: 22,
-                      backgroundImage: AssetImage(
-                        value['url'],
-                      ),
-                    )),
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              Container(
-                width: MediaQuery.of(context).size.width * 0.50,
-                child: value['lac'] != "brak"
-                    ? Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          AutoSizeText(
-                            value['name'],
-                            maxLines: 1,
-                            style: TextStyle(
-                              color: Theme.of(context).textSelectionColor,
-                              fontSize: 18,
-                            ),
-                          ),
-                          AutoSizeText(
-                            value['lac'],
-                            maxLines: 1,
-                            style: TextStyle(
-                              color: Theme.of(context).hintColor,
-                              fontSize: 16,
-                            ),
-                          ),
-                        ],
-                      )
-                    : Container(
-                        width: MediaQuery.of(context).size.width * 0.50,
-                        child: AutoSizeText(
-                          value['name'],
-                          maxLines: 1,
-                          style: TextStyle(
-                            color: Theme.of(context).textSelectionColor,
-                            fontSize: 20,
-                          ),
-                        ),
-                      ),
-              ),
-            ],
-          ),
-        );
-      }).toList(),
-      onChanged: (value) {
-        if (value['name'] != 'Dodaj Papugę') {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => AddParrotScreen(
-                parrotMap: value,
-                parrot: null,
-              ),
-            ),
-          );
-        } else {
-          return;
-        }
-      },
     );
   }
 }

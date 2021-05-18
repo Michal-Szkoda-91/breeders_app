@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import 'IncubationCountsContainer.dart';
+
 class IncubationInformation extends StatefulWidget {
   IncubationInformation({Key key}) : super(key: key);
 
@@ -51,19 +53,8 @@ class _IncubationInformationState extends State<IncubationInformation> {
                         ),
                         textAlign: TextAlign.center,
                       )
-                    : Container(
-                        child: Row(
-                          children: [
-                            Text(
-                              "Aktywnych inkubacji:",
-                              style: TextStyle(
-                                color: Theme.of(context).textSelectionColor,
-                                fontSize: 16,
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
+                    : IncubationCountsContainer(
+                        incubationTimes: _incubationTimes);
         }
       },
     );
