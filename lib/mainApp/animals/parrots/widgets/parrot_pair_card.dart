@@ -71,16 +71,13 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
                   SizedBox(
                     height: 15,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: ListView.builder(
-                      physics: NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: widget.pairList.length,
-                      itemBuilder: (context, index) {
-                        return _createCard(context, index);
-                      },
-                    ),
+                  ListView.builder(
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: widget.pairList.length,
+                    itemBuilder: (context, index) {
+                      return _createCard(context, index);
+                    },
                   ),
                 ],
               ),
@@ -187,10 +184,12 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         FlatButton.icon(
+          padding: EdgeInsets.all(5),
           label: Text(
             "Usuń Parę",
             style: TextStyle(
               color: Colors.red,
+              fontSize: MediaQuery.of(context).size.width > 350 ? 14 : 12,
             ),
           ),
           icon: Icon(
@@ -215,10 +214,12 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
         ),
         widget.pairList[index].isArchive == "false"
             ? FlatButton.icon(
+                padding: EdgeInsets.all(5),
                 label: Text(
                   "Do Archiwum",
                   style: TextStyle(
                     color: Colors.blueAccent,
+                    fontSize: MediaQuery.of(context).size.width > 350 ? 14 : 12,
                   ),
                 ),
                 icon: Icon(
@@ -289,9 +290,13 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
                         content,
                         style: _cretedTextStyle(context),
                       ),
-                      content: ParrotDialogInformation(
-                        parrotRace: widget.race,
-                        parrotRing: content,
+                      content: Container(
+                        width: MediaQuery.of(context).size.width * 0.7,
+                        height: MediaQuery.of(context).size.height * 0.7,
+                        child: ParrotDialogInformation(
+                          parrotRace: widget.race,
+                          parrotRing: content,
+                        ),
                       ),
                       actions: <Widget>[
                         FlatButton(
