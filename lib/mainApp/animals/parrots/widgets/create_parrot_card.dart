@@ -179,7 +179,7 @@ class _ParrotCardState extends State<ParrotCard> {
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             _createTitleRow(context, "Nr", 30.0, 0),
-                            _createTitleRow(context, "Nr obrączki", 100.0, 1),
+                            _createTitleRow(context, "Obrączka", 100.0, 1),
                           ],
                         ),
                         ListView.builder(
@@ -399,11 +399,12 @@ class _ParrotCardState extends State<ParrotCard> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
+              AutoSizeText(
                 title,
+                maxLines: 1,
                 style: TextStyle(
                   color: Theme.of(context).textSelectionColor,
-                  fontSize: 14,
+                  fontSize: MediaQuery.of(context).size.width > 350 ? 14 : 12,
                 ),
               ),
               sortedIndex != 0
@@ -438,9 +439,13 @@ class _ParrotCardState extends State<ParrotCard> {
                 title,
                 style: _cretedTextStyle(context),
               ),
-              content: ParrotDialogInformation(
-                parrotRace: widget._createdParrotList[index].race,
-                parrotRing: title,
+              content: Container(
+                width: MediaQuery.of(context).size.width * 0.7,
+                height: MediaQuery.of(context).size.height * 0.7,
+                child: ParrotDialogInformation(
+                  parrotRace: widget._createdParrotList[index].race,
+                  parrotRing: title,
+                ),
               ),
               actions: <Widget>[
                 FlatButton(

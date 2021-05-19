@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:breeders_app/mainApp/animals/parrots/models/children_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -123,14 +124,14 @@ class _ChildrenListState extends State<ChildrenList> {
           bottom: BorderSide(color: Colors.black, width: 1.0),
         ),
       ),
-      height: 35,
+      height: 40,
       width: 110,
       alignment: Alignment.center,
-      child: Text(
+      child: AutoSizeText(
         title,
         style: TextStyle(
           color: Theme.of(context).textSelectionColor,
-          fontSize: 14,
+          // fontSize: 14,
         ),
         textAlign: TextAlign.center,
       ),

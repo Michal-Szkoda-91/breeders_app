@@ -164,6 +164,7 @@ class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
 
   Widget createCard(
       BuildContext context, int index, String raceName, int parrotCount) {
+    var deviceWidth = MediaQuery.of(context).size.width;
     return Stack(
       children: [
         Card(
@@ -193,7 +194,7 @@ class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          width: MediaQuery.of(context).size.width * 0.49,
+                          width: deviceWidth * 0.47,
                           child: AutoSizeText(
                             widget.activeRaceList[index],
                             maxLines: 1,
@@ -210,7 +211,7 @@ class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             Container(
-                              width: MediaQuery.of(context).size.width * 0.35,
+                              width: deviceWidth * 0.35,
                               child: AutoSizeText(
                                 "Ilość ptaków: ",
                                 maxLines: 1,
