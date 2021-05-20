@@ -13,7 +13,7 @@ class IncubationCountsContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 15),
       child: Container(
         padding: EdgeInsets.all(7),
         decoration: BoxDecoration(
@@ -28,7 +28,6 @@ class IncubationCountsContainer extends StatelessWidget {
               maxLines: 1,
               style: TextStyle(
                 color: Theme.of(context).textSelectionColor,
-                // fontSize: 16,
               ),
             ),
             Container(

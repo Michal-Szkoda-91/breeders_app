@@ -72,7 +72,6 @@ class _RaceListScreenState extends State<AddParrotScreen> {
     sexName = genderMap[1.0];
     if (widget.parrot != null) {
       _isEditing(widget.parrot);
-      print("edycja");
     }
   }
 
