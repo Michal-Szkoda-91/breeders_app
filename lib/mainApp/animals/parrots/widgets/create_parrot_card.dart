@@ -8,6 +8,7 @@ import 'package:breeders_app/mainApp/animals/parrots/screens/addParrot_screen.da
 import 'package:breeders_app/models/global_methods.dart';
 import 'package:breeders_app/mainApp/animals/parrots/models/parrot_model.dart';
 
+import 'addParrotButtonFromParrotList.dart';
 import 'parrotDialogInformation.dart';
 
 class ParrotCard extends StatefulWidget {
@@ -80,6 +81,8 @@ class _ParrotCardState extends State<ParrotCard> {
           padding: const EdgeInsets.all(6.0),
           child: Column(
             children: [
+              AddParrotFromInsideParrotList(
+                  race: widget._createdParrotList[0].race),
               SizedBox(
                 height: 10,
               ),

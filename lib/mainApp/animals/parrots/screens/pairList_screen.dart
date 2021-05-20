@@ -74,6 +74,7 @@ class _PairListScreenState extends State<PairListScreen> {
                 _createPairList(snapshot);
                 return Column(
                   children: [
+                    SizedBox(height: 8),
                     !_showArchive
                         ? CreatePairingParrotDropdownButton(
                             raceName: widget.raceName,
@@ -100,7 +101,7 @@ class _PairListScreenState extends State<PairListScreen> {
 
   Widget _changeView(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: GestureDetector(
         onTap: () {
           setState(() {

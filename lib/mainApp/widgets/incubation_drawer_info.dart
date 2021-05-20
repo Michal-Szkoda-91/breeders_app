@@ -1,3 +1,4 @@
+import 'package:breeders_app/mainApp/animals/parrots/screens/incubationInfo_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -53,8 +54,19 @@ class _IncubationInformationState extends State<IncubationInformation> {
                         ),
                         textAlign: TextAlign.center,
                       )
-                    : IncubationCountsContainer(
-                        incubationTimes: _incubationTimes);
+                    : GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  IncubationInformationScreen(),
+                            ),
+                          );
+                        },
+                        child: IncubationCountsContainer(
+                            incubationTimes: _incubationTimes),
+                      );
         }
       },
     );
@@ -70,7 +82,8 @@ class _IncubationInformationState extends State<IncubationInformation> {
           .get()
           .then((snap) {
         for (DocumentSnapshot doc in snap.docs) {
-          if (doc.data()['Show Eggs Date'] == "brak") {
+          if (doc.data()['Show Eggs Date'] == "brak" ||
+              doc.data()["Is Archive"] == "true") {
             return;
           } else {
             setState(() {
