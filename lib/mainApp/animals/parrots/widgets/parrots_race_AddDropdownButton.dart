@@ -33,7 +33,6 @@ class _CreateParrotsDropdownButtonState
         child: DropdownButton(
           value: _parrotsRace.parrotsRaceList[0],
           itemHeight: 60,
-          // isExpanded: true,
           icon: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Icon(
@@ -69,26 +68,32 @@ class _CreateParrotsDropdownButtonState
                         ? Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              AutoSizeText(
-                                value['name'],
-                                maxLines: 1,
-                                style: TextStyle(
-                                  color: Theme.of(context).textSelectionColor,
-                                  fontSize: 18,
+                              Container(
+                                width: MediaQuery.of(context).size.width * 0.70,
+                                child: AutoSizeText(
+                                  value['name'],
+                                  maxLines: 1,
+                                  style: TextStyle(
+                                    color: Theme.of(context).textSelectionColor,
+                                    fontSize: 18,
+                                  ),
                                 ),
                               ),
-                              AutoSizeText(
-                                value['lac'],
-                                maxLines: 1,
-                                style: TextStyle(
-                                  color: Theme.of(context).hintColor,
-                                  fontSize: 16,
+                              Container(
+                                width: MediaQuery.of(context).size.width * 0.70,
+                                child: AutoSizeText(
+                                  value['lac'],
+                                  maxLines: 2,
+                                  style: TextStyle(
+                                    color: Theme.of(context).hintColor,
+                                    // fontSize: 14,
+                                  ),
                                 ),
                               ),
                             ],
                           )
                         : Container(
-                            width: MediaQuery.of(context).size.width * 0.50,
+                            width: MediaQuery.of(context).size.width * 0.70,
                             child: AutoSizeText(
                               value['name'],
                               maxLines: 1,

@@ -1,4 +1,5 @@
 import 'package:breeders_app/mainApp/animals/parrots/screens/addPairParrot_screen.dart';
+import 'package:breeders_app/mainApp/animals/parrots/screens/incubationInfo_screen.dart';
 import 'package:breeders_app/mainApp/animals/parrots/screens/pairList_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -53,6 +54,8 @@ class MyApp extends StatelessWidget {
         ParrotsListScreen.routeName: (ctx) => ParrotsListScreen(),
         AddPairScreen.routeName: (ctx) => AddPairScreen(),
         PairListScreen.routeName: (ctx) => PairListScreen(),
+        IncubationInformationScreen.routeName: (ctx) =>
+            IncubationInformationScreen(),
       },
     );
   }
