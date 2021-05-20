@@ -181,7 +181,7 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
 
   Row _deleteAndArchiveButtons(BuildContext context, int index) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         FlatButton.icon(
           padding: EdgeInsets.all(5),

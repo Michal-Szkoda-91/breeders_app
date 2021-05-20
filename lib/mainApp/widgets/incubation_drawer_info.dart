@@ -1,3 +1,4 @@
+import 'package:breeders_app/mainApp/animals/parrots/models/pairing_model.dart';
 import 'package:breeders_app/mainApp/animals/parrots/screens/incubationInfo_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -16,6 +17,7 @@ class _IncubationInformationState extends State<IncubationInformation> {
   final firebaseUser = FirebaseAuth.instance.currentUser;
   int _incubationTimes = 0;
   bool _isLoading = true;
+  List<ParrotPairing> _pairList = [];
 
   @override
   Widget build(BuildContext context) {
@@ -56,16 +58,19 @@ class _IncubationInformationState extends State<IncubationInformation> {
                       )
                     : GestureDetector(
                         onTap: () {
+                          Navigator.of(context).pop();
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) =>
-                                  IncubationInformationScreen(),
+                              builder: (context) => IncubationInformationScreen(
+                                pairList: _pairList,
+                              ),
                             ),
                           );
                         },
                         child: IncubationCountsContainer(
-                            incubationTimes: _incubationTimes),
+                          incubationTimes: _incubationTimes,
+                        ),
                       );
         }
       },
@@ -82,14 +87,24 @@ class _IncubationInformationState extends State<IncubationInformation> {
           .get()
           .then((snap) {
         for (DocumentSnapshot doc in snap.docs) {
-          if (doc.data()['Show Eggs Date'] == "brak" ||
-              doc.data()["Is Archive"] == "true") {
-            return;
-          } else {
+          if (doc.data()['Show Eggs Date'] != "brak" &&
+              doc.data()['Is Archive'] != "true") {
+            _pairList.add(
+              ParrotPairing(
+                id: doc.id,
+                femaleRingNumber: doc.data()['Female Ring'],
+                maleRingNumber: doc.data()['Male Ring'],
+                isArchive: doc.data()['Is Archive'],
+                pairColor: doc.data()['Pair Color'],
+                pairingData: doc.data()['Pairing Data'],
+                picUrl: doc.data()['Pic Url'],
+                race: doc.data()['Race'],
+                showEggsDate: doc.data()['Show Eggs Date'],
+              ),
+            );
             setState(() {
               _incubationTimes++;
             });
-            print("_________________________$_incubationTimes");
           }
         }
       }).then((_) {

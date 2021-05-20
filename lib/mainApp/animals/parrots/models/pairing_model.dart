@@ -6,6 +6,7 @@ import 'children_model.dart';
 
 class ParrotPairing {
   final String id;
+  final String race;
   final String maleRingNumber;
   final String femaleRingNumber;
   final String pairingData;
@@ -16,6 +17,7 @@ class ParrotPairing {
 
   ParrotPairing({
     this.id,
+    this.race,
     this.maleRingNumber,
     this.femaleRingNumber,
     this.pairingData,
@@ -42,6 +44,7 @@ class ParrotPairDataHelper {
     await collectionReference.doc(race).collection("Pairs").doc(pair.id).set({
       "Male Ring": "${pair.maleRingNumber}",
       "Female Ring": "${pair.femaleRingNumber}",
+      "Race" : "$race",
       "Pairing Data": "${pair.pairingData}",
       "Pair Color": "${pair.pairColor}",
       "Is Archive": "false",
