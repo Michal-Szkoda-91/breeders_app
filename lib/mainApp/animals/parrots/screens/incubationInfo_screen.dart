@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:breeders_app/globalWidgets/mainBackground.dart';
 import 'package:breeders_app/mainApp/animals/parrots/models/pairing_model.dart';
 import 'package:breeders_app/mainApp/widgets/custom_drawer.dart';
+import 'package:breeders_app/mainApp/widgets/incubationList.dart';
 import 'package:breeders_app/services/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -40,6 +41,19 @@ class _IncubationInformationScreenState
     return count;
   }
 
+  List<ParrotPairing> _createRacePairList(
+      List<ParrotPairing> allparrots, String race) {
+    List<ParrotPairing> createdList = [];
+    allparrots.forEach(
+      (element) {
+        if (element.race == race) {
+          createdList.add(element);
+        }
+      },
+    );
+    return createdList;
+  }
+
   @override
   Widget build(BuildContext context) {
     _createRaceList();
@@ -74,7 +88,7 @@ class _IncubationInformationScreenState
                       Text(
                         raceList[index],
                         style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 22,
                           color: Theme.of(context).textSelectionColor,
                         ),
                       ),
@@ -101,8 +115,10 @@ class _IncubationInformationScreenState
                               ),
                             ),
                             child: Text(
-                              _cauntPair(widget.pairList, raceList[index])
-                                  .toString(),
+                              _cauntPair(
+                                widget.pairList,
+                                raceList[index],
+                              ).toString(),
                               style: TextStyle(
                                 color: Theme.of(context).textSelectionColor,
                                 fontSize: 18,
@@ -111,12 +127,18 @@ class _IncubationInformationScreenState
                           )
                         ],
                       ),
+                      SizedBox(
+                        height: 8,
+                      ),
                     ],
                   ),
                   children: [
-                    Column(
-                      children: [],
-                    )
+                    IncubationList(
+                      parrotList: _createRacePairList(
+                        widget.pairList,
+                        widget.pairList[index].race,
+                      ),
+                    ),
                   ],
                 ),
               ),

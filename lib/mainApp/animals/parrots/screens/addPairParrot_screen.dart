@@ -108,6 +108,7 @@ class _AddPairScreenState extends State<AddPairScreen> {
   }
 
   Future getImageFromGalery() async {
+    // ignore: deprecated_member_use
     var image = await ImagePicker.pickImage(
         source: ImageSource.gallery, imageQuality: 30);
 
@@ -122,6 +123,7 @@ class _AddPairScreenState extends State<AddPairScreen> {
   }
 
   Future getImageFromCamera() async {
+    // ignore: deprecated_member_use
     var image = await ImagePicker.pickImage(
         source: ImageSource.camera, imageQuality: 30);
     if (image == null) {

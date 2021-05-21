@@ -742,7 +742,6 @@ class _RaceListScreenState extends State<AddParrotScreen> {
           _globalMethods.showMaterialDialog(context,
               "Operacja nieudana, nieznany błąd, spróbuj ponownie pózniej");
         });
-        ;
       }
     }
   }
