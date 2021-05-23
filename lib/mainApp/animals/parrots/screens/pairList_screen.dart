@@ -67,21 +67,19 @@ class _PairListScreenState extends State<PairListScreen> {
                 return Center(
                   child: Padding(
                     padding: const EdgeInsets.all(50.0),
-                    child: CircularProgressIndicator(),
+                    child: const CircularProgressIndicator(),
                   ),
                 );
               default:
                 _createPairList(snapshot);
                 return Column(
                   children: [
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     !_showArchive
                         ? CreatePairingParrotDropdownButton(
                             raceName: widget.raceName,
                           )
-                        : SizedBox(
-                            height: 1,
-                          ),
+                        : const SizedBox(height: 1),
                     _changeView(context),
                     Expanded(
                       child: ParrotPairCard(
@@ -127,9 +125,7 @@ class _PairListScreenState extends State<PairListScreen> {
                   color: Theme.of(context).textSelectionColor,
                 ),
               ),
-              SizedBox(
-                width: 10,
-              ),
+              const SizedBox(width: 10),
               Icon(
                 !_showArchive
                     ? MaterialCommunityIcons.archive

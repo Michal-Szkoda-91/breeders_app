@@ -25,9 +25,9 @@ class _EggExpansionTileState extends State<EggExpansionTile> {
   ParrotPairDataHelper _parrotPairDataHelper = ParrotPairDataHelper();
   ParrotsRace _parrotsRace = new ParrotsRace();
 
-  int daysToBorn = 0;
-  int incubationDuration = 0;
-  String bornTimeString = "";
+  int _daysToBorn = 0;
+  int _incubationDuration = 0;
+  String _bornTimeString = "";
   bool _isLoading = false;
 
   @override
@@ -35,7 +35,7 @@ class _EggExpansionTileState extends State<EggExpansionTile> {
     super.initState();
     _parrotsRace.parrotsRaceList.forEach((element) {
       if (element['name'] == widget.raceName) {
-        incubationDuration = element['icubationTime'];
+        _incubationDuration = element['icubationTime'];
       }
     });
     _countData();
@@ -48,9 +48,9 @@ class _EggExpansionTileState extends State<EggExpansionTile> {
         DateTime today = DateTime.now();
         DateTime incubationTime = DateTime.parse(widget.showEggDate);
         DateTime bornTime =
-            incubationTime.add(Duration(days: incubationDuration));
-        daysToBorn = bornTime.difference(today).inDays;
-        bornTimeString = DateFormat("yyyy-MM-dd").format(bornTime);
+            incubationTime.add(Duration(days: _incubationDuration));
+        _daysToBorn = bornTime.difference(today).inDays;
+        _bornTimeString = DateFormat("yyyy-MM-dd").format(bornTime);
       }
     });
   }
@@ -69,14 +69,14 @@ class _EggExpansionTileState extends State<EggExpansionTile> {
                   Column(
                     children: [
                       _createInkubationStartButton(context),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       _createInkubationCancelButton(context),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                     ],
                   ),
                 ],
               )
-        : Center(child: CircularProgressIndicator());
+        : const Center(child: const CircularProgressIndicator());
   }
 
   Column _createContentColumn(BuildContext context) {
@@ -91,20 +91,19 @@ class _EggExpansionTileState extends State<EggExpansionTile> {
                 maxLines: 1,
                 style: TextStyle(
                   color: Theme.of(context).textSelectionColor,
-                  // fontSize: 16,
                 ),
               ),
             ),
-            Spacer(),
+            const Spacer(),
             widget.showEggDate != "brak"
                 ? Container(
                     width: 33,
                     height: 33,
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
-                      color: daysToBorn <= 6 && daysToBorn > 3
+                      color: _daysToBorn <= 6 && _daysToBorn > 3
                           ? Colors.orange
-                          : daysToBorn <= 3
+                          : _daysToBorn <= 3
                               ? Colors.red
                               : Theme.of(context).primaryColor,
                       border: Border.all(
@@ -115,19 +114,17 @@ class _EggExpansionTileState extends State<EggExpansionTile> {
                       ),
                     ),
                     child: Text(
-                      daysToBorn < 0 ? "-" : daysToBorn.toString(),
+                      _daysToBorn < 0 ? "-" : _daysToBorn.toString(),
                       style: TextStyle(
                         color: Theme.of(context).textSelectionColor,
                         fontSize: 18,
                       ),
                     ),
                   )
-                : Center(),
+                : const Center(),
           ],
         ),
-        SizedBox(
-          height: 5,
-        ),
+        const SizedBox(height: 5),
         widget.showEggDate != "brak"
             ? Row(
                 children: [
@@ -154,7 +151,7 @@ class _EggExpansionTileState extends State<EggExpansionTile> {
                   ),
                 ],
               )
-            : Center(),
+            : const Center(),
         widget.showEggDate != "brak"
             ? Row(
                 children: [
@@ -170,9 +167,9 @@ class _EggExpansionTileState extends State<EggExpansionTile> {
                       ),
                     ),
                   ),
-                  Spacer(),
+                  const Spacer(),
                   Text(
-                    bornTimeString,
+                    _bornTimeString,
                     style: TextStyle(
                       color: Theme.of(context).textSelectionColor,
                       fontSize:
@@ -181,7 +178,7 @@ class _EggExpansionTileState extends State<EggExpansionTile> {
                   ),
                 ],
               )
-            : Center(),
+            : const Center(),
       ],
     );
   }

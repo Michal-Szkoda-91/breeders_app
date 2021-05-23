@@ -36,9 +36,9 @@ class MyApp extends StatelessWidget {
       ),
       home: SafeArea(
         child: Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage(
+          decoration: const BoxDecoration(
+            image: const DecorationImage(
+              image: const AssetImage(
                 "assets/image/background.jpg",
               ),
               fit: BoxFit.fill,

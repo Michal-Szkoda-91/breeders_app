@@ -24,7 +24,7 @@ class _CreateParrotsDropdownButtonState
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(
+        borderRadius: const BorderRadius.all(
           Radius.circular(8),
         ),
         color: Theme.of(context).backgroundColor,
@@ -60,9 +60,7 @@ class _CreateParrotsDropdownButtonState
                             ),
                           )),
                     ),
-                    SizedBox(
-                      width: 10,
-                    ),
+                    const SizedBox(width: 10),
                     Container(
                       width: MediaQuery.of(context).size.width * 0.35,
                       child: value['lac'] != "brak"

@@ -1,4 +1,4 @@
-import 'package:auto_size_text/auto_size_text.dart';
+import 'package:breeders_app/mainApp/widgets/google.button.dart';
 import 'package:draggable_scrollbar_sliver/draggable_scrollbar_sliver.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
@@ -151,7 +151,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             ),
                           ),
                           SizedBox(height: _sizedBoxHeight),
-                          _createGoogleButton(context, _googleSingIn),
+                          GoogleButton(function: _googleSingIn),
                           SizedBox(height: _sizedBoxHeight),
                         ],
                       ),
@@ -161,41 +161,6 @@ class _SignInScreenState extends State<SignInScreen> {
               ),
             ),
           );
-  }
-
-  Widget _createGoogleButton(BuildContext context, Function function) {
-    print(MediaQuery.of(context).size.width.toString());
-    return RaisedButton(
-      onPressed: function,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(30),
-      ),
-      splashColor: Theme.of(context).accentColor,
-      color: Theme.of(context).primaryColor,
-      child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Image.asset(
-              'assets/image/google_logo.png',
-              height: 25,
-            ),
-            Container(
-              width: MediaQuery.of(context).size.width * 0.5,
-              child: AutoSizeText(
-                'Zaloguj się przez Google',
-                maxLines: 1,
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Theme.of(context).textSelectionColor,
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
   }
 
   void _googleSingIn() async {

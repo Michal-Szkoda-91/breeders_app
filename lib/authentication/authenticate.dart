@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:keyboard_visibility/keyboard_visibility.dart';
 
+import '../mainApp/widgets/registraction_question.dart';
 import 'register_screen.dart';
 import 'signIn_screen.dart';
 
@@ -68,7 +69,7 @@ class _AuthenticateState extends State<Authenticate> {
       appBar: AppBar(
         actions: [
           FlatButton(
-            child: Icon(
+            child: const Icon(
               Icons.close,
               color: Colors.white,
               size: 30,
@@ -76,7 +77,7 @@ class _AuthenticateState extends State<Authenticate> {
             onPressed: () => _showDialog(context),
           ),
         ],
-        title: Text('Logowanie użytkownika'),
+        title: const Text('Logowanie użytkownika'),
       ),
       body: new PageView(
         controller: _controller,
@@ -89,25 +90,25 @@ class _AuthenticateState extends State<Authenticate> {
       ),
       bottomNavigationBar: Container(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
           child: GNav(
             rippleColor: Theme.of(context).backgroundColor,
             hoverColor: Theme.of(context).backgroundColor,
             gap: 10,
             activeColor: Theme.of(context).textSelectionColor,
             iconSize: 24,
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-            duration: Duration(milliseconds: 600),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+            duration: const Duration(milliseconds: 600),
             tabBackgroundColor: Theme.of(context).backgroundColor,
             color: Theme.of(context).textSelectionColor,
             backgroundColor: Colors.transparent,
             selectedIndex: _page,
             tabs: [
-              new GButton(
+              const GButton(
                 text: "Zaloguj się",
                 icon: Icons.login,
               ),
-              new GButton(
+              const GButton(
                 text: "Utwórz konto",
                 icon: Icons.create,
               ),
@@ -134,21 +135,21 @@ class _AuthenticateState extends State<Authenticate> {
     showDialog(
       context: context,
       builder: (_) => new AlertDialog(
-        title: new Text("Czy na pewno chcesz zamknąć aplikacje?"),
+        title: const Text("Czy na pewno chcesz zamknąć aplikacje?"),
         actions: <Widget>[
           FlatButton(
-            child: Text(
+            child: const Text(
               'Zamknij',
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 20,
               ),
             ),
             onPressed: () => exit(0),
           ),
           FlatButton(
-            child: Text(
+            child: const Text(
               'Anuluj',
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 20,
               ),
             ),
@@ -156,48 +157,6 @@ class _AuthenticateState extends State<Authenticate> {
               Navigator.of(context).pop();
             },
           )
-        ],
-      ),
-    );
-  }
-}
-
-class RegisterQuestion extends StatelessWidget {
-  const RegisterQuestion({
-    this.function,
-  });
-
-  final Function function;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(
-        bottom: 10,
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Text(
-            'Nie masz konta?',
-            style: TextStyle(
-              color: Theme.of(context).textSelectionColor,
-              fontSize: 16,
-            ),
-          ),
-          FlatButton(
-            child: Text(
-              'Załóż je tutaj',
-              style: TextStyle(
-                color: Theme.of(context).textSelectionColor,
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            onPressed: () {
-              function(1);
-            },
-          ),
         ],
       ),
     );

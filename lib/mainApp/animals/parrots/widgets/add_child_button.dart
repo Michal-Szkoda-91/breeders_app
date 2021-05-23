@@ -54,7 +54,7 @@ class _AddPairChildButtonState extends State<AddPairChildButton> {
             ),
           ),
         ),
-        Spacer(),
+        const Spacer(),
       ],
     );
   }

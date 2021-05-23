@@ -43,10 +43,10 @@ class _GenderIconState extends State<GenderIcon> {
     return Container(
       width: 50,
       height: 60,
-      decoration: BoxDecoration(
-        border: Border(
-          right: BorderSide(color: Colors.black, width: 1.0),
-          bottom: BorderSide(color: Colors.black, width: 1.0),
+      decoration: const BoxDecoration(
+        border: const Border(
+          right: const BorderSide(color: Colors.black, width: 1.0),
+          bottom: const BorderSide(color: Colors.black, width: 1.0),
         ),
       ),
       child: Padding(
@@ -60,7 +60,7 @@ class _GenderIconState extends State<GenderIcon> {
             border: Border.all(
               color: Theme.of(context).textSelectionColor,
             ),
-            borderRadius: BorderRadius.all(
+            borderRadius: const BorderRadius.all(
               Radius.circular(30),
             ),
           ),

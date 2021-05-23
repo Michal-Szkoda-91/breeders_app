@@ -19,7 +19,7 @@ class GlobalMethods {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: padding),
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 4),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5),
           color: color,

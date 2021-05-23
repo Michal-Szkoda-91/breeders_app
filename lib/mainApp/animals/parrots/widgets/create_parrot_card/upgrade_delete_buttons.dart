@@ -32,7 +32,7 @@ class DeleteUpgradeButtons extends StatelessWidget {
                 createdParrotList[index],
               );
             },
-            child: Icon(
+            child: const Icon(
               Icons.delete,
               color: Colors.red,
               size: 30,
@@ -54,7 +54,7 @@ class DeleteUpgradeButtons extends StatelessWidget {
                 ),
               );
             },
-            child: Icon(
+            child: const Icon(
               MaterialCommunityIcons.circle_edit_outline,
               color: Colors.lightBlueAccent,
               size: 30,

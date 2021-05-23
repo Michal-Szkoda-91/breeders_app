@@ -34,8 +34,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   String _hint =
       'Email:\nPrawidłowy format to, np. janek_kowalski@gmail.com\n\nHasło:\nMusi składać się z conajmniej 8 znaków, a także zawierać małą i dużą literę, cyfrę oraz znak specjalny. Maksymalna długość to 20 znaków. Oba hasła muszą być identyczne.';
 
-  final double _sizedBoxHeight = 10.0;
-
   @override
   // ignore: must_call_super
   void dispose() {
@@ -48,7 +46,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final node = FocusScope.of(context);
     return _isLoading
         ? Center(
-            child: CircularProgressIndicator(),
+            child: const CircularProgressIndicator(),
           )
         : DraggableScrollbar.rrect(
             controller: _rrectController,
@@ -58,7 +56,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               controller: _rrectController,
               child: Column(
                 children: [
-                  SizedBox(height: _sizedBoxHeight),
+                  const SizedBox(height: 10),
                   Text(
                     'Utwórz konto',
                     style: TextStyle(
@@ -66,9 +64,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       fontSize: 24,
                     ),
                   ),
-                  SizedBox(height: _sizedBoxHeight),
+                  const SizedBox(height: 10),
                   const ImageContainerParrot(),
-                  SizedBox(height: _sizedBoxHeight),
+                  const SizedBox(height: 10),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 30),
                     child: Form(
@@ -104,7 +102,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             },
                             onEditingComplete: () => node.nextFocus(),
                           ),
-                          SizedBox(height: _sizedBoxHeight),
+                          const SizedBox(height: 10),
                           //
                           //******************************************************* */
                           //Password Form
@@ -135,7 +133,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             },
                             onEditingComplete: () => node.nextFocus(),
                           ),
-                          SizedBox(height: _sizedBoxHeight),
+                          const SizedBox(height: 10),
                           //
                           //******************************************************* */
                           // Repeat Password Form
@@ -169,7 +167,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             //dodac tu fnkcje jak po klikniecu zaloguj
                             onEditingComplete: _createAccount,
                           ),
-                          SizedBox(height: _sizedBoxHeight),
+                          const SizedBox(height: 10),
                           Row(
                             children: [
                               const Expanded(
@@ -187,7 +185,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               ),
                             ],
                           ),
-                          SizedBox(height: _sizedBoxHeight),
+                          const SizedBox(height: 10),
                           Text(
                             error,
                             style: TextStyle(
@@ -241,7 +239,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   InputDecoration _createInputDecoration(BuildContext context, String text,
       IconData icon, bool eyeIcon, int change) {
     return InputDecoration(
-      contentPadding: EdgeInsets.symmetric(horizontal: 14),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 14.0),
       counterStyle: TextStyle(
         height: double.minPositive,
       ),
@@ -316,10 +314,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
       builder: (BuildContext context) {
         return AlertDialog(
           backgroundColor: Theme.of(context).accentColor,
-          title: Text(
+          title: const Text(
             'Błędne dane!',
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.red,
             ),
           ),

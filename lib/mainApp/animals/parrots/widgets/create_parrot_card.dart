@@ -85,9 +85,7 @@ class _ParrotCardState extends State<ParrotCard> {
             children: [
               AddParrotFromInsideParrotList(
                   race: widget._createdParrotList[0].race),
-              SizedBox(
-                height: 10,
-              ),
+              const SizedBox(height: 10),
               Stack(
                 children: [
                   SingleChildScrollView(
@@ -97,7 +95,7 @@ class _ParrotCardState extends State<ParrotCard> {
                       child: Column(
                         children: [
                           Padding(
-                            padding: EdgeInsets.only(left: 130),
+                            padding: const EdgeInsets.only(left: 130),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
@@ -143,9 +141,7 @@ class _ParrotCardState extends State<ParrotCard> {
                                   sortedIndex: 0,
                                   sorting: _sortingBy,
                                 ),
-                                SizedBox(
-                                  width: 100,
-                                ),
+                                const SizedBox(width: 100),
                               ],
                             ),
                           ),
@@ -157,7 +153,7 @@ class _ParrotCardState extends State<ParrotCard> {
                               return Stack(
                                 children: [
                                   Container(
-                                    padding: EdgeInsets.only(left: 130),
+                                    padding: const EdgeInsets.only(left: 130),
                                     width: 1030,
                                     child: Row(
                                       mainAxisAlignment:
@@ -212,9 +208,7 @@ class _ParrotCardState extends State<ParrotCard> {
                               );
                             },
                           ),
-                          SizedBox(
-                            height: 25,
-                          ),
+                          const SizedBox(height: 25),
                         ],
                       ),
                     ),

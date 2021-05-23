@@ -13,11 +13,11 @@ class TableContentNotesRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(5.0),
-      decoration: BoxDecoration(
-        border: Border(
-          right: BorderSide(color: Colors.black, width: 1.0),
-          bottom: BorderSide(color: Colors.black, width: 1.0),
+      padding: const EdgeInsets.all(5.0),
+      decoration: const BoxDecoration(
+        border: const Border(
+          right: const BorderSide(color: Colors.black, width: 1.0),
+          bottom: const BorderSide(color: Colors.black, width: 1.0),
         ),
       ),
       height: 60,

@@ -34,7 +34,6 @@ class _AddPairScreenState extends State<AddPairScreen> {
   static GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
 
   GlobalMethods _globalMethods = GlobalMethods();
-  ParrotDataHelper dataProvider = ParrotDataHelper();
   ParrotPairDataHelper _parrotPairDataHelper = ParrotPairDataHelper();
   ScrollController _rrectController = ScrollController();
   bool _isPhotoChoosen = false;
@@ -48,10 +47,10 @@ class _AddPairScreenState extends State<AddPairScreen> {
   String _choosenFeMaleParrotRingNumber;
   Parrot _femaleParrotChoosen;
   Parrot _maleParrotChoosen;
-  String pairColor = "";
-  String pictureUrl = "brak";
-  ParrotPairing pair;
-  String pairTime =
+  String _pairColor = "";
+  String _pictureUrl = "brak";
+  ParrotPairing _pair;
+  String _pairTime =
       DateFormat("yyyy-MM-dd", 'pl_PL').format(DateTime.now()).toString();
   bool _isLoading = false;
 
@@ -254,7 +253,7 @@ class _AddPairScreenState extends State<AddPairScreen> {
                       : Theme.of(context).backgroundColor,
                   radius: _isBlinking ? 30 : 25,
                   child: IconButton(
-                    padding: EdgeInsets.zero,
+                    padding: const EdgeInsets.all(0),
                     icon: Icon(
                       Icons.camera_alt_outlined,
                       size: 35,
@@ -309,15 +308,15 @@ class _AddPairScreenState extends State<AddPairScreen> {
                       )
                     : Row(
                         children: [
-                          CircleAvatar(
+                          const CircleAvatar(
                             backgroundColor: Colors.transparent,
                             radius: 25,
                             child: Center(),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 5,
                           ),
-                          CircleAvatar(
+                          const CircleAvatar(
                             backgroundColor: Colors.transparent,
                             radius: 25,
                             child: Center(),
@@ -350,7 +349,7 @@ class _AddPairScreenState extends State<AddPairScreen> {
 
   Padding _createContent(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       child: SingleChildScrollView(
         child: Column(
           children: [
@@ -362,9 +361,7 @@ class _AddPairScreenState extends State<AddPairScreen> {
                 icon: MaterialCommunityIcons.gender_female,
                 gender: _createDropdownButtonFeMale,
                 list: _femaleParrotList),
-            SizedBox(
-              height: 15,
-            ),
+            const SizedBox(height: 15),
             createCard(
               context: context,
               text: "Samiec (1,0)",
@@ -387,7 +384,7 @@ class _AddPairScreenState extends State<AddPairScreen> {
         key: _formKey,
         autovalidateMode: AutovalidateMode.onUserInteraction,
         child: TextFormField(
-          initialValue: pairColor,
+          initialValue: _pairColor,
           style: customTextStyle(context),
           cursorColor: Theme.of(context).textSelectionColor,
           maxLength: 30,
@@ -408,7 +405,7 @@ class _AddPairScreenState extends State<AddPairScreen> {
           },
           onChanged: (val) {
             setState(() {
-              pairColor = val;
+              _pairColor = val;
             });
           },
           onEditingComplete: () => node.nextFocus(),
@@ -446,9 +443,7 @@ class _AddPairScreenState extends State<AddPairScreen> {
               icon,
               color,
             ),
-            SizedBox(
-              height: 20,
-            ),
+            const SizedBox(height: 20),
             list.isEmpty
                 ? _createInfoText(context, alterText)
                 : gender(context),
@@ -461,8 +456,10 @@ class _AddPairScreenState extends State<AddPairScreen> {
   Text _createInfoText(BuildContext context, String text) {
     return Text(
       text,
-      style:
-          TextStyle(fontSize: 16, color: Theme.of(context).textSelectionColor),
+      style: TextStyle(
+        fontSize: 16,
+        color: Theme.of(context).textSelectionColor,
+      ),
     );
   }
 
@@ -569,9 +566,7 @@ class _AddPairScreenState extends State<AddPairScreen> {
             fontSize: 24,
           ),
         ),
-        SizedBox(
-          width: 10,
-        ),
+        const SizedBox(width: 10),
         Icon(
           icon,
           color: color,
@@ -597,7 +592,7 @@ class _AddPairScreenState extends State<AddPairScreen> {
               cancelText: "Anuluj",
             ).then((date) {
               setState(() {
-                pairTime =
+                _pairTime =
                     DateFormat("yyyy-MM-dd", 'pl_PL').format(date).toString();
               });
             });
@@ -613,7 +608,7 @@ class _AddPairScreenState extends State<AddPairScreen> {
           child: Padding(
             padding: const EdgeInsets.all(20.0),
             child: Text(
-              pairTime,
+              _pairTime,
               style: TextStyle(
                   fontSize: 18, color: Theme.of(context).textSelectionColor),
             ),
@@ -731,9 +726,9 @@ class _AddPairScreenState extends State<AddPairScreen> {
           id: "$_choosenFeMaleParrotRingNumber - $_choosenMaleParrotRingNumber - ${DateTime.now()}",
           femaleRingNumber: _choosenFeMaleParrotRingNumber,
           maleRingNumber: _choosenMaleParrotRingNumber,
-          pairingData: pairTime,
-          pairColor: pairColor,
-          picUrl: pictureUrl,
+          pairingData: _pairTime,
+          pairColor: _pairColor,
+          picUrl: _pictureUrl,
         );
         _maleParrotList.forEach((parrot) {
           if (parrot.ringNumber == _choosenMaleParrotRingNumber) {
@@ -835,9 +830,9 @@ class _AddPairScreenState extends State<AddPairScreen> {
       return;
     } else {
       setState(() {
-        pictureUrl = basename(_image.path);
+        _pictureUrl = basename(_image.path);
       });
-      Reference ref = FirebaseStorage.instance.ref().child(pictureUrl);
+      Reference ref = FirebaseStorage.instance.ref().child(_pictureUrl);
       UploadTask uploadTask = ref.putFile(_image);
       await uploadTask;
     }
@@ -847,32 +842,32 @@ class _AddPairScreenState extends State<AddPairScreen> {
     setState(() {
       _isBlinking = true;
     });
-    await Future.delayed(Duration(milliseconds: 200));
+    await Future.delayed(const Duration(milliseconds: 200));
     setState(() {
       _isBlinking = false;
     });
-    await Future.delayed(Duration(milliseconds: 200));
+    await Future.delayed(const Duration(milliseconds: 200));
     setState(() {
       _isBlinking = true;
     });
-    await Future.delayed(Duration(milliseconds: 200));
+    await Future.delayed(const Duration(milliseconds: 200));
     setState(() {
       _isBlinking = false;
     });
-    await Future.delayed(Duration(milliseconds: 200));
+    await Future.delayed(const Duration(milliseconds: 200));
     setState(() {
       _isBlinking = true;
     });
-    await Future.delayed(Duration(milliseconds: 200));
+    await Future.delayed(const Duration(milliseconds: 200));
     setState(() {
       _isBlinking = false;
     });
-    await Future.delayed(Duration(milliseconds: 200));
+    await Future.delayed(const Duration(milliseconds: 200));
 
     setState(() {
       _isBlinking = true;
     });
-    await Future.delayed(Duration(milliseconds: 200));
+    await Future.delayed(const Duration(milliseconds: 200));
     setState(() {
       _isBlinking = false;
     });

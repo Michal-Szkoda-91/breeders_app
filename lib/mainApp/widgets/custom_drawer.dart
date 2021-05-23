@@ -25,9 +25,7 @@ class CustomDrawer extends StatelessWidget {
           ),
           child: ListView(
             children: [
-              const SizedBox(
-                height: 10,
-              ),
+              const SizedBox(height: 10),
               const ImageContainerParrotSmall(),
               Padding(
                 padding: const EdgeInsets.all(14.0),
@@ -44,9 +42,9 @@ class CustomDrawer extends StatelessWidget {
               const Divider(
                 thickness: 2,
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               IncubationInformation(),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               const Divider(
                 thickness: 2,
               ),

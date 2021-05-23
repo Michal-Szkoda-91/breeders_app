@@ -19,11 +19,11 @@ class IncubationList extends StatelessWidget {
       shrinkWrap: true,
       itemBuilder: (context, index) {
         return Card(
-          margin: EdgeInsets.all(0),
+          margin: const EdgeInsets.all(0),
           color: Colors.transparent,
           child: Column(
             children: [
-              SizedBox(height: 5),
+              const SizedBox(height: 5),
               parrotList[index].picUrl == "brak"
                   ? PairCircleAvatar(
                       picUrl: parrotList[index].picUrl,
@@ -35,7 +35,7 @@ class IncubationList extends StatelessWidget {
                       isAssets: false,
                       size: 30,
                     ),
-              SizedBox(width: 5),
+              const SizedBox(width: 5),
               Padding(
                 padding: const EdgeInsets.all(4.0),
                 child: Column(

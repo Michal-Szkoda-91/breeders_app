@@ -62,10 +62,10 @@ class ParrotRingButton extends StatelessWidget {
         },
         child: Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(8.0),
             color: Colors.black45,
           ),
-          padding: EdgeInsets.all(10),
+          padding: const EdgeInsets.all(10),
           child: AutoSizeText(
             title,
             maxLines: 2,

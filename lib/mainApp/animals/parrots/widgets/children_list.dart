@@ -39,7 +39,7 @@ class _ChildrenListState extends State<ChildrenList> {
             return Center(
               child: Padding(
                 padding: const EdgeInsets.all(5.0),
-                child: CircularProgressIndicator(),
+                child: const CircularProgressIndicator(),
               ),
             );
 
@@ -74,8 +74,8 @@ class _ChildrenListState extends State<ChildrenList> {
               border: Border.all(
                 color: Theme.of(context).textSelectionColor,
               ),
-              borderRadius: BorderRadius.all(
-                Radius.circular(20),
+              borderRadius: const BorderRadius.all(
+                const Radius.circular(20),
               ),
             ),
             child: Text(
@@ -98,9 +98,9 @@ class _ChildrenListState extends State<ChildrenList> {
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).backgroundColor,
-        border: Border(
-          right: BorderSide(color: Colors.black, width: 2.0),
-          bottom: BorderSide(color: Colors.black, width: 2.0),
+        border: const Border(
+          right: const BorderSide(color: Colors.black, width: 2.0),
+          bottom: const BorderSide(color: Colors.black, width: 2.0),
         ),
       ),
       height: 30,
@@ -118,10 +118,10 @@ class _ChildrenListState extends State<ChildrenList> {
 
   Container _createContentRow(BuildContext context, String title) {
     return Container(
-      decoration: BoxDecoration(
-        border: Border(
-          right: BorderSide(color: Colors.black, width: 1.0),
-          bottom: BorderSide(color: Colors.black, width: 1.0),
+      decoration: const BoxDecoration(
+        border: const Border(
+          right: const BorderSide(color: Colors.black, width: 1.0),
+          bottom: const BorderSide(color: Colors.black, width: 1.0),
         ),
       ),
       height: 40,
@@ -131,7 +131,6 @@ class _ChildrenListState extends State<ChildrenList> {
         title,
         style: TextStyle(
           color: Theme.of(context).textSelectionColor,
-          // fontSize: 14,
         ),
         textAlign: TextAlign.center,
       ),
@@ -150,9 +149,7 @@ class _ChildrenListState extends State<ChildrenList> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    SizedBox(
-                      width: 25,
-                    ),
+                    const SizedBox(width: 25),
                     _createTitleRow(context, "Nr obrączki"),
                     _createTitleRow(context, "Kolor"),
                     _createTitleRow(context, "Data ur."),
@@ -212,8 +209,8 @@ class _ChildrenListState extends State<ChildrenList> {
         border: Border.all(
           color: Theme.of(context).textSelectionColor,
         ),
-        borderRadius: BorderRadius.all(
-          Radius.circular(25),
+        borderRadius: const BorderRadius.all(
+          const Radius.circular(25),
         ),
       ),
       child: Icon(
@@ -227,9 +224,7 @@ class _ChildrenListState extends State<ChildrenList> {
   Row _createdNoChildRow(BuildContext context) {
     return Row(
       children: [
-        SizedBox(
-          width: 15,
-        ),
+        const SizedBox(width: 15),
         Text(
           "Brak potomstwa",
           style: TextStyle(

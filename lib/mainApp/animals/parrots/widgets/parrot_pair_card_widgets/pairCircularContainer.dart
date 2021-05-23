@@ -41,8 +41,8 @@ class _PairCircleAvatarState extends State<PairCircleAvatar> {
                       ? (MediaQuery.of(context).size.width / 2) - 15
                       : widget.size,
                   backgroundColor: Theme.of(context).primaryColor,
-                  child: Center(
-                    child: CircularProgressIndicator(),
+                  child: const Center(
+                    child: const CircularProgressIndicator(),
                   ),
                 ),
               );

@@ -12,7 +12,7 @@ class MainBackground extends StatelessWidget {
       height: MediaQuery.of(context).size.height,
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage(
+          image: const AssetImage(
             "assets/image/background.jpg",
           ),
           fit: BoxFit.fill,

@@ -30,9 +30,9 @@ class TableTitleRow extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             color: Theme.of(context).backgroundColor,
-            border: Border(
-              right: BorderSide(color: Colors.black, width: 2.0),
-              bottom: BorderSide(color: Colors.black, width: 2.0),
+            border: const Border(
+              right: const BorderSide(color: Colors.black, width: 2.0),
+              bottom: const BorderSide(color: Colors.black, width: 2.0),
             ),
           ),
           width: width,

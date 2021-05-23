@@ -111,7 +111,6 @@ class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  // color: Colors.red,
                 ),
                 child: createCard(
                     context, index, widget.activeRaceList[index], parrotCount),
@@ -132,8 +131,13 @@ class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
               null,
             );
           },
-          child: _globalMethods.createActionItem(context, Colors.red,
-              MaterialCommunityIcons.delete, "Usuń hodowlę", 26),
+          child: _globalMethods.createActionItem(
+            context,
+            Colors.red,
+            MaterialCommunityIcons.delete,
+            "Usuń hodowlę",
+            26,
+          ),
         ),
       ],
     );
@@ -182,14 +186,12 @@ class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    CircleAvatar(
+                    const CircleAvatar(
                       radius: 40,
                       backgroundColor: Colors.transparent,
-                      child: Center(),
+                      child: const Center(),
                     ),
-                    SizedBox(
-                      width: 7,
-                    ),
+                    const SizedBox(width: 7),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -204,9 +206,7 @@ class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
                             ),
                           ),
                         ),
-                        SizedBox(
-                          height: 10,
-                        ),
+                        const SizedBox(height: 10),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
@@ -220,7 +220,7 @@ class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
                                 ),
                               ),
                             ),
-                            SizedBox(width: 6),
+                            const SizedBox(width: 6),
                             Container(
                               width: 33,
                               height: 33,
@@ -230,7 +230,7 @@ class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
                                 border: Border.all(
                                   color: Theme.of(context).textSelectionColor,
                                 ),
-                                borderRadius: BorderRadius.all(
+                                borderRadius: const BorderRadius.all(
                                   Radius.circular(18),
                                 ),
                               ),
@@ -246,7 +246,7 @@ class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
                         ),
                       ],
                     ),
-                    Spacer(),
+                    const Spacer(),
                   ],
                 ),
                 Row(
@@ -257,11 +257,12 @@ class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
                         _navigateToPairingList(raceName);
                       },
                       child: _globalMethods.createActionItem(
-                          context,
-                          Colors.pink[300],
-                          MaterialCommunityIcons.heart_multiple,
-                          "Parowanie",
-                          5),
+                        context,
+                        Colors.pink[300],
+                        MaterialCommunityIcons.heart_multiple,
+                        "Parowanie",
+                        5,
+                      ),
                     ),
                     GestureDetector(
                       onTap: () {

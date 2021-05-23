@@ -54,8 +54,8 @@ class _ParrotsRaceListScreenState extends State<ParrotsRaceListScreen> {
                     Expanded(
                       child: Column(
                         children: [
-                          SizedBox(height: 8),
-                          CreateParrotsDropdownButton(),
+                          const SizedBox(height: 8),
+                          const CreateParrotsDropdownButton(),
                           CreateParrotRaceListTile(
                               activeRaceList: _activeRaceList),
                         ],
