@@ -23,11 +23,13 @@ class IncubationCountsContainer extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            AutoSizeText(
-              "Aktywnych inkubacji:",
-              maxLines: 1,
-              style: TextStyle(
-                color: Theme.of(context).textSelectionColor,
+            Expanded(
+              child: AutoSizeText(
+                "Aktywnych inkubacji:",
+                maxLines: 1,
+                style: TextStyle(
+                  color: Theme.of(context).textSelectionColor,
+                ),
               ),
             ),
             Container(

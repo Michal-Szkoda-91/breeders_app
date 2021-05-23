@@ -12,22 +12,28 @@ class CreateInfoRow extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        AutoSizeText(
-          title,
-          maxLines: 1,
-          style: TextStyle(
-            color: Theme.of(context).hintColor,
-            fontSize: MediaQuery.of(context).size.width > 330 ? 14 : 10,
+        Container(
+          child: AutoSizeText(
+            title,
+            maxLines: 1,
+            style: TextStyle(
+              color: Theme.of(context).hintColor,
+            ),
+            softWrap: true,
           ),
-          softWrap: true,
         ),
-        AutoSizeText(
-          content,
-          maxLines: 3,
-          style: TextStyle(
-            color: Theme.of(context).textSelectionColor,
+        SizedBox(
+          width: 5,
+        ),
+        Expanded(
+          child: AutoSizeText(
+            content,
+            maxLines: 2,
+            style: TextStyle(
+              color: Theme.of(context).textSelectionColor,
+            ),
+            textAlign: TextAlign.center,
           ),
-          softWrap: true,
         ),
       ],
     );

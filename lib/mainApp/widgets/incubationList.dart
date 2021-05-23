@@ -15,67 +15,64 @@ class IncubationList extends StatelessWidget {
     return ListView.builder(
       itemCount: parrotList.length,
       scrollDirection: Axis.vertical,
+      physics: NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       itemBuilder: (context, index) {
         return Card(
+          margin: EdgeInsets.all(0),
           color: Colors.transparent,
           child: Column(
             children: [
-              Row(
-                children: [
-                  SizedBox(width: 5),
-                  parrotList[index].picUrl == "brak"
-                      ? PairCircleAvatar(
-                          picUrl: parrotList[index].picUrl,
-                          isAssets: true,
-                          size: 40,
-                        )
-                      : PairCircleAvatar(
-                          picUrl: parrotList[index].picUrl,
-                          isAssets: false,
-                          size: 30,
-                        ),
-                  SizedBox(width: 5),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          CreateInfoRow(
-                            title: "Data utworzenia pary: ",
-                            content: parrotList[index].pairingData,
-                          ),
-                          const SizedBox(height: 6),
-                          CreateInfoRow(
-                            title: "Kolor Pary: ",
-                            content: parrotList[index].pairColor,
-                          ),
-                          const SizedBox(height: 6),
-                          CreateInfoRowParrot(
-                            race: parrotList[index].race,
-                            title: "Samica(0,1): ",
-                            content: parrotList[index].femaleRingNumber,
-                          ),
-                          const SizedBox(height: 6),
-                          CreateInfoRowParrot(
-                            race: parrotList[index].race,
-                            title: "Samiec(1,0): ",
-                            content: parrotList[index].maleRingNumber,
-                          ),
-                          Divider(
-                            color: Theme.of(context).textSelectionColor,
-                          ),
-                        ],
-                      ),
+              SizedBox(height: 5),
+              parrotList[index].picUrl == "brak"
+                  ? PairCircleAvatar(
+                      picUrl: parrotList[index].picUrl,
+                      isAssets: true,
+                      size: 30,
+                    )
+                  : PairCircleAvatar(
+                      picUrl: parrotList[index].picUrl,
+                      isAssets: false,
+                      size: 30,
                     ),
-                  ),
-                ],
+              SizedBox(width: 5),
+              Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CreateInfoRow(
+                      title: "Data utworzenia: ",
+                      content: parrotList[index].pairingData,
+                    ),
+                    const SizedBox(height: 6),
+                    CreateInfoRow(
+                      title: "Kolor: ",
+                      content: parrotList[index].pairColor,
+                    ),
+                    const SizedBox(height: 6),
+                    CreateInfoRowParrot(
+                      race: parrotList[index].race,
+                      title: "Samica(0,1):",
+                      content: parrotList[index].femaleRingNumber,
+                    ),
+                    const SizedBox(height: 6),
+                    CreateInfoRowParrot(
+                      race: parrotList[index].race,
+                      title: "Samiec(1,0):",
+                      content: parrotList[index].maleRingNumber,
+                    ),
+                    Divider(
+                      color: Theme.of(context).textSelectionColor,
+                    ),
+                  ],
+                ),
               ),
               EggExpansionTile(
                 parrotList[index].showEggsDate,
                 parrotList[index].race,
                 parrotList[index].id,
+                true,
               ),
             ],
           ),

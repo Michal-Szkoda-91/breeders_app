@@ -57,16 +57,15 @@ class _AddParrotFromInsideParrotListState
               ),
             ),
             SizedBox(width: 10),
-            AutoSizeText(
-              "Dodaj Papugę",
-              maxLines: 1,
-              style: TextStyle(
-                color: Theme.of(context).textSelectionColor,
-                fontSize: MediaQuery.of(context).size.width > 350 ? 18 : 14,
-              ),
-            ),
             Expanded(
-              child: SizedBox(),
+              child: AutoSizeText(
+                "Dodaj Papugę",
+                maxLines: 1,
+                style: TextStyle(
+                  color: Theme.of(context).textSelectionColor,
+                  // fontSize: MediaQuery.of(context).size.width > 350 ? 18 : 14,
+                ),
+              ),
             ),
             Icon(
               Icons.add,

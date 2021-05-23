@@ -468,7 +468,7 @@ class _AddPairScreenState extends State<AddPairScreen> {
 
   DropdownButton _createDropdownButtonMale(BuildContext context) {
     return DropdownButton(
-      itemHeight: 80,
+      itemHeight: 90,
       isExpanded: true,
       value: _choosenMaleParrotRingNumber,
       icon: Icon(
@@ -503,18 +503,18 @@ class _AddPairScreenState extends State<AddPairScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            AutoSizeText(
               parrot.ringNumber,
+              maxLines: 1,
               style: TextStyle(
-                fontSize: 18,
                 color: Theme.of(context).textSelectionColor,
               ),
             ),
             SizedBox(height: 2),
-            Text(
+            AutoSizeText(
               "Kolor: " + parrot.color,
+              maxLines: 2,
               style: TextStyle(
-                fontSize: 14,
                 color: Theme.of(context).textSelectionColor,
               ),
             ),
@@ -531,7 +531,7 @@ class _AddPairScreenState extends State<AddPairScreen> {
 
   DropdownButton _createDropdownButtonFeMale(BuildContext context) {
     return DropdownButton(
-      itemHeight: 80,
+      itemHeight: 90,
       isExpanded: true,
       value: _choosenFeMaleParrotRingNumber,
       icon: Icon(
@@ -624,83 +624,6 @@ class _AddPairScreenState extends State<AddPairScreen> {
   }
 
   Future<void> _sendPictureToStorage(BuildContext context) async {
-    if (_image.path == 'assets/image/parrotsRace/parrot_pair.jpg') {
-      showDialog(
-        barrierDismissible: false,
-        context: context,
-        child: AlertDialog(
-          backgroundColor: Theme.of(context).backgroundColor,
-          title: Text(
-            "Uwaga!",
-            style: TextStyle(
-              color: Theme.of(context).textSelectionColor,
-            ),
-          ),
-          content: Text(
-            "Nie wybrano zdjęcia par.. czy mimo to chcesz kontynuwać? Nie będzie tej możliwości po utworzeniu pary.",
-            style: TextStyle(
-              color: Theme.of(context).textSelectionColor,
-            ),
-          ),
-          actions: [
-            Row(children: [
-              FlatButton(
-                  child: Text(
-                    "Kontynuuj",
-                    style: TextStyle(
-                        color: Theme.of(context).textSelectionColor,
-                        fontSize: 16),
-                  ),
-                  onPressed: () async {
-                    Navigator.of(context).pop();
-                    setState(() {
-                      _isLoading = true;
-                    });
-                    await sendPicture(context).then((_) {
-                      _createPair(context);
-                    }).catchError((error) {
-                      _globalMethods.showMaterialDialog(context,
-                          "Nie udało się wczytać zdjęcia, Spróbuj ponownie póżniej");
-                    });
-                  }),
-              FlatButton(
-                child: Text(
-                  "Uzupełnij zdjęcie",
-                  style: TextStyle(
-                      color: Theme.of(context).textSelectionColor,
-                      fontSize: 16),
-                ),
-                onPressed: () {
-                  FocusScope.of(context).requestFocus(new FocusNode());
-                  Navigator.of(context).pop();
-                  _rrectController
-                      .animateTo(
-                    0.0,
-                    curve: Curves.easeOut,
-                    duration: const Duration(
-                      milliseconds: 400,
-                    ),
-                  )
-                      .then((_) {
-                    _blinkingCamera();
-                  });
-                },
-              ),
-            ]),
-          ],
-        ),
-      );
-    } else {
-      await sendPicture(context).then((_) {
-        _createPair(context);
-      }).catchError((error) {
-        _globalMethods.showMaterialDialog(
-            context, "Nie udało się wczytać zdjęcia, Spróbuj ponownie póżniej");
-      });
-    }
-  }
-
-  Future<void> _createPair(BuildContext context) async {
     if (_choosenFeMaleParrotRingNumber == null ||
         _choosenFeMaleParrotRingNumber == null ||
         !_formKey.currentState.validate()) {
@@ -708,63 +631,148 @@ class _AddPairScreenState extends State<AddPairScreen> {
           context, "Nie można utworzyć pary, niepełne dane");
       return;
     } else {
-      bool result = await _globalMethods.checkInternetConnection(context);
-
-      if (!result) {
-        Navigator.of(context).pop();
-        _globalMethods.showMaterialDialog(
-            context, "brak połączenia z internetem.");
+      if (_image.path == 'assets/image/parrotsRace/parrot_pair.jpg') {
+        showDialog(
+          barrierDismissible: false,
+          context: context,
+          child: AlertDialog(
+            backgroundColor: Theme.of(context).backgroundColor,
+            title: Text(
+              "Uwaga!",
+              style: TextStyle(
+                color: Theme.of(context).textSelectionColor,
+              ),
+            ),
+            content: Text(
+              "Nie wybrano zdjęcia par.. czy mimo to chcesz kontynuwać? Nie będzie tej możliwości po utworzeniu pary.",
+              style: TextStyle(
+                color: Theme.of(context).textSelectionColor,
+              ),
+            ),
+            actions: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  FlatButton(
+                      child: AutoSizeText(
+                        "Kontynuuj",
+                        maxLines: 1,
+                        style: TextStyle(
+                          color: Theme.of(context).textSelectionColor,
+                        ),
+                      ),
+                      onPressed: () async {
+                        Navigator.of(context).pop();
+                        setState(() {
+                          _isLoading = true;
+                        });
+                        await sendPicture(context).then((_) {
+                          _createPair(context);
+                        }).catchError((error) {
+                          _globalMethods.showMaterialDialog(context,
+                              "Nie udało się wczytać zdjęcia, Spróbuj ponownie póżniej");
+                        });
+                      }),
+                  FlatButton(
+                    child: AutoSizeText(
+                      "Uzupełnij \nzdjęcie",
+                      maxLines: 2,
+                      style: TextStyle(
+                        color: Theme.of(context).textSelectionColor,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    onPressed: () {
+                      FocusScope.of(context).requestFocus(new FocusNode());
+                      Navigator.of(context).pop();
+                      _rrectController
+                          .animateTo(
+                        0.0,
+                        curve: Curves.easeOut,
+                        duration: const Duration(
+                          milliseconds: 400,
+                        ),
+                      )
+                          .then((_) {
+                        _blinkingCamera();
+                      });
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
       } else {
-        setState(() {
-          _isLoading = true;
-        });
-
-        setState(() {
-          _createdPair = ParrotPairing(
-            id: "$_choosenFeMaleParrotRingNumber - $_choosenMaleParrotRingNumber - ${DateTime.now()}",
-            femaleRingNumber: _choosenFeMaleParrotRingNumber,
-            maleRingNumber: _choosenMaleParrotRingNumber,
-            pairingData: pairTime,
-            pairColor: pairColor,
-            picUrl: pictureUrl,
-          );
-          _maleParrotList.forEach((parrot) {
-            if (parrot.ringNumber == _choosenMaleParrotRingNumber) {
-              _maleParrotChoosen = parrot;
-            }
-          });
-          _femaleParrotList.forEach((parrot) {
-            if (parrot.ringNumber == _choosenFeMaleParrotRingNumber) {
-              _femaleParrotChoosen = parrot;
-            }
-          });
-        });
-
-        _parrotPairDataHelper
-            .createPairCollection(
-          uid: firebaseUser.uid,
-          pair: _createdPair,
-          race: widget.raceName,
-          maleParrot: _maleParrotChoosen,
-          femaleParrot: _femaleParrotChoosen,
-        )
-            .then((_) {
-          _choosenFeMaleParrotRingNumber = null;
-          _choosenMaleParrotRingNumber = null;
-
-          setState(() {
-            _isLoading = false;
-          });
-          Navigator.of(context).pop();
-          _globalMethods.showMaterialDialog(context, "Utworzono parę");
+        await sendPicture(context).then((_) {
+          _createPair(context);
         }).catchError((error) {
+          _globalMethods.showMaterialDialog(context,
+              "Nie udało się wczytać zdjęcia, Spróbuj ponownie póżniej");
+        });
+      }
+    }
+  }
+
+  Future<void> _createPair(BuildContext context) async {
+    bool result = await _globalMethods.checkInternetConnection(context);
+
+    if (!result) {
+      Navigator.of(context).pop();
+      _globalMethods.showMaterialDialog(
+          context, "brak połączenia z internetem.");
+    } else {
+      setState(() {
+        _isLoading = true;
+      });
+
+      setState(() {
+        _createdPair = ParrotPairing(
+          id: "$_choosenFeMaleParrotRingNumber - $_choosenMaleParrotRingNumber - ${DateTime.now()}",
+          femaleRingNumber: _choosenFeMaleParrotRingNumber,
+          maleRingNumber: _choosenMaleParrotRingNumber,
+          pairingData: pairTime,
+          pairColor: pairColor,
+          picUrl: pictureUrl,
+        );
+        _maleParrotList.forEach((parrot) {
+          if (parrot.ringNumber == _choosenMaleParrotRingNumber) {
+            _maleParrotChoosen = parrot;
+          }
+        });
+        _femaleParrotList.forEach((parrot) {
+          if (parrot.ringNumber == _choosenFeMaleParrotRingNumber) {
+            _femaleParrotChoosen = parrot;
+          }
+        });
+      });
+
+      _parrotPairDataHelper
+          .createPairCollection(
+        uid: firebaseUser.uid,
+        pair: _createdPair,
+        race: widget.raceName,
+        maleParrot: _maleParrotChoosen,
+        femaleParrot: _femaleParrotChoosen,
+      )
+          .then((_) {
+        _choosenFeMaleParrotRingNumber = null;
+        _choosenMaleParrotRingNumber = null;
+
+        setState(() {
+          _isLoading = false;
+        });
+        Navigator.of(context).pop();
+        _globalMethods.showMaterialDialog(context, "Utworzono parę");
+      }).catchError(
+        (error) {
           setState(() {
             _isLoading = false;
           });
           _globalMethods.showMaterialDialog(context,
               "Operacja nieudana, nieznany błąd, spróbuj ponownie pózniej");
-        });
-      }
+        },
+      );
     }
   }
 

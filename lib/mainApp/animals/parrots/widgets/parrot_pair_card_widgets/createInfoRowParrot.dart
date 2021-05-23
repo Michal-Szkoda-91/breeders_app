@@ -34,51 +34,53 @@ class CreateInfoRowParrot extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
           onTap: () {
             showDialog(
-                context: context,
-                builder: (_) => new AlertDialog(
-                      backgroundColor: Theme.of(context).backgroundColor,
-                      scrollable: true,
-                      title: new Text(
-                        content,
-                        style: TextStyle(
-                          color: Theme.of(context).textSelectionColor,
-                        ),
+              context: context,
+              builder: (_) => new AlertDialog(
+                backgroundColor: Theme.of(context).backgroundColor,
+                scrollable: true,
+                title: new Text(
+                  content,
+                  style: TextStyle(
+                    color: Theme.of(context).textSelectionColor,
+                  ),
+                ),
+                content: ParrotDialogInformation(
+                  parrotRace: race,
+                  parrotRing: content,
+                ),
+                actions: <Widget>[
+                  FlatButton(
+                    child: Text(
+                      'OK',
+                      style: TextStyle(
+                        color: Theme.of(context).textSelectionColor,
+                        fontSize: 18,
                       ),
-                      content: Container(
-                        width: MediaQuery.of(context).size.width * 0.7,
-                        height: MediaQuery.of(context).size.height * 0.7,
-                        child: ParrotDialogInformation(
-                          parrotRace: race,
-                          parrotRing: content,
-                        ),
-                      ),
-                      actions: <Widget>[
-                        FlatButton(
-                          child: Text(
-                            'OK',
-                            style: TextStyle(
-                              color: Theme.of(context).textSelectionColor,
-                              fontSize: 18,
-                            ),
-                          ),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                        )
-                      ],
-                    ));
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  )
+                ],
+              ),
+            );
           },
           child: Container(
+            alignment: Alignment.center,
+            height: 60,
+            width: MediaQuery.of(context).size.width * 0.45,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               color: Colors.black45,
             ),
             padding: EdgeInsets.all(10),
-            child: Text(
+            child: AutoSizeText(
               content,
+              maxLines: 2,
               style: TextStyle(
                 color: Theme.of(context).textSelectionColor,
               ),
+              textAlign: TextAlign.center,
             ),
           ),
         ),

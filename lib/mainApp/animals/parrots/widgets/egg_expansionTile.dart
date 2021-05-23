@@ -11,8 +11,10 @@ class EggExpansionTile extends StatefulWidget {
   final String showEggDate;
   final String raceName;
   final String pairID;
+  final bool isShowingOnly;
 
-  const EggExpansionTile(this.showEggDate, this.raceName, this.pairID);
+  const EggExpansionTile(
+      this.showEggDate, this.raceName, this.pairID, this.isShowingOnly);
 
   @override
   _EggExpansionTileState createState() => _EggExpansionTileState();
@@ -56,131 +58,132 @@ class _EggExpansionTileState extends State<EggExpansionTile> {
   @override
   Widget build(BuildContext context) {
     return !_isLoading
-        ? ExpansionTile(
-            title: Column(
-              children: [
-                Row(
-                  children: [
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.45,
-                      child: AutoSizeText(
-                        widget.showEggDate == "brak"
-                            ? "Brak jajek"
-                            : "Pozostało dni do wylęgu:",
-                        maxLines: 1,
-                        style: TextStyle(
-                          color: Theme.of(context).textSelectionColor,
-                          fontSize: 16,
-                        ),
+        ? widget.isShowingOnly
+            ? Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: _createContentColumn(context),
+              )
+            : ExpansionTile(
+                title: _createContentColumn(context),
+                children: [
+                  Column(
+                    children: [
+                      _createInkubationStartButton(context),
+                      SizedBox(height: 10),
+                      _createInkubationCancelButton(context),
+                      SizedBox(height: 10),
+                    ],
+                  ),
+                ],
+              )
+        : Center(child: CircularProgressIndicator());
+  }
+
+  Column _createContentColumn(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          children: [
+            Container(
+              width: MediaQuery.of(context).size.width * 0.45,
+              child: AutoSizeText(
+                widget.showEggDate == "brak" ? "Brak jajek" : "Dni do wylęgu:",
+                maxLines: 1,
+                style: TextStyle(
+                  color: Theme.of(context).textSelectionColor,
+                  // fontSize: 16,
+                ),
+              ),
+            ),
+            Spacer(),
+            widget.showEggDate != "brak"
+                ? Container(
+                    width: 33,
+                    height: 33,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: daysToBorn <= 6 && daysToBorn > 3
+                          ? Colors.orange
+                          : daysToBorn <= 3
+                              ? Colors.red
+                              : Theme.of(context).primaryColor,
+                      border: Border.all(
+                        color: Theme.of(context).textSelectionColor,
+                      ),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(18),
                       ),
                     ),
-                    Spacer(),
-                    widget.showEggDate != "brak"
-                        ? Container(
-                            width: 33,
-                            height: 33,
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              color: daysToBorn <= 6 && daysToBorn > 3
-                                  ? Colors.orange
-                                  : daysToBorn <= 3
-                                      ? Colors.red
-                                      : Theme.of(context).primaryColor,
-                              border: Border.all(
-                                color: Theme.of(context).textSelectionColor,
-                              ),
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(18),
-                              ),
-                            ),
-                            child: Text(
-                              daysToBorn < 0 ? "-" : daysToBorn.toString(),
-                              style: TextStyle(
-                                color: Theme.of(context).textSelectionColor,
-                                fontSize: 18,
-                              ),
-                            ),
-                          )
-                        : Center(),
-                  ],
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                widget.showEggDate != "brak"
-                    ? Row(
-                        children: [
-                          Container(
-                            width: MediaQuery.of(context).size.width * 0.40,
-                            child: AutoSizeText(
-                              "Start inkubacji: ",
-                              maxLines: 1,
-                              style: TextStyle(
-                                color: Theme.of(context).hintColor,
-                                fontSize:
-                                    MediaQuery.of(context).size.width < 330
-                                        ? 10
-                                        : 14,
-                              ),
-                            ),
-                          ),
-                          Spacer(),
-                          Text(
-                            widget.showEggDate,
-                            style: TextStyle(
-                              color: Theme.of(context).textSelectionColor,
-                              fontSize: MediaQuery.of(context).size.width < 330
-                                  ? 10
-                                  : 14,
-                            ),
-                          ),
-                        ],
-                      )
-                    : Center(),
-                widget.showEggDate != "brak"
-                    ? Row(
-                        children: [
-                          Container(
-                            width: MediaQuery.of(context).size.width * 0.40,
-                            child: AutoSizeText(
-                              "data wylęgu: ",
-                              maxLines: 1,
-                              style: TextStyle(
-                                color: Theme.of(context).hintColor,
-                                fontSize:
-                                    MediaQuery.of(context).size.width < 330
-                                        ? 10
-                                        : 14,
-                              ),
-                            ),
-                          ),
-                          Spacer(),
-                          Text(
-                            bornTimeString,
-                            style: TextStyle(
-                              color: Theme.of(context).textSelectionColor,
-                              fontSize: MediaQuery.of(context).size.width < 330
-                                  ? 10
-                                  : 14,
-                            ),
-                          ),
-                        ],
-                      )
-                    : Center(),
-              ],
-            ),
-            children: [
-              Column(
+                    child: Text(
+                      daysToBorn < 0 ? "-" : daysToBorn.toString(),
+                      style: TextStyle(
+                        color: Theme.of(context).textSelectionColor,
+                        fontSize: 18,
+                      ),
+                    ),
+                  )
+                : Center(),
+          ],
+        ),
+        SizedBox(
+          height: 5,
+        ),
+        widget.showEggDate != "brak"
+            ? Row(
                 children: [
-                  _createInkubationStartButton(context),
-                  SizedBox(height: 10),
-                  _createInkubationCancelButton(context),
-                  SizedBox(height: 10),
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.40,
+                    child: AutoSizeText(
+                      "Start inkubacji: ",
+                      maxLines: 1,
+                      style: TextStyle(
+                        color: Theme.of(context).hintColor,
+                        fontSize:
+                            MediaQuery.of(context).size.width < 330 ? 10 : 14,
+                      ),
+                    ),
+                  ),
+                  Spacer(),
+                  Text(
+                    widget.showEggDate,
+                    style: TextStyle(
+                      color: Theme.of(context).textSelectionColor,
+                      fontSize:
+                          MediaQuery.of(context).size.width < 330 ? 10 : 14,
+                    ),
+                  ),
                 ],
-              ),
-            ],
-          )
-        : Center(child: CircularProgressIndicator());
+              )
+            : Center(),
+        widget.showEggDate != "brak"
+            ? Row(
+                children: [
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.40,
+                    child: AutoSizeText(
+                      "data wylęgu: ",
+                      maxLines: 1,
+                      style: TextStyle(
+                        color: Theme.of(context).hintColor,
+                        fontSize:
+                            MediaQuery.of(context).size.width < 330 ? 10 : 14,
+                      ),
+                    ),
+                  ),
+                  Spacer(),
+                  Text(
+                    bornTimeString,
+                    style: TextStyle(
+                      color: Theme.of(context).textSelectionColor,
+                      fontSize:
+                          MediaQuery.of(context).size.width < 330 ? 10 : 14,
+                    ),
+                  ),
+                ],
+              )
+            : Center(),
+      ],
+    );
   }
 
   Container _createInkubationCancelButton(BuildContext context) {
