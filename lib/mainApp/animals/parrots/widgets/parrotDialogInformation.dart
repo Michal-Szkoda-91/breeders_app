@@ -4,6 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import 'parrotDialogInformation/info_parrow_row.dart';
+
 class ParrotDialogInformation extends StatefulWidget {
   final String parrotRing;
   final String parrotRace;
@@ -42,47 +44,30 @@ class _ParrotDialogInformationState extends State<ParrotDialogInformation> {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _createdInfoParrotRow(context, "Kolor:", _createdParrot.color),
-                _createdInfoParrotRow(
-                    context, "Rozsczepienie:", _createdParrot.fission),
-                _createdInfoParrotRow(
-                    context, "Nr klatki:", _createdParrot.cageNumber),
-                _createdInfoParrotRow(
-                    context, "Notatki:", _createdParrot.notes),
-                _createdInfoParrotRow(
-                    context, "Nr partnera:", _createdParrot.pairRingNumber),
+                InfoParrowRow(
+                  title: "Kolor:",
+                  content: _createdParrot.color,
+                ),
+                InfoParrowRow(
+                  title: "Rozsczepienie:",
+                  content: _createdParrot.fission,
+                ),
+                InfoParrowRow(
+                  title: "Nr klatki:",
+                  content: _createdParrot.cageNumber,
+                ),
+                InfoParrowRow(
+                  title: "Notatki:",
+                  content: _createdParrot.notes,
+                ),
+                InfoParrowRow(
+                  title: "Nr partnera:",
+                  content: _createdParrot.pairRingNumber,
+                ),
               ],
             );
         }
       },
-    );
-  }
-
-  Widget _createdInfoParrotRow(
-      BuildContext context, String title, String contet) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        AutoSizeText(
-          title,
-          style: TextStyle(
-            color: Theme.of(context).hintColor,
-          ),
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        AutoSizeText(
-          contet,
-          style: TextStyle(
-            color: Theme.of(context).textSelectionColor,
-          ),
-        ),
-        Divider(
-          color: Theme.of(context).textSelectionColor,
-        )
-      ],
     );
   }
 
