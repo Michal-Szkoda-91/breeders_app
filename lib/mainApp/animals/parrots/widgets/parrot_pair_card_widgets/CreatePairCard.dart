@@ -31,12 +31,8 @@ class CreatePairCard extends StatelessWidget {
     return Stack(
       children: [
         Card(
-          margin: const EdgeInsets.only(
-            left: 15,
-            right: 10,
-            top: 80,
-            bottom: 15,
-          ),
+          margin:
+              const EdgeInsets.only(left: 15, right: 10, top: 80, bottom: 15),
           color: pairList[index].isArchive == "false"
               ? Colors.transparent
               : Colors.grey[700],
@@ -77,10 +73,8 @@ class CreatePairCard extends StatelessWidget {
                   toArchive: toArchive,
                 ),
                 pairList[index].isArchive == "false"
-                    ? Divider(
-                        color: Theme.of(context).textSelectionColor,
-                      )
-                    : Center(),
+                    ? Divider(color: Theme.of(context).textSelectionColor)
+                    : const Center(),
                 pairList[index].isArchive == "false"
                     ? EggExpansionTile(
                         pairList[index].showEggsDate,
@@ -89,20 +83,14 @@ class CreatePairCard extends StatelessWidget {
                         false,
                       )
                     : Center(),
-                Divider(
-                  color: Theme.of(context).textSelectionColor,
-                ),
+                Divider(color: Theme.of(context).textSelectionColor),
                 pairList[index].isArchive == "false"
                     ? AddPairChildButton(
                         pair: pairList[index],
                         raceName: race,
                       )
-                    : SizedBox(
-                        height: 1,
-                      ),
-                const SizedBox(
-                  height: 3,
-                ),
+                    : const SizedBox(height: 1),
+                const SizedBox(height: 3),
                 ChildrenList(
                   pairId: pairList[index].id,
                   raceName: race,

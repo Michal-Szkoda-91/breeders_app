@@ -31,14 +31,14 @@ class _CreatePairingParrotDropdownButtonState
         height: 60,
         width: MediaQuery.of(context).size.width * 0.72,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(
+          borderRadius: const BorderRadius.all(
             Radius.circular(8),
           ),
           color: Theme.of(context).backgroundColor,
         ),
         child: new Row(
           children: [
-            SizedBox(width: 10),
+            const SizedBox(width: 10),
             CircleAvatar(
               radius: 25,
               backgroundColor: Theme.of(context).primaryColor,
@@ -49,7 +49,7 @@ class _CreatePairingParrotDropdownButtonState
                 ),
               ),
             ),
-            SizedBox(width: 10),
+            const SizedBox(width: 10),
             AutoSizeText(
               name,
               maxLines: 1,
@@ -58,15 +58,15 @@ class _CreatePairingParrotDropdownButtonState
                 fontSize: MediaQuery.of(context).size.width > 350 ? 18 : 14,
               ),
             ),
-            Expanded(
-              child: SizedBox(),
+            const Expanded(
+              child: const SizedBox(),
             ),
             Icon(
               Icons.add,
               color: Theme.of(context).textSelectionColor,
               size: 30,
             ),
-            SizedBox(width: 10),
+            const SizedBox(width: 10),
           ],
         ),
       ),

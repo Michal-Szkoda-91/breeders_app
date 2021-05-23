@@ -73,7 +73,7 @@ class CreateInfoRowParrot extends StatelessWidget {
               borderRadius: BorderRadius.circular(10),
               color: Colors.black45,
             ),
-            padding: EdgeInsets.all(10),
+            padding: const EdgeInsets.all(10.0),
             child: AutoSizeText(
               content,
               maxLines: 2,

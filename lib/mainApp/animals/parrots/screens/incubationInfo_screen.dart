@@ -88,7 +88,6 @@ class _IncubationInformationScreenState
                       AutoSizeText(
                         raceList[index],
                         style: TextStyle(
-                          // fontSize: 22,
                           color: Theme.of(context).textSelectionColor,
                         ),
                       ),
@@ -97,8 +96,8 @@ class _IncubationInformationScreenState
                           AutoSizeText(
                             "Oczekujących inkubacji:",
                             style: TextStyle(
-                                fontSize: 12,
-                                color: Theme.of(context).hintColor),
+                              color: Theme.of(context).hintColor,
+                            ),
                           ),
                           Spacer(),
                           Container(
@@ -111,7 +110,7 @@ class _IncubationInformationScreenState
                                 color: Theme.of(context).textSelectionColor,
                               ),
                               borderRadius: BorderRadius.all(
-                                Radius.circular(18),
+                                const Radius.circular(18),
                               ),
                             ),
                             child: Text(
@@ -127,9 +126,7 @@ class _IncubationInformationScreenState
                           )
                         ],
                       ),
-                      SizedBox(
-                        height: 8,
-                      ),
+                      const SizedBox(height: 8),
                     ],
                   ),
                   children: [

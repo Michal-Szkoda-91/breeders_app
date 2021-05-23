@@ -25,9 +25,7 @@ class NotConnected extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
           ),
-          SizedBox(
-            height: 30,
-          ),
+          const SizedBox(height: 30),
           FlatButton(
             color: Theme.of(context).backgroundColor,
             child: Padding(

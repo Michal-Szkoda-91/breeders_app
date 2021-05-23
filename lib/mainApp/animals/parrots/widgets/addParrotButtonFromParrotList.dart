@@ -41,13 +41,13 @@ class _AddParrotFromInsideParrotListState
         width: MediaQuery.of(context).size.width * 0.72,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(
-            Radius.circular(8),
+            const Radius.circular(8),
           ),
           color: Theme.of(context).backgroundColor,
         ),
         child: new Row(
           children: [
-            SizedBox(width: 10),
+            const SizedBox(width: 10),
             CircleAvatar(
               radius: 30,
               backgroundColor: Theme.of(context).primaryColor,
@@ -56,7 +56,7 @@ class _AddParrotFromInsideParrotListState
                 backgroundImage: AssetImage(raceMap["url"]),
               ),
             ),
-            SizedBox(width: 10),
+            const SizedBox(width: 10),
             Expanded(
               child: AutoSizeText(
                 "Dodaj Papugę",
@@ -72,7 +72,7 @@ class _AddParrotFromInsideParrotListState
               color: Theme.of(context).textSelectionColor,
               size: 30,
             ),
-            SizedBox(width: 10),
+            const SizedBox(width: 10),
           ],
         ),
       ),

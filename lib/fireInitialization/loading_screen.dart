@@ -6,10 +6,10 @@ class LoadingScreen extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text("Ładowanie"),
+          title: const Text("Ładowanie"),
         ),
         body: Center(
-          child: CircularProgressIndicator(),
+          child: const CircularProgressIndicator(),
         ),
       ),
     );

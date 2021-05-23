@@ -49,7 +49,7 @@ class _ParrotsListScreenState extends State<ParrotsListScreen> {
                 return Center(
                   child: Padding(
                     padding: const EdgeInsets.all(50.0),
-                    child: CircularProgressIndicator(),
+                    child: const CircularProgressIndicator(),
                   ),
                 );
               default:

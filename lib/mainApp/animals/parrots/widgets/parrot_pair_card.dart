@@ -62,9 +62,7 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
               child: Column(
                 children: [
                   _sortingColumn(context),
-                  SizedBox(
-                    height: 15,
-                  ),
+                  const SizedBox(height: 15),
                   ListView.builder(
                     physics: NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
@@ -83,8 +81,8 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
               ),
             ),
           )
-        : Center(
-            child: CircularProgressIndicator(),
+        : const Center(
+            child: const CircularProgressIndicator(),
           );
   }
 

@@ -6,10 +6,10 @@ class SomethingWentWrongScreen extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text("Błąd"),
+          title: const Text("Błąd"),
         ),
         body: Center(
-          child: Text(
+          child: const Text(
             "Błąd ładowania aplikacji!\nSpróbuj ponownie poźniej",
           ),
         ),

@@ -15,7 +15,7 @@ class IncubationCountsContainer extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15),
       child: Container(
-        padding: EdgeInsets.all(7),
+        padding: const EdgeInsets.all(7),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(14),
           color: Colors.black45,
@@ -41,7 +41,7 @@ class IncubationCountsContainer extends StatelessWidget {
                 border: Border.all(
                   color: Theme.of(context).textSelectionColor,
                 ),
-                borderRadius: BorderRadius.all(
+                borderRadius: const BorderRadius.all(
                   Radius.circular(18),
                 ),
               ),

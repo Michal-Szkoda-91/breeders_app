@@ -36,16 +36,16 @@ class _IncubationInformationState extends State<IncubationInformation> {
           );
         switch (snapshot.connectionState) {
           case ConnectionState.waiting:
-            return Center(
-              child: CircularProgressIndicator(),
+            return const Center(
+              child: const CircularProgressIndicator(),
             );
           default:
             if (_isLoading) {
               _loadInkubationData(snapshot);
             }
             return _isLoading
-                ? Center(
-                    child: CircularProgressIndicator(),
+                ? const Center(
+                    child: const CircularProgressIndicator(),
                   )
                 : _incubationTimes == 0
                     ? Text(

@@ -23,9 +23,7 @@ class InfoParrowRow extends StatelessWidget {
             color: Theme.of(context).hintColor,
           ),
         ),
-        SizedBox(
-          height: 10,
-        ),
+        const SizedBox(height: 10),
         AutoSizeText(
           content,
           style: TextStyle(

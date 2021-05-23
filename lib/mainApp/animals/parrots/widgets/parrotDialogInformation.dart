@@ -1,10 +1,9 @@
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:breeders_app/mainApp/animals/parrots/models/parrot_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'parrotDialogInformation/info_parrow_row.dart';
+import '../models/parrot_model.dart';
 
 class ParrotDialogInformation extends StatefulWidget {
   final String parrotRing;
@@ -36,7 +35,7 @@ class _ParrotDialogInformationState extends State<ParrotDialogInformation> {
             return Center(
               child: Padding(
                 padding: const EdgeInsets.all(50.0),
-                child: CircularProgressIndicator(),
+                child: const CircularProgressIndicator(),
               ),
             );
           default:

@@ -8,6 +8,7 @@ class DeleteAndArchiveButtons extends StatefulWidget {
   final List<ParrotPairing> pairList;
   final Function delete;
   final Function toArchive;
+
   DeleteAndArchiveButtons({
     @required this.index,
     this.pairList,
@@ -29,7 +30,7 @@ class _DeleteAndArchiveButtonsState extends State<DeleteAndArchiveButtons> {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         FlatButton.icon(
-          padding: EdgeInsets.all(5),
+          padding: const EdgeInsets.all(5.0),
           label: Text(
             "Usuń Parę",
             style: TextStyle(
@@ -37,7 +38,7 @@ class _DeleteAndArchiveButtonsState extends State<DeleteAndArchiveButtons> {
               fontSize: MediaQuery.of(context).size.width > 350 ? 14 : 12,
             ),
           ),
-          icon: Icon(
+          icon: const Icon(
             MaterialCommunityIcons.delete,
             color: Colors.red,
           ),
@@ -59,7 +60,7 @@ class _DeleteAndArchiveButtonsState extends State<DeleteAndArchiveButtons> {
         ),
         widget.pairList[widget.index].isArchive == "false"
             ? FlatButton.icon(
-                padding: EdgeInsets.all(5),
+                padding: const EdgeInsets.all(5.0),
                 label: Text(
                   "Do Archiwum",
                   style: TextStyle(
@@ -67,7 +68,7 @@ class _DeleteAndArchiveButtonsState extends State<DeleteAndArchiveButtons> {
                     fontSize: MediaQuery.of(context).size.width > 350 ? 14 : 12,
                   ),
                 ),
-                icon: Icon(
+                icon: const Icon(
                   MaterialCommunityIcons.archive,
                   color: Colors.blueAccent,
                 ),
@@ -86,7 +87,7 @@ class _DeleteAndArchiveButtonsState extends State<DeleteAndArchiveButtons> {
                   );
                 },
               )
-            : Center(),
+            : const Center(),
       ],
     );
   }

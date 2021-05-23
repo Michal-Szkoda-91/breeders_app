@@ -22,9 +22,7 @@ class CreateInfoRow extends StatelessWidget {
             softWrap: true,
           ),
         ),
-        SizedBox(
-          width: 5,
-        ),
+        const SizedBox(width: 5),
         Expanded(
           child: AutoSizeText(
             content,
