@@ -1,15 +1,17 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:draggable_scrollbar_sliver/draggable_scrollbar_sliver.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
 
-import 'package:breeders_app/mainApp/animals/parrots/screens/addParrot_screen.dart';
 import 'package:breeders_app/models/global_methods.dart';
 import 'package:breeders_app/mainApp/animals/parrots/models/parrot_model.dart';
 
 import 'addParrotButtonFromParrotList.dart';
-import 'parrotDialogInformation.dart';
+import 'create_parrot_card/genderIcon.dart';
+import 'create_parrot_card/table_content_notes_row.dart';
+import 'create_parrot_card/table_content_row.dart';
+import 'create_parrot_card/table_contnent_normal_row.dart';
+import 'create_parrot_card/table_title_row.dart';
+import 'create_parrot_card/upgrade_delete_buttons.dart';
 
 class ParrotCard extends StatefulWidget {
   const ParrotCard({
@@ -99,13 +101,48 @@ class _ParrotCardState extends State<ParrotCard> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
-                                _createTitleRow(context, "", 50.0, 6),
-                                _createTitleRow(context, "Para", 100.0, 5),
-                                _createTitleRow(context, "Kolor", 150.0, 2),
-                                _createTitleRow(
-                                    context, "Rozszczepienie", 200.0, 3),
-                                _createTitleRow(context, "Nr klatki", 150.0, 4),
-                                _createTitleRow(context, "Notatki", 150.0, 0),
+                                TableTitleRow(
+                                  context: context,
+                                  title: "",
+                                  width: 50.0,
+                                  sortedIndex: 6,
+                                  sorting: _sortingBy,
+                                ),
+                                TableTitleRow(
+                                  context: context,
+                                  title: "Para",
+                                  width: 100.0,
+                                  sortedIndex: 5,
+                                  sorting: _sortingBy,
+                                ),
+                                TableTitleRow(
+                                  context: context,
+                                  title: "Kolor",
+                                  width: 150.0,
+                                  sortedIndex: 2,
+                                  sorting: _sortingBy,
+                                ),
+                                TableTitleRow(
+                                  context: context,
+                                  title: "Rozszczepienie",
+                                  width: 200.0,
+                                  sortedIndex: 3,
+                                  sorting: _sortingBy,
+                                ),
+                                TableTitleRow(
+                                  context: context,
+                                  title: "Nr klatki",
+                                  width: 150.0,
+                                  sortedIndex: 4,
+                                  sorting: _sortingBy,
+                                ),
+                                TableTitleRow(
+                                  context: context,
+                                  title: "Notatki",
+                                  width: 150.0,
+                                  sortedIndex: 0,
+                                  sorting: _sortingBy,
+                                ),
                                 SizedBox(
                                   width: 100,
                                 ),
@@ -126,39 +163,48 @@ class _ParrotCardState extends State<ParrotCard> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceAround,
                                       children: [
-                                        _genderIcon(context, index),
-                                        _createContentRowPair(
-                                          context,
-                                          widget._createdParrotList[index]
-                                              .pairRingNumber,
-                                          100.0,
-                                          index,
-                                          true,
+                                        GenderIcon(
+                                          index: index,
+                                          createdParrotList:
+                                              widget._createdParrotList,
                                         ),
-                                        _createContentRow(
-                                          context,
-                                          widget
+                                        TableContentRow(
+                                            createdParrotList:
+                                                widget._createdParrotList,
+                                            title: widget
+                                                ._createdParrotList[index]
+                                                .pairRingNumber,
+                                            width: 100.0,
+                                            index: index,
+                                            isPair: true),
+                                        TableContentNormalRow(
+                                          title: widget
                                               ._createdParrotList[index].color,
-                                          150.0,
+                                          width: 150.0,
                                         ),
-                                        _createContentRowNotes(
-                                            context,
-                                            widget._createdParrotList[index]
-                                                .fission,
-                                            200.0),
-                                        _createContentRow(
-                                          context,
-                                          widget._createdParrotList[index]
+                                        TableContentNotesRow(
+                                          title: widget
+                                              ._createdParrotList[index]
+                                              .fission,
+                                          width: 200.0,
+                                        ),
+                                        TableContentNormalRow(
+                                          title: widget
+                                              ._createdParrotList[index]
                                               .cageNumber,
-                                          150.0,
+                                          width: 150.0,
                                         ),
-                                        _createContentRowNotes(
-                                          context,
-                                          widget
+                                        TableContentNotesRow(
+                                          title: widget
                                               ._createdParrotList[index].notes,
-                                          150.0,
+                                          width: 150.0,
                                         ),
-                                        _createInteractiveRow(index),
+                                        DeleteUpgradeButtons(
+                                          index: index,
+                                          createdParrotList:
+                                              widget._createdParrotList,
+                                          delete: _deleteParrot,
+                                        ),
                                       ],
                                     ),
                                   ),
@@ -181,8 +227,20 @@ class _ParrotCardState extends State<ParrotCard> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            _createTitleRow(context, "Nr", 30.0, 0),
-                            _createTitleRow(context, "Obrączka", 100.0, 1),
+                            TableTitleRow(
+                              context: context,
+                              title: "Nr",
+                              width: 30.0,
+                              sortedIndex: 0,
+                              sorting: _sortingBy,
+                            ),
+                            TableTitleRow(
+                              context: context,
+                              title: "Obrączka",
+                              width: 100.0,
+                              sortedIndex: 1,
+                              sorting: _sortingBy,
+                            ),
                           ],
                         ),
                         ListView.builder(
@@ -196,14 +254,18 @@ class _ParrotCardState extends State<ParrotCard> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceAround,
                                 children: [
-                                  _createContentRow(
-                                      context, (index + 1).toString(), 30.0),
-                                  _createContentRowPair(
-                                    context,
-                                    widget._createdParrotList[index].ringNumber,
-                                    100.0,
-                                    index,
-                                    false,
+                                  TableContentNormalRow(
+                                    title: (index + 1).toString(),
+                                    width: 30.0,
+                                  ),
+                                  TableContentRow(
+                                    createdParrotList:
+                                        widget._createdParrotList,
+                                    title: widget
+                                        ._createdParrotList[index].ringNumber,
+                                    width: 100.0,
+                                    index: index,
+                                    isPair: false,
                                   ),
                                 ],
                               ),
@@ -216,316 +278,6 @@ class _ParrotCardState extends State<ParrotCard> {
                 ],
               ),
             ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Container _createInteractiveRow(int index) {
-    return Container(
-      width: 100,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          GestureDetector(
-            onTap: () {
-              _globalMethods.showDeletingDialog(
-                context,
-                widget._createdParrotList[index].ringNumber,
-                "Napewno usunąć tę papugę z hodowli?",
-                _deleteParrot,
-                widget._createdParrotList[index],
-              );
-            },
-            child: Icon(
-              Icons.delete,
-              color: Colors.red,
-              size: 30,
-            ),
-          ),
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AddParrotScreen(
-                    parrotMap: {
-                      "url": "assets/image/parrot.jpg",
-                      "name": "Edytuj Papugę",
-                      "icubationTime": "21"
-                    },
-                    parrot: widget._createdParrotList[index],
-                  ),
-                ),
-              );
-            },
-            child: Icon(
-              MaterialCommunityIcons.circle_edit_outline,
-              color: Colors.lightBlueAccent,
-              size: 30,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Container _createContentRow(
-      BuildContext context, String title, double width) {
-    return Container(
-      padding: EdgeInsets.all(5.0),
-      decoration: BoxDecoration(
-        border: Border(
-          right: BorderSide(color: Colors.black, width: 1.0),
-          bottom: BorderSide(color: Colors.black, width: 1.0),
-        ),
-      ),
-      height: 60,
-      width: width,
-      alignment: Alignment.center,
-      child: Text(
-        title,
-        style: TextStyle(
-          color: Theme.of(context).textSelectionColor,
-          fontSize: 14,
-        ),
-        textAlign: TextAlign.center,
-      ),
-    );
-  }
-
-  Container _createContentRowPair(BuildContext context, String title,
-      double width, int index, bool isPair) {
-    return Container(
-      padding: EdgeInsets.all(1.0),
-      decoration: BoxDecoration(
-        border: Border(
-          right: BorderSide(color: Colors.black, width: 1.0),
-          bottom: BorderSide(color: Colors.black, width: 1.0),
-        ),
-      ),
-      height: 60,
-      width: width,
-      alignment: Alignment.center,
-      child: widget._createdParrotList[index].pairRingNumber == "brak" && isPair
-          ? AutoSizeText(
-              title,
-              style: TextStyle(
-                color: Theme.of(context).textSelectionColor,
-                fontSize: 12,
-              ),
-              textAlign: TextAlign.center,
-            )
-          : createPairRow(context, index, title),
-    );
-  }
-
-  Container _createContentRowNotes(
-      BuildContext context, String title, double width) {
-    return Container(
-      padding: EdgeInsets.all(5.0),
-      decoration: BoxDecoration(
-        border: Border(
-          right: BorderSide(color: Colors.black, width: 1.0),
-          bottom: BorderSide(color: Colors.black, width: 1.0),
-        ),
-      ),
-      height: 60,
-      width: width,
-      alignment: Alignment.center,
-      child: title.length > 25
-          ? GestureDetector(
-              onTap: () {
-                return _showInfo(context, title);
-              },
-              child: Text(
-                title.substring(0, 20) + "... ->",
-                style: TextStyle(
-                  color: Theme.of(context).textSelectionColor,
-                  fontSize: 14,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            )
-          : Text(
-              title,
-              style: TextStyle(
-                color: Theme.of(context).textSelectionColor,
-                fontSize: 14,
-              ),
-              textAlign: TextAlign.center,
-            ),
-    );
-  }
-
-  Future<void> _showInfo(BuildContext context, String title) {
-    return showDialog<void>(
-      barrierDismissible: true,
-      context: context,
-      builder: (BuildContext context) {
-        return new AlertDialog(
-          backgroundColor: Theme.of(context).backgroundColor,
-          content: Text(
-            title,
-            style: new TextStyle(
-              fontSize: 14,
-              color: Theme.of(context).textSelectionColor,
-            ),
-            textAlign: TextAlign.center,
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _createTitleRow(
-      BuildContext context, String title, double width, int sortedIndex) {
-    return Material(
-      child: InkWell(
-        splashColor: Colors.red,
-        radius: 22,
-        onTap: () {
-          if (sortedIndex != 0) _sortingBy(sortedIndex);
-        },
-        child: Container(
-          decoration: BoxDecoration(
-            color: Theme.of(context).backgroundColor,
-            border: Border(
-              right: BorderSide(color: Colors.black, width: 2.0),
-              bottom: BorderSide(color: Colors.black, width: 2.0),
-            ),
-          ),
-          width: width,
-          height: 40,
-          alignment: Alignment.center,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              AutoSizeText(
-                title,
-                maxLines: 1,
-                style: TextStyle(
-                  color: Theme.of(context).textSelectionColor,
-                  fontSize: MediaQuery.of(context).size.width > 350 ? 14 : 12,
-                ),
-              ),
-              sortedIndex != 0
-                  ? Icon(
-                      MaterialCommunityIcons.arrow_down_drop_circle_outline,
-                      color: Theme.of(context).textSelectionColor,
-                      size: 25,
-                    )
-                  : Container(
-                      width: 0,
-                    ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget createPairRow(BuildContext context, int index, String title) {
-    return Padding(
-      padding: const EdgeInsets.all(2.0),
-      child: InkWell(
-        splashColor: Theme.of(context).primaryColor,
-        borderRadius: BorderRadius.circular(8),
-        onTap: () {
-          showDialog(
-            context: context,
-            builder: (_) => new AlertDialog(
-              backgroundColor: Theme.of(context).backgroundColor,
-              scrollable: true,
-              title: new Text(
-                title,
-                style: _cretedTextStyle(context),
-              ),
-              content: Container(
-                width: MediaQuery.of(context).size.width * 0.7,
-                height: MediaQuery.of(context).size.height * 0.7,
-                child: ParrotDialogInformation(
-                  parrotRace: widget._createdParrotList[index].race,
-                  parrotRing: title,
-                ),
-              ),
-              actions: <Widget>[
-                FlatButton(
-                  child: Text(
-                    'OK',
-                    style: TextStyle(
-                      color: Theme.of(context).textSelectionColor,
-                      fontSize: 18,
-                    ),
-                  ),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                )
-              ],
-            ),
-          );
-        },
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
-            color: Colors.black45,
-          ),
-          padding: EdgeInsets.all(10),
-          child: AutoSizeText(
-            title,
-            maxLines: 2,
-            style: _cretedTextStyle(context),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Container _genderIcon(BuildContext context, int index) {
-    Color colorBackground = Colors.greenAccent;
-    Color colorIcon = Colors.green[700];
-    IconData icon = MaterialCommunityIcons.help;
-
-    if (widget._createdParrotList[index].sex == "Samiec") {
-      colorBackground = Colors.blue[300];
-      colorIcon = Colors.blue[700];
-      icon = MaterialCommunityIcons.gender_male;
-    } else if (widget._createdParrotList[index].sex == "Samica") {
-      colorBackground = Colors.pink[300];
-      colorIcon = Colors.pink[700];
-      icon = MaterialCommunityIcons.gender_female;
-    }
-
-    return Container(
-      width: 50,
-      height: 60,
-      decoration: BoxDecoration(
-        border: Border(
-          right: BorderSide(color: Colors.black, width: 1.0),
-          bottom: BorderSide(color: Colors.black, width: 1.0),
-        ),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
-        child: Container(
-          width: 30,
-          height: 30,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: colorBackground,
-            border: Border.all(
-              color: Theme.of(context).textSelectionColor,
-            ),
-            borderRadius: BorderRadius.all(
-              Radius.circular(30),
-            ),
-          ),
-          child: Icon(
-            icon,
-            color: colorIcon,
-            size: 16,
           ),
         ),
       ),
@@ -557,11 +309,5 @@ class _ParrotCardState extends State<ParrotCard> {
             "Operacja nieudana, nieznany błąd, spróbuj ponownie pózniej");
       });
     }
-  }
-
-  TextStyle _cretedTextStyle(BuildContext context) {
-    return TextStyle(
-      color: Theme.of(context).textSelectionColor,
-    );
   }
 }

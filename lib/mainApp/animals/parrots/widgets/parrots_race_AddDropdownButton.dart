@@ -42,72 +42,77 @@ class _CreateParrotsDropdownButtonState
             ),
           ),
           dropdownColor: Theme.of(context).backgroundColor,
-          items: _parrotsRace.parrotsRaceList.map((value) {
-            return DropdownMenuItem(
-              value: value,
-              child: new Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 5),
-                    child: CircleAvatar(
-                        radius: 25,
-                        backgroundColor: Theme.of(context).primaryColor,
-                        child: CircleAvatar(
-                          radius: 22,
-                          backgroundImage: AssetImage(
-                            value['url'],
-                          ),
-                        )),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.35,
-                    child: value['lac'] != "brak"
-                        ? Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                width: MediaQuery.of(context).size.width * 0.70,
-                                child: AutoSizeText(
-                                  value['name'],
-                                  maxLines: 1,
-                                  style: TextStyle(
-                                    color: Theme.of(context).textSelectionColor,
-                                    fontSize: 18,
+          items: _parrotsRace.parrotsRaceList.map(
+            (value) {
+              return DropdownMenuItem(
+                value: value,
+                child: new Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 5),
+                      child: CircleAvatar(
+                          radius: 25,
+                          backgroundColor: Theme.of(context).primaryColor,
+                          child: CircleAvatar(
+                            radius: 22,
+                            backgroundImage: AssetImage(
+                              value['url'],
+                            ),
+                          )),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.35,
+                      child: value['lac'] != "brak"
+                          ? Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.70,
+                                  child: AutoSizeText(
+                                    value['name'],
+                                    maxLines: 1,
+                                    style: TextStyle(
+                                      color:
+                                          Theme.of(context).textSelectionColor,
+                                      fontSize: 18,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              Container(
-                                width: MediaQuery.of(context).size.width * 0.70,
-                                child: AutoSizeText(
-                                  value['lac'],
-                                  maxLines: 2,
-                                  style: TextStyle(
-                                    color: Theme.of(context).hintColor,
-                                    // fontSize: 14,
+                                Container(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.70,
+                                  child: AutoSizeText(
+                                    value['lac'],
+                                    maxLines: 2,
+                                    style: TextStyle(
+                                      color: Theme.of(context).hintColor,
+                                      // fontSize: 14,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
-                          )
-                        : Container(
-                            width: MediaQuery.of(context).size.width * 0.70,
-                            child: AutoSizeText(
-                              value['name'],
-                              maxLines: 1,
-                              style: TextStyle(
-                                color: Theme.of(context).textSelectionColor,
-                                fontSize: 20,
+                              ],
+                            )
+                          : Container(
+                              width: MediaQuery.of(context).size.width * 0.70,
+                              child: AutoSizeText(
+                                value['name'],
+                                maxLines: 1,
+                                style: TextStyle(
+                                  color: Theme.of(context).textSelectionColor,
+                                  fontSize: 20,
+                                ),
                               ),
                             ),
-                          ),
-                  ),
-                ],
-              ),
-            );
-          }).toList(),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ).toList(),
           onChanged: (value) {
             if (value['name'] != 'Dodaj Papugę') {
               Navigator.push(
