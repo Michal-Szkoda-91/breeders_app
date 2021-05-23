@@ -85,19 +85,19 @@ class _IncubationInformationScreenState
                   title: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      AutoSizeText(
                         raceList[index],
                         style: TextStyle(
-                          fontSize: 22,
+                          // fontSize: 22,
                           color: Theme.of(context).textSelectionColor,
                         ),
                       ),
                       Row(
                         children: [
-                          Text(
-                            "Oczekujących inkubacji",
+                          AutoSizeText(
+                            "Oczekujących inkubacji:",
                             style: TextStyle(
-                                fontSize: 18,
+                                fontSize: 12,
                                 color: Theme.of(context).hintColor),
                           ),
                           Spacer(),

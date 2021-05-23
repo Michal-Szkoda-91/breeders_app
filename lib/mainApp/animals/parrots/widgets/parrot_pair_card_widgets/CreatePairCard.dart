@@ -47,12 +47,12 @@ class CreatePairCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CreateInfoRow(
-                  title: "Data utworzenia pary: ",
+                  title: "Data utworzenia: ",
                   content: pairList[index].pairingData,
                 ),
                 const SizedBox(height: 3),
                 CreateInfoRow(
-                  title: "Kolor Pary: ",
+                  title: "Kolor:",
                   content: pairList[index].pairColor,
                 ),
                 const SizedBox(height: 3),
@@ -86,6 +86,7 @@ class CreatePairCard extends StatelessWidget {
                         pairList[index].showEggsDate,
                         race,
                         pairList[index].id,
+                        false,
                       )
                     : Center(),
                 Divider(

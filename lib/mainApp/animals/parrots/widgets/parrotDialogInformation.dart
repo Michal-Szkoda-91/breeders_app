@@ -66,7 +66,9 @@ class _ParrotDialogInformationState extends State<ParrotDialogInformation> {
       children: [
         AutoSizeText(
           title,
-          style: TextStyle(color: Theme.of(context).hintColor),
+          style: TextStyle(
+            color: Theme.of(context).hintColor,
+          ),
         ),
         SizedBox(
           height: 10,
@@ -75,7 +77,6 @@ class _ParrotDialogInformationState extends State<ParrotDialogInformation> {
           contet,
           style: TextStyle(
             color: Theme.of(context).textSelectionColor,
-            fontSize: 16,
           ),
         ),
         Divider(
