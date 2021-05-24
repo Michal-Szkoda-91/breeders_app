@@ -71,12 +71,10 @@ class _ActionButtonState extends State<ActionButton> {
                     padding: const EdgeInsets.only(top: 35),
                     child: AutoSizeText(
                       widget.name,
-                      maxLines: 2,
                       style: TextStyle(
                         color: _isClicked
                             ? Theme.of(context).primaryColor
                             : Theme.of(context).textSelectionColor,
-                        fontSize: _isClicked ? 16 : 14,
                       ),
                       textAlign: TextAlign.center,
                     ),

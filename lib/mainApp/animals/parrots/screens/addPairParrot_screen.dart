@@ -642,57 +642,62 @@ class _AddPairScreenState extends State<AddPairScreen> {
               style: TextStyle(
                 color: Theme.of(context).textSelectionColor,
               ),
+              textAlign: TextAlign.center,
             ),
             actions: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  FlatButton(
+              Container(
+                height: 80,
+                width: MediaQuery.of(context).size.width * 0.70,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    FlatButton(
+                        child: AutoSizeText(
+                          "Kontynuuj",
+                          maxLines: 1,
+                          style: TextStyle(
+                            color: Theme.of(context).textSelectionColor,
+                          ),
+                        ),
+                        onPressed: () async {
+                          Navigator.of(context).pop();
+                          setState(() {
+                            _isLoading = true;
+                          });
+                          await sendPicture(context).then((_) {
+                            _createPair(context);
+                          }).catchError((error) {
+                            _globalMethods.showMaterialDialog(context,
+                                "Nie udało się wczytać zdjęcia, Spróbuj ponownie póżniej");
+                          });
+                        }),
+                    FlatButton(
                       child: AutoSizeText(
-                        "Kontynuuj",
-                        maxLines: 1,
+                        "Uzupełnij \nzdjęcie",
+                        maxLines: 2,
                         style: TextStyle(
                           color: Theme.of(context).textSelectionColor,
                         ),
+                        textAlign: TextAlign.center,
                       ),
-                      onPressed: () async {
+                      onPressed: () {
+                        FocusScope.of(context).requestFocus(new FocusNode());
                         Navigator.of(context).pop();
-                        setState(() {
-                          _isLoading = true;
+                        _rrectController
+                            .animateTo(
+                          0.0,
+                          curve: Curves.easeOut,
+                          duration: const Duration(
+                            milliseconds: 400,
+                          ),
+                        )
+                            .then((_) {
+                          _blinkingCamera();
                         });
-                        await sendPicture(context).then((_) {
-                          _createPair(context);
-                        }).catchError((error) {
-                          _globalMethods.showMaterialDialog(context,
-                              "Nie udało się wczytać zdjęcia, Spróbuj ponownie póżniej");
-                        });
-                      }),
-                  FlatButton(
-                    child: AutoSizeText(
-                      "Uzupełnij \nzdjęcie",
-                      maxLines: 2,
-                      style: TextStyle(
-                        color: Theme.of(context).textSelectionColor,
-                      ),
-                      textAlign: TextAlign.center,
+                      },
                     ),
-                    onPressed: () {
-                      FocusScope.of(context).requestFocus(new FocusNode());
-                      Navigator.of(context).pop();
-                      _rrectController
-                          .animateTo(
-                        0.0,
-                        curve: Curves.easeOut,
-                        duration: const Duration(
-                          milliseconds: 400,
-                        ),
-                      )
-                          .then((_) {
-                        _blinkingCamera();
-                      });
-                    },
-                  ),
-                ],
+                  ],
+                ),
               ),
             ],
           ),

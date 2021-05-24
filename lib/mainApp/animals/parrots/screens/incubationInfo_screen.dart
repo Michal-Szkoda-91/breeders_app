@@ -92,20 +92,25 @@ class _IncubationInformationScreenState
                         ),
                       ),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          AutoSizeText(
-                            "Oczekujących inkubacji:",
-                            style: TextStyle(
-                              color: Theme.of(context).hintColor,
+                          Expanded(
+                            child: Container(
+                              child: AutoSizeText(
+                                "Oczekujących inkubacji:",
+                                maxLines: 2,
+                                style: TextStyle(
+                                  color: Theme.of(context).hintColor,
+                                ),
+                              ),
                             ),
                           ),
-                          Spacer(),
                           Container(
                             width: 33,
                             height: 33,
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
-                              color: Theme.of(context).primaryColor,
+                              color: Theme.of(context).backgroundColor,
                               border: Border.all(
                                 color: Theme.of(context).textSelectionColor,
                               ),
@@ -120,7 +125,7 @@ class _IncubationInformationScreenState
                               ).toString(),
                               style: TextStyle(
                                 color: Theme.of(context).textSelectionColor,
-                                fontSize: 18,
+                                fontSize: 16,
                               ),
                             ),
                           )

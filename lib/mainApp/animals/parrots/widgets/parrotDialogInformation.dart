@@ -40,30 +40,36 @@ class _ParrotDialogInformationState extends State<ParrotDialogInformation> {
             );
           default:
             _createParrot(snapshot);
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                InfoParrowRow(
-                  title: "Kolor:",
-                  content: _createdParrot.color,
+            return Container(
+              height: MediaQuery.of(context).size.height * 0.75,
+              width: MediaQuery.of(context).size.width * 0.75,
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    InfoParrowRow(
+                      title: "Kolor:",
+                      content: _createdParrot.color,
+                    ),
+                    InfoParrowRow(
+                      title: "Rozsczepienie:",
+                      content: _createdParrot.fission,
+                    ),
+                    InfoParrowRow(
+                      title: "Nr klatki:",
+                      content: _createdParrot.cageNumber,
+                    ),
+                    InfoParrowRow(
+                      title: "Notatki:",
+                      content: _createdParrot.notes,
+                    ),
+                    InfoParrowRow(
+                      title: "Nr partnera:",
+                      content: _createdParrot.pairRingNumber,
+                    ),
+                  ],
                 ),
-                InfoParrowRow(
-                  title: "Rozsczepienie:",
-                  content: _createdParrot.fission,
-                ),
-                InfoParrowRow(
-                  title: "Nr klatki:",
-                  content: _createdParrot.cageNumber,
-                ),
-                InfoParrowRow(
-                  title: "Notatki:",
-                  content: _createdParrot.notes,
-                ),
-                InfoParrowRow(
-                  title: "Nr partnera:",
-                  content: _createdParrot.pairRingNumber,
-                ),
-              ],
+              ),
             );
         }
       },

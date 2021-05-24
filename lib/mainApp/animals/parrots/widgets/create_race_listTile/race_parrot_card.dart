@@ -24,7 +24,6 @@ class RaceParrotCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var deviceWidth = MediaQuery.of(context).size.width;
     return Stack(
       children: [
         Card(
@@ -52,7 +51,6 @@ class RaceParrotCard extends StatelessWidget {
                           maxLines: 1,
                           style: TextStyle(
                             color: Theme.of(context).textSelectionColor,
-                            fontSize: 20,
                           ),
                         ),
                         const SizedBox(height: 10.0),
