@@ -56,20 +56,29 @@ class _IncubationInformationState extends State<IncubationInformation> {
                         ),
                         textAlign: TextAlign.center,
                       )
-                    : GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).pop();
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => IncubationInformationScreen(
-                                pairList: _pairList,
-                              ),
+                    : Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: Material(
+                          borderRadius: BorderRadius.circular(14),
+                          color: Colors.black45,
+                          child: InkWell(
+                            splashColor: Theme.of(context).primaryColor,
+                            onTap: () {
+                              Navigator.of(context).pop();
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      IncubationInformationScreen(
+                                    pairList: _pairList,
+                                  ),
+                                ),
+                              );
+                            },
+                            child: IncubationCountsContainer(
+                              incubationTimes: _incubationTimes,
                             ),
-                          );
-                        },
-                        child: IncubationCountsContainer(
-                          incubationTimes: _incubationTimes,
+                          ),
                         ),
                       );
         }

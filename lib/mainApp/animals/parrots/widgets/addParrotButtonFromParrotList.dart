@@ -24,55 +24,56 @@ class _AddParrotFromInsideParrotListState
     raceMap = _parrotsRace.parrotsRaceList
         .firstWhere((element) => element["name"] == widget.race);
 
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => AddParrotScreen(
-              parrotMap: raceMap,
-              parrot: null,
-            ),
-          ),
-        );
-      },
-      child: Container(
-        height: 60,
-        width: MediaQuery.of(context).size.width * 0.72,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(
-            const Radius.circular(8),
-          ),
-          color: Theme.of(context).backgroundColor,
-        ),
-        child: new Row(
-          children: [
-            const SizedBox(width: 10),
-            CircleAvatar(
-              radius: 30,
-              backgroundColor: Theme.of(context).primaryColor,
-              child: CircleAvatar(
-                radius: 26,
-                backgroundImage: AssetImage(raceMap["url"]),
+    return Material(
+      borderRadius: BorderRadius.all(
+        const Radius.circular(8),
+      ),
+      color: Theme.of(context).backgroundColor,
+      child: InkWell(
+        splashColor: Theme.of(context).primaryColor,
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AddParrotScreen(
+                parrotMap: raceMap,
+                parrot: null,
               ),
             ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: AutoSizeText(
-                "Dodaj Papugę",
-                maxLines: 1,
-                style: TextStyle(
-                  color: Theme.of(context).textSelectionColor,
+          );
+        },
+        child: Container(
+          height: 60,
+          width: MediaQuery.of(context).size.width * 0.72,
+          child: new Row(
+            children: [
+              const SizedBox(width: 10),
+              CircleAvatar(
+                radius: 30,
+                backgroundColor: Theme.of(context).primaryColor,
+                child: CircleAvatar(
+                  radius: 26,
+                  backgroundImage: AssetImage(raceMap["url"]),
                 ),
               ),
-            ),
-            Icon(
-              Icons.add,
-              color: Theme.of(context).textSelectionColor,
-              size: 30,
-            ),
-            const SizedBox(width: 10),
-          ],
+              const SizedBox(width: 10),
+              Expanded(
+                child: AutoSizeText(
+                  "Dodaj Papugę",
+                  maxLines: 1,
+                  style: TextStyle(
+                    color: Theme.of(context).textSelectionColor,
+                  ),
+                ),
+              ),
+              Icon(
+                Icons.add,
+                color: Theme.of(context).textSelectionColor,
+                size: 30,
+              ),
+              const SizedBox(width: 10),
+            ],
+          ),
         ),
       ),
     );

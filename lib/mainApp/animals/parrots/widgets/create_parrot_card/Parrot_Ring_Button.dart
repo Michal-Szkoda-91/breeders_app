@@ -18,8 +18,9 @@ class ParrotRingButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(2.0),
+    return Material(
+      color: Colors.black54,
+      borderRadius: BorderRadius.circular(8.0),
       child: InkWell(
         splashColor: Theme.of(context).primaryColor,
         borderRadius: BorderRadius.circular(8),
@@ -61,10 +62,6 @@ class ParrotRingButton extends StatelessWidget {
           );
         },
         child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8.0),
-            color: Colors.black45,
-          ),
           padding: const EdgeInsets.all(10),
           child: AutoSizeText(
             title,

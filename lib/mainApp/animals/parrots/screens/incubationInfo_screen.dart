@@ -31,6 +31,8 @@ class _IncubationInformationScreenState
         raceList.add(pair.race);
       }
     });
+
+    raceList.sort((a, b) => a.compareTo(b));
   }
 
   int _cauntPair(List<ParrotPairing> pairList, String race) {

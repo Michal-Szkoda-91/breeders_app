@@ -2,7 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 
-class TableTitleRow extends StatelessWidget {
+class TableTitleRow extends StatefulWidget {
   const TableTitleRow({
     Key key,
     @required this.context,
@@ -19,13 +19,32 @@ class TableTitleRow extends StatelessWidget {
   final Function sorting;
 
   @override
+  _TableTitleRowState createState() => _TableTitleRowState();
+}
+
+class _TableTitleRowState extends State<TableTitleRow> {
+  bool _isClicked = false;
+
+  void _animation() {
+    setState(() {
+      _isClicked = !_isClicked;
+    });
+    Future.delayed(const Duration(milliseconds: 50)).then((_) {
+      setState(() {
+        _isClicked = !_isClicked;
+      });
+      if (widget.sortedIndex != 0) widget.sorting(widget.sortedIndex);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Material(
       child: InkWell(
         splashColor: Colors.red,
         radius: 22,
         onTap: () {
-          if (sortedIndex != 0) sorting(sortedIndex);
+          _animation();
         },
         child: Container(
           decoration: BoxDecoration(
@@ -35,24 +54,28 @@ class TableTitleRow extends StatelessWidget {
               bottom: const BorderSide(color: Colors.black, width: 2.0),
             ),
           ),
-          width: width,
+          width: widget.width,
           height: 40,
           alignment: Alignment.center,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               AutoSizeText(
-                title,
+                widget.title,
                 maxLines: 1,
                 style: TextStyle(
-                  color: Theme.of(context).textSelectionColor,
+                  color: _isClicked
+                      ? Theme.of(context).primaryColor
+                      : Theme.of(context).textSelectionColor,
                   fontSize: MediaQuery.of(context).size.width > 350 ? 14 : 12,
                 ),
               ),
-              sortedIndex != 0
+              widget.sortedIndex != 0
                   ? Icon(
                       MaterialCommunityIcons.arrow_down_drop_circle_outline,
-                      color: Theme.of(context).textSelectionColor,
+                      color: _isClicked
+                          ? Theme.of(context).primaryColor
+                          : Theme.of(context).textSelectionColor,
                       size: 25,
                     )
                   : Container(

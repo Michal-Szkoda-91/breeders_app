@@ -12,49 +12,45 @@ class IncubationCountsContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15),
-      child: Container(
-        padding: const EdgeInsets.all(7),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(14),
-          color: Colors.black45,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Expanded(
-              child: AutoSizeText(
-                "Aktywnych inkubacji:",
-                maxLines: 1,
-                style: TextStyle(
-                  color: Theme.of(context).textSelectionColor,
-                ),
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(14),
+      ),
+      padding: const EdgeInsets.all(7),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Expanded(
+            child: AutoSizeText(
+              "Aktywnych inkubacji:",
+              maxLines: 1,
+              style: TextStyle(
+                color: Theme.of(context).textSelectionColor,
               ),
             ),
-            Container(
-              width: 33,
-              height: 33,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor,
-                border: Border.all(
-                  color: Theme.of(context).textSelectionColor,
-                ),
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(18),
-                ),
+          ),
+          Container(
+            width: 33,
+            height: 33,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: Theme.of(context).primaryColor,
+              border: Border.all(
+                color: Theme.of(context).textSelectionColor,
               ),
-              child: Text(
-                _incubationTimes.toString(),
-                style: TextStyle(
-                  color: Theme.of(context).textSelectionColor,
-                  fontSize: 20,
-                ),
+              borderRadius: const BorderRadius.all(
+                Radius.circular(18),
               ),
             ),
-          ],
-        ),
+            child: Text(
+              _incubationTimes.toString(),
+              style: TextStyle(
+                color: Theme.of(context).textSelectionColor,
+                fontSize: 20,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
