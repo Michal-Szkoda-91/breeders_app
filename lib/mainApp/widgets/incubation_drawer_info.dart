@@ -65,6 +65,8 @@ class _IncubationInformationState extends State<IncubationInformation> {
                             splashColor: Theme.of(context).primaryColor,
                             onTap: () {
                               Navigator.of(context).pop();
+                              _pairList
+                                  .sort((a, b) => a.race.compareTo(b.race));
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(

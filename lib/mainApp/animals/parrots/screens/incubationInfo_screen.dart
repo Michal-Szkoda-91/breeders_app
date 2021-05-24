@@ -32,7 +32,7 @@ class _IncubationInformationScreenState
       }
     });
 
-    raceList.sort((a, b) => a.compareTo(b));
+    
   }
 
   int _cauntPair(List<ParrotPairing> pairList, String race) {
@@ -59,9 +59,7 @@ class _IncubationInformationScreenState
   @override
   Widget build(BuildContext context) {
     _createRaceList();
-    raceList.forEach((el) {
-      print(el);
-    });
+
     return Scaffold(
       endDrawer: CustomDrawer(auth: _auth),
       endDrawerEnableOpenDragGesture: false,
