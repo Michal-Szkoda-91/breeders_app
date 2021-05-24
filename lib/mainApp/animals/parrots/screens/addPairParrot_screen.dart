@@ -49,7 +49,6 @@ class _AddPairScreenState extends State<AddPairScreen> {
   Parrot _maleParrotChoosen;
   String _pairColor = "";
   String _pictureUrl = "brak";
-  ParrotPairing _pair;
   String _pairTime =
       DateFormat("yyyy-MM-dd", 'pl_PL').format(DateTime.now()).toString();
   bool _isLoading = false;

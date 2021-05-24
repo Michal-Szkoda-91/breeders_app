@@ -24,6 +24,10 @@ class IncubationList extends StatelessWidget {
           child: Column(
             children: [
               const SizedBox(height: 5),
+              Divider(
+                color: Theme.of(context).textSelectionColor,
+                thickness: 2,
+              ),
               parrotList[index].picUrl == "brak"
                   ? PairCircleAvatar(
                       picUrl: parrotList[index].picUrl,
@@ -61,9 +65,6 @@ class IncubationList extends StatelessWidget {
                       race: parrotList[index].race,
                       title: "Samiec(1,0):",
                       content: parrotList[index].maleRingNumber,
-                    ),
-                    Divider(
-                      color: Theme.of(context).textSelectionColor,
                     ),
                   ],
                 ),

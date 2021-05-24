@@ -63,7 +63,6 @@ class _AddParrotFromInsideParrotListState
                 maxLines: 1,
                 style: TextStyle(
                   color: Theme.of(context).textSelectionColor,
-                  // fontSize: MediaQuery.of(context).size.width > 350 ? 18 : 14,
                 ),
               ),
             ),
