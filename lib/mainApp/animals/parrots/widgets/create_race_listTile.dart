@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:breeders_app/mainApp/animals/parrots/screens/pairList_screen.dart';
+import 'package:breeders_app/mainApp/animals/parrots/widgets/create_race_listTile/deleteButton.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:draggable_scrollbar_sliver/draggable_scrollbar_sliver.dart';
 import 'package:flutter/painting.dart';
@@ -11,6 +12,8 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import '../../../../models/global_methods.dart';
 import '../../parrots/screens/parrotsList.dart';
 import '../models/parrot_model.dart';
+import 'create_race_listTile/action_button.dart';
+import 'create_race_listTile/race_parrot_card.dart';
 
 class CreateParrotRaceListTile extends StatefulWidget {
   const CreateParrotRaceListTile({
@@ -112,8 +115,14 @@ class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: createCard(
-                    context, index, widget.activeRaceList[index], parrotCount),
+                child: RaceParrotCard(
+                  index: index,
+                  raceName: widget.activeRaceList[index],
+                  parrotCount: parrotCount,
+                  activeRace: widget.activeRaceList[index],
+                  navToBreed: _navigateToParrotsList,
+                  navToPair: _navigateToPairingList,
+                ),
               ),
             ),
             _globalMethods.arrowConteiner,
@@ -121,23 +130,13 @@ class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
         ),
       ),
       secondaryActions: <Widget>[
-        GestureDetector(
-          onTap: () {
-            _globalMethods.showDeletingDialog(
-              context,
-              widget.activeRaceList[index],
-              "Czy chcesz usunąć wszystkie papugi z hodowli? Usunięte zostaną również pary wraz z danymi o inkubacji i potomstwu.\n\nOPERACJI NIE MOŻNA PÓZNIEJ COFNĄĆ!!!",
-              _deleteRace,
-              null,
-            );
-          },
-          child: _globalMethods.createActionItem(
-            context,
-            Colors.red,
-            MaterialCommunityIcons.delete,
-            "Usuń hodowlę",
-            26,
-          ),
+        Deletebutton(
+          function: _deleteRace,
+          title: widget.activeRaceList[index],
+          color: Colors.red,
+          icon: MaterialCommunityIcons.delete,
+          name: "Usuń hodowlę",
+          padding: 25.0,
         ),
       ],
     );
@@ -163,140 +162,6 @@ class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
           parrotList: parrotList,
         ),
       ),
-    );
-  }
-
-  Widget createCard(
-      BuildContext context, int index, String raceName, int parrotCount) {
-    var deviceWidth = MediaQuery.of(context).size.width;
-    return Stack(
-      children: [
-        Card(
-          margin: const EdgeInsets.only(
-            left: 15,
-            top: 15,
-            bottom: 15,
-          ),
-          color: Colors.transparent,
-          shadowColor: Theme.of(context).cardColor,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const CircleAvatar(
-                      radius: 40,
-                      backgroundColor: Colors.transparent,
-                      child: const Center(),
-                    ),
-                    const SizedBox(width: 7),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          width: deviceWidth * 0.47,
-                          child: AutoSizeText(
-                            widget.activeRaceList[index],
-                            maxLines: 1,
-                            style: TextStyle(
-                              color: Theme.of(context).textSelectionColor,
-                              fontSize: 20,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Container(
-                              width: deviceWidth * 0.35,
-                              child: AutoSizeText(
-                                "Ilość ptaków: ",
-                                maxLines: 1,
-                                style: TextStyle(
-                                  color: Theme.of(context).textSelectionColor,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 6),
-                            Container(
-                              width: 33,
-                              height: 33,
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                color: Theme.of(context).primaryColor,
-                                border: Border.all(
-                                  color: Theme.of(context).textSelectionColor,
-                                ),
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(18),
-                                ),
-                              ),
-                              child: Text(
-                                parrotCount.toString(),
-                                style: TextStyle(
-                                  color: Theme.of(context).textSelectionColor,
-                                  fontSize: 20,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    const Spacer(),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        _navigateToPairingList(raceName);
-                      },
-                      child: _globalMethods.createActionItem(
-                        context,
-                        Colors.pink[300],
-                        MaterialCommunityIcons.heart_multiple,
-                        "Parowanie",
-                        5,
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        _navigateToParrotsList(raceName);
-                      },
-                      child: _globalMethods.createActionItem(
-                        context,
-                        Colors.blueAccent,
-                        MaterialCommunityIcons.home_group,
-                        "Hodowla",
-                        5,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
-        Positioned(
-          left: 0,
-          top: 0,
-          child: CircleAvatar(
-            radius: 44,
-            backgroundColor: Theme.of(context).primaryColor,
-            child: CircleAvatar(
-              radius: 42,
-              backgroundImage: AssetImage(
-                "assets/image/parrotsRace/${widget.activeRaceList[index]}.jpg",
-              ),
-            ),
-          ),
-        ),
-      ],
     );
   }
 
