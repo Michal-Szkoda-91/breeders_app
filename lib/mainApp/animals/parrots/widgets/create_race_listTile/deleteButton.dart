@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:breeders_app/models/global_methods.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class Deletebutton extends StatelessWidget {
   final String title;
   final Function function;

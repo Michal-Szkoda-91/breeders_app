@@ -71,6 +71,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           //******************************************************* */
                           //Email Form
                           TextFormField(
+                            maxLength: 20,
                             style: customTextStyle(context),
                             cursorColor: Theme.of(context).textSelectionColor,
                             decoration: _createInputDecoration(
@@ -100,6 +101,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           //******************************************************* */
                           //Password Form
                           TextFormField(
+                            maxLength: 20,
                             style: customTextStyle(context),
                             cursorColor: Theme.of(context).textSelectionColor,
                             decoration: _createInputDecoration(

@@ -1,4 +1,3 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:breeders_app/mainApp/animals/parrots/screens/pairList_screen.dart';
 import 'package:breeders_app/mainApp/animals/parrots/widgets/create_race_listTile/deleteButton.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -12,7 +11,6 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import '../../../../models/global_methods.dart';
 import '../../parrots/screens/parrotsList.dart';
 import '../models/parrot_model.dart';
-import 'create_race_listTile/action_button.dart';
 import 'create_race_listTile/race_parrot_card.dart';
 
 class CreateParrotRaceListTile extends StatefulWidget {

@@ -12,6 +12,10 @@
         android:name="io.flutter.app.FlutterApplication"
         android:label="Hodowla Papug"
         android:icon="@mipmap/ic_launcher">
+
+            <meta-data
+                android:name="com.google.android.gms.ads.APPLICATION_ID"
+                android:value="ca-app-pub-6198840177908447~7033636778"/>
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
