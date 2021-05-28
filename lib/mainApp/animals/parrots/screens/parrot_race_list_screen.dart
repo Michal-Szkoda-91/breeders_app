@@ -1,3 +1,4 @@
+import 'package:breeders_app/advertisement_banner/banner_page.dart';
 import 'package:breeders_app/mainApp/animals/parrots/widgets/notConnected_information.dart';
 import 'package:breeders_app/mainApp/animals/parrots/widgets/parrots_race_AddDropdownButton.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -54,6 +55,7 @@ class _ParrotsRaceListScreenState extends State<ParrotsRaceListScreen> {
                     Expanded(
                       child: Column(
                         children: [
+                          BannerPage(),
                           const SizedBox(height: 8),
                           const CreateParrotsDropdownButton(),
                           CreateParrotRaceListTile(
