@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:breeders_app/advertisement_banner/banner_page.dart';
 import 'package:breeders_app/globalWidgets/mainBackground.dart';
 import 'package:breeders_app/mainApp/animals/parrots/models/pairing_model.dart';
 import 'package:breeders_app/mainApp/animals/parrots/models/parrot_model.dart';
@@ -74,6 +75,7 @@ class _PairListScreenState extends State<PairListScreen> {
                 _createPairList(snapshot);
                 return Column(
                   children: [
+                    BannerPage(),
                     const SizedBox(height: 8),
                     !_showArchive
                         ? CreatePairingParrotDropdownButton(

@@ -50,20 +50,16 @@ class _ParrotsRaceListScreenState extends State<ParrotsRaceListScreen> {
                 );
               default:
                 createListRace(snapshot);
-                return Column(
-                  children: [
-                    Expanded(
-                      child: Column(
-                        children: [
-                          BannerPage(),
-                          const SizedBox(height: 8),
-                          const CreateParrotsDropdownButton(),
-                          CreateParrotRaceListTile(
-                              activeRaceList: _activeRaceList),
-                        ],
-                      ),
-                    ),
-                  ],
+
+                return Expanded(
+                  child: Column(
+                    children: [
+                      BannerPage(),
+                      const SizedBox(height: 8),
+                      const CreateParrotsDropdownButton(),
+                      CreateParrotRaceListTile(activeRaceList: _activeRaceList),
+                    ],
+                  ),
                 );
             }
           },
