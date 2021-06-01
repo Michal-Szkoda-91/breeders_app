@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:breeders_app/advertisement_banner/banner_page.dart';
 import 'package:breeders_app/globalWidgets/mainBackground.dart';
 import 'package:breeders_app/mainApp/animals/parrots/models/pairing_model.dart';
 import 'package:breeders_app/mainApp/widgets/custom_drawer.dart';
@@ -31,8 +32,6 @@ class _IncubationInformationScreenState
         raceList.add(pair.race);
       }
     });
-
-    
   }
 
   int _cauntPair(List<ParrotPairing> pairList, String race) {
@@ -74,78 +73,92 @@ class _IncubationInformationScreenState
         ),
       ),
       body: MainBackground(
-        child: ListView.builder(
-          itemCount: raceList.length,
-          itemBuilder: (BuildContext context, int index) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              child: Card(
-                color: Colors.black12,
-                child: ExpansionTile(
-                  title: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      AutoSizeText(
-                        raceList[index],
-                        style: TextStyle(
-                          color: Theme.of(context).textSelectionColor,
-                        ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            child: Container(
-                              child: AutoSizeText(
-                                "Oczekujących inkubacji:",
-                                maxLines: 2,
+        child: Expanded(
+          child: Column(
+            children: [
+              BannerPage(),
+              const SizedBox(height: 8),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: raceList.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 10),
+                      child: Card(
+                        color: Colors.black12,
+                        child: ExpansionTile(
+                          title: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              AutoSizeText(
+                                raceList[index],
                                 style: TextStyle(
-                                  color: Theme.of(context).hintColor,
+                                  color: Theme.of(context).textSelectionColor,
                                 ),
                               ),
-                            ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    child: Container(
+                                      child: AutoSizeText(
+                                        "Oczekujących inkubacji:",
+                                        maxLines: 2,
+                                        style: TextStyle(
+                                          color: Theme.of(context).hintColor,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    width: 33,
+                                    height: 33,
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      color: Theme.of(context).backgroundColor,
+                                      border: Border.all(
+                                        color: Theme.of(context)
+                                            .textSelectionColor,
+                                      ),
+                                      borderRadius: BorderRadius.all(
+                                        const Radius.circular(18),
+                                      ),
+                                    ),
+                                    child: Text(
+                                      _cauntPair(
+                                        widget.pairList,
+                                        raceList[index],
+                                      ).toString(),
+                                      style: TextStyle(
+                                        color: Theme.of(context)
+                                            .textSelectionColor,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              const SizedBox(height: 8),
+                            ],
                           ),
-                          Container(
-                            width: 33,
-                            height: 33,
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).backgroundColor,
-                              border: Border.all(
-                                color: Theme.of(context).textSelectionColor,
-                              ),
-                              borderRadius: BorderRadius.all(
-                                const Radius.circular(18),
-                              ),
-                            ),
-                            child: Text(
-                              _cauntPair(
+                          children: [
+                            IncubationList(
+                              parrotList: _createRacePairList(
                                 widget.pairList,
-                                raceList[index],
-                              ).toString(),
-                              style: TextStyle(
-                                color: Theme.of(context).textSelectionColor,
-                                fontSize: 16,
+                                widget.pairList[index].race,
                               ),
                             ),
-                          )
-                        ],
+                          ],
+                        ),
                       ),
-                      const SizedBox(height: 8),
-                    ],
-                  ),
-                  children: [
-                    IncubationList(
-                      parrotList: _createRacePairList(
-                        widget.pairList,
-                        widget.pairList[index].race,
-                      ),
-                    ),
-                  ],
+                    );
+                  },
                 ),
               ),
-            );
-          },
+            ],
+          ),
         ),
       ),
     );

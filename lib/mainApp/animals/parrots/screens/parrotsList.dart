@@ -1,3 +1,4 @@
+import 'package:breeders_app/advertisement_banner/banner_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -54,7 +55,13 @@ class _ParrotsListScreenState extends State<ParrotsListScreen> {
                 );
               default:
                 _createParrotList(snapshot);
-                return ParrotCard(createdParrotList: _createdParrotList);
+                return Column(
+                  children: [
+                    BannerPage(),
+                    const SizedBox(height: 8),
+                    ParrotCard(createdParrotList: _createdParrotList),
+                  ],
+                );
             }
           },
         ),

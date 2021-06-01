@@ -50,8 +50,8 @@ class _BannerPageState extends State<BannerPage> {
             child: AdWidget(
               ad: _ad,
             ),
-            width: double.infinity,
-            height: 72,
+            width: _ad.size.width.toDouble(),
+            height: _ad.size.height.toDouble(),
             alignment: Alignment.center,
           )
         : Center();
