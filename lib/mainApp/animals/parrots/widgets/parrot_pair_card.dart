@@ -1,4 +1,3 @@
-import 'package:breeders_app/advertisement_banner/banner_page.dart';
 import 'package:draggable_scrollbar_sliver/draggable_scrollbar_sliver.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

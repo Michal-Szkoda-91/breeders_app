@@ -1,10 +1,10 @@
+import 'package:breeders_app/authentication/verification_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 
 import 'authentication/authenticate.dart';
 import 'models/user.dart';
-import 'package:breeders_app/mainApp/animals/parrots/screens/parrot_race_list_screen.dart';
 
 class Wrapper extends StatelessWidget {
   Future<InitializationStatus> _initGoogleMobileAds() {
@@ -33,7 +33,7 @@ class Wrapper extends StatelessWidget {
         },
       );
     } else {
-      return ParrotsRaceListScreen();
+      return VerificationEmailScreen();
     }
   }
 }

@@ -67,14 +67,7 @@ class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
                     _countParrot(snapshot);
                     return Padding(
                       padding: const EdgeInsets.only(right: 20),
-                      child: Column(
-                        children: [
-                          index == 0
-                              ? const CreateParrotsDropdownButton()
-                              : Center(),
-                          createSlidableCard(context, index, _parrotCount),
-                        ],
-                      ),
+                      child: createSlidableCard(context, index, _parrotCount),
                     );
                 }
               },

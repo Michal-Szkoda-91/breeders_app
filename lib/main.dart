@@ -1,3 +1,4 @@
+import 'package:breeders_app/authentication/verification_screen.dart';
 import 'package:breeders_app/mainApp/animals/parrots/screens/addPairParrot_screen.dart';
 import 'package:breeders_app/mainApp/animals/parrots/screens/incubationInfo_screen.dart';
 import 'package:breeders_app/mainApp/animals/parrots/screens/pairList_screen.dart';
@@ -56,6 +57,7 @@ class MyApp extends StatelessWidget {
         PairListScreen.routeName: (ctx) => PairListScreen(),
         IncubationInformationScreen.routeName: (ctx) =>
             IncubationInformationScreen(),
+        VerificationEmailScreen.routeName: (ctx) => VerificationEmailScreen(),
       },
     );
   }
