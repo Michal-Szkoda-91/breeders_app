@@ -1,6 +1,5 @@
 import 'package:breeders_app/advertisement_banner/banner_page.dart';
 import 'package:breeders_app/mainApp/animals/parrots/widgets/notConnected_information.dart';
-import 'package:breeders_app/mainApp/animals/parrots/widgets/parrots_race_AddDropdownButton.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -50,16 +49,19 @@ class _ParrotsRaceListScreenState extends State<ParrotsRaceListScreen> {
                 );
               default:
                 createListRace(snapshot);
-
-                return Expanded(
-                  child: Column(
-                    children: [
-                      BannerPage(),
-                      const SizedBox(height: 8),
-                      const CreateParrotsDropdownButton(),
-                      CreateParrotRaceListTile(activeRaceList: _activeRaceList),
-                    ],
-                  ),
+                return Column(
+                  children: [
+                    BannerPage(),
+                    const SizedBox(height: 8),
+                    Expanded(
+                      child: Column(
+                        children: [
+                          CreateParrotRaceListTile(
+                              activeRaceList: _activeRaceList),
+                        ],
+                      ),
+                    ),
+                  ],
                 );
             }
           },
