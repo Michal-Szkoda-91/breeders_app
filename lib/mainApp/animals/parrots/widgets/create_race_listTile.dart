@@ -1,5 +1,6 @@
 import 'package:breeders_app/mainApp/animals/parrots/screens/pairList_screen.dart';
 import 'package:breeders_app/mainApp/animals/parrots/widgets/create_race_listTile/deleteButton.dart';
+import 'package:breeders_app/mainApp/animals/parrots/widgets/parrots_race_AddDropdownButton.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:draggable_scrollbar_sliver/draggable_scrollbar_sliver.dart';
 import 'package:flutter/painting.dart';
@@ -66,11 +67,7 @@ class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
                     _countParrot(snapshot);
                     return Padding(
                       padding: const EdgeInsets.only(right: 20),
-                      child: Column(
-                        children: [
-                          createSlidableCard(context, index, _parrotCount),
-                        ],
-                      ),
+                      child: createSlidableCard(context, index, _parrotCount),
                     );
                 }
               },

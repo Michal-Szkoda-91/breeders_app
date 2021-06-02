@@ -33,7 +33,6 @@ class AuthService {
       final UserCredential authResult =
           await _auth.signInWithCredential(credential);
       final User user = authResult.user;
-
       return _userFromFirebaseUser(user);
     } catch (e) {
       print(e.toString());
@@ -43,16 +42,15 @@ class AuthService {
 
   //register user
   Future registerWithEmaAndPass(String email, String password) async {
-    try {
-      UserCredential result = await _auth.createUserWithEmailAndPassword(
-          email: email, password: password);
+    await _auth
+        .createUserWithEmailAndPassword(email: email, password: password)
+        .then((result) {
       User user = result.user;
-      //create firebase collection
-
+      user.sendEmailVerification();
       return _userFromFirebaseUser(user);
-    } catch (e) {
-      return e;
-    }
+    }).catchError((err) {
+      print(err);
+    });
   }
 
   //login user

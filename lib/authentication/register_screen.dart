@@ -35,7 +35,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
       'Email:\nPrawidłowy format to, np. janek_kowalski@gmail.com\n\nHasło:\nMusi składać się z conajmniej 8 znaków, a także zawierać małą i dużą literę, cyfrę oraz znak specjalny. Maksymalna długość to 20 znaków. Oba hasła muszą być identyczne.';
 
   @override
-  // ignore: must_call_super
   void dispose() {
     super.dispose();
   }
@@ -77,7 +76,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           //******************************************************* */
                           //Email Form
                           TextFormField(
-                            maxLength: 20,
+                            // maxLength: 20,
                             style: customTextStyle(context),
                             cursorColor: Theme.of(context).textSelectionColor,
                             decoration: _createInputDecoration(
@@ -213,20 +212,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
       setState(() {
         _isLoading = true;
       });
-      dynamic result = await _auth.registerWithEmaAndPass(email, password);
-      if (result.toString() ==
-          '[firebase_auth/email-already-in-use] The email address is already in use by another account.') {
-        setState(() {
-          _isLoading = false;
-          error = 'Email jest już używany. Wybierz inny.';
-        });
-      } else if (result.toString() ==
-          '[firebase_auth/unknown] com.google.firebase.FirebaseException: An internal error has occurred. [ Unable to resolve host "www.googleapis.com":No address associated with hostname ]') {
-        setState(() {
-          _isLoading = false;
-          error = 'Sprawdź połączenie z internetem';
-        });
-      }
+      await _auth
+          .registerWithEmaAndPass(email, password)
+          .then((userCredential) {
+        if (userCredential ==
+            '[firebase_auth/email-already-in-use] The email address is already in use by another account.') {
+          setState(() {
+            _isLoading = false;
+            error = 'Email jest już używany. Wybierz inny.';
+          });
+        } else if (userCredential ==
+            '[firebase_auth/unknown] com.google.firebase.FirebaseException: An internal error has occurred. [ Unable to resolve host "www.googleapis.com":No address associated with hostname ]') {
+          setState(() {
+            _isLoading = false;
+            error = 'Sprawdź połączenie z internetem';
+          });
+        }
+      });
     }
   }
 

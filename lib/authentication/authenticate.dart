@@ -131,9 +131,9 @@ class _AuthenticateState extends State<Authenticate> {
   }
 
 //Dialog wyswietlany przy zamykaniu aplikacji
-  _showDialog(BuildContext context) {
+  _showDialog(BuildContext dialogContext) {
     showDialog(
-      context: context,
+      context: dialogContext,
       builder: (_) => new AlertDialog(
         title: const Text("Czy na pewno chcesz zamknąć aplikacje?"),
         actions: <Widget>[
@@ -154,7 +154,7 @@ class _AuthenticateState extends State<Authenticate> {
               ),
             ),
             onPressed: () {
-              Navigator.of(context).pop();
+              Navigator.pop(dialogContext);
             },
           )
         ],

@@ -73,205 +73,210 @@ class _ParrotCardState extends State<ParrotCard> {
 
   @override
   Widget build(BuildContext context) {
-    return DraggableScrollbar.rrect(
-      controller: _rrectController,
-      heightScrollThumb: 100,
-      backgroundColor: Theme.of(context).accentColor,
-      child: SingleChildScrollView(
+    return Expanded(
+      child: DraggableScrollbar.rrect(
         controller: _rrectController,
+        heightScrollThumb: 100,
+        backgroundColor: Theme.of(context).accentColor,
         child: Padding(
           padding: const EdgeInsets.all(6.0),
-          child: Column(
-            children: [
-              AddParrotFromInsideParrotList(
-                  race: widget._createdParrotList[0].race),
-              const SizedBox(height: 10),
-              Stack(
-                children: [
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Container(
-                      width: 1030,
+          child: SingleChildScrollView(
+            controller: _rrectController,
+            child: Column(
+              children: [
+                AddParrotFromInsideParrotList(
+                    race: widget._createdParrotList[0].race),
+                const SizedBox(height: 10),
+                Stack(
+                  children: [
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Container(
+                        width: 1030,
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(left: 130),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  TableTitleRow(
+                                    context: context,
+                                    title: "",
+                                    width: 50.0,
+                                    sortedIndex: 6,
+                                    sorting: _sortingBy,
+                                  ),
+                                  TableTitleRow(
+                                    context: context,
+                                    title: "Para",
+                                    width: 100.0,
+                                    sortedIndex: 5,
+                                    sorting: _sortingBy,
+                                  ),
+                                  TableTitleRow(
+                                    context: context,
+                                    title: "Kolor",
+                                    width: 150.0,
+                                    sortedIndex: 2,
+                                    sorting: _sortingBy,
+                                  ),
+                                  TableTitleRow(
+                                    context: context,
+                                    title: "Rozszczepienie",
+                                    width: 200.0,
+                                    sortedIndex: 3,
+                                    sorting: _sortingBy,
+                                  ),
+                                  TableTitleRow(
+                                    context: context,
+                                    title: "Nr klatki",
+                                    width: 150.0,
+                                    sortedIndex: 4,
+                                    sorting: _sortingBy,
+                                  ),
+                                  TableTitleRow(
+                                    context: context,
+                                    title: "Notatki",
+                                    width: 150.0,
+                                    sortedIndex: 0,
+                                    sorting: _sortingBy,
+                                  ),
+                                  const SizedBox(width: 100),
+                                ],
+                              ),
+                            ),
+                            ListView.builder(
+                              physics: NeverScrollableScrollPhysics(),
+                              itemCount: widget._createdParrotList.length,
+                              shrinkWrap: true,
+                              itemBuilder: (context, index) {
+                                return Stack(
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.only(left: 130),
+                                      width: 1030,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        children: [
+                                          GenderIcon(
+                                            index: index,
+                                            createdParrotList:
+                                                widget._createdParrotList,
+                                          ),
+                                          TableContentRow(
+                                              createdParrotList:
+                                                  widget._createdParrotList,
+                                              title: widget
+                                                  ._createdParrotList[index]
+                                                  .pairRingNumber,
+                                              width: 100.0,
+                                              index: index,
+                                              isPair: true),
+                                          TableContentNormalRow(
+                                            title: widget
+                                                ._createdParrotList[index]
+                                                .color,
+                                            width: 150.0,
+                                          ),
+                                          TableContentNotesRow(
+                                            title: widget
+                                                ._createdParrotList[index]
+                                                .fission,
+                                            width: 200.0,
+                                          ),
+                                          TableContentNormalRow(
+                                            title: widget
+                                                ._createdParrotList[index]
+                                                .cageNumber,
+                                            width: 150.0,
+                                          ),
+                                          TableContentNotesRow(
+                                            title: widget
+                                                ._createdParrotList[index]
+                                                .notes,
+                                            width: 150.0,
+                                          ),
+                                          DeleteUpgradeButtons(
+                                            index: index,
+                                            createdParrotList:
+                                                widget._createdParrotList,
+                                            delete: _deleteParrot,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
+                            ),
+                            const SizedBox(height: 25),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Container(
+                      width: 130,
+                      color: Theme.of(context).backgroundColor,
                       child: Column(
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.only(left: 130),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                TableTitleRow(
-                                  context: context,
-                                  title: "",
-                                  width: 50.0,
-                                  sortedIndex: 6,
-                                  sorting: _sortingBy,
-                                ),
-                                TableTitleRow(
-                                  context: context,
-                                  title: "Para",
-                                  width: 100.0,
-                                  sortedIndex: 5,
-                                  sorting: _sortingBy,
-                                ),
-                                TableTitleRow(
-                                  context: context,
-                                  title: "Kolor",
-                                  width: 150.0,
-                                  sortedIndex: 2,
-                                  sorting: _sortingBy,
-                                ),
-                                TableTitleRow(
-                                  context: context,
-                                  title: "Rozszczepienie",
-                                  width: 200.0,
-                                  sortedIndex: 3,
-                                  sorting: _sortingBy,
-                                ),
-                                TableTitleRow(
-                                  context: context,
-                                  title: "Nr klatki",
-                                  width: 150.0,
-                                  sortedIndex: 4,
-                                  sorting: _sortingBy,
-                                ),
-                                TableTitleRow(
-                                  context: context,
-                                  title: "Notatki",
-                                  width: 150.0,
-                                  sortedIndex: 0,
-                                  sorting: _sortingBy,
-                                ),
-                                const SizedBox(width: 100),
-                              ],
-                            ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              TableTitleRow(
+                                context: context,
+                                title: "Nr",
+                                width: 30.0,
+                                sortedIndex: 0,
+                                sorting: _sortingBy,
+                              ),
+                              TableTitleRow(
+                                context: context,
+                                title: "Obrączka",
+                                width: 100.0,
+                                sortedIndex: 1,
+                                sorting: _sortingBy,
+                              ),
+                            ],
                           ),
                           ListView.builder(
                             physics: NeverScrollableScrollPhysics(),
                             itemCount: widget._createdParrotList.length,
                             shrinkWrap: true,
                             itemBuilder: (context, index) {
-                              return Stack(
-                                children: [
-                                  Container(
-                                    padding: const EdgeInsets.only(left: 130),
-                                    width: 1030,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceAround,
-                                      children: [
-                                        GenderIcon(
-                                          index: index,
-                                          createdParrotList:
-                                              widget._createdParrotList,
-                                        ),
-                                        TableContentRow(
-                                            createdParrotList:
-                                                widget._createdParrotList,
-                                            title: widget
-                                                ._createdParrotList[index]
-                                                .pairRingNumber,
-                                            width: 100.0,
-                                            index: index,
-                                            isPair: true),
-                                        TableContentNormalRow(
-                                          title: widget
-                                              ._createdParrotList[index].color,
-                                          width: 150.0,
-                                        ),
-                                        TableContentNotesRow(
-                                          title: widget
-                                              ._createdParrotList[index]
-                                              .fission,
-                                          width: 200.0,
-                                        ),
-                                        TableContentNormalRow(
-                                          title: widget
-                                              ._createdParrotList[index]
-                                              .cageNumber,
-                                          width: 150.0,
-                                        ),
-                                        TableContentNotesRow(
-                                          title: widget
-                                              ._createdParrotList[index].notes,
-                                          width: 150.0,
-                                        ),
-                                        DeleteUpgradeButtons(
-                                          index: index,
-                                          createdParrotList:
-                                              widget._createdParrotList,
-                                          delete: _deleteParrot,
-                                        ),
-                                      ],
+                              return Container(
+                                width: 260,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    TableContentNormalRow(
+                                      title: (index + 1).toString(),
+                                      width: 30.0,
                                     ),
-                                  ),
-                                ],
+                                    TableContentRow(
+                                      createdParrotList:
+                                          widget._createdParrotList,
+                                      title: widget
+                                          ._createdParrotList[index].ringNumber,
+                                      width: 100.0,
+                                      index: index,
+                                      isPair: false,
+                                    ),
+                                  ],
+                                ),
                               );
                             },
                           ),
-                          const SizedBox(height: 25),
                         ],
                       ),
                     ),
-                  ),
-                  Container(
-                    width: 130,
-                    color: Theme.of(context).backgroundColor,
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            TableTitleRow(
-                              context: context,
-                              title: "Nr",
-                              width: 30.0,
-                              sortedIndex: 0,
-                              sorting: _sortingBy,
-                            ),
-                            TableTitleRow(
-                              context: context,
-                              title: "Obrączka",
-                              width: 100.0,
-                              sortedIndex: 1,
-                              sorting: _sortingBy,
-                            ),
-                          ],
-                        ),
-                        ListView.builder(
-                          physics: NeverScrollableScrollPhysics(),
-                          itemCount: widget._createdParrotList.length,
-                          shrinkWrap: true,
-                          itemBuilder: (context, index) {
-                            return Container(
-                              width: 260,
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  TableContentNormalRow(
-                                    title: (index + 1).toString(),
-                                    width: 30.0,
-                                  ),
-                                  TableContentRow(
-                                    createdParrotList:
-                                        widget._createdParrotList,
-                                    title: widget
-                                        ._createdParrotList[index].ringNumber,
-                                    width: 100.0,
-                                    index: index,
-                                    isPair: false,
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
