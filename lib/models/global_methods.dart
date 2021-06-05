@@ -92,8 +92,8 @@ class GlobalMethods {
       showMaterialDialog(context, "Sprawdzanie połączenia z internetem...");
 
       final result = await InternetAddress.lookup('google.com');
-      Navigator.of(context).pop();
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        Navigator.of(context).pop();
         return true;
       }
     } on SocketException catch (e) {
