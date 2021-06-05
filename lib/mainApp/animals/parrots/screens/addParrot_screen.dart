@@ -704,20 +704,21 @@ class _RaceListScreenState extends State<AddParrotScreen> {
             context, "brak połączenia z internetem.");
         return;
       } else {
-        setState(() {
-          _isLoading = true;
+        setState(
+          () {
+            _isLoading = true;
 
-          _createdParrot = Parrot(
-              race: widget.parrot.race,
-              ringNumber: widget.parrot.ringNumber,
-              cageNumber: _cageNumber,
-              color: _parrotColor,
-              fission: _fission,
-              notes: _notes,
-              sex: _sexName,
-              pairRingNumber: widget.parrot.pairRingNumber);
-        });
-
+            _createdParrot = Parrot(
+                race: widget.parrot.race,
+                ringNumber: widget.parrot.ringNumber,
+                cageNumber: _cageNumber,
+                color: _parrotColor,
+                fission: _fission,
+                notes: _notes,
+                sex: _sexName,
+                pairRingNumber: widget.parrot.pairRingNumber);
+          },
+        );
         _parrotDataHelper
             .updateParrot(
           uid: _firebaseUser.uid,

@@ -59,7 +59,14 @@ class _ParrotsListScreenState extends State<ParrotsListScreen> {
                   children: [
                     BannerPage(),
                     const SizedBox(height: 8),
-                    ParrotCard(createdParrotList: _createdParrotList),
+                    _createdParrotList.length == 0
+                        ? Text(
+                            "Brak Papug",
+                            style: TextStyle(
+                              color: Theme.of(context).textSelectionColor,
+                            ),
+                          )
+                        : ParrotCard(createdParrotList: _createdParrotList),
                   ],
                 );
             }
