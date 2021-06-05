@@ -92,11 +92,11 @@ class _ParrotCardState extends State<ParrotCard> {
                     SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Container(
-                        width: 1030,
+                        width: 1040,
                         child: Column(
                           children: [
                             Padding(
-                              padding: const EdgeInsets.only(left: 130),
+                              padding: const EdgeInsets.only(left: 140),
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceAround,
@@ -155,8 +155,8 @@ class _ParrotCardState extends State<ParrotCard> {
                                 return Stack(
                                   children: [
                                     Container(
-                                      padding: const EdgeInsets.only(left: 130),
-                                      width: 1030,
+                                      padding: const EdgeInsets.only(left: 140),
+                                      width: 1040,
                                       child: Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceAround,
@@ -218,7 +218,7 @@ class _ParrotCardState extends State<ParrotCard> {
                       ),
                     ),
                     Container(
-                      width: 130,
+                      width: 140,
                       color: Theme.of(context).backgroundColor,
                       child: Column(
                         children: [
@@ -235,7 +235,7 @@ class _ParrotCardState extends State<ParrotCard> {
                               TableTitleRow(
                                 context: context,
                                 title: "Obrączka",
-                                width: 100.0,
+                                width: 110.0,
                                 sortedIndex: 1,
                                 sorting: _sortingBy,
                               ),
@@ -247,7 +247,7 @@ class _ParrotCardState extends State<ParrotCard> {
                             shrinkWrap: true,
                             itemBuilder: (context, index) {
                               return Container(
-                                width: 260,
+                                width: 270,
                                 child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceAround,
@@ -261,7 +261,7 @@ class _ParrotCardState extends State<ParrotCard> {
                                           widget._createdParrotList,
                                       title: widget
                                           ._createdParrotList[index].ringNumber,
-                                      width: 100.0,
+                                      width: 110.0,
                                       index: index,
                                       isPair: false,
                                     ),
@@ -285,28 +285,43 @@ class _ParrotCardState extends State<ParrotCard> {
 
   Future<void> _deleteParrot(String ring, Parrot parrot) async {
     final _firebaseUser = FirebaseAuth.instance.currentUser;
-    bool result = await _globalMethods.checkInternetConnection(context);
-
-    if (!result) {
-      Navigator.of(context).pop();
-      _globalMethods.showMaterialDialog(
-          context, "brak połączenia z internetem.");
-    } else {
-      Navigator.of(context).pop();
-      await _parrotHelper
-          .deleteParrot(
-        _firebaseUser.uid,
-        parrot,
-      )
-          .then(
-        (_) {
-          _globalMethods.showMaterialDialog(context,
-              "Usunięto papugę o numerze obrączki ${parrot.ringNumber}");
-        },
-      ).catchError((error) {
-        _globalMethods.showMaterialDialog(context,
-            "Operacja nieudana, nieznany błąd, spróbuj ponownie pózniej");
-      });
-    }
+    await _globalMethods.checkInternetConnection(context).then((result) async {
+      if (!result) {
+        Navigator.of(context).pop();
+        _globalMethods.showMaterialDialog(
+            context, "brak połączenia z internetem.");
+      } else {
+        Navigator.of(context).pop();
+        if (widget._createdParrotList.length == 1) {
+          Navigator.of(context).pop();
+          await _parrotHelper
+              .deleteRaceList(_firebaseUser.uid, parrot.race)
+              .then(
+            (_) {
+              _globalMethods.showMaterialDialog(context,
+                  "Usunięto papugę o numerze obrączki ${parrot.ringNumber}");
+            },
+          ).catchError((error) {
+            _globalMethods.showMaterialDialog(context,
+                "Operacja nieudana, nieznany błąd, spróbuj ponownie pózniej");
+          });
+        } else {
+          await _parrotHelper
+              .deleteParrot(
+            _firebaseUser.uid,
+            parrot,
+          )
+              .then(
+            (_) {
+              _globalMethods.showMaterialDialog(context,
+                  "Usunięto papugę o numerze obrączki ${parrot.ringNumber}");
+            },
+          ).catchError((error) {
+            _globalMethods.showMaterialDialog(context,
+                "Operacja nieudana, nieznany błąd, spróbuj ponownie pózniej");
+          });
+        }
+      }
+    });
   }
 }

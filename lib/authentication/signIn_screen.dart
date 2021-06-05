@@ -1,4 +1,5 @@
 import 'package:breeders_app/mainApp/widgets/google.button.dart';
+import 'package:breeders_app/mainApp/widgets/registraction_question.dart';
 import 'package:draggable_scrollbar_sliver/draggable_scrollbar_sliver.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,9 @@ import '../globalWidgets/imageContainerParrot.dart';
 import '../services/auth.dart';
 
 class SignInScreen extends StatefulWidget {
+  final Function changePage;
+
+  const SignInScreen({Key key, this.changePage}) : super(key: key);
   @override
   _SignInScreenState createState() => _SignInScreenState();
 }
@@ -154,6 +158,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           SizedBox(height: _sizedBoxHeight),
                           GoogleButton(function: _googleSingIn),
                           SizedBox(height: _sizedBoxHeight),
+                          RegisterQuestion(function: widget.changePage),
                         ],
                       ),
                     ),

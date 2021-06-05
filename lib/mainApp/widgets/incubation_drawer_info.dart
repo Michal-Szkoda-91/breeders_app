@@ -43,46 +43,40 @@ class _IncubationInformationState extends State<IncubationInformation> {
             if (_isLoading) {
               _loadInkubationData(snapshot);
             }
-            return _isLoading
-                ? const Center(
-                    child: const CircularProgressIndicator(),
+            return _incubationTimes == 0
+                ? Text(
+                    "Brak Par oczekujących na wylęg",
+                    style: TextStyle(
+                      color: Theme.of(context).textSelectionColor,
+                      fontSize: 16,
+                    ),
+                    textAlign: TextAlign.center,
                   )
-                : _incubationTimes == 0
-                    ? Text(
-                        "Brak Par oczekujących na wylęg",
-                        style: TextStyle(
-                          color: Theme.of(context).textSelectionColor,
-                          fontSize: 16,
-                        ),
-                        textAlign: TextAlign.center,
-                      )
-                    : Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: Material(
-                          borderRadius: BorderRadius.circular(14),
-                          color: Colors.black45,
-                          child: InkWell(
-                            splashColor: Theme.of(context).primaryColor,
-                            onTap: () {
-                              Navigator.of(context).pop();
-                              _pairList
-                                  .sort((a, b) => a.race.compareTo(b.race));
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      IncubationInformationScreen(
-                                    pairList: _pairList,
-                                  ),
-                                ),
-                              );
-                            },
-                            child: IncubationCountsContainer(
-                              incubationTimes: _incubationTimes,
+                : Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Material(
+                      borderRadius: BorderRadius.circular(14),
+                      color: Colors.black45,
+                      child: InkWell(
+                        splashColor: Theme.of(context).primaryColor,
+                        onTap: () {
+                          Navigator.of(context).pop();
+                          _pairList.sort((a, b) => a.race.compareTo(b.race));
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => IncubationInformationScreen(
+                                pairList: _pairList,
+                              ),
                             ),
-                          ),
+                          );
+                        },
+                        child: IncubationCountsContainer(
+                          incubationTimes: _incubationTimes,
                         ),
-                      );
+                      ),
+                    ),
+                  );
         }
       },
     );

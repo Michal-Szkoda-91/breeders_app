@@ -13,8 +13,8 @@ class ImageContainerParrot extends StatelessWidget {
         child: Image.asset(
           "assets/image/parrot.jpg",
           fit: BoxFit.cover,
-          height: 200,
-          width: 200,
+          height: 122,
+          width: 122,
         ),
       ),
     );

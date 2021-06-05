@@ -1,4 +1,7 @@
 import 'package:breeders_app/authentication/verification_screen.dart';
+import 'package:breeders_app/mainApp/animals/parrots/screens/parrot_race_list_screen.dart';
+import 'package:breeders_app/mainApp/animals/parrots/screens/parrotsList.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
@@ -12,8 +15,12 @@ class Wrapper extends StatelessWidget {
     return MobileAds.instance.initialize();
   }
 
+  User loggedUser;
+  final auth = FirebaseAuth.instance;
+
   @override
   Widget build(BuildContext context) {
+    loggedUser = auth.currentUser;
     final user = Provider.of<UserLogged>(context);
     if (user == null) {
       return FutureBuilder(
@@ -33,7 +40,9 @@ class Wrapper extends StatelessWidget {
         },
       );
     } else {
-      return VerificationEmailScreen();
+      return loggedUser.emailVerified
+          ? ParrotsRaceListScreen()
+          : VerificationEmailScreen();
     }
   }
 }
