@@ -53,13 +53,10 @@ class _AuthenticateState extends State<Authenticate> {
       Column(
         children: [
           Expanded(
-            child: SignInScreen(),
+            child: SignInScreen(
+              changePage: _changePage,
+            ),
           ),
-          _keyboardState
-              ? SizedBox(
-                  height: 1,
-                )
-              : RegisterQuestion(function: _changePage),
         ],
       ),
       RegisterScreen(),

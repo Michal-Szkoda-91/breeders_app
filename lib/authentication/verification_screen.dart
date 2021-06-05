@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:breeders_app/globalWidgets/mainBackground.dart';
 import 'package:breeders_app/main.dart';
 import 'package:breeders_app/mainApp/animals/parrots/screens/parrot_race_list_screen.dart';
+import 'package:breeders_app/models/global_methods.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -19,6 +20,8 @@ class VerificationEmailScreen extends StatefulWidget {
 
 class _VerificationEmailScreenState extends State<VerificationEmailScreen> {
   final auth = FirebaseAuth.instance;
+  GlobalMethods _globalMethods = GlobalMethods();
+
   User user;
   Timer timer;
   @override
@@ -40,16 +43,6 @@ class _VerificationEmailScreenState extends State<VerificationEmailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        actions: [
-          FlatButton(
-            child: const Icon(
-              Icons.close,
-              color: Colors.white,
-              size: 30,
-            ),
-            onPressed: () => _showDialog(context),
-          ),
-        ],
         title: Text("Weryfikacja Email"),
       ),
       body: MainBackground(
@@ -74,23 +67,49 @@ class _VerificationEmailScreenState extends State<VerificationEmailScreen> {
               width: double.infinity,
               height: 100,
               alignment: Alignment.center,
-              child: CircularProgressIndicator(),
+              child: const CircularProgressIndicator(),
             ),
-            IconButton(
+            Divider(
+              color: Theme.of(context).textSelectionColor,
+            ),
+            FlatButton.icon(
+              label: Text(
+                "Wyślij email ponownie",
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Theme.of(context).textSelectionColor,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              icon: Icon(
+                Icons.email_outlined,
+                color: Theme.of(context).textSelectionColor,
+                size: 33,
+              ),
+              onPressed: _sendEmailAgain,
+            ),
+            Divider(
+              color: Theme.of(context).textSelectionColor,
+            ),
+            FlatButton.icon(
+              label: Text(
+                "Ekran logowania",
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Theme.of(context).textSelectionColor,
+                ),
+                textAlign: TextAlign.center,
+              ),
               icon: Icon(
                 Icons.logout,
+                color: Theme.of(context).textSelectionColor,
+                size: 33,
               ),
-              onPressed: () async {
-                await auth.signOut();
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(
-                    builder: ((context) => MyApp()),
-                  ),
-                  (Route<dynamic> route) => false,
-                );
-              },
-            )
+              onPressed: _returnLoginScreen,
+            ),
+            Divider(
+              color: Theme.of(context).textSelectionColor,
+            ),
           ],
         ),
       ),
@@ -111,35 +130,21 @@ class _VerificationEmailScreenState extends State<VerificationEmailScreen> {
       return;
   }
 
-//Dialog wyswietlany przy zamykaniu aplikacji
-  _showDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => new AlertDialog(
-        title: const Text("Czy na pewno chcesz zamknąć aplikacje?"),
-        actions: <Widget>[
-          FlatButton(
-            child: const Text(
-              'Zamknij',
-              style: const TextStyle(
-                fontSize: 20,
-              ),
-            ),
-            onPressed: () => exit(0),
-          ),
-          FlatButton(
-            child: const Text(
-              'Anuluj',
-              style: const TextStyle(
-                fontSize: 20,
-              ),
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          )
-        ],
+  void _sendEmailAgain() async {
+    user = auth.currentUser;
+    await user.sendEmailVerification().then((_) {
+      _globalMethods.showMaterialDialog(context, "Wysłano wiadomość ponownie");
+    });
+  }
+
+  void _returnLoginScreen() async {
+    await auth.signOut();
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: ((context) => MyApp()),
       ),
+      (Route<dynamic> route) => false,
     );
   }
 }
