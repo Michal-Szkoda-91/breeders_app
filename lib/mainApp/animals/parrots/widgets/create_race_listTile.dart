@@ -1,6 +1,5 @@
 import 'package:breeders_app/mainApp/animals/parrots/screens/pairList_screen.dart';
 import 'package:breeders_app/mainApp/animals/parrots/widgets/create_race_listTile/deleteButton.dart';
-import 'package:breeders_app/mainApp/animals/parrots/widgets/parrots_race_AddDropdownButton.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:draggable_scrollbar_sliver/draggable_scrollbar_sliver.dart';
 import 'package:flutter/painting.dart';
@@ -161,23 +160,23 @@ class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
   }
 
   Future<void> _deleteRace(String name) async {
-    bool result = await _globalMethods.checkInternetConnection(context);
-
-    if (!result) {
-      Navigator.of(context).pop();
-      _globalMethods.showMaterialDialog(
-          context, "brak połączenia z internetem.");
-    } else {
-      Navigator.of(context).pop();
-      await _parrotDataHelper.deleteRaceList(firebaseUser.uid, name).then(
-        (_) {
+    await _globalMethods.checkInternetConnection(context).then((result) async {
+      if (!result) {
+        Navigator.of(context).pop();
+        _globalMethods.showMaterialDialog(
+            context, "brak połączenia z internetem.");
+      } else {
+        Navigator.of(context).pop();
+        await _parrotDataHelper.deleteRaceList(firebaseUser.uid, name).then(
+          (_) {
+            _globalMethods.showMaterialDialog(context,
+                "Usunięto wszystkie papugi z rasy $name wraz ze wszystkimi parami i danymi.");
+          },
+        ).catchError((error) {
           _globalMethods.showMaterialDialog(context,
-              "Usunięto wszystkie papugi z rasy $name wraz ze wszystkimi parami i danymi.");
-        },
-      ).catchError((error) {
-        _globalMethods.showMaterialDialog(context,
-            "Operacja nieudana, nieznany błąd, spróbuj ponownie pózniej");
-      });
-    }
+              "Operacja nieudana, nieznany błąd, spróbuj ponownie pózniej");
+        });
+      }
+    });
   }
 }

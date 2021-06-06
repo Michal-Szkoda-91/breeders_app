@@ -163,11 +163,8 @@ class _SignInScreenState extends State<SignInScreen> {
                           SizedBox(height: _sizedBoxHeight),
                           RegisterQuestion(function: widget.changePage),
                           SizedBox(height: _sizedBoxHeight),
-                          GestureDetector(
-                            child: ResetPassword(),
-                            onTap: () {
-                              _resetPass(email);
-                            },
+                          ResetPassword(
+                            email: email,
                           ),
                         ],
                       ),
@@ -190,20 +187,6 @@ class _SignInScreenState extends State<SignInScreen> {
       });
     } else {
       return;
-    }
-  }
-
-  void _resetPass(String email) async {
-    GlobalMethods globalMethods = GlobalMethods();
-    if (email.isEmpty) {
-      globalMethods.showMaterialDialog(context, "Uzupełnij Email");
-    } else if (!EmailValidator.validate(email)) {
-      globalMethods.showMaterialDialog(context, "Email jest nie prawidłowy");
-    } else {
-      final _authReset = FirebaseAuth.instance;
-      await _authReset.sendPasswordResetEmail(email: email);
-      globalMethods.showMaterialDialog(context,
-          "Wysłano wiadomość resetującą hasło. Pamiętaj, że nowe musi odpowiadać wymaganiaom postawionym w aplikacji");
     }
   }
 
