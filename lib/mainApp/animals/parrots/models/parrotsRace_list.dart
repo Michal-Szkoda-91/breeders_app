@@ -11,7 +11,7 @@ class ParrotsRace {
     {
       "url": 'assets/image/parrotsRace/Amazonka.jpg',
       'name': 'Amazonka',
-      'lac': '( lac: Amazona )',  
+      'lac': '( lac: Amazona )',
       'icubationTime': 25
     },
     {

@@ -1,8 +1,8 @@
-import 'package:breeders_app/advertisement_banner/banner_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../advertisement_banner/banner_page.dart';
 import '../models/parrot_model.dart';
 import '../widgets/create_parrot_card.dart';
 import '../../../../globalWidgets/mainBackground.dart';

@@ -1,8 +1,9 @@
-import 'package:breeders_app/mainApp/animals/parrots/models/parrot_model.dart';
-import 'package:breeders_app/mainApp/animals/parrots/screens/addParrot_screen.dart';
-import 'package:breeders_app/models/global_methods.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+
+import '../../models/parrot_model.dart';
+import '../../screens/addParrot_screen.dart';
+import '../../../../../models/global_methods.dart';
 
 class DeleteUpgradeButtons extends StatelessWidget {
   final Function delete;

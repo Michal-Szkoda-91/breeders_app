@@ -1,11 +1,10 @@
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:breeders_app/mainApp/animals/parrots/models/pairing_model.dart';
-import 'package:breeders_app/mainApp/animals/parrots/models/parrotsRace_list.dart';
-import 'package:breeders_app/models/global_methods.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../models/pairing_model.dart';
+import '../models/parrotsRace_list.dart';
+import '../../../../models/global_methods.dart';
 import 'egg_expansion_tile/content_column.dart';
 import 'egg_expansion_tile/incubation_cancel_button.dart';
 import 'egg_expansion_tile/inkubation_start_button.dart';

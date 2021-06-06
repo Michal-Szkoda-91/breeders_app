@@ -1,11 +1,11 @@
-import 'package:breeders_app/advertisement_banner/banner_page.dart';
-import 'package:breeders_app/mainApp/animals/parrots/widgets/notConnected_information.dart';
-import 'package:breeders_app/mainApp/animals/parrots/widgets/parrots_race_AddDropdownButton.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:diacritic/diacritic.dart';
 
+import '../../../../advertisement_banner/banner_page.dart';
+import '../widgets/notConnected_information.dart';
+import '../widgets/parrots_race_AddDropdownButton.dart';
 import '../widgets/create_race_listTile.dart';
 import '../../../../services/auth.dart';
 import '../../../widgets/custom_drawer.dart';

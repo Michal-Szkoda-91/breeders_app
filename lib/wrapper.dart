@@ -1,21 +1,26 @@
-import 'package:breeders_app/authentication/verification_screen.dart';
-import 'package:breeders_app/mainApp/animals/parrots/screens/parrot_race_list_screen.dart';
-import 'package:breeders_app/mainApp/animals/parrots/screens/parrotsList.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
-
 import 'authentication/authenticate.dart';
 import 'models/user.dart';
 
-class Wrapper extends StatelessWidget {
+import 'authentication/verification_screen.dart';
+import 'mainApp/animals/parrots/screens/parrot_race_list_screen.dart';
+
+class Wrapper extends StatefulWidget {
+  @override
+  _WrapperState createState() => _WrapperState();
+}
+
+class _WrapperState extends State<Wrapper> {
   Future<InitializationStatus> _initGoogleMobileAds() {
     // TODO: Initialize Google Mobile Ads SDK
     return MobileAds.instance.initialize();
   }
 
   User loggedUser;
+
   final auth = FirebaseAuth.instance;
 
   @override

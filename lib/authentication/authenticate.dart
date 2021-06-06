@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:keyboard_visibility/keyboard_visibility.dart';
 
-import '../mainApp/widgets/registraction_question.dart';
 import 'register_screen.dart';
 import 'signIn_screen.dart';
 
@@ -21,7 +20,7 @@ class _AuthenticateState extends State<Authenticate> {
   KeyboardVisibilityNotification _keyboardVisibility =
       new KeyboardVisibilityNotification();
   int _keyboardVisibilitySubscriberId;
-  bool _keyboardState;
+  bool keyboardState;
 
   @protected
   void initState() {
@@ -30,12 +29,12 @@ class _AuthenticateState extends State<Authenticate> {
       initialPage: _page,
     );
 
-    _keyboardState = _keyboardVisibility.isKeyboardVisible;
+    keyboardState = _keyboardVisibility.isKeyboardVisible;
 
     _keyboardVisibilitySubscriberId = _keyboardVisibility.addNewListener(
       onChange: (bool visible) {
         setState(() {
-          _keyboardState = visible;
+          keyboardState = visible;
         });
       },
     );

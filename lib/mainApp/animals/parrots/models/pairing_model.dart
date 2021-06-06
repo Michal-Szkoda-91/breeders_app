@@ -1,7 +1,7 @@
-import 'package:breeders_app/mainApp/animals/parrots/models/parrot_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
+import 'parrot_model.dart';
 import 'children_model.dart';
 
 class ParrotPairing {
@@ -44,7 +44,7 @@ class ParrotPairDataHelper {
     await collectionReference.doc(race).collection("Pairs").doc(pair.id).set({
       "Male Ring": "${pair.maleRingNumber}",
       "Female Ring": "${pair.femaleRingNumber}",
-      "Race" : "$race",
+      "Race": "$race",
       "Pairing Data": "${pair.pairingData}",
       "Pair Color": "${pair.pairColor}",
       "Is Archive": "false",

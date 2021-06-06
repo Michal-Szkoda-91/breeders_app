@@ -1,16 +1,16 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:breeders_app/mainApp/animals/parrots/models/children_model.dart';
-import 'package:breeders_app/mainApp/animals/parrots/models/pairing_model.dart';
-import 'package:breeders_app/models/global_methods.dart';
 import 'package:draggable_scrollbar_sliver/draggable_scrollbar_sliver.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../../animals/parrots/models/parrot_model.dart';
-import 'package:breeders_app/globalWidgets/mainBackground.dart';
-import 'package:breeders_app/mainApp/widgets/custom_drawer.dart';
-import 'package:breeders_app/services/auth.dart';
+import '../../../../globalWidgets/mainBackground.dart';
+import '../../../widgets/custom_drawer.dart';
+import '../../../../services/auth.dart';
+import '../models/children_model.dart';
+import '../models/pairing_model.dart';
+import '../../../../models/global_methods.dart';
 
 class AddParrotScreen extends StatefulWidget {
   static const String routeName = "/AddParrotScreen";

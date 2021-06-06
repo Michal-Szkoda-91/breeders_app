@@ -1,6 +1,7 @@
-import 'package:breeders_app/mainApp/animals/parrots/models/pairing_model.dart';
-import 'package:breeders_app/mainApp/animals/parrots/screens/addParrot_screen.dart';
 import 'package:flutter/material.dart';
+
+import '../models/pairing_model.dart';
+import '../screens/addParrot_screen.dart';
 
 class AddPairChildButton extends StatefulWidget {
   final String raceName;

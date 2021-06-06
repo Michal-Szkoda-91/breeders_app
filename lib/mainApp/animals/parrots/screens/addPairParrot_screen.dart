@@ -11,12 +11,12 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
-import 'package:breeders_app/mainApp/animals/parrots/models/pairing_model.dart';
-import 'package:breeders_app/models/global_methods.dart';
-import 'package:breeders_app/services/auth.dart';
-import 'package:breeders_app/globalWidgets/mainBackground.dart';
-import 'package:breeders_app/mainApp/animals/parrots/models/parrot_model.dart';
-import 'package:breeders_app/mainApp/widgets/custom_drawer.dart';
+import '../../../widgets/custom_drawer.dart';
+import '../models/pairing_model.dart';
+import '../../../../models/global_methods.dart';
+import '../../../../services/auth.dart';
+import '../../../../globalWidgets/mainBackground.dart';
+import '../models/parrot_model.dart';
 
 class AddPairScreen extends StatefulWidget {
   static const String routeName = "/AddPairingScreen";

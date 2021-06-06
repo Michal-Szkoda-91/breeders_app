@@ -1,7 +1,6 @@
-import 'package:breeders_app/mainApp/animals/parrots/models/pairing_model.dart';
-
 import 'package:flutter/material.dart';
 
+import '../../models/pairing_model.dart';
 import '../add_child_button.dart';
 import '../children_list.dart';
 import '../egg_expansionTile.dart';

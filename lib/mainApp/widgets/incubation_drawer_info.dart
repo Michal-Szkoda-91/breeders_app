@@ -1,9 +1,9 @@
-import 'package:breeders_app/mainApp/animals/parrots/models/pairing_model.dart';
-import 'package:breeders_app/mainApp/animals/parrots/screens/incubationInfo_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../animals/parrots/models/pairing_model.dart';
+import '../animals/parrots/screens/incubationInfo_screen.dart';
 import 'IncubationCountsContainer.dart';
 
 class IncubationInformation extends StatefulWidget {

@@ -1,8 +1,9 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:breeders_app/mainApp/animals/parrots/models/parrotsRace_list.dart';
-import 'package:breeders_app/mainApp/animals/parrots/screens/addParrot_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import '../models/parrotsRace_list.dart';
+import '../screens/addParrot_screen.dart';
 
 class CreateParrotsDropdownButton extends StatefulWidget {
   final List<String> parrotRingList;
