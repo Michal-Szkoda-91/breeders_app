@@ -1,8 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:breeders_app/mainApp/animals/parrots/models/parrot_model.dart';
 import 'package:flutter/material.dart';
 
 import '../parrotDialogInformation.dart';
+import '../../models/parrot_model.dart';
 
 class ParrotRingButton extends StatelessWidget {
   final int index;

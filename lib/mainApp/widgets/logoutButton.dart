@@ -1,6 +1,6 @@
-import 'package:breeders_app/services/auth.dart';
 import 'package:flutter/material.dart';
 
+import '../../services/auth.dart';
 import '../../main.dart';
 
 class LogoutButton extends StatelessWidget {

@@ -1,9 +1,10 @@
-import 'package:breeders_app/mainApp/animals/parrots/models/pairing_model.dart';
-import 'package:breeders_app/mainApp/animals/parrots/widgets/egg_expansionTile.dart';
-import 'package:breeders_app/mainApp/animals/parrots/widgets/parrot_pair_card_widgets/createInfoRow.dart';
-import 'package:breeders_app/mainApp/animals/parrots/widgets/parrot_pair_card_widgets/createInfoRowParrot.dart';
-import 'package:breeders_app/mainApp/animals/parrots/widgets/parrot_pair_card_widgets/pairCircularContainer.dart';
 import 'package:flutter/material.dart';
+
+import '../animals/parrots/models/pairing_model.dart';
+import '../animals/parrots/widgets/egg_expansionTile.dart';
+import '../animals/parrots/widgets/parrot_pair_card_widgets/createInfoRow.dart';
+import '../animals/parrots/widgets/parrot_pair_card_widgets/createInfoRowParrot.dart';
+import '../animals/parrots/widgets/parrot_pair_card_widgets/pairCircularContainer.dart';
 
 class IncubationList extends StatelessWidget {
   final List<ParrotPairing> parrotList;

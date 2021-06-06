@@ -3,10 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:group_button/group_button.dart';
 
-import 'package:breeders_app/mainApp/animals/parrots/screens/pairList_screen.dart';
-import 'package:breeders_app/mainApp/animals/parrots/models/pairing_model.dart';
-import 'package:breeders_app/mainApp/animals/parrots/models/parrot_model.dart';
-import 'package:breeders_app/models/global_methods.dart';
+import '../screens/pairList_screen.dart';
+import '../models/pairing_model.dart';
+import '../models/parrot_model.dart';
+import '../../../../models/global_methods.dart';
 import 'parrot_pair_card_widgets/CreatePairCard.dart';
 
 class ParrotPairCard extends StatefulWidget {

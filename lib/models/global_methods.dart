@@ -1,6 +1,7 @@
-import 'package:breeders_app/mainApp/animals/parrots/models/parrot_model.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
+
+import '../mainApp/animals/parrots/models/parrot_model.dart';
 
 class GlobalMethods {
   //arrow container

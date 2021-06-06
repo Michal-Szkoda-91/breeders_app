@@ -1,6 +1,7 @@
-import 'package:breeders_app/mainApp/animals/parrots/models/parrot_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+
+import '../../models/parrot_model.dart';
 
 class GenderIcon extends StatefulWidget {
   final int index;

@@ -1,7 +1,8 @@
-import 'package:breeders_app/mainApp/animals/parrots/models/pairing_model.dart';
-import 'package:breeders_app/models/global_methods.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+
+import '../../models/pairing_model.dart';
+import '../../../../../models/global_methods.dart';
 
 class DeleteAndArchiveButtons extends StatefulWidget {
   final int index;

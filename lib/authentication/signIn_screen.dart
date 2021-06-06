@@ -1,12 +1,10 @@
-import 'package:breeders_app/mainApp/widgets/google.button.dart';
-import 'package:breeders_app/mainApp/widgets/registraction_question.dart';
-import 'package:breeders_app/mainApp/widgets/reset_password.dart';
-import 'package:breeders_app/models/global_methods.dart';
 import 'package:draggable_scrollbar_sliver/draggable_scrollbar_sliver.dart';
 import 'package:email_validator/email_validator.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../mainApp/widgets/google.button.dart';
+import '../mainApp/widgets/registraction_question.dart';
+import '../mainApp/widgets/reset_password.dart';
 import '../globalWidgets/imageContainerParrot.dart';
 import '../services/auth.dart';
 
@@ -160,12 +158,9 @@ class _SignInScreenState extends State<SignInScreen> {
                           ),
                           SizedBox(height: _sizedBoxHeight),
                           GoogleButton(function: _googleSingIn),
-                          SizedBox(height: _sizedBoxHeight),
+                          const SizedBox(height: 45),
                           RegisterQuestion(function: widget.changePage),
-                          SizedBox(height: _sizedBoxHeight),
-                          ResetPassword(
-                            email: email,
-                          ),
+                          ResetPassword(email: email),
                         ],
                       ),
                     ),

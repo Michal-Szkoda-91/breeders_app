@@ -10,33 +10,28 @@ class RegisterQuestion extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          AutoSizeText(
-            'Nie masz konta?',
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        AutoSizeText(
+          'Nie masz konta?',
+          style: TextStyle(
+            color: Theme.of(context).textSelectionColor,
+          ),
+        ),
+        FlatButton(
+          child: Text(
+            'Załóż je tutaj',
             style: TextStyle(
               color: Theme.of(context).textSelectionColor,
-              // fontSize: 16,
+              fontWeight: FontWeight.bold,
             ),
           ),
-          FlatButton(
-            child: Text(
-              'Załóż je tutaj',
-              style: TextStyle(
-                color: Theme.of(context).textSelectionColor,
-                // fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            onPressed: () {
-              function(1);
-            },
-          ),
-        ],
-      ),
+          onPressed: () {
+            function(1);
+          },
+        ),
+      ],
     );
   }
 }

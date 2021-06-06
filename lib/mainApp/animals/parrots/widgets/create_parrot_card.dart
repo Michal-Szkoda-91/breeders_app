@@ -1,11 +1,10 @@
-import 'package:breeders_app/mainApp/animals/parrots/screens/parrot_race_list_screen.dart';
 import 'package:draggable_scrollbar_sliver/draggable_scrollbar_sliver.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import 'package:breeders_app/models/global_methods.dart';
-import 'package:breeders_app/mainApp/animals/parrots/models/parrot_model.dart';
-
+import '../../../../models/global_methods.dart';
+import '../models/parrot_model.dart';
+import '../screens/parrot_race_list_screen.dart';
 import 'addParrotButtonFromParrotList.dart';
 import 'create_parrot_card/genderIcon.dart';
 import 'create_parrot_card/table_content_notes_row.dart';

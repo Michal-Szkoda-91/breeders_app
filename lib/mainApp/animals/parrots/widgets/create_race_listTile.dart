@@ -1,5 +1,3 @@
-import 'package:breeders_app/mainApp/animals/parrots/screens/pairList_screen.dart';
-import 'package:breeders_app/mainApp/animals/parrots/widgets/create_race_listTile/deleteButton.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:draggable_scrollbar_sliver/draggable_scrollbar_sliver.dart';
 import 'package:flutter/painting.dart';
@@ -8,6 +6,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
+import '../screens/pairList_screen.dart';
+import '../widgets/create_race_listTile/deleteButton.dart';
 import '../../../../models/global_methods.dart';
 import '../../parrots/screens/parrotsList.dart';
 import '../models/parrot_model.dart';

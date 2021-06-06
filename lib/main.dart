@@ -1,11 +1,11 @@
-import 'package:breeders_app/authentication/verification_screen.dart';
-import 'package:breeders_app/mainApp/animals/parrots/screens/addPairParrot_screen.dart';
-import 'package:breeders_app/mainApp/animals/parrots/screens/incubationInfo_screen.dart';
-import 'package:breeders_app/mainApp/animals/parrots/screens/pairList_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
+import 'authentication/verification_screen.dart';
+import 'mainApp/animals/parrots/screens/addPairParrot_screen.dart';
+import 'mainApp/animals/parrots/screens/incubationInfo_screen.dart';
+import 'mainApp/animals/parrots/screens/pairList_screen.dart';
 import 'mainApp/animals/parrots/screens/addParrot_screen.dart';
 import 'mainApp/animals/parrots/screens/parrot_race_list_screen.dart';
 import 'mainApp/animals/parrots/screens/parrotsList.dart';

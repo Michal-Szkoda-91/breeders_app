@@ -1,12 +1,11 @@
 import 'dart:async';
-import 'dart:io';
-
-import 'package:breeders_app/globalWidgets/mainBackground.dart';
-import 'package:breeders_app/main.dart';
-import 'package:breeders_app/mainApp/animals/parrots/screens/parrot_race_list_screen.dart';
-import 'package:breeders_app/models/global_methods.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import '../globalWidgets/mainBackground.dart';
+import '../main.dart';
+import '../mainApp/animals/parrots/screens/parrot_race_list_screen.dart';
+import '../models/global_methods.dart';
 
 class VerificationEmailScreen extends StatefulWidget {
   static const String routeName = "/VerificationEmailScreen";

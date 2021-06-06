@@ -1,5 +1,6 @@
-import 'package:breeders_app/mainApp/animals/parrots/screens/parrot_race_list_screen.dart';
 import 'package:flutter/material.dart';
+
+import '../screens/parrot_race_list_screen.dart';
 
 class NotConnected extends StatelessWidget {
   const NotConnected({

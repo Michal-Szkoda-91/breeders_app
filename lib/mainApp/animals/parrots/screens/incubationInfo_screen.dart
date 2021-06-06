@@ -1,12 +1,13 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:breeders_app/advertisement_banner/banner_page.dart';
-import 'package:breeders_app/globalWidgets/mainBackground.dart';
-import 'package:breeders_app/mainApp/animals/parrots/models/pairing_model.dart';
-import 'package:breeders_app/mainApp/widgets/custom_drawer.dart';
-import 'package:breeders_app/mainApp/widgets/incubationList.dart';
 import 'package:breeders_app/services/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import '../../../../advertisement_banner/banner_page.dart';
+import '../../../../globalWidgets/mainBackground.dart';
+import '../models/pairing_model.dart';
+import '../../../widgets/custom_drawer.dart';
+import '../../../widgets/incubationList.dart';
 
 class IncubationInformationScreen extends StatefulWidget {
   static const String routeName = "/IncubationInformationScreen";
