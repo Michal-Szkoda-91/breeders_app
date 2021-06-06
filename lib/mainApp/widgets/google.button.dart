@@ -30,7 +30,7 @@ class GoogleButton extends StatelessWidget {
             Container(
               width: MediaQuery.of(context).size.width * 0.5,
               child: AutoSizeText(
-                'Zaloguj się przez Google',
+                'Logowanie Google',
                 maxLines: 1,
                 style: TextStyle(
                   fontSize: 16,

@@ -127,97 +127,98 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
   Future<void> _deletePair(
       String id, String femaleId, String maleID, String picUrl) async {
     final _firebaseUser = FirebaseAuth.instance.currentUser;
-    bool result = await _globalMethods.checkInternetConnection(context);
-
-    if (!result) {
-      Navigator.of(context).pop();
-      Navigator.of(context).pop();
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => PairListScreen(
-            raceName: widget.race,
-            parrotList: widget.parrotList,
+    await _globalMethods.checkInternetConnection(context).then((result) async {
+      if (!result) {
+        Navigator.of(context).pop();
+        Navigator.of(context).pop();
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => PairListScreen(
+              raceName: widget.race,
+              parrotList: widget.parrotList,
+            ),
           ),
-        ),
-      );
-      _globalMethods.showMaterialDialog(context,
-          "Operacja nieudana, nieznany błąd lub brak połączenia z internetem.");
-    } else {
-      setState(() {
-        _isLoading = true;
-      });
-      widget.parrotList.forEach((parr) {
-        if (parr.ringNumber == femaleId) {
-          chosenFemaleParrot = parr;
-        } else if (parr.ringNumber == maleID) {
-          chosenMaleParrot = parr;
-        }
-      });
-
-      Navigator.of(context).pop();
-
-      await _parrotPairDataHelper
-          .deletePair(
-        _firebaseUser.uid,
-        widget.race,
-        id,
-        chosenFemaleParrot,
-        chosenMaleParrot,
-        picUrl,
-      )
-          .then((_) {
-        _globalMethods.showMaterialDialog(
-            context, "Usunięto wybraną parę papug");
-        setState(() {
-          _isLoading = false;
-        });
-      }).catchError((error) {
-        setState(() {
-          _isLoading = false;
-        });
+        );
         _globalMethods.showMaterialDialog(context,
-            "Operacja nieudana, nieznany błąd, spróbuj ponownie pózniej");
-      });
-    }
+            "Operacja nieudana, nieznany błąd lub brak połączenia z internetem.");
+      } else {
+        setState(() {
+          _isLoading = true;
+        });
+        widget.parrotList.forEach((parr) {
+          if (parr.ringNumber == femaleId) {
+            chosenFemaleParrot = parr;
+          } else if (parr.ringNumber == maleID) {
+            chosenMaleParrot = parr;
+          }
+        });
+
+        Navigator.of(context).pop();
+
+        await _parrotPairDataHelper
+            .deletePair(
+          _firebaseUser.uid,
+          widget.race,
+          id,
+          chosenFemaleParrot,
+          chosenMaleParrot,
+          picUrl,
+        )
+            .then((_) {
+          _globalMethods.showMaterialDialog(
+              context, "Usunięto wybraną parę papug");
+          setState(() {
+            _isLoading = false;
+          });
+        }).catchError((error) {
+          setState(() {
+            _isLoading = false;
+          });
+          _globalMethods.showMaterialDialog(context,
+              "Operacja nieudana, nieznany błąd, spróbuj ponownie pózniej");
+        });
+      }
+    });
   }
 
   Future<void> _movingToArchive(
       String id, String femaleId, String maleID) async {
     final _firebaseUser = FirebaseAuth.instance.currentUser;
-    bool result = await _globalMethods.checkInternetConnection(context);
-
-    if (!result) {
-      Navigator.of(context).pop();
-      Navigator.of(context).pop();
-      _globalMethods.showMaterialDialog(context,
-          "Operacja nieudana, nieznany błąd lub brak połączenia z internetem.");
-    } else {
-      widget.parrotList.forEach((parr) {
-        if (parr.ringNumber == femaleId) {
-          chosenFemaleParrot = parr;
-        } else if (parr.ringNumber == maleID) {
-          chosenMaleParrot = parr;
-        }
-      });
-
-      Navigator.of(context).pop();
-      await _parrotPairDataHelper
-          .moveToArchive(
-        _firebaseUser.uid,
-        widget.race,
-        id,
-        chosenFemaleParrot,
-        chosenMaleParrot,
-      )
-          .then(
-        (_) {
-          _globalMethods.showMaterialDialog(context, "Przesunięto do archiwum");
-        },
-      ).catchError((error) {
+    await _globalMethods.checkInternetConnection(context).then((result) async {
+      if (!result) {
+        Navigator.of(context).pop();
+        Navigator.of(context).pop();
         _globalMethods.showMaterialDialog(context,
-            "Operacja nieudana, nieznany błąd, spróbuj ponownie pózniej");
-      });
-    }
+            "Operacja nieudana, nieznany błąd lub brak połączenia z internetem.");
+      } else {
+        widget.parrotList.forEach((parr) {
+          if (parr.ringNumber == femaleId) {
+            chosenFemaleParrot = parr;
+          } else if (parr.ringNumber == maleID) {
+            chosenMaleParrot = parr;
+          }
+        });
+
+        Navigator.of(context).pop();
+        await _parrotPairDataHelper
+            .moveToArchive(
+          _firebaseUser.uid,
+          widget.race,
+          id,
+          chosenFemaleParrot,
+          chosenMaleParrot,
+        )
+            .then(
+          (_) {
+            _globalMethods.showMaterialDialog(
+                context, "Przesunięto do archiwum");
+          },
+        ).catchError((error) {
+          _globalMethods.showMaterialDialog(context,
+              "Operacja nieudana, nieznany błąd, spróbuj ponownie pózniej");
+        });
+      }
+    });
   }
 }

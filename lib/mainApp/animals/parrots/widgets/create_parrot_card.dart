@@ -286,40 +286,45 @@ class _ParrotCardState extends State<ParrotCard> {
 
   Future<void> _deleteParrot(String ring, Parrot parrot) async {
     final _firebaseUser = FirebaseAuth.instance.currentUser;
-    bool result = await _globalMethods.checkInternetConnection(context);
-    if (!result) {
-      Navigator.of(context).pop();
-      _globalMethods.showMaterialDialog(
-          context, "brak połączenia z internetem.");
-    } else {
-      if (widget._createdParrotList.length == 1) {
-        Navigator.of(context).pushNamedAndRemoveUntil(
-            ParrotsRaceListScreen.routeName, (Route<dynamic> route) => false);
-        await _parrotHelper.deleteRaceList(_firebaseUser.uid, parrot.race).then(
-          (_) {
-            _globalMethods.showMaterialDialog(context,
-                "Usunięto papugę o numerze obrączki ${parrot.ringNumber}");
-          },
-        ).catchError((error) {
-          _globalMethods.showMaterialDialog(context,
-              "Operacja nieudana, nieznany błąd, spróbuj ponownie pózniej");
-        });
+    await _globalMethods.checkInternetConnection(context).then((result) async {
+      if (!result) {
+        Navigator.of(context).pop();
+        Navigator.of(context).pop();
+        _globalMethods.showMaterialDialog(
+            context, "brak połączenia z internetem.");
       } else {
-        await _parrotHelper
-            .deleteParrot(
-          _firebaseUser.uid,
-          parrot,
-        )
-            .then(
-          (_) {
+        if (widget._createdParrotList.length == 1) {
+          Navigator.of(context).pushNamedAndRemoveUntil(
+              ParrotsRaceListScreen.routeName, (Route<dynamic> route) => false);
+          await _parrotHelper
+              .deleteRaceList(_firebaseUser.uid, parrot.race)
+              .then(
+            (_) {
+              _globalMethods.showMaterialDialog(context,
+                  "Usunięto papugę o numerze obrączki ${parrot.ringNumber}");
+            },
+          ).catchError((error) {
             _globalMethods.showMaterialDialog(context,
-                "Usunięto papugę o numerze obrączki ${parrot.ringNumber}");
-          },
-        ).catchError((error) {
-          _globalMethods.showMaterialDialog(context,
-              "Operacja nieudana, nieznany błąd, spróbuj ponownie pózniej");
-        });
+                "Operacja nieudana, nieznany błąd, spróbuj ponownie pózniej");
+          });
+        } else {
+          Navigator.of(context).pop();
+          await _parrotHelper
+              .deleteParrot(
+            _firebaseUser.uid,
+            parrot,
+          )
+              .then(
+            (_) {
+              _globalMethods.showMaterialDialog(context,
+                  "Usunięto papugę o numerze obrączki ${parrot.ringNumber}");
+            },
+          ).catchError((error) {
+            _globalMethods.showMaterialDialog(context,
+                "Operacja nieudana, nieznany błąd, spróbuj ponownie pózniej");
+          });
+        }
       }
-    }
+    });
   }
 }

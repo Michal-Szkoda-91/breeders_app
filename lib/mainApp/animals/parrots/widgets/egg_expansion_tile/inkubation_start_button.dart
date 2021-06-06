@@ -35,8 +35,12 @@ class InkubationStartButton extends StatelessWidget {
             lastDate: DateTime.now(),
             cancelText: "Anuluj",
           ).then((date) {
-            setEggsDate(
-                DateFormat("yyyy-MM-dd", 'pl_PL').format(date).toString());
+            if (date == null) {
+              return;
+            } else {
+              setEggsDate(
+                  DateFormat("yyyy-MM-dd", 'pl_PL').format(date).toString());
+            }
           });
         },
         label: Text(
