@@ -119,6 +119,42 @@ class ParrotDataHelper {
     });
   }
 
+  //
+//
+//
+//**************** */
+//
+//
+//
+//**************** */
+  Future<dynamic> updatedParrotsStatus({
+    String uid,
+    Parrot parrot,
+    String pairRingNumber,
+    BuildContext context,
+  }) async {
+    final CollectionReference collectionReference =
+        FirebaseFirestore.instance.collection(uid);
+
+    await collectionReference
+        .doc(parrot.race)
+        .collection("Birds")
+        .doc(parrot.ringNumber)
+        .update({
+      "Race Name": "${parrot.race}",
+      "Colors": "${parrot.color}",
+      "Fission": "${parrot.fission}",
+      "Sex": "${parrot.sex}",
+      "Cage number": "${parrot.cageNumber}",
+      "Notes": "${parrot.notes}",
+      "PairRingNumber": pairRingNumber,
+    }).then((_) {
+      print("parrot edited");
+    }).catchError((err) {
+      print("error occured $err");
+    });
+  }
+
 //
 //
 //

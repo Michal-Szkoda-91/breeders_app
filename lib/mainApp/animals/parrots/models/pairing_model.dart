@@ -47,6 +47,7 @@ class ParrotPairDataHelper {
     String race,
     Parrot maleParrot,
     Parrot femaleParrot,
+    BuildContext context,
   }) async {
     final CollectionReference collectionReference =
         FirebaseFirestore.instance.collection(uid);
@@ -63,11 +64,14 @@ class ParrotPairDataHelper {
       "Show Eggs Date": "brak",
       "Pic Url": "${pair.picUrl}",
     }, SetOptions(merge: true)).then((_) {
-      parrotList.updateParrot(
+      parrotList.updatedParrotsStatus(
           parrot: maleParrot, uid: uid, pairRingNumber: pair.femaleRingNumber);
-      parrotList.updateParrot(
+      parrotList.updatedParrotsStatus(
           parrot: femaleParrot, uid: uid, pairRingNumber: pair.maleRingNumber);
+      _globalMethods.showMaterialDialog(context, "Utworzono parę");
     }).catchError((err) {
+      _globalMethods.showMaterialDialog(context,
+          "Operacja nieudana, nieznany błąd, spróbuj ponownie pózniej");
       print("error occured $err");
     });
   }
@@ -152,9 +156,9 @@ class ParrotPairDataHelper {
         .doc(id)
         .delete()
         .then((_) {
-      parrotList.updateParrot(
+      parrotList.updatedParrotsStatus(
           parrot: maleParrot, uid: uid, pairRingNumber: "brak");
-      parrotList.updateParrot(
+      parrotList.updatedParrotsStatus(
           parrot: femaleParrot, uid: uid, pairRingNumber: "brak");
       _globalMethods.showMaterialDialog(context, "Usunięto wybraną parę papug");
       print("Pair deleted");
@@ -191,9 +195,9 @@ class ParrotPairDataHelper {
     await breedCollection.doc(race).collection("Pairs").doc(id).update({
       "Is Archive": "true",
     }).then((_) {
-      parrotList.updateParrot(
+      parrotList.updatedParrotsStatus(
           parrot: maleParrot, uid: uid, pairRingNumber: "brak");
-      parrotList.updateParrot(
+      parrotList.updatedParrotsStatus(
           parrot: femaleParrot, uid: uid, pairRingNumber: "brak");
       _globalMethods.showMaterialDialog(context, "Przesunięto do archiwum");
       print("Pair updated");
