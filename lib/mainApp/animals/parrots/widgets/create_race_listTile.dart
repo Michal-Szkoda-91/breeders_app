@@ -33,6 +33,7 @@ class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
   int _parrotCount;
   List<String> parrotRingList = [''];
   List<Parrot> parrotList = [];
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -64,10 +65,15 @@ class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
                     );
                   default:
                     _countParrot(snapshot);
-                    return Padding(
-                      padding: const EdgeInsets.only(right: 20),
-                      child: createSlidableCard(context, index, _parrotCount),
-                    );
+                    return _isLoading
+                        ? Center(
+                            child: CircularProgressIndicator(),
+                          )
+                        : Padding(
+                            padding: const EdgeInsets.only(right: 20),
+                            child: createSlidableCard(
+                                context, index, _parrotCount),
+                          );
                 }
               },
             );
@@ -160,22 +166,23 @@ class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
   }
 
   Future<void> _deleteRace(String name) async {
+    setState(() {
+      _isLoading = true;
+    });
     await _globalMethods.checkInternetConnection(context).then((result) async {
       if (!result) {
+        setState(() {
+          _isLoading = false;
+        });
         Navigator.of(context).pop();
         _globalMethods.showMaterialDialog(
             context, "brak połączenia z internetem.");
       } else {
-        Navigator.of(context).pop();
-        await _parrotDataHelper.deleteRaceList(firebaseUser.uid, name).then(
-          (_) {
-            _globalMethods.showMaterialDialog(context,
-                "Usunięto wszystkie papugi z rasy $name wraz ze wszystkimi parami i danymi.");
-          },
-        ).catchError((error) {
-          _globalMethods.showMaterialDialog(context,
-              "Operacja nieudana, nieznany błąd, spróbuj ponownie pózniej");
+        setState(() {
+          _isLoading = false;
         });
+        Navigator.of(context).pop();
+        await _parrotDataHelper.deleteRaceList(firebaseUser.uid, name, context);
       }
     });
   }

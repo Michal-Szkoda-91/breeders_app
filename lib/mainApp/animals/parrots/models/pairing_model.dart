@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 
+import '../../../../models/global_methods.dart';
 import 'parrot_model.dart';
 import 'children_model.dart';
 
@@ -29,6 +31,16 @@ class ParrotPairing {
 }
 
 class ParrotPairDataHelper {
+  GlobalMethods _globalMethods = GlobalMethods();
+
+//
+//
+//
+//**************** */
+//
+//
+//
+//**************** */
   Future<void> createPairCollection({
     String uid,
     ParrotPairing pair,
@@ -60,8 +72,21 @@ class ParrotPairDataHelper {
     });
   }
 
-  Future<void> createChild(
-      {String uid, String race, String pairId, Children child}) async {
+//
+//
+//
+//**************** */
+//
+//
+//
+//**************** */
+  Future<void> createChild({
+    String uid,
+    String race,
+    String pairId,
+    Children child,
+    BuildContext context,
+  }) async {
     final CollectionReference collectionReference =
         FirebaseFirestore.instance.collection(uid);
 
@@ -76,14 +101,32 @@ class ParrotPairDataHelper {
       "Sex": "${child.gender}",
       "Born Date": "${child.broodDate}"
     }, SetOptions(merge: false)).then((_) {
+      Navigator.of(context).pop();
+      _globalMethods.showMaterialDialog(context, "Utworzono potomka");
       print("parrot added");
     }).catchError((err) {
+      _globalMethods.showMaterialDialog(context,
+          "Operacja nieudana, nieznany błąd, spróbuj ponownie pózniej");
       print("error occured $err");
     });
   }
 
-  Future<void> deletePair(String uid, String race, String id,
-      Parrot femaleParrot, Parrot maleParrot, String picUrl) async {
+//
+//
+//
+//**************** */
+//
+//
+//
+//**************** */
+  Future<void> deletePair(
+      String uid,
+      String race,
+      String id,
+      Parrot femaleParrot,
+      Parrot maleParrot,
+      String picUrl,
+      BuildContext context) async {
     final CollectionReference breedCollection =
         FirebaseFirestore.instance.collection(uid);
     ParrotDataHelper parrotList = ParrotDataHelper();
@@ -113,8 +156,11 @@ class ParrotPairDataHelper {
           parrot: maleParrot, uid: uid, pairRingNumber: "brak");
       parrotList.updateParrot(
           parrot: femaleParrot, uid: uid, pairRingNumber: "brak");
+      _globalMethods.showMaterialDialog(context, "Usunięto wybraną parę papug");
       print("Pair deleted");
     }).catchError((err) {
+      _globalMethods.showMaterialDialog(context,
+          "Operacja nieudana, nieznany błąd, spróbuj ponownie pózniej");
       print("error occured $err");
     });
 
@@ -122,14 +168,22 @@ class ParrotPairDataHelper {
     try {
       final ref = FirebaseStorage.instance.ref().child(picUrl);
       await ref.delete();
-      print("Pair deleted");
+      print("pic deleted");
     } catch (e) {
       print("error occured $e");
     }
   }
 
+//
+//
+//
+//**************** */
+//
+//
+//
+//**************** */
   Future<void> moveToArchive(String uid, String race, String id,
-      Parrot femaleParrot, Parrot maleParrot) async {
+      Parrot femaleParrot, Parrot maleParrot, BuildContext context) async {
     final CollectionReference breedCollection =
         FirebaseFirestore.instance.collection(uid);
     ParrotDataHelper parrotList = ParrotDataHelper();
@@ -141,21 +195,40 @@ class ParrotPairDataHelper {
           parrot: maleParrot, uid: uid, pairRingNumber: "brak");
       parrotList.updateParrot(
           parrot: femaleParrot, uid: uid, pairRingNumber: "brak");
+      _globalMethods.showMaterialDialog(context, "Przesunięto do archiwum");
       print("Pair updated");
     }).catchError((err) {
+      _globalMethods.showMaterialDialog(context,
+          "Operacja nieudana, nieznany błąd, spróbuj ponownie pózniej");
+
       print("error occured $err");
     });
   }
 
-  Future<void> setEggIncubationTime(
-      String uid, String race, String id, String date) async {
+//
+//
+//
+//**************** */
+//
+//
+//
+//**************** */
+  Future<void> setEggIncubationTime(String uid, String race, String id,
+      String date, BuildContext context) async {
     final CollectionReference breedCollection =
         FirebaseFirestore.instance.collection(uid);
     await breedCollection.doc(race).collection("Pairs").doc(id).update({
       "Show Eggs Date": "$date",
     }).then((_) {
+      date != "brak"
+          ? _globalMethods.showMaterialDialog(
+              context, "Ustawiono datę rozpoczęcia inkubacji")
+          : _globalMethods.showMaterialDialog(
+              context, "Anulowanie odliczania czasu inkubacji");
       print("Pair update");
     }).catchError((err) {
+      _globalMethods.showMaterialDialog(context,
+          "Operacja nieudana, nieznany błąd, spróbuj ponownie pózniej");
       print("error occured $err");
     });
   }

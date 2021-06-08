@@ -41,7 +41,8 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
         break;
       case 1:
         setState(() {
-          widget.pairList.sort((a, b) => a.pairColor.compareTo(b.pairColor));
+          widget.pairList.sort((a, b) =>
+              a.pairColor.toLowerCase().compareTo(b.pairColor.toLowerCase()));
         });
         break;
       default:
@@ -127,25 +128,19 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
   Future<void> _deletePair(
       String id, String femaleId, String maleID, String picUrl) async {
     final _firebaseUser = FirebaseAuth.instance.currentUser;
+    setState(() {
+      _isLoading = true;
+    });
     await _globalMethods.checkInternetConnection(context).then((result) async {
       if (!result) {
         Navigator.of(context).pop();
-        Navigator.of(context).pop();
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => PairListScreen(
-              raceName: widget.race,
-              parrotList: widget.parrotList,
-            ),
-          ),
-        );
-        _globalMethods.showMaterialDialog(context,
-            "Operacja nieudana, nieznany błąd lub brak połączenia z internetem.");
-      } else {
+        _globalMethods.showMaterialDialog(
+            context, "Brak połączenia z internetem.");
         setState(() {
-          _isLoading = true;
+          _isLoading = false;
         });
+        return;
+      } else {
         widget.parrotList.forEach((parr) {
           if (parr.ringNumber == femaleId) {
             chosenFemaleParrot = parr;
@@ -153,30 +148,18 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
             chosenMaleParrot = parr;
           }
         });
-
         Navigator.of(context).pop();
-
-        await _parrotPairDataHelper
-            .deletePair(
+        await _parrotPairDataHelper.deletePair(
           _firebaseUser.uid,
           widget.race,
           id,
           chosenFemaleParrot,
           chosenMaleParrot,
           picUrl,
-        )
-            .then((_) {
-          _globalMethods.showMaterialDialog(
-              context, "Usunięto wybraną parę papug");
-          setState(() {
-            _isLoading = false;
-          });
-        }).catchError((error) {
-          setState(() {
-            _isLoading = false;
-          });
-          _globalMethods.showMaterialDialog(context,
-              "Operacja nieudana, nieznany błąd, spróbuj ponownie pózniej");
+          context,
+        );
+        setState(() {
+          _isLoading = false;
         });
       }
     });
@@ -184,13 +167,18 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
 
   Future<void> _movingToArchive(
       String id, String femaleId, String maleID) async {
+    setState(() {
+      _isLoading = true;
+    });
     final _firebaseUser = FirebaseAuth.instance.currentUser;
     await _globalMethods.checkInternetConnection(context).then((result) async {
       if (!result) {
+        setState(() {
+          _isLoading = false;
+        });
         Navigator.of(context).pop();
-        Navigator.of(context).pop();
-        _globalMethods.showMaterialDialog(context,
-            "Operacja nieudana, nieznany błąd lub brak połączenia z internetem.");
+        _globalMethods.showMaterialDialog(
+            context, "Brak połączenia z internetem.");
       } else {
         widget.parrotList.forEach((parr) {
           if (parr.ringNumber == femaleId) {
@@ -199,24 +187,11 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
             chosenMaleParrot = parr;
           }
         });
-
         Navigator.of(context).pop();
-        await _parrotPairDataHelper
-            .moveToArchive(
-          _firebaseUser.uid,
-          widget.race,
-          id,
-          chosenFemaleParrot,
-          chosenMaleParrot,
-        )
-            .then(
-          (_) {
-            _globalMethods.showMaterialDialog(
-                context, "Przesunięto do archiwum");
-          },
-        ).catchError((error) {
-          _globalMethods.showMaterialDialog(context,
-              "Operacja nieudana, nieznany błąd, spróbuj ponownie pózniej");
+        await _parrotPairDataHelper.moveToArchive(_firebaseUser.uid,
+            widget.race, id, chosenFemaleParrot, chosenMaleParrot, context);
+        setState(() {
+          _isLoading = false;
         });
       }
     });
