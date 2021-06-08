@@ -1,4 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
+
+import '../../../../models/global_methods.dart';
 
 class Parrot {
   final String race;
@@ -23,9 +27,19 @@ class Parrot {
 }
 
 class ParrotDataHelper {
+  GlobalMethods _globalMethods = GlobalMethods();
+//
+//
+//
+//**************** */
+//
+//
+//
+//**************** */
   Future<dynamic> createParrotCollection({
     String uid,
     Parrot parrot,
+    BuildContext context,
   }) async {
     final CollectionReference collectionReference =
         FirebaseFirestore.instance.collection(uid);
@@ -54,17 +68,30 @@ class ParrotDataHelper {
         "Notes": "${parrot.notes}",
         "PairRingNumber": "brak",
       }, SetOptions(merge: false)).then((_) {
+        Navigator.of(context).pop();
+        _globalMethods.showMaterialDialog(context, "Dodano Papugę");
         print("parrot added");
       }).catchError((err) {
+        _globalMethods.showMaterialDialog(context,
+            "Operacja nieudana, nieznany błąd, spróbuj ponownie pózniej");
         print("error occured $err");
       });
     }
   }
 
+//
+//
+//
+//**************** */
+//
+//
+//
+//**************** */
   Future<dynamic> updateParrot({
     String uid,
     Parrot parrot,
     String pairRingNumber,
+    BuildContext context,
   }) async {
     final CollectionReference collectionReference =
         FirebaseFirestore.instance.collection(uid);
@@ -82,13 +109,26 @@ class ParrotDataHelper {
       "Notes": "${parrot.notes}",
       "PairRingNumber": pairRingNumber,
     }).then((_) {
+      Navigator.of(context).pop();
+      _globalMethods.showMaterialDialog(context, "Edytowano dane");
       print("parrot edited");
     }).catchError((err) {
+      _globalMethods.showMaterialDialog(context,
+          "Operacja nieudana, nieznany błąd, spróbuj ponownie pózniej");
       print("error occured $err");
     });
   }
 
-  Future<void> deleteRaceList(String uid, String raceName) async {
+//
+//
+//
+//**************** */
+//
+//
+//
+//**************** */
+  Future<void> deleteRaceList(
+      String uid, String raceName, BuildContext context) async {
     final CollectionReference collectionReference =
         FirebaseFirestore.instance.collection(uid);
     //delete all birds in collection
@@ -100,6 +140,7 @@ class ParrotDataHelper {
       for (DocumentSnapshot doc in snapshot.docs) {
         doc.reference.delete();
       }
+
       print("Delete completed");
     }).catchError((err) {
       print(err);
@@ -117,6 +158,7 @@ class ParrotDataHelper {
           }
         });
       }
+
       print("Delete completed");
     }).catchError((err) {
       print(err);
@@ -127,9 +169,18 @@ class ParrotDataHelper {
         .doc(raceName)
         .collection("Pairs")
         .get()
-        .then((snapshot) {
+        .then((snapshot) async {
       for (DocumentSnapshot doc in snapshot.docs) {
         doc.reference.delete();
+        //Delete picture from storage
+        try {
+          final ref =
+              FirebaseStorage.instance.ref().child(doc.data()['Pic Url']);
+          await ref.delete();
+          print("pic deleted");
+        } catch (e) {
+          print("error occured $e");
+        }
       }
       print("Delete completed");
     }).catchError((err) {
@@ -137,13 +188,26 @@ class ParrotDataHelper {
     });
 //delete all document
     await collectionReference.doc(raceName).delete().then((_) {
+      _globalMethods.showMaterialDialog(context,
+          "Usunięto wszystkie papugi z rasy $raceName wraz ze wszystkimi parami i danymi.");
       print("collection of parrots deleted");
     }).catchError((err) {
+      _globalMethods.showMaterialDialog(context,
+          "Operacja nieudana, nieznany błąd, spróbuj ponownie pózniej");
       print("error occured $err");
     });
   }
 
-  Future<void> deleteParrot(String uid, Parrot parrotToDelete) async {
+//
+//
+//
+//**************** */
+//
+//
+//
+//**************** */
+  Future<void> deleteParrot(
+      String uid, Parrot parrotToDelete, BuildContext context) async {
     final CollectionReference breedCollection =
         FirebaseFirestore.instance.collection(uid);
 
@@ -159,7 +223,6 @@ class ParrotDataHelper {
           }
         }
       });
-
       await breedCollection
           .doc(parrotToDelete.race)
           .collection("Birds")
@@ -168,15 +231,17 @@ class ParrotDataHelper {
         "PairRingNumber": "brak",
       });
     }
-
     await breedCollection
         .doc(parrotToDelete.race)
         .collection("Birds")
         .doc(parrotToDelete.ringNumber)
         .delete()
         .then((_) {
-      print("parrot deleted");
+      _globalMethods.showMaterialDialog(context,
+          "Usunięto papugę o numerze obrączki ${parrotToDelete.ringNumber}");
     }).catchError((err) {
+      _globalMethods.showMaterialDialog(context,
+          "Operacja nieudana, nieznany błąd, spróbuj ponownie pózniej");
       print("error occured $err");
     });
   }

@@ -587,26 +587,32 @@ class _RaceListScreenState extends State<AddParrotScreen> {
     );
   }
 
+///////Adding parrots
+  ///
+  ///
   Future<void> _createParrots() async {
     if (!_formKey.currentState.validate()) {
       _globalMethods.showMaterialDialog(
           context, "Nie udało się dodać papugi, nie pełne dane");
     } else {
+      setState(() {
+        _isLoading = true;
+      });
       await _globalMethods
           .checkInternetConnection(context)
           .then((result) async {
         setState(() {
           _ringNumber = "$_country-$_year-$_symbol-$_parrotNumber";
         });
-
         if (!result) {
-          Navigator.of(context).pop();
           _globalMethods.showMaterialDialog(
               context, "brak połączenia z internetem.");
+          setState(() {
+            _isLoading = false;
+          });
           return;
         } else {
           setState(() {
-            _isLoading = true;
             String race = "";
             widget.pair == null
                 ? race = widget.parrotMap['name']
@@ -620,35 +626,30 @@ class _RaceListScreenState extends State<AddParrotScreen> {
                 notes: _notes,
                 sex: _sexName);
           });
-
-          await _parrotDataHelper
-              .createParrotCollection(
+          await _parrotDataHelper.createParrotCollection(
             uid: _firebaseUser.uid,
             parrot: _createdParrot,
-          )
-              .then((_) {
-            setState(() {
-              _isLoading = false;
-            });
-            Navigator.of(context).pop();
-            _globalMethods.showMaterialDialog(context, "Dodano Papugę");
-          }).catchError((error) {
-            setState(() {
-              _isLoading = false;
-            });
-            _globalMethods.showMaterialDialog(context,
-                "Operacja nieudana, nieznany błąd, spróbuj ponownie pózniej");
+            context: context,
+          );
+          setState(() {
+            _isLoading = false;
           });
         }
       });
     }
   }
 
+///////Adding child
+  ///
+  ///
   Future<void> _createChild() async {
     if (!_formKey.currentState.validate()) {
       _globalMethods.showMaterialDialog(
           context, "Nie udało się dodać papugi, nie pełne dane");
     } else {
+      setState(() {
+        _isLoading = true;
+      });
       await _globalMethods
           .checkInternetConnection(context)
           .then((result) async {
@@ -657,13 +658,14 @@ class _RaceListScreenState extends State<AddParrotScreen> {
         });
 
         if (!result) {
-          Navigator.of(context).pop();
           _globalMethods.showMaterialDialog(
               context, "brak połączenia z internetem.");
+          setState(() {
+            _isLoading = false;
+          });
           return;
         } else {
           setState(() {
-            _isLoading = true;
             _createdChild = Children(
               broodDate: bornTime,
               color: _parrotColor,
@@ -672,48 +674,45 @@ class _RaceListScreenState extends State<AddParrotScreen> {
             );
           });
 
-          await _parrotPairDataHelper
-              .createChild(
+          await _parrotPairDataHelper.createChild(
             uid: _firebaseUser.uid,
             race: widget.race,
             child: _createdChild,
             pairId: widget.pair.id,
-          )
-              .then((_) {
-            setState(() {
-              _isLoading = false;
-            });
-            Navigator.of(context).pop();
-            _globalMethods.showMaterialDialog(context, "Utworzono potomka");
-          }).catchError((error) {
-            setState(() {
-              _isLoading = false;
-            });
-            _globalMethods.showMaterialDialog(context,
-                "Operacja nieudana, nieznany błąd, spróbuj ponownie pózniej");
+            context: context,
+          );
+          setState(() {
+            _isLoading = false;
           });
         }
       });
     }
   }
 
+///////Editing parrots
+  ///
+  ///
   Future<void> _editParrot() async {
     if (!_formKey.currentState.validate()) {
       _globalMethods.showMaterialDialog(
           context, "Nie udało się edytować papugi, nie pełne dane");
     } else {
+      setState(() {
+        _isLoading = true;
+      });
       await _globalMethods
           .checkInternetConnection(context)
           .then((result) async {
         if (!result) {
-          Navigator.of(context).pop();
           _globalMethods.showMaterialDialog(
               context, "brak połączenia z internetem.");
+          setState(() {
+            _isLoading = false;
+          });
           return;
         } else {
           setState(
             () {
-              _isLoading = true;
               _createdParrot = Parrot(
                   race: widget.parrot.race,
                   ringNumber: widget.parrot.ringNumber,
@@ -725,24 +724,14 @@ class _RaceListScreenState extends State<AddParrotScreen> {
                   pairRingNumber: widget.parrot.pairRingNumber);
             },
           );
-          await _parrotDataHelper
-              .updateParrot(
+          await _parrotDataHelper.updateParrot(
             uid: _firebaseUser.uid,
             parrot: _createdParrot,
             pairRingNumber: _createdParrot.pairRingNumber,
-          )
-              .then((_) {
-            setState(() {
-              _isLoading = false;
-            });
-            Navigator.of(context).pop();
-            _globalMethods.showMaterialDialog(context, "Edytowano dane");
-          }).catchError((error) {
-            setState(() {
-              _isLoading = false;
-            });
-            _globalMethods.showMaterialDialog(context,
-                "Operacja nieudana, nieznany błąd, spróbuj ponownie pózniej");
+            context: context,
+          );
+          setState(() {
+            _isLoading = false;
           });
         }
       });

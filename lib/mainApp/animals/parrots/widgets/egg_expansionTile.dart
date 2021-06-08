@@ -96,39 +96,22 @@ class _EggExpansionTileState extends State<EggExpansionTile> {
 
   Future<void> _setEggsDate(String date) async {
     final _firebaseUser = FirebaseAuth.instance.currentUser;
-    await _globalMethods.checkInternetConnection(context).then((result) {
+    setState(() {
+      _isLoading = true;
+    });
+    await _globalMethods.checkInternetConnection(context).then((result) async {
       if (!result) {
-        Navigator.of(context).pop();
+        setState(() {
+          _isLoading = false;
+        });
         _globalMethods.showMaterialDialog(
             context, "brak połączenia z internetem.");
       } else {
-        setState(() {
-          _isLoading = true;
-        });
+        await _parrotPairDataHelper.setEggIncubationTime(
+            _firebaseUser.uid, widget.raceName, widget.pairID, date, context);
 
-        _parrotPairDataHelper
-            .setEggIncubationTime(
-          _firebaseUser.uid,
-          widget.raceName,
-          widget.pairID,
-          date,
-        )
-            .then((_) {
-          setState(() {
-            _isLoading = false;
-          });
-          _countData();
-          date != "brak"
-              ? _globalMethods.showMaterialDialog(
-                  context, "Ustawiono datę rozpoczęcia inkubacji")
-              : _globalMethods.showMaterialDialog(
-                  context, "Anulowanie odliczania czasu inkubacji");
-        }).catchError((error) {
-          setState(() {
-            _isLoading = false;
-          });
-          _globalMethods.showMaterialDialog(context,
-              "Operacja nieudana, nieznany błąd, spróbuj ponownie pózniej");
+        setState(() {
+          _isLoading = false;
         });
       }
     });
