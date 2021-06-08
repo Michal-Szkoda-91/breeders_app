@@ -668,12 +668,8 @@ class _AddPairScreenState extends State<AddPairScreen> {
                                 color: Theme.of(context).textSelectionColor,
                               ),
                             ),
-                            onPressed: () async {
-                              Navigator.of(context).pop();
-                              setState(() {
-                                _isLoading = true;
-                              });
-                              await sendPicture(context).then((_) {
+                            onPressed: () {
+                              sendPicture(context).then((_) {
                                 _createPair(context);
                               }).catchError((error) {
                                 _globalMethods.showMaterialDialog(context,
@@ -727,10 +723,6 @@ class _AddPairScreenState extends State<AddPairScreen> {
 
   Future<void> _createPair(BuildContext context) async {
     setState(() {
-      _isLoading = true;
-    });
-
-    setState(() {
       _createdPair = ParrotPairing(
         id: "$_choosenFeMaleParrotRingNumber - $_choosenMaleParrotRingNumber - ${DateTime.now()}",
         femaleRingNumber: _choosenFeMaleParrotRingNumber,
@@ -750,7 +742,7 @@ class _AddPairScreenState extends State<AddPairScreen> {
         }
       });
     });
-    await _parrotPairDataHelper
+    _parrotPairDataHelper
         .createPairCollection(
       uid: firebaseUser.uid,
       pair: _createdPair,
@@ -838,6 +830,7 @@ class _AddPairScreenState extends State<AddPairScreen> {
     } else {
       setState(() {
         _pictureUrl = basename(_image.path);
+        _isLoading = true;
       });
       Reference ref = FirebaseStorage.instance.ref().child(_pictureUrl);
       UploadTask uploadTask = ref.putFile(_image);

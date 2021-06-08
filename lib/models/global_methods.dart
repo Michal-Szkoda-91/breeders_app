@@ -90,11 +90,9 @@ class GlobalMethods {
 
   Future<bool> checkInternetConnection(BuildContext context) async {
     try {
-      showMaterialDialog(context, "Sprawdzanie połączenia z internetem...");
-
       final result = await InternetAddress.lookup('google.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-        Navigator.of(context).pop();
+        // Navigator.of(context).pop();
         return true;
       }
     } on SocketException catch (e) {

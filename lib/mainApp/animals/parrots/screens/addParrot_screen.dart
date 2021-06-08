@@ -592,9 +592,7 @@ class _RaceListScreenState extends State<AddParrotScreen> {
       _globalMethods.showMaterialDialog(
           context, "Nie udało się dodać papugi, nie pełne dane");
     } else {
-      await _globalMethods
-          .checkInternetConnection(context)
-          .then((result) async {
+      _globalMethods.checkInternetConnection(context).then((result) async {
         setState(() {
           _ringNumber = "$_country-$_year-$_symbol-$_parrotNumber";
         });
@@ -621,7 +619,7 @@ class _RaceListScreenState extends State<AddParrotScreen> {
                 sex: _sexName);
           });
 
-          await _parrotDataHelper
+          _parrotDataHelper
               .createParrotCollection(
             uid: _firebaseUser.uid,
             parrot: _createdParrot,
