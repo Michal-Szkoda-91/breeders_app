@@ -5,8 +5,8 @@ import 'package:provider/provider.dart';
 import 'authentication/authenticate.dart';
 import 'models/user.dart';
 
-import 'authentication/verification_screen.dart';
 import 'mainApp/animals/parrots/screens/parrot_race_list_screen.dart';
+import 'privacy_politicy/politycy_privacy_screen.dart';
 
 class Wrapper extends StatefulWidget {
   @override
@@ -47,7 +47,7 @@ class _WrapperState extends State<Wrapper> {
     } else {
       return loggedUser.emailVerified
           ? ParrotsRaceListScreen()
-          : VerificationEmailScreen();
+          : PolitycyPrivacyScreen();
     }
   }
 }

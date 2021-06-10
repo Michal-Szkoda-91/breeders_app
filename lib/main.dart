@@ -10,6 +10,7 @@ import 'mainApp/animals/parrots/screens/addParrot_screen.dart';
 import 'mainApp/animals/parrots/screens/parrot_race_list_screen.dart';
 import 'mainApp/animals/parrots/screens/parrotsList.dart';
 import 'fireInitialization/initWidget.dart';
+import 'privacy_politicy/politycy_privacy_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -58,6 +59,7 @@ class MyApp extends StatelessWidget {
         IncubationInformationScreen.routeName: (ctx) =>
             IncubationInformationScreen(),
         VerificationEmailScreen.routeName: (ctx) => VerificationEmailScreen(),
+        PolitycyPrivacyScreen.routeName: (ctx) => PolitycyPrivacyScreen(),
       },
     );
   }
