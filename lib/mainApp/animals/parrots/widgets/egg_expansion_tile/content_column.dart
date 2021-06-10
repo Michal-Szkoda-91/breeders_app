@@ -5,9 +5,14 @@ class ContentColumn extends StatelessWidget {
   final String showEggDate;
   final int daysToBorn;
   final String bornTimeString;
+  final int incubationLength;
 
   const ContentColumn(
-      {Key key, this.showEggDate, this.daysToBorn, this.bornTimeString})
+      {Key key,
+      this.showEggDate,
+      this.daysToBorn,
+      this.bornTimeString,
+      this.incubationLength})
       : super(key: key);
 
   @override
@@ -57,6 +62,33 @@ class ContentColumn extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 5),
+        showEggDate != "brak"
+            ? Row(
+                children: [
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.40,
+                    child: AutoSizeText(
+                      "Długość inkubacji ",
+                      maxLines: 1,
+                      style: TextStyle(
+                        color: Theme.of(context).hintColor,
+                        fontSize:
+                            MediaQuery.of(context).size.width < 330 ? 10 : 14,
+                      ),
+                    ),
+                  ),
+                  Spacer(),
+                  Text(
+                    "${incubationLength.toString()} dni",
+                    style: TextStyle(
+                      color: Theme.of(context).textSelectionColor,
+                      fontSize:
+                          MediaQuery.of(context).size.width < 330 ? 10 : 14,
+                    ),
+                  ),
+                ],
+              )
+            : const Center(),
         showEggDate != "brak"
             ? Row(
                 children: [

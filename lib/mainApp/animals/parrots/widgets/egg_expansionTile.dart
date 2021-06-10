@@ -51,7 +51,7 @@ class _EggExpansionTileState extends State<EggExpansionTile> {
         DateTime incubationTime = DateTime.parse(widget.showEggDate);
         DateTime bornTime =
             incubationTime.add(Duration(days: _incubationDuration));
-        _daysToBorn = bornTime.difference(today).inDays;
+        _daysToBorn = bornTime.difference(today).inDays + 1;
         _bornTimeString = DateFormat("yyyy-MM-dd").format(bornTime);
       }
     });
@@ -67,6 +67,7 @@ class _EggExpansionTileState extends State<EggExpansionTile> {
                   showEggDate: widget.showEggDate,
                   daysToBorn: _daysToBorn,
                   bornTimeString: _bornTimeString,
+                  incubationLength: _incubationDuration,
                 ),
               )
             : ExpansionTile(
@@ -74,6 +75,7 @@ class _EggExpansionTileState extends State<EggExpansionTile> {
                   showEggDate: widget.showEggDate,
                   daysToBorn: _daysToBorn,
                   bornTimeString: _bornTimeString,
+                  incubationLength: _incubationDuration,
                 ),
                 children: [
                   Column(
@@ -109,7 +111,7 @@ class _EggExpansionTileState extends State<EggExpansionTile> {
       } else {
         await _parrotPairDataHelper.setEggIncubationTime(
             _firebaseUser.uid, widget.raceName, widget.pairID, date, context);
-
+        _countData();
         setState(() {
           _isLoading = false;
         });
