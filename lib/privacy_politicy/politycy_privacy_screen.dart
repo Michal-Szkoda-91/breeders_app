@@ -1,9 +1,11 @@
-import 'package:breeders_app/mainApp/animals/parrots/screens/parrot_race_list_screen.dart';
-import 'package:breeders_app/mainApp/animals/parrots/screens/parrotsList.dart';
-import 'package:breeders_app/services/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:url_launcher/url_launcher.dart';
 
+import '../mainApp/animals/parrots/screens/parrot_race_list_screen.dart';
+import '../privacy_politicy/policy_model.dart';
+import '../services/auth.dart';
 import '../authentication/verification_screen.dart';
 import '../globalWidgets/mainBackground.dart';
 import '../mainApp/widgets/custom_drawer.dart';
@@ -17,6 +19,7 @@ class PolitycyPrivacyScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AuthService _auth = AuthService();
+    PolicyModel policyModel = PolicyModel();
 
     return Scaffold(
       endDrawer: CustomDrawer(auth: _auth),
@@ -32,9 +35,14 @@ class PolitycyPrivacyScreen extends StatelessWidget {
             Container(
               height: MediaQuery.of(context).size.height * 0.7,
               width: MediaQuery.of(context).size.width * 0.9,
-              color: Theme.of(context).backgroundColor,
-              child: Column(
-                children: [],
+              color: Theme.of(context).textSelectionColor,
+              child: SingleChildScrollView(
+                child: Html(
+                  data: policyModel.policy,
+                  onLinkTap: (url) {
+                    launch(url);
+                  },
+                ),
               ),
             ),
             const SizedBox(height: 10),
