@@ -36,7 +36,7 @@ class LogoutButton extends StatelessWidget {
   _showDialog(BuildContext dialogContext) {
     showDialog(
       context: dialogContext,
-      builder: (_) => new AlertDialog(
+      builder: (ctx) => new AlertDialog(
         title: const Text(
           "Czy na pewno chcesz wylogować się z aplikacji?",
           textAlign: TextAlign.center,
@@ -50,7 +50,7 @@ class LogoutButton extends StatelessWidget {
               ),
             ),
             onPressed: () async {
-              Navigator.of(dialogContext).pop();
+              Navigator.of(ctx).pop();
               await _auth.signOut();
               Navigator.pushAndRemoveUntil(
                 dialogContext,
@@ -69,7 +69,7 @@ class LogoutButton extends StatelessWidget {
               ),
             ),
             onPressed: () {
-              Navigator.pop(dialogContext);
+              Navigator.pop(ctx);
             },
           )
         ],

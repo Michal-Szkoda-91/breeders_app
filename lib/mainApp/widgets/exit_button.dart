@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
-
 class ExitButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -29,7 +28,7 @@ class ExitButton extends StatelessWidget {
   _showDialog(BuildContext dialogContext) {
     showDialog(
       context: dialogContext,
-      builder: (_) => new AlertDialog(
+      builder: (ctx) => new AlertDialog(
         title: const Text(
           "Czy na pewno chcesz zamknąć aplikacje?",
           textAlign: TextAlign.center,
@@ -52,7 +51,7 @@ class ExitButton extends StatelessWidget {
               ),
             ),
             onPressed: () {
-              Navigator.pop(dialogContext);
+              Navigator.pop(ctx);
             },
           )
         ],
