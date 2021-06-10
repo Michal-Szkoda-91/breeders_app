@@ -130,7 +130,7 @@ class _AuthenticateState extends State<Authenticate> {
   _showDialog(BuildContext dialogContext) {
     showDialog(
       context: dialogContext,
-      builder: (_) => new AlertDialog(
+      builder: (ctx) => new AlertDialog(
         title: const Text("Czy na pewno chcesz zamknąć aplikacje?"),
         actions: <Widget>[
           FlatButton(
@@ -150,7 +150,7 @@ class _AuthenticateState extends State<Authenticate> {
               ),
             ),
             onPressed: () {
-              Navigator.pop(dialogContext);
+              Navigator.pop(ctx);
             },
           )
         ],
