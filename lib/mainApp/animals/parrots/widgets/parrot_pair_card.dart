@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:group_button/group_button.dart';
 
-import '../screens/pairList_screen.dart';
 import '../models/pairing_model.dart';
 import '../models/parrot_model.dart';
 import '../../../../models/global_methods.dart';
