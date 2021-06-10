@@ -1,11 +1,12 @@
-import 'package:breeders_app/authentication/verification_screen.dart';
-import 'package:breeders_app/globalWidgets/mainBackground.dart';
-import 'package:breeders_app/mainApp/widgets/custom_drawer.dart';
+import 'package:breeders_app/mainApp/animals/parrots/screens/parrot_race_list_screen.dart';
+import 'package:breeders_app/mainApp/animals/parrots/screens/parrotsList.dart';
 import 'package:breeders_app/services/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_nav_bar/google_nav_bar.dart';
 
+import '../authentication/verification_screen.dart';
+import '../globalWidgets/mainBackground.dart';
+import '../mainApp/widgets/custom_drawer.dart';
 import '../main.dart';
 
 class PolitycyPrivacyScreen extends StatelessWidget {
@@ -85,36 +86,18 @@ class PolitycyPrivacyScreen extends StatelessWidget {
   }
 
   void _goToVerificationScreen(BuildContext context) async {
-    Navigator.pushNamed(
-      context,
-      VerificationEmailScreen.routeName,
-    );
+    User loggedUser;
+    final auth = FirebaseAuth.instance;
+    loggedUser = auth.currentUser;
+
+    loggedUser.emailVerified
+        ? Navigator.of(context).pushNamedAndRemoveUntil(
+            ParrotsRaceListScreen.routeName,
+            (Route<dynamic> route) => false,
+          )
+        : Navigator.pushNamed(
+            context,
+            VerificationEmailScreen.routeName,
+          );
   }
 }
-// class PoliticyPrivacy {
-//   bool showPolitycyDialog(BuildContext context) {
-//     double padding = MediaQuery.of(context).size.height * 0.4;
-//     showDialog(
-//       context: context,
-//       builder: (_) => Padding(
-//         padding: EdgeInsets.only(top: padding),
-//         child: new AlertDialog(
-//           backgroundColor: Theme.of(context).backgroundColor,
-//           title: new Text(
-//             "Polityka prywatności",
-//             style: TextStyle(color: Theme.of(context).textSelectionColor),
-//             textAlign: TextAlign.center,
-//           ),
-//           content: new Text(
-//             "Tutaj nalezy dodac politykę",
-//             textAlign: TextAlign.center,
-//             style: TextStyle(color: Theme.of(context).textSelectionColor),
-//           ),
-//           actions: [
-
-//           ],
-//         ),
-//       ),
-//     );
-//     return false;
-//   }

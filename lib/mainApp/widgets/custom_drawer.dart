@@ -4,6 +4,8 @@ import '../../globalWidgets/imageContainerChinchila.dart';
 import '../../services/auth.dart';
 import 'incubation_drawer_info.dart';
 import 'logoutButton.dart';
+import 'policyButton.dart';
+import 'exit_button.dart';
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({
@@ -23,7 +25,7 @@ class CustomDrawer extends StatelessWidget {
           decoration: BoxDecoration(
             color: Theme.of(context).backgroundColor,
           ),
-          child: ListView(
+          child: Column(
             children: [
               const SizedBox(height: 10),
               const ImageContainerParrotSmall(),
@@ -39,16 +41,23 @@ class CustomDrawer extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
               ),
-              const Divider(
-                thickness: 2,
-              ),
+              const Divider(thickness: 2),
               const SizedBox(height: 10),
               IncubationInformation(),
               const SizedBox(height: 10),
-              const Divider(
-                thickness: 2,
+              const Divider(thickness: 2),
+              PolicyButton(),
+              Spacer(),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 30.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    LogoutButton(auth: _auth),
+                    ExitButton(),
+                  ],
+                ),
               ),
-              LogoutButton(auth: _auth),
             ],
           ),
         ),
