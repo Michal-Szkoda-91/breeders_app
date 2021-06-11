@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../privacy_politicy/politycy_privacy_screen.dart';
+import '../../help/help_screen.dart';
 
-class PolicyButton extends StatelessWidget {
-  const PolicyButton({
+class HelpButton extends StatelessWidget {
+  const HelpButton({
     Key key,
   }) : super(key: key);
 
@@ -11,18 +11,18 @@ class PolicyButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return FlatButton.icon(
       icon: Icon(
-        Icons.policy,
+        Icons.help,
         color: Theme.of(context).textSelectionColor,
         size: 30,
       ),
       label: Text(
-        'Polityka Prywatności',
+        'Pomoc',
         style: TextStyle(
           color: Theme.of(context).textSelectionColor,
         ),
       ),
       onPressed: () async {
-        Navigator.pushNamed(context, PolitycyPrivacyScreen.routeName);
+        Navigator.pushNamed(context, HelpScreen.routeName);
       },
     );
   }

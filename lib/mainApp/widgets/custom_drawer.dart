@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../globalWidgets/imageContainerChinchila.dart';
 import '../../services/auth.dart';
 import 'incubation_drawer_info.dart';
+import 'helpButton.dart';
 import 'logoutButton.dart';
 import 'policyButton.dart';
 import 'exit_button.dart';
@@ -46,8 +47,11 @@ class CustomDrawer extends StatelessWidget {
               IncubationInformation(),
               const SizedBox(height: 10),
               const Divider(thickness: 2),
-              PolicyButton(),
               Spacer(),
+              const Divider(thickness: 2),
+              HelpButton(),
+              PolicyButton(),
+              const Divider(thickness: 2),
               Padding(
                 padding: const EdgeInsets.only(bottom: 30.0),
                 child: Row(

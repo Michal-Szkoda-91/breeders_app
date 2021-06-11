@@ -5,7 +5,7 @@ class PolicyModel {
 <p>Korzystanie z aplikacji jest w pełni darmowe.</p>
 <p>Właścicielem aplikacji jest Michał Szkoda.</p>
 <p><strong>Rodzaje zbieranych informacji:</strong></p>
-<p>Auto nie zbiera danych, kt&oacute;re mogłyby w jakikolwiek spos&oacute;b pozwolić na identyfikacje (ustalenie tożsamości) Użytkownika, nie są gromadzone przez aplikację ani udostępniane przez Usługodawcę jakimkolwiek osobom trzecim.</p>
+<p>Autor nie zbiera danych, kt&oacute;re mogłyby w jakikolwiek spos&oacute;b pozwolić na identyfikacje (ustalenie tożsamości) Użytkownika, nie są gromadzone przez aplikację ani udostępniane przez Usługodawcę jakimkolwiek osobom trzecim.</p>
 <p>Zbierane są tylko informacje niezbędne do zapewniania pełnej funkcjonalności aplikacji. Obejmuje to tylko <strong>adres email.</strong> Program korzysta z uwierzytelniania <strong>Google</strong> <strong>Firebase</strong>. Dzięki temu użytkownik ma r&oacute;wnież możliwość użycia własnego konta Google w celu logowania. Zebrane dane pozwalają na dostęp do swojej hodowli z r&oacute;żnych urządzeń oraz odzyskanie zapomnianego hasła lub ustawienie nowego.</p>
 <p>- Aby uzyskać więcej informacji o Google Firebase <a href="https://policies.google.com/privacy">kliknij</a>.</p>
 <p>Aplikacja anonimowo zbiera dane statystyczne udostępniane przez system. Za zbieranie tych danych oraz sposobu użytkowania aplikacji odpowiedzialne są następujące usługi:</p>
