@@ -5,10 +5,8 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../mainApp/animals/parrots/screens/parrot_race_list_screen.dart';
 import '../privacy_politicy/policy_model.dart';
-import '../services/auth.dart';
 import '../authentication/verification_screen.dart';
 import '../globalWidgets/mainBackground.dart';
-import '../mainApp/widgets/custom_drawer.dart';
 import '../main.dart';
 
 class PolitycyPrivacyScreen extends StatelessWidget {
@@ -18,11 +16,9 @@ class PolitycyPrivacyScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AuthService _auth = AuthService();
     PolicyModel policyModel = PolicyModel();
 
     return Scaffold(
-      endDrawer: CustomDrawer(auth: _auth),
       endDrawerEnableOpenDragGesture: false,
       backgroundColor: Colors.transparent,
       appBar: AppBar(
@@ -52,7 +48,7 @@ class PolitycyPrivacyScreen extends StatelessWidget {
                 RaisedButton(
                   color: Theme.of(context).primaryColor,
                   child: Text(
-                    "Anuluj",
+                    "Rezygnuję",
                     style: TextStyle(
                       color: Theme.of(context).textSelectionColor,
                     ),
