@@ -107,6 +107,19 @@ flutter:
     - assets/image/parrotsRace/Nierozłączka.jpg
     - assets/image/parrotsRace/Papużka_falista.jpg
     - assets/image/parrotsRace/parrot_pair.jpg
+    # Help Screens
+    - assets/help/help_screen_1.png
+    - assets/help/help_screen_2.png
+    - assets/help/help_screen_3.png
+    - assets/help/help_screen_4.png
+    - assets/help/help_screen_5.png
+    - assets/help/help_screen_6.png
+    - assets/help/help_screen_7.png
+    - assets/help/help_screen_8.png
+    - assets/help/help_screen_9.png
+    - assets/help/help_screen_10.png
+    - assets/help/help_screen_11.png
+    - assets/help/help_screen_12.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
