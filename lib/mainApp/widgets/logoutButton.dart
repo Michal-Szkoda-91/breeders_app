@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
 import '../../services/auth.dart';
@@ -25,6 +26,7 @@ class LogoutButton extends StatelessWidget {
           'Wyloguj',
           style: TextStyle(
             color: Theme.of(context).textSelectionColor,
+            fontSize: MediaQuery.of(context).size.width < 340 ? 10 : 16,
           ),
         ),
         onPressed: () async {
@@ -43,11 +45,8 @@ class LogoutButton extends StatelessWidget {
         ),
         actions: <Widget>[
           FlatButton(
-            child: const Text(
+            child: AutoSizeText(
               'Wyloguj',
-              style: const TextStyle(
-                fontSize: 20,
-              ),
             ),
             onPressed: () async {
               Navigator.of(ctx).pop();
@@ -62,11 +61,8 @@ class LogoutButton extends StatelessWidget {
             },
           ),
           FlatButton(
-            child: const Text(
+            child: AutoSizeText(
               'Anuluj',
-              style: const TextStyle(
-                fontSize: 20,
-              ),
             ),
             onPressed: () {
               Navigator.pop(ctx);

@@ -19,8 +19,11 @@ class CustomDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(MediaQuery.of(context).size.width.toString());
     return Container(
-      width: MediaQuery.of(context).size.width * 0.75,
+      width: MediaQuery.of(context).size.width < 340
+          ? MediaQuery.of(context).size.width * 0.85
+          : MediaQuery.of(context).size.width * 0.75,
       child: Drawer(
         child: Container(
           decoration: BoxDecoration(

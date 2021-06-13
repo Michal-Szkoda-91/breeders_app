@@ -433,7 +433,7 @@ class _AddPairScreenState extends State<AddPairScreen> {
       color: Colors.transparent,
       shadowColor: Theme.of(context).cardColor,
       child: Padding(
-        padding: const EdgeInsets.all(12.0),
+        padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
             _customTextIcon(
@@ -495,7 +495,7 @@ class _AddPairScreenState extends State<AddPairScreen> {
       color: Colors.transparent,
       shadowColor: Theme.of(context).cardColor,
       child: Padding(
-        padding: const EdgeInsets.all(6.0),
+        padding: const EdgeInsets.all(5.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -516,7 +516,7 @@ class _AddPairScreenState extends State<AddPairScreen> {
             ),
             Divider(
               color: Theme.of(context).textSelectionColor,
-              height: 10,
+              height: 7,
               thickness: 1,
             ),
           ],
@@ -731,7 +731,7 @@ class _AddPairScreenState extends State<AddPairScreen> {
     return showDialog(
       barrierDismissible: false,
       context: context,
-      child: AlertDialog(
+      builder: (ctx) => new AlertDialog(
         backgroundColor: Theme.of(context).backgroundColor,
         title: Text(
           "Uwaga!",
@@ -740,7 +740,7 @@ class _AddPairScreenState extends State<AddPairScreen> {
           ),
         ),
         content: Text(
-          "Nie wybrano zdjęcia par.. czy mimo to chcesz kontynuwać? Nie będzie tej możliwości po utworzeniu pary.",
+          "Nie wybrano zdjęcia par. Czy mimo to chcesz kontynuwać? Nie będzie tej możliwości po utworzeniu pary.",
           style: TextStyle(
             color: Theme.of(context).textSelectionColor,
           ),
@@ -765,7 +765,7 @@ class _AddPairScreenState extends State<AddPairScreen> {
                       setState(() {
                         _isLoading = true;
                       });
-                      Navigator.of(context).pop();
+                      Navigator.of(ctx).pop();
                       await sendPicture(context).then((_) async {
                         await _createPair(context);
                       });
@@ -781,7 +781,7 @@ class _AddPairScreenState extends State<AddPairScreen> {
                   ),
                   onPressed: () {
                     FocusScope.of(context).requestFocus(new FocusNode());
-                    Navigator.of(context).pop();
+                    Navigator.of(ctx).pop();
                     _rrectController
                         .animateTo(
                       0.0,

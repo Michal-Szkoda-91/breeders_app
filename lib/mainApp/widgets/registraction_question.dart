@@ -1,4 +1,3 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
 class RegisterQuestion extends StatelessWidget {
@@ -13,10 +12,11 @@ class RegisterQuestion extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        AutoSizeText(
+        Text(
           'Nie masz konta?',
           style: TextStyle(
             color: Theme.of(context).textSelectionColor,
+            fontSize: MediaQuery.of(context).size.width < 340 ? 10 : 16,
           ),
         ),
         FlatButton(
@@ -25,6 +25,7 @@ class RegisterQuestion extends StatelessWidget {
             style: TextStyle(
               color: Theme.of(context).textSelectionColor,
               fontWeight: FontWeight.bold,
+              fontSize: MediaQuery.of(context).size.width < 340 ? 10 : 16,
             ),
           ),
           onPressed: () {

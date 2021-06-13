@@ -41,7 +41,7 @@ class InkubationChildrenDialog {
                       createText(context,
                           "Lista potomków będzie posortowana alfabetycznie wg nr obrączki."),
                       createText(context,
-                          "Zawartość tabele POTOMSTWO możesz przesuwać w lewo lub w prawo."),
+                          "Zawartość tabeli POTOMSTWO możesz przesuwać w lewo lub w prawo."),
                     ],
                   ),
                 ),

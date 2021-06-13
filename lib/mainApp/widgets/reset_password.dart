@@ -1,4 +1,3 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -16,11 +15,11 @@ class ResetPassword extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          AutoSizeText(
+          Text(
             'Zapomniane hasło?',
             style: TextStyle(
               color: Theme.of(context).textSelectionColor,
-              // fontSize: 16,
+              fontSize: MediaQuery.of(context).size.width < 340 ? 10 : 16,
             ),
           ),
           FlatButton(
@@ -28,8 +27,8 @@ class ResetPassword extends StatelessWidget {
               'Zresetuj je!',
               style: TextStyle(
                 color: Theme.of(context).textSelectionColor,
-                // fontSize: 16,
                 fontWeight: FontWeight.bold,
+                fontSize: MediaQuery.of(context).size.width < 340 ? 10 : 16,
               ),
             ),
             onPressed: () {
