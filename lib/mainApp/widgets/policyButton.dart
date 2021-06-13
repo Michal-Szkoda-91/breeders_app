@@ -22,6 +22,7 @@ class PolicyButton extends StatelessWidget {
         ),
       ),
       onPressed: () async {
+        Navigator.of(context).pop();
         Navigator.pushNamed(context, PolitycyPrivacyScreen.routeName);
       },
     );

@@ -22,6 +22,7 @@ class HelpButton extends StatelessWidget {
         ),
       ),
       onPressed: () async {
+        Navigator.of(context).pop();
         Navigator.pushNamed(context, HelpScreen.routeName);
       },
     );

@@ -1,3 +1,4 @@
+import 'package:draggable_scrollbar_sliver/draggable_scrollbar_sliver.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -17,6 +18,7 @@ class PolitycyPrivacyScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     PolicyModel policyModel = PolicyModel();
+    ScrollController _rrectController = ScrollController();
 
     return Scaffold(
       endDrawerEnableOpenDragGesture: false,
@@ -32,12 +34,18 @@ class PolitycyPrivacyScreen extends StatelessWidget {
               height: MediaQuery.of(context).size.height * 0.7,
               width: MediaQuery.of(context).size.width * 0.9,
               color: Theme.of(context).textSelectionColor,
-              child: SingleChildScrollView(
-                child: Html(
-                  data: policyModel.policy,
-                  onLinkTap: (url) {
-                    launch(url);
-                  },
+              child: DraggableScrollbar.rrect(
+                controller: _rrectController,
+                heightScrollThumb: 100,
+                backgroundColor: Theme.of(context).accentColor,
+                child: SingleChildScrollView(
+                  controller: _rrectController,
+                  child: Html(
+                    data: policyModel.policy,
+                    onLinkTap: (url) {
+                      launch(url);
+                    },
+                  ),
                 ),
               ),
             ),

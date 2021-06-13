@@ -13,7 +13,7 @@ class GlobalMethods {
     return showDialog<void>(
       context: context,
       barrierDismissible: true,
-      builder: (BuildContext context) {
+      builder: (BuildContext ctx) {
         return AlertDialog(
           backgroundColor: Theme.of(context).backgroundColor,
           title: Text(
@@ -56,7 +56,7 @@ class GlobalMethods {
                 ),
               ),
               onPressed: () {
-                Navigator.of(context).pop();
+                Navigator.of(ctx).pop();
               },
             ),
           ],

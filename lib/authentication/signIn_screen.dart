@@ -67,7 +67,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   const ImageContainerParrot(),
                   SizedBox(height: _sizedBoxHeight),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 30),
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
                     child: Form(
                       key: _formKey,
                       child: Column(

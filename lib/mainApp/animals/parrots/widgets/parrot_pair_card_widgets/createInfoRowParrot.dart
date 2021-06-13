@@ -35,7 +35,7 @@ class CreateInfoRowParrot extends StatelessWidget {
           onTap: () {
             showDialog(
               context: context,
-              builder: (_) => new AlertDialog(
+              builder: (ctx) => new AlertDialog(
                 backgroundColor: Theme.of(context).backgroundColor,
                 scrollable: true,
                 title: new Text(
@@ -58,7 +58,7 @@ class CreateInfoRowParrot extends StatelessWidget {
                       ),
                     ),
                     onPressed: () {
-                      Navigator.of(context).pop();
+                      Navigator.of(ctx).pop();
                     },
                   )
                 ],

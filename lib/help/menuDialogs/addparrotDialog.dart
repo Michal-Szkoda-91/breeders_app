@@ -38,7 +38,7 @@ class AddParrotDialog {
                       createText(context, "A teraz uzupełnij wszystkie dane:"),
                       createPicture(context, "assets/help/help_screen_3.png"),
                       createText(context,
-                          "EDYTUJ już istniejący wpis w ekranie hodolwi, przesuwając zwartość w bok:"),
+                          "EDYTUJ już istniejący wpis w ekranie hodolwi, przesuwając zwartość tabeli Papug w bok:"),
                       createPicture(context, "assets/help/help_screen_4.png"),
                       createText(context,
                           "Aby USUNĄĆ jedną wybraną papugę należy na końcu tabeli w ekranie hodowli wybrać ikonę kosza:"),

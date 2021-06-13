@@ -37,7 +37,7 @@ class AddPairDialog {
                           "Wybierz samice i samca z wybranej rasy, jeśli nie ma możliwości wyboru dodaj najpierw odpowiednie papugi."),
                       createPicture(context, "assets/help/help_screen_8.png"),
                       createText(context,
-                          "Wpisz kolor, wybierz datę parowania i ewentualnie dodaj zdjęcie aparatem lub z pamięci telefonu."),
+                          "Wpisz kolor, wybierz datę parowania i ewentualnie dodaj zdjęcie aparatem lub wybierz je pamięci telefonu."),
                       createText(context,
                           "USUŃ parę wybierając odpowiedni przycisk na karcie PAR"),
                     ],

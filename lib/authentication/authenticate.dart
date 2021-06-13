@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:keyboard_visibility/keyboard_visibility.dart';
@@ -131,23 +132,20 @@ class _AuthenticateState extends State<Authenticate> {
     showDialog(
       context: dialogContext,
       builder: (ctx) => new AlertDialog(
-        title: const Text("Czy na pewno chcesz zamknąć aplikacje?"),
+        title: const Text(
+          "Czy na pewno chcesz zamknąć aplikacje?",
+          textAlign: TextAlign.center,
+        ),
         actions: <Widget>[
           FlatButton(
-            child: const Text(
+            child: AutoSizeText(
               'Zamknij',
-              style: const TextStyle(
-                fontSize: 20,
-              ),
             ),
             onPressed: () => exit(0),
           ),
           FlatButton(
-            child: const Text(
+            child: AutoSizeText(
               'Anuluj',
-              style: const TextStyle(
-                fontSize: 20,
-              ),
             ),
             onPressed: () {
               Navigator.pop(ctx);

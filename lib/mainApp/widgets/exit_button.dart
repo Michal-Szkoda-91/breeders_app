@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
 class ExitButton extends StatelessWidget {
@@ -16,9 +17,10 @@ class ExitButton extends StatelessWidget {
         'Zamknij',
         style: TextStyle(
           color: Theme.of(context).textSelectionColor,
+          fontSize: MediaQuery.of(context).size.width < 340 ? 10 : 16,
         ),
       ),
-      onPressed: () async {
+      onPressed: () {
         _showDialog(context);
       },
     );
@@ -35,20 +37,14 @@ class ExitButton extends StatelessWidget {
         ),
         actions: <Widget>[
           FlatButton(
-            child: const Text(
+            child: AutoSizeText(
               'Zamknij',
-              style: const TextStyle(
-                fontSize: 20,
-              ),
             ),
             onPressed: () => exit(0),
           ),
           FlatButton(
-            child: const Text(
+            child: AutoSizeText(
               'Anuluj',
-              style: const TextStyle(
-                fontSize: 20,
-              ),
             ),
             onPressed: () {
               Navigator.pop(ctx);
