@@ -107,6 +107,15 @@ flutter:
     - assets/image/parrotsRace/Nierozłączka.jpg
     - assets/image/parrotsRace/Papużka_falista.jpg
     - assets/image/parrotsRace/parrot_pair.jpg
+    - assets/image/parrotsRace/Kapturnica.jpg
+    - assets/image/parrotsRace/Żako.jpg
+    - assets/image/parrotsRace/Lora.jpg
+    - assets/image/parrotsRace/Szkarłatka.jpg
+    - assets/image/parrotsRace/Afrykanka.jpg
+    - assets/image/parrotsRace/Patagonka.jpg
+    - assets/image/parrotsRace/Stokówka.jpg
+    - assets/image/parrotsRace/Wróbliczka.jpg
+    - assets/image/parrotsRace/Piona.jpg
     # Help Screens
     - assets/help/help_screen_1.png
     - assets/help/help_screen_2.png

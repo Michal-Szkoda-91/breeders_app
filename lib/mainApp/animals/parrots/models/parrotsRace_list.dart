@@ -9,6 +9,12 @@ class ParrotsRace {
     /////
     ///// A
     {
+      "url": 'assets/image/parrotsRace/Afrykanka.jpg',
+      'name': 'Afrykanka',
+      'lac': '( lac: Poicephalus )',
+      'icubationTime': 26
+    },
+    {
       "url": 'assets/image/parrotsRace/Amazonka.jpg',
       'name': 'Amazonka',
       'lac': '( lac: Amazona )',
@@ -41,12 +47,24 @@ class ParrotsRace {
       'icubationTime': 25
     },
     {
+      "url": 'assets/image/parrotsRace/Kapturnica.jpg',
+      'name': 'Kapturnica',
+      'lac': '( lac: Deroptyus )',
+      'icubationTime': 26
+    },
+    {
       "url": 'assets/image/parrotsRace/Konura.jpg',
       'name': 'Konura',
       'lac': '( lac: Aratinga )',
       'icubationTime': 20
     },
     //// L
+    {
+      "url": 'assets/image/parrotsRace/Lora.jpg',
+      'name': 'Lora',
+      'lac': '( lac: Chalcopsitta )',
+      'icubationTime': 25
+    },
     {
       "url": 'assets/image/parrotsRace/Lorysa.jpg',
       'name': 'Lorysa',
@@ -88,10 +106,22 @@ class ParrotsRace {
     },
     ///// P
     {
+      "url": 'assets/image/parrotsRace/Patagonka.jpg',
+      'name': 'Patagonka',
+      'lac': '( lac: Cyanoliseus patagonus )',
+      'icubationTime': 21
+    },
+    {
       "url": 'assets/image/parrotsRace/Papużka_falista.jpg',
       'name': 'Papużka_falista',
       'lac': '( lac: Melopsittacus )',
       'icubationTime': 18
+    },
+    {
+      "url": 'assets/image/parrotsRace/Piona.jpg',
+      'name': 'Piona',
+      'lac': '( lac: Pionus )',
+      'icubationTime': 26
     },
     ///// R
     {
@@ -108,20 +138,49 @@ class ParrotsRace {
     },
     /////// S
     {
+      "url": 'assets/image/parrotsRace/Stokówka.jpg',
+      'name': 'Stokówka',
+      'lac': '( lac: Psilopsiagon )',
+      'icubationTime': 21
+    },
+    {
+      "url": 'assets/image/parrotsRace/Szkarłatka.jpg',
+      'name': 'Szkarłatka',
+      'lac': '( lac: Alisterus )',
+      'icubationTime': 21
+    },
+    {
       "url": 'assets/image/parrotsRace/Świergotka.jpg',
       'name': 'Świergotka',
       'lac': '( lac: Psephotus )',
       'icubationTime': 18
     },
+    /////// W
+    {
+      "url": 'assets/image/parrotsRace/Wróbliczka.jpg',
+      'name': 'Wróbliczka ',
+      'lac': '( lac: Forpus )',
+      'icubationTime': 21
+    },
+    /////// Ż
+    {
+      "url": 'assets/image/parrotsRace/Żako.jpg',
+      'name': 'Żako',
+      'lac': '( lac: Psittacus )',
+      'icubationTime': 30
+    },
   ];
 
   final List<String> parrotsNameList = [
+    'Afrykanka',
     'Amazonka',
     'Aleksandretta',
     'Ara',
     'Barwinka',
     'Kakadu',
+    'Kapturnica',
     'Konura',
+    'Lora',
     'Lorysa',
     'Łąkówka',
     'Mnicha',
@@ -129,8 +188,14 @@ class ParrotsRace {
     'Nierozłączka',
     'Nimfa',
     'Papużka_falista',
+    'Patagonka',
+    'Piona',
     'Rozella',
     'Rudosterka',
-    'Świergotka'
+    'Stokówka',
+    'Szkarłatka',
+    'Świergotka',
+    'Wróbliczka',
+    'Żako',
   ];
 }
