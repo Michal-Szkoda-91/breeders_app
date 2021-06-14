@@ -86,6 +86,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               false,
                               null,
                             ),
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
                             validator: (val) {
                               if (val.isEmpty) {
                                 return 'Wprowadź email';
@@ -117,6 +119,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               true,
                               1,
                             ),
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
                             validator: (val) {
                               if (val.isEmpty) {
                                 return 'Wprowadź hasło';
@@ -149,6 +153,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               true,
                               2,
                             ),
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+
                             validator: (val) {
                               if (val.isEmpty) {
                                 return 'Potwierdź hasło';

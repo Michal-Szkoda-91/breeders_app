@@ -5,7 +5,7 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../mainApp/animals/parrots/screens/parrot_race_list_screen.dart';
-import '../privacy_politicy/policy_model.dart';
+import '../privacy_policy/policy_model.dart';
 import '../authentication/verification_screen.dart';
 import '../globalWidgets/mainBackground.dart';
 import '../main.dart';
