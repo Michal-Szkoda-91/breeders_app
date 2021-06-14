@@ -18,7 +18,7 @@ class MainBackground extends StatelessWidget {
           fit: BoxFit.fill,
         ),
       ),
-      alignment: Alignment.center,
+      // alignment: Alignment.center,
       child: child,
     );
   }

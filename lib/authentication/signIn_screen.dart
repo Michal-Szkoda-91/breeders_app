@@ -84,6 +84,8 @@ class _SignInScreenState extends State<SignInScreen> {
                               Icons.email,
                               false,
                             ),
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
                             validator: (val) {
                               if (val.isEmpty) {
                                 return 'Wprowadź email';
@@ -114,6 +116,8 @@ class _SignInScreenState extends State<SignInScreen> {
                               Icons.lock_outlined,
                               true,
                             ),
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
                             validator: (val) {
                               if (val.isEmpty) {
                                 return 'Wprowadź hasło';
@@ -160,7 +164,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           GoogleButton(function: _googleSingIn),
                           const SizedBox(height: 45),
                           RegisterQuestion(function: widget.changePage),
-                          ResetPassword(email: email),
+                          ResetPassword(),
                         ],
                       ),
                     ),

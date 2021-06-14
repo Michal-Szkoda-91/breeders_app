@@ -66,23 +66,19 @@ class GlobalMethods {
   }
 
   showMaterialDialog(BuildContext context, String text) async {
-    double padding = MediaQuery.of(context).size.height * 0.4;
     await showDialog(
       context: context,
-      builder: (_) => Padding(
-        padding: EdgeInsets.only(top: padding),
-        child: new AlertDialog(
-          backgroundColor: Theme.of(context).backgroundColor,
-          title: new Text(
-            "Informacja",
-            style: TextStyle(color: Theme.of(context).textSelectionColor),
-            textAlign: TextAlign.center,
-          ),
-          content: new Text(
-            text,
-            textAlign: TextAlign.center,
-            style: TextStyle(color: Theme.of(context).textSelectionColor),
-          ),
+      builder: (_) => new AlertDialog(
+        backgroundColor: Theme.of(context).backgroundColor,
+        title: new Text(
+          "Informacja",
+          style: TextStyle(color: Theme.of(context).textSelectionColor),
+          textAlign: TextAlign.center,
+        ),
+        content: new Text(
+          text,
+          textAlign: TextAlign.center,
+          style: TextStyle(color: Theme.of(context).textSelectionColor),
         ),
       ),
     );

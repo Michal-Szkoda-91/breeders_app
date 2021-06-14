@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../privacy_politicy/politycy_privacy_screen.dart';
+import '../../privacy_policy/policy_privacy_screen.dart';
 
 class PolicyButton extends StatelessWidget {
   const PolicyButton({

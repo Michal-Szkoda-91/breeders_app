@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
+import 'authentication/resetPass_screen.dart';
 import 'authentication/verification_screen.dart';
 import 'mainApp/animals/parrots/screens/addPairParrot_screen.dart';
 import 'mainApp/animals/parrots/screens/incubationInfo_screen.dart';
@@ -10,7 +11,7 @@ import 'mainApp/animals/parrots/screens/addParrot_screen.dart';
 import 'mainApp/animals/parrots/screens/parrot_race_list_screen.dart';
 import 'mainApp/animals/parrots/screens/parrotsList.dart';
 import 'fireInitialization/initWidget.dart';
-import 'privacy_politicy/politycy_privacy_screen.dart';
+import 'privacy_policy/policy_privacy_screen.dart';
 import 'help/help_screen.dart';
 
 void main() {
@@ -62,6 +63,7 @@ class MyApp extends StatelessWidget {
         VerificationEmailScreen.routeName: (ctx) => VerificationEmailScreen(),
         PolitycyPrivacyScreen.routeName: (ctx) => PolitycyPrivacyScreen(),
         HelpScreen.routeName: (ctx) => HelpScreen(),
+        ResetPasswordScreen.routeName: (ctx) => ResetPasswordScreen(),
       },
     );
   }
