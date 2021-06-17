@@ -117,7 +117,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
       final _authReset = FirebaseAuth.instance;
       await _authReset.sendPasswordResetEmail(email: email);
       globalMethods.showMaterialDialog(context,
-          "Wysłano wiadomość resetującą hasło. Pamiętaj, że nowe musi odpowiadać wymaganiaom postawionym w aplikacji");
+          "Wysłano wiadomość resetującą hasło. Pamiętaj, że nowe musi odpowiadać wymaganiaom postawionym w aplikacji tzn. Zawierać conajmniej jedną małą i dużą literę oraz cyfrę.");
     }
   }
 
