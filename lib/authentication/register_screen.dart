@@ -28,11 +28,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   //patterns for validation
 
-  Pattern _passwordPattern =
-      r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!?_@#\$&*~]).{8,20}$';
+  Pattern _passwordPattern = r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,20}$';
 
   String _hint =
-      'Email:\nPrawidłowy format to, np. janek_kowalski@gmail.com\n\nHasło:\nMusi składać się z conajmniej 8 znaków, a także zawierać małą i dużą literę, cyfrę oraz znak specjalny. Maksymalna długość to 20 znaków. Oba hasła muszą być identyczne.';
+      'Email:\nPrawidłowy format to, np. janek_kowalski@gmail.com\n\nHasło:\nMusi składać się z conajmniej 8 znaków, a także zawierać małą i dużą literę oraz cyfrę. Maksymalna długość to 20 znaków. Oba hasła muszą być identyczne.';
 
   @override
   void dispose() {
@@ -43,6 +42,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     RegExp _regExpPassword = RegExp(_passwordPattern);
     final node = FocusScope.of(context);
+    final key = GlobalKey<State<Tooltip>>();
     return _isLoading
         ? Center(
             child: const CircularProgressIndicator(),
@@ -105,6 +105,44 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             onEditingComplete: () => node.nextFocus(),
                           ),
                           const SizedBox(height: 10),
+                          //
+                          //******************************************************* */
+                          //Info Tooltip
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Align(
+                              alignment: Alignment.centerRight,
+                              child: Tooltip(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15),
+                                  color: Theme.of(context).backgroundColor,
+                                ),
+                                textStyle: TextStyle(
+                                  fontSize: 16,
+                                  color: Theme.of(context).textSelectionColor,
+                                ),
+                                margin: EdgeInsets.all(10.0),
+                                padding: EdgeInsets.all(10.0),
+                                waitDuration: Duration(milliseconds: 0),
+                                showDuration: Duration(seconds: 8),
+                                message: _hint,
+                                preferBelow: false,
+                                key: key,
+                                child: GestureDetector(
+                                  behavior: HitTestBehavior.opaque,
+                                  onTap: () {
+                                    final dynamic tooltip = key.currentState;
+                                    tooltip?.ensureTooltipVisible();
+                                  },
+                                  child: Icon(
+                                    Icons.help_outline_outlined,
+                                    size: 20,
+                                    color: Theme.of(context).textSelectionColor,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
                           //
                           //******************************************************* */
                           //Password Form
