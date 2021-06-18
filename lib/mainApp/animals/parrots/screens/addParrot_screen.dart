@@ -19,8 +19,10 @@ class AddParrotScreen extends StatefulWidget {
   final Parrot parrot;
   final ParrotPairing pair;
   final String race;
+  final bool addFromChild;
 
-  AddParrotScreen({this.parrotMap, this.parrot, this.pair, this.race});
+  AddParrotScreen(
+      {this.parrotMap, this.parrot, this.pair, this.race, this.addFromChild});
 
   @override
   _RaceListScreenState createState() => _RaceListScreenState();
@@ -60,6 +62,7 @@ class _RaceListScreenState extends State<AddParrotScreen> {
   ParrotDataHelper _parrotDataHelper = ParrotDataHelper();
   ParrotPairDataHelper _parrotPairDataHelper = ParrotPairDataHelper();
   Parrot _createdParrot;
+  Parrot _parrotToDelete;
   Children _createdChild;
   bool _isLoading = false;
 
@@ -136,7 +139,8 @@ class _RaceListScreenState extends State<AddParrotScreen> {
                               //Ring number
                               infoText(context, "Numer obrączki"),
                               const SizedBox(height: 16.0),
-                              widget.parrot != null
+                              widget.parrot != null &&
+                                      widget.parrot.pairRingNumber != "brak"
                                   ? infoText(context, widget.parrot.ringNumber)
                                   : ringNumberRow(
                                       context,
@@ -238,7 +242,8 @@ class _RaceListScreenState extends State<AddParrotScreen> {
                           ),
                         ),
                         const SizedBox(height: 16.0),
-                        (widget.parrot == null && widget.pair == null)
+                        (widget.parrot == null && widget.pair == null ||
+                                widget.addFromChild)
                             ? _addParrotConfimButton(context)
                             : widget.pair == null
                                 ? _editParrotConfirmButton(context)
@@ -267,6 +272,20 @@ class _RaceListScreenState extends State<AddParrotScreen> {
         RaisedButton(
           color: Theme.of(context).primaryColor,
           child: Text(
+            'Anuluj',
+            style: TextStyle(
+              color: Theme.of(context).textSelectionColor,
+            ),
+          ),
+          //create a parrot
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+        const SizedBox(width: 20),
+        RaisedButton(
+          color: Theme.of(context).primaryColor,
+          child: Text(
             'Zapisz zmiany',
             style: TextStyle(
               color: Theme.of(context).textSelectionColor,
@@ -275,7 +294,16 @@ class _RaceListScreenState extends State<AddParrotScreen> {
           //edit a parrot
           onPressed: _editParrot,
         ),
-        const SizedBox(width: 20),
+      ],
+    );
+  }
+
+  Row _addParrotConfimButton(BuildContext context) {
+    return Row(
+      children: [
+        const Expanded(
+          child: const SizedBox(),
+        ),
         RaisedButton(
           color: Theme.of(context).primaryColor,
           child: Text(
@@ -289,16 +317,7 @@ class _RaceListScreenState extends State<AddParrotScreen> {
             Navigator.of(context).pop();
           },
         ),
-      ],
-    );
-  }
-
-  Row _addParrotConfimButton(BuildContext context) {
-    return Row(
-      children: [
-        const Expanded(
-          child: const SizedBox(),
-        ),
+        const SizedBox(width: 20),
         RaisedButton(
           color: Theme.of(context).primaryColor,
           child: Text(
@@ -713,23 +732,43 @@ class _RaceListScreenState extends State<AddParrotScreen> {
         } else {
           setState(
             () {
+              _ringNumber = "$_country-$_year-$_symbol-$_parrotNumber";
               _createdParrot = Parrot(
                   race: widget.parrot.race,
-                  ringNumber: widget.parrot.ringNumber,
+                  ringNumber: _ringNumber,
                   cageNumber: _cageNumber,
                   color: _parrotColor,
                   fission: _fission,
                   notes: _notes,
                   sex: _sexName,
                   pairRingNumber: widget.parrot.pairRingNumber);
+              if (widget.parrot.ringNumber != _ringNumber) {
+                _parrotToDelete = Parrot(
+                    race: widget.parrot.race,
+                    ringNumber: widget.parrot.ringNumber,
+                    cageNumber: _cageNumber,
+                    color: _parrotColor,
+                    fission: _fission,
+                    notes: _notes,
+                    sex: _sexName,
+                    pairRingNumber: widget.parrot.pairRingNumber);
+              }
             },
           );
-          await _parrotDataHelper.updateParrot(
+          await _parrotDataHelper
+              .updateParrot(
             uid: _firebaseUser.uid,
             parrot: _createdParrot,
             pairRingNumber: _createdParrot.pairRingNumber,
             context: context,
-          );
+          )
+              .then((_) async {
+            if (widget.parrot.ringNumber != _ringNumber) {
+              await _parrotDataHelper.deleteParrot(
+                  _firebaseUser.uid, _parrotToDelete, context, false);
+            }
+          });
+
           setState(() {
             _isLoading = false;
           });

@@ -51,6 +51,7 @@ class DeleteUpgradeButtons extends StatelessWidget {
                       "icubationTime": "21"
                     },
                     parrot: createdParrotList[index],
+                    addFromChild: false,
                   ),
                 ),
               );

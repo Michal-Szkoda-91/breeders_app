@@ -257,22 +257,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
       setState(() {
         _isLoading = true;
       });
-      await _auth
-          .registerWithEmaAndPass(email, password)
-          .then((userCredential) {
-        if (userCredential ==
-            '[firebase_auth/email-already-in-use] The email address is already in use by another account.') {
-          setState(() {
-            _isLoading = false;
-            error = 'Email jest już używany. Wybierz inny.';
-          });
-        } else if (userCredential ==
-            '[firebase_auth/unknown] com.google.firebase.FirebaseException: An internal error has occurred. [ Unable to resolve host "www.googleapis.com":No address associated with hostname ]') {
-          setState(() {
-            _isLoading = false;
-            error = 'Sprawdź połączenie z internetem';
-          });
-        }
+      await _auth.registerWithEmaAndPass(email, password, context).then((e) {
+        setState(() {
+          _isLoading = false;
+        });
+      }).catchError((e) {
+        _isLoading = false;
       });
     }
   }

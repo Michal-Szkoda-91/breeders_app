@@ -211,6 +211,7 @@ class _ParrotCardState extends State<ParrotCard> {
                                                   createdParrotList:
                                                       widget._createdParrotList,
                                                   delete: _deleteParrot,
+                                                  
                                                 ),
                                               ],
                                             ),
@@ -313,7 +314,7 @@ class _ParrotCardState extends State<ParrotCard> {
               _firebaseUser.uid, parrot.race, context);
         } else {
           Navigator.of(context).pop();
-          await _parrotHelper.deleteParrot(_firebaseUser.uid, parrot, context);
+          await _parrotHelper.deleteParrot(_firebaseUser.uid, parrot, context, true);
         }
       }
       setState(() {

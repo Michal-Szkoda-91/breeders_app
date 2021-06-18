@@ -34,8 +34,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
   bool _passwordObscure = true;
 
-  Pattern _passwordPattern =
-      r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!?_@#\$&*~]).{8,20}$';
+  Pattern _passwordPattern = r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,20}$';
 
   final double _sizedBoxHeight = 10.0;
 
@@ -194,26 +193,15 @@ class _SignInScreenState extends State<SignInScreen> {
       setState(() {
         _isLoading = true;
       });
-      dynamic result = await _auth.singInWithEmailAndPass(email, password);
-      if (result.toString() ==
-          '[firebase_auth/user-not-found] There is no user record corresponding to this identifier. The user may have been deleted.') {
+      await _auth.singInWithEmailAndPass(email, password, context).then((_) {
         setState(() {
           _isLoading = false;
-          error = 'Użytkownik nie istnieje, sprawdź email.';
         });
-      } else if (result.toString() ==
-          '[firebase_auth/wrong-password] The password is invalid or the user does not have a password.') {
+      }).catchError((e) {
         setState(() {
           _isLoading = false;
-          error = 'Nieprawidłowe hasło.';
         });
-      } else if (result.toString() ==
-          '[firebase_auth/unknown] com.google.firebase.FirebaseException: An internal error has occurred. [ Unable to resolve host "www.googleapis.com":No address associated with hostname ]') {
-        setState(() {
-          _isLoading = false;
-          error = 'Sprawdź połączenie z internetem';
-        });
-      }
+      });
     }
   }
 

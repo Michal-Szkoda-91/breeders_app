@@ -209,6 +209,40 @@ class ParrotPairDataHelper {
     });
   }
 
+  //
+//
+//
+//**************** */
+//
+//
+//
+//**************** */
+  Future<void> editPair(
+      {String uid,
+      String race,
+      String id,
+      String pairingData,
+      String picUrl,
+      String color,
+      BuildContext context}) async {
+    final CollectionReference breedCollection =
+        FirebaseFirestore.instance.collection(uid);
+
+    await breedCollection.doc(race).collection("Pairs").doc(id).update({
+      "Pairing Data": "$pairingData",
+      "Pair Color": "$color",
+      "Pic Url": "$picUrl",
+    }).then((_) {
+      Navigator.of(context).pop();
+      _globalMethods.showMaterialDialog(context, "Edytowano dane");
+      print("parrot edited");
+    }).catchError((err) {
+      _globalMethods.showMaterialDialog(context,
+          "Operacja nieudana, nieznany błąd, spróbuj ponownie pózniej");
+      print("error occured $err");
+    });
+  }
+
 //
 //
 //

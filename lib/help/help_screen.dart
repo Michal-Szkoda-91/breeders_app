@@ -55,7 +55,6 @@ class HelpScreen extends StatelessWidget {
                 title: "5.  Archiwum Par",
                 function: _archiveDialog.showMaterialDialog,
               ),
-              // Spacer(),
               Html(
                 data:
                     '<p style="text-align: center; color: white">W razie jakichkolwiek pytań lub niejasności chętnie służę pomocą. Skontaktuj się ze mną na adres <a style="color:blue", href="mailto:michal.szkoda.policy@gmail.com">michal.szkoda.policy@gmail.com</a></p>',
