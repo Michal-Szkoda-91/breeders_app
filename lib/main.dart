@@ -1,3 +1,4 @@
+import 'package:breeders_app/mainApp/animals/parrots/screens/editPair_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -64,6 +65,7 @@ class MyApp extends StatelessWidget {
         PolitycyPrivacyScreen.routeName: (ctx) => PolitycyPrivacyScreen(),
         HelpScreen.routeName: (ctx) => HelpScreen(),
         ResetPasswordScreen.routeName: (ctx) => ResetPasswordScreen(),
+        EditPairScreen.routeName: (ctx) => EditPairScreen(),
       },
     );
   }

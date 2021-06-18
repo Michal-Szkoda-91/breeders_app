@@ -738,16 +738,19 @@ class _RaceListScreenState extends State<AddParrotScreen> {
               }
             },
           );
-          if (widget.parrot.ringNumber != _ringNumber) {
-            await _parrotDataHelper.deleteParrot(
-                _firebaseUser.uid, _parrotToDelete, context);
-          }
-          await _parrotDataHelper.updateParrot(
+          await _parrotDataHelper
+              .updateParrot(
             uid: _firebaseUser.uid,
             parrot: _createdParrot,
             pairRingNumber: _createdParrot.pairRingNumber,
             context: context,
-          );
+          )
+              .then((_) async {
+            if (widget.parrot.ringNumber != _ringNumber) {
+              await _parrotDataHelper.deleteParrot(
+                  _firebaseUser.uid, _parrotToDelete, context, false);
+            }
+          });
 
           setState(() {
             _isLoading = false;

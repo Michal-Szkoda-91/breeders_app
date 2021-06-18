@@ -242,8 +242,8 @@ class ParrotDataHelper {
 //
 //
 //**************** */
-  Future<void> deleteParrot(
-      String uid, Parrot parrotToDelete, BuildContext context) async {
+  Future<void> deleteParrot(String uid, Parrot parrotToDelete,
+      BuildContext context, bool showDialog) async {
     final CollectionReference breedCollection =
         FirebaseFirestore.instance.collection(uid);
 
@@ -273,11 +273,15 @@ class ParrotDataHelper {
         .doc(parrotToDelete.ringNumber)
         .delete()
         .then((_) {
-      _globalMethods.showMaterialDialog(context,
-          "Usunięto papugę o numerze obrączki ${parrotToDelete.ringNumber}");
+      if (showDialog) {
+        _globalMethods.showMaterialDialog(context,
+            "Usunięto papugę o numerze obrączki ${parrotToDelete.ringNumber}");
+      }
     }).catchError((err) {
-      _globalMethods.showMaterialDialog(context,
-          "Operacja nieudana, nieznany błąd, spróbuj ponownie pózniej");
+      if (showDialog) {
+        _globalMethods.showMaterialDialog(context,
+            "Operacja nieudana, nieznany błąd, spróbuj ponownie pózniej");
+      }
       print("error occured $err");
     });
   }

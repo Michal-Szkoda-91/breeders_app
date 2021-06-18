@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 
+import '../../screens/editPair_screen.dart';
 import '../../models/pairing_model.dart';
 import '../../../../../models/global_methods.dart';
 
@@ -30,66 +31,114 @@ class _DeleteAndArchiveButtonsState extends State<DeleteAndArchiveButtons> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        FlatButton.icon(
-          padding: const EdgeInsets.all(5.0),
-          label: Text(
-            "Usuń Parę",
-            style: TextStyle(
-              color: Colors.red,
-              fontSize: MediaQuery.of(context).size.width > 350 ? 14 : 12,
+        Container(
+          width: MediaQuery.of(context).size.width * 0.23,
+          child: FittedBox(
+            child: FlatButton.icon(
+              padding: const EdgeInsets.all(5.0),
+              label: Text(
+                "Usuń",
+                style: TextStyle(
+                  color: Colors.red,
+                ),
+              ),
+              icon: const Icon(
+                MaterialCommunityIcons.delete,
+                color: Colors.red,
+              ),
+              onPressed: () {
+                _globalMethods.showDeletingDialog(
+                  context,
+                  "Usuń parę",
+                  "Napewno usunąć wybraną parę z hodowli?",
+                  (_) {
+                    widget.delete(
+                      widget.pairList[widget.index].id,
+                      widget.pairList[widget.index].femaleRingNumber,
+                      widget.pairList[widget.index].maleRingNumber,
+                      widget.pairList[widget.index].picUrl,
+                    );
+                  },
+                  null,
+                );
+              },
             ),
           ),
-          icon: const Icon(
-            MaterialCommunityIcons.delete,
-            color: Colors.red,
-          ),
-          onPressed: () {
-            _globalMethods.showDeletingDialog(
-              context,
-              "Usuń parę",
-              "Napewno usunąć wybraną parę z hodowli?",
-              (_) {
-                widget.delete(
-                    widget.pairList[widget.index].id,
-                    widget.pairList[widget.index].femaleRingNumber,
-                    widget.pairList[widget.index].maleRingNumber,
-                    widget.pairList[widget.index].picUrl);
-              },
-              null,
-            );
-          },
         ),
         widget.pairList[widget.index].isArchive == "false"
-            ? FlatButton.icon(
-                padding: const EdgeInsets.all(5.0),
-                label: Text(
-                  "Do Archiwum",
-                  style: TextStyle(
-                    color: Colors.blueAccent,
-                    fontSize: MediaQuery.of(context).size.width > 350 ? 14 : 12,
+            ? Container(
+                width: MediaQuery.of(context).size.width * 0.35,
+                child: FittedBox(
+                  child: FlatButton.icon(
+                    padding: const EdgeInsets.all(5.0),
+                    label: Text(
+                      "Archiwum",
+                      style: TextStyle(
+                        color: Colors.blueGrey,
+                      ),
+                    ),
+                    icon: const Icon(
+                      MaterialCommunityIcons.archive,
+                      color: Colors.blueGrey,
+                    ),
+                    onPressed: () {
+                      _globalMethods.showDeletingDialog(
+                        context,
+                        "Przenieś do archiwum",
+                        "Napewno ustawić wybraną parę jako nie aktywną? \nNie można cofnąć operacji",
+                        (_) {
+                          widget.toArchive(
+                            widget.pairList[widget.index].id,
+                            widget.pairList[widget.index].femaleRingNumber,
+                            widget.pairList[widget.index].maleRingNumber,
+                          );
+                        },
+                        null,
+                      );
+                    },
                   ),
                 ),
-                icon: const Icon(
-                  MaterialCommunityIcons.archive,
-                  color: Colors.blueAccent,
-                ),
-                onPressed: () {
-                  _globalMethods.showDeletingDialog(
-                    context,
-                    "Przenieś do archiwum",
-                    "Napewno ustawić wybraną parę jako nie aktywną? \nNie można cofnąć operacji",
-                    (_) {
-                      widget.toArchive(
-                          widget.pairList[widget.index].id,
-                          widget.pairList[widget.index].femaleRingNumber,
-                          widget.pairList[widget.index].maleRingNumber);
-                    },
-                    null,
-                  );
-                },
               )
-            : const Center(),
+            : Container(),
+        widget.pairList[widget.index].isArchive == "false"
+            ? Container(
+                width: MediaQuery.of(context).size.width * 0.24,
+                child: FittedBox(
+                  child: FlatButton.icon(
+                    padding: const EdgeInsets.all(5.0),
+                    label: Text(
+                      "Edytuj",
+                      style: TextStyle(
+                        color: Colors.blueAccent,
+                      ),
+                    ),
+                    icon: const Icon(
+                      MaterialCommunityIcons.circle_edit_outline,
+                      color: Colors.blueAccent,
+                    ),
+                    onPressed: () {
+                      _editPair();
+                    },
+                  ),
+                ),
+              )
+            : Container(),
       ],
+    );
+  }
+
+  void _editPair() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditPairScreen(
+          raceName: widget.pairList[widget.index].race,
+          pairColor: widget.pairList[widget.index].pairColor,
+          pairID: widget.pairList[widget.index].id,
+          pairingData: widget.pairList[widget.index].pairingData,
+          picUrl: widget.pairList[widget.index].picUrl,
+        ),
+      ),
     );
   }
 }
