@@ -555,7 +555,6 @@ class _EditPairScreenState extends State<EditPairScreen> {
   }
 
   Future<void> _editPair(BuildContext context) async {
-    // Navigator.of(context).pop();
     await _parrotPairDataHelper
         .editPair(
       uid: firebaseUser.uid,
@@ -566,7 +565,17 @@ class _EditPairScreenState extends State<EditPairScreen> {
       color: _pairColor,
       context: context,
     )
-        .then((_) {
+        .then((_) async {
+      if (widget.picUrl != _pictureUrl) {
+        //Delete picture from storage
+        try {
+          final ref = FirebaseStorage.instance.ref().child(widget.picUrl);
+          await ref.delete();
+          print("pic deleted");
+        } catch (e) {
+          print("error occured $e");
+        }
+      }
       setState(() {
         _isLoading = false;
       });
