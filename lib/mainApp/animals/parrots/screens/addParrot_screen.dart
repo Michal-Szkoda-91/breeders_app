@@ -19,8 +19,10 @@ class AddParrotScreen extends StatefulWidget {
   final Parrot parrot;
   final ParrotPairing pair;
   final String race;
+  final bool addFromChild;
 
-  AddParrotScreen({this.parrotMap, this.parrot, this.pair, this.race});
+  AddParrotScreen(
+      {this.parrotMap, this.parrot, this.pair, this.race, this.addFromChild});
 
   @override
   _RaceListScreenState createState() => _RaceListScreenState();
@@ -240,7 +242,8 @@ class _RaceListScreenState extends State<AddParrotScreen> {
                           ),
                         ),
                         const SizedBox(height: 16.0),
-                        (widget.parrot == null && widget.pair == null)
+                        (widget.parrot == null && widget.pair == null ||
+                                widget.addFromChild)
                             ? _addParrotConfimButton(context)
                             : widget.pair == null
                                 ? _editParrotConfirmButton(context)
@@ -269,6 +272,20 @@ class _RaceListScreenState extends State<AddParrotScreen> {
         RaisedButton(
           color: Theme.of(context).primaryColor,
           child: Text(
+            'Anuluj',
+            style: TextStyle(
+              color: Theme.of(context).textSelectionColor,
+            ),
+          ),
+          //create a parrot
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+        const SizedBox(width: 20),
+        RaisedButton(
+          color: Theme.of(context).primaryColor,
+          child: Text(
             'Zapisz zmiany',
             style: TextStyle(
               color: Theme.of(context).textSelectionColor,
@@ -277,7 +294,16 @@ class _RaceListScreenState extends State<AddParrotScreen> {
           //edit a parrot
           onPressed: _editParrot,
         ),
-        const SizedBox(width: 20),
+      ],
+    );
+  }
+
+  Row _addParrotConfimButton(BuildContext context) {
+    return Row(
+      children: [
+        const Expanded(
+          child: const SizedBox(),
+        ),
         RaisedButton(
           color: Theme.of(context).primaryColor,
           child: Text(
@@ -291,16 +317,7 @@ class _RaceListScreenState extends State<AddParrotScreen> {
             Navigator.of(context).pop();
           },
         ),
-      ],
-    );
-  }
-
-  Row _addParrotConfimButton(BuildContext context) {
-    return Row(
-      children: [
-        const Expanded(
-          child: const SizedBox(),
-        ),
+        const SizedBox(width: 20),
         RaisedButton(
           color: Theme.of(context).primaryColor,
           child: Text(

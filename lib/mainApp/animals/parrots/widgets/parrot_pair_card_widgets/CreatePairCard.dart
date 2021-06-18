@@ -73,6 +73,12 @@ class _CreatePairCardState extends State<CreatePairCard> {
                             color: Theme.of(context).textSelectionColor,
                           ),
                         ),
+                        Text(
+                          "Data parowania - ${widget.pairList[widget.index].pairingData}",
+                          style: TextStyle(
+                            color: Theme.of(context).textSelectionColor,
+                          ),
+                        ),
                       ],
                     ),
               children: [

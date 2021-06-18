@@ -1,9 +1,7 @@
 import 'package:draggable_scrollbar_sliver/draggable_scrollbar_sliver.dart';
 import 'package:email_validator/email_validator.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../models/global_methods.dart';
 import '../globalWidgets/imageContainerParrot.dart';
 import '../services/auth.dart';
 
@@ -16,7 +14,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
   ScrollController _rrectController = ScrollController();
-  GlobalMethods _globalMethods = GlobalMethods();
 
   bool _isLoading = false;
 

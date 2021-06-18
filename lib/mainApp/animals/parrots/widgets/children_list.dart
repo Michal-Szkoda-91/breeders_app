@@ -1,9 +1,12 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:breeders_app/mainApp/animals/parrots/models/parrot_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 
+import '../models/parrotsRace_list.dart';
+import '../screens/addParrot_screen.dart';
 import '../models/children_model.dart';
 
 class ChildrenList extends StatefulWidget {
@@ -20,6 +23,8 @@ class _ChildrenListState extends State<ChildrenList> {
   final firebaseUser = FirebaseAuth.instance.currentUser;
   List<Children> _childrenList = [];
   int _childrenCount = 0;
+  Map raceMap;
+  final ParrotsRace _parrotsRace = new ParrotsRace();
 
   @override
   Widget build(BuildContext context) {
@@ -144,16 +149,17 @@ class _ChildrenListState extends State<ChildrenList> {
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Container(
-            width: 355,
+            width: 415,
             child: Column(
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    const SizedBox(width: 25),
+                    const SizedBox(width: 30),
                     _createTitleRow(context, "Nr obrączki"),
                     _createTitleRow(context, "Kolor"),
                     _createTitleRow(context, "Data ur."),
+                    const SizedBox(width: 55),
                   ],
                 ),
                 ListView.builder(
@@ -162,7 +168,7 @@ class _ChildrenListState extends State<ChildrenList> {
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
                     return Container(
-                      width: 330,
+                      width: 390,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
@@ -173,6 +179,11 @@ class _ChildrenListState extends State<ChildrenList> {
                               context, _childrenList[index].color),
                           _createContentRow(
                               context, _childrenList[index].broodDate),
+                          _createAddParrotButton(
+                            _childrenList[index].ringNumber,
+                            _childrenList[index].color,
+                            _childrenList[index].gender,
+                          ),
                         ],
                       ),
                     );
@@ -183,6 +194,42 @@ class _ChildrenListState extends State<ChildrenList> {
           ),
         ),
       ],
+    );
+  }
+
+  Container _createAddParrotButton(
+      String ringNumber, String color, String gender) {
+    return Container(
+      width: 55,
+      child: IconButton(
+        icon: Icon(
+          Icons.add,
+          color: Theme.of(context).textSelectionColor,
+        ),
+        onPressed: () {
+          raceMap = _parrotsRace.parrotsRaceList
+              .firstWhere((element) => element["name"] == widget.raceName);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AddParrotScreen(
+                parrotMap: raceMap,
+                parrot: new Parrot(
+                  ringNumber: ringNumber,
+                  color: color,
+                  cageNumber: "brak",
+                  fission: "brak",
+                  notes: "brak",
+                  pairRingNumber: "brak",
+                  race: widget.raceName,
+                  sex: gender,
+                ),
+                addFromChild: true,
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 
@@ -202,8 +249,8 @@ class _ChildrenListState extends State<ChildrenList> {
     }
 
     return Container(
-      width: 25,
-      height: 25,
+      width: 30,
+      height: 30,
       alignment: Alignment.center,
       decoration: BoxDecoration(
         color: colorBackground,

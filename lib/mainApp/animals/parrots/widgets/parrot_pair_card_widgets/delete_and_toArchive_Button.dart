@@ -32,7 +32,7 @@ class _DeleteAndArchiveButtonsState extends State<DeleteAndArchiveButtons> {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         Container(
-          width: MediaQuery.of(context).size.width * 0.23,
+          width: MediaQuery.of(context).size.width * 0.25,
           child: FittedBox(
             child: FlatButton.icon(
               padding: const EdgeInsets.all(5.0),
@@ -67,7 +67,7 @@ class _DeleteAndArchiveButtonsState extends State<DeleteAndArchiveButtons> {
         ),
         widget.pairList[widget.index].isArchive == "false"
             ? Container(
-                width: MediaQuery.of(context).size.width * 0.35,
+                width: MediaQuery.of(context).size.width * 0.33,
                 child: FittedBox(
                   child: FlatButton.icon(
                     padding: const EdgeInsets.all(5.0),
@@ -102,7 +102,7 @@ class _DeleteAndArchiveButtonsState extends State<DeleteAndArchiveButtons> {
             : Container(),
         widget.pairList[widget.index].isArchive == "false"
             ? Container(
-                width: MediaQuery.of(context).size.width * 0.24,
+                width: MediaQuery.of(context).size.width * 0.25,
                 child: FittedBox(
                   child: FlatButton.icon(
                     padding: const EdgeInsets.all(5.0),

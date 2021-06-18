@@ -39,6 +39,7 @@ class _AddParrotFromInsideParrotListState
               builder: (context) => AddParrotScreen(
                 parrotMap: raceMap,
                 parrot: null,
+                addFromChild: false,
               ),
             ),
           );

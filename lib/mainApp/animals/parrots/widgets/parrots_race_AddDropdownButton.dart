@@ -120,6 +120,7 @@ class _CreateParrotsDropdownButtonState
                   builder: (context) => AddParrotScreen(
                     parrotMap: value,
                     parrot: null,
+                    addFromChild: false,
                   ),
                 ),
               );

@@ -42,6 +42,7 @@ class _AddPairChildButtonState extends State<AddPairChildButton> {
                       "icubationTime": "21"
                     },
                     race: widget.raceName,
+                    addFromChild: false,
                   ),
                 ),
               );
