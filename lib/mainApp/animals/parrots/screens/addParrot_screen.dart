@@ -60,6 +60,7 @@ class _RaceListScreenState extends State<AddParrotScreen> {
   ParrotDataHelper _parrotDataHelper = ParrotDataHelper();
   ParrotPairDataHelper _parrotPairDataHelper = ParrotPairDataHelper();
   Parrot _createdParrot;
+  Parrot _parrotToDelete;
   Children _createdChild;
   bool _isLoading = false;
 
@@ -136,7 +137,8 @@ class _RaceListScreenState extends State<AddParrotScreen> {
                               //Ring number
                               infoText(context, "Numer obrączki"),
                               const SizedBox(height: 16.0),
-                              widget.parrot != null
+                              widget.parrot != null &&
+                                      widget.parrot.pairRingNumber != "brak"
                                   ? infoText(context, widget.parrot.ringNumber)
                                   : ringNumberRow(
                                       context,
@@ -713,23 +715,40 @@ class _RaceListScreenState extends State<AddParrotScreen> {
         } else {
           setState(
             () {
+              _ringNumber = "$_country-$_year-$_symbol-$_parrotNumber";
               _createdParrot = Parrot(
                   race: widget.parrot.race,
-                  ringNumber: widget.parrot.ringNumber,
+                  ringNumber: _ringNumber,
                   cageNumber: _cageNumber,
                   color: _parrotColor,
                   fission: _fission,
                   notes: _notes,
                   sex: _sexName,
                   pairRingNumber: widget.parrot.pairRingNumber);
+              if (widget.parrot.ringNumber != _ringNumber) {
+                _parrotToDelete = Parrot(
+                    race: widget.parrot.race,
+                    ringNumber: widget.parrot.ringNumber,
+                    cageNumber: _cageNumber,
+                    color: _parrotColor,
+                    fission: _fission,
+                    notes: _notes,
+                    sex: _sexName,
+                    pairRingNumber: widget.parrot.pairRingNumber);
+              }
             },
           );
+          if (widget.parrot.ringNumber != _ringNumber) {
+            await _parrotDataHelper.deleteParrot(
+                _firebaseUser.uid, _parrotToDelete, context);
+          }
           await _parrotDataHelper.updateParrot(
             uid: _firebaseUser.uid,
             parrot: _createdParrot,
             pairRingNumber: _createdParrot.pairRingNumber,
             context: context,
           );
+
           setState(() {
             _isLoading = false;
           });

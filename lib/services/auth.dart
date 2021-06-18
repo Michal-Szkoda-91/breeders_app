@@ -1,11 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+import '../models/global_methods.dart';
 import '../models/user.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = GoogleSignIn();
+  GlobalMethods _globalMethods = GlobalMethods();
 
   //uuser create
   UserLogged _userFromFirebaseUser(User user) {
@@ -41,27 +44,38 @@ class AuthService {
   }
 
   //register user
-  Future registerWithEmaAndPass(String email, String password) async {
-    await _auth
-        .createUserWithEmailAndPassword(email: email, password: password)
-        .then((result) {
+  Future registerWithEmaAndPass(
+      String email, String password, BuildContext context) async {
+    try {
+      UserCredential result = await _auth.createUserWithEmailAndPassword(
+          email: email, password: password);
       User user = result.user;
       user.sendEmailVerification();
       return _userFromFirebaseUser(user);
-    }).catchError((err) {
-      print(err);
-    });
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'email-already-in-use') {
+        _globalMethods.showMaterialDialog(
+            context, "Istnieje już konto dla wybranego adresu Email.");
+      }
+    } catch (e) {}
   }
 
   //login user
-  Future singInWithEmailAndPass(String email, String password) async {
+  Future singInWithEmailAndPass(
+      String email, String password, BuildContext context) async {
     try {
       UserCredential result = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
       User user = result.user;
       return _userFromFirebaseUser(user);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        _globalMethods.showMaterialDialog(
+            context, "Użytkownik nie istnieje, załóż konto");
+      }
     } catch (e) {
-      return e;
+      _globalMethods.showMaterialDialog(
+          context, "Wystąpił błąd, spróbuj ponownie");
     }
   }
 

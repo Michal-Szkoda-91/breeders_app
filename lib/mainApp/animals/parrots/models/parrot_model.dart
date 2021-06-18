@@ -100,7 +100,7 @@ class ParrotDataHelper {
         .doc(parrot.race)
         .collection("Birds")
         .doc(parrot.ringNumber)
-        .update({
+        .set({
       "Race Name": "${parrot.race}",
       "Colors": "${parrot.color}",
       "Fission": "${parrot.fission}",

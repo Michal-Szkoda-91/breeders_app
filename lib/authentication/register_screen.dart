@@ -1,7 +1,9 @@
 import 'package:draggable_scrollbar_sliver/draggable_scrollbar_sliver.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../models/global_methods.dart';
 import '../globalWidgets/imageContainerParrot.dart';
 import '../services/auth.dart';
 
@@ -14,6 +16,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
   ScrollController _rrectController = ScrollController();
+  GlobalMethods _globalMethods = GlobalMethods();
 
   bool _isLoading = false;
 
@@ -257,22 +260,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
       setState(() {
         _isLoading = true;
       });
-      await _auth
-          .registerWithEmaAndPass(email, password)
-          .then((userCredential) {
-        if (userCredential ==
-            '[firebase_auth/email-already-in-use] The email address is already in use by another account.') {
-          setState(() {
-            _isLoading = false;
-            error = 'Email jest już używany. Wybierz inny.';
-          });
-        } else if (userCredential ==
-            '[firebase_auth/unknown] com.google.firebase.FirebaseException: An internal error has occurred. [ Unable to resolve host "www.googleapis.com":No address associated with hostname ]') {
-          setState(() {
-            _isLoading = false;
-            error = 'Sprawdź połączenie z internetem';
-          });
-        }
+      await _auth.registerWithEmaAndPass(email, password, context).then((e) {
+        setState(() {
+          _isLoading = false;
+        });
+      }).catchError((e) {
+        _isLoading = false;
       });
     }
   }
