@@ -6,4 +6,5 @@ Technologia: Flutter oraz Dart. Aplikacja pisana z użyciem Visual Studio Code. 
 
 Aplikacja jest dotępna na sklepie Google Play
 
-Wygląd Programu:![Screenshot_20210619-114850](https://user-images.githubusercontent.com/68157494/122669536-27ffd080-d1be-11eb-81a6-1861bb540e36.png)
+![Webp net-resizeimage](https://user-images.githubusercontent.com/68157494/122676965-88a00500-d1e0-11eb-8683-4992f3dcce86.png)
+
