@@ -70,7 +70,7 @@ class _EditPairScreenState extends State<EditPairScreen> {
   Future getImageFromGalery() async {
     // ignore: deprecated_member_use
     var image = await ImagePicker.pickImage(
-        source: ImageSource.gallery, imageQuality: 30);
+        source: ImageSource.gallery, maxWidth: 750, maxHeight: 1000);
 
     if (image == null) {
       return;
@@ -86,7 +86,7 @@ class _EditPairScreenState extends State<EditPairScreen> {
   Future getImageFromCamera() async {
     // ignore: deprecated_member_use
     var image = await ImagePicker.pickImage(
-        source: ImageSource.camera, imageQuality: 30);
+        source: ImageSource.camera, maxWidth: 750, maxHeight: 1000);
     if (image == null) {
       return;
     } else {
