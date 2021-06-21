@@ -1,23 +1,24 @@
 {
   "project_info": {
     "project_number": "663676083966",
+    "firebase_url": "https://breedersapp-c1956-default-rtdb.firebaseio.com",
     "project_id": "breedersapp-c1956",
     "storage_bucket": "breedersapp-c1956.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:663676083966:android:e30529bb3f74df75ac0faf",
+        "mobilesdk_app_id": "1:663676083966:android:6bdedc2a62f404f0ac0faf",
         "android_client_info": {
-          "package_name": "com.example.aplikacja_hodowcow"
+          "package_name": "michal.szkoda_hodowla_papug"
         }
       },
       "oauth_client": [
         {
-          "client_id": "663676083966-valaoave5btmn39790ep5qg852ra5lrg.apps.googleusercontent.com",
+          "client_id": "663676083966-0t8pdhbjbrf0itf8f0dkmiong7mmlggl.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.aplikacja_hodowcow",
+            "package_name": "michal.szkoda_hodowla_papug",
             "certificate_hash": "191bed3877a5d709c80121edd8f38994f4149c0d"
           }
         },

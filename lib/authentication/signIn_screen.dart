@@ -140,12 +140,13 @@ class _SignInScreenState extends State<SignInScreen> {
                               Expanded(
                                 child: SizedBox(),
                               ),
-                              FlatButton(
+                              RaisedButton(
+                                color: Theme.of(context).primaryColor,
+                                shape: StadiumBorder(),
                                 child: Text(
                                   'Zaloguj się',
                                   style: TextStyle(
                                     color: Theme.of(context).textSelectionColor,
-                                    fontSize: 16,
                                   ),
                                 ),
                                 onPressed: confirmSignIn,
