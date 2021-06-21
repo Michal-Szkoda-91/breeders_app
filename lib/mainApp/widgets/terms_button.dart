@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 
 import '../../privacy_policy/dialog_policy.dart';
 
-class PolicyButton extends StatelessWidget {
-  const PolicyButton({
+class TermsButton extends StatelessWidget {
+  const TermsButton({
     Key key,
   }) : super(key: key);
 
@@ -11,12 +12,12 @@ class PolicyButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return FlatButton.icon(
       icon: Icon(
-        Icons.policy,
+        MaterialCommunityIcons.book_open_variant,
         color: Theme.of(context).textSelectionColor,
         size: 30,
       ),
       label: Text(
-        'Polityka Prywatności',
+        'Zasady i Regulamin',
         style: TextStyle(
           color: Theme.of(context).textSelectionColor,
         ),
@@ -26,7 +27,7 @@ class PolicyButton extends StatelessWidget {
           context: context,
           builder: (context) {
             return PolicyDialog(
-              mdFileName: 'privacy_policy.md',
+              mdFileName: 'terms_and_condition.md',
             );
           },
         );

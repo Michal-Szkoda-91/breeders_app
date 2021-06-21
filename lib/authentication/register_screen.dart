@@ -2,6 +2,7 @@ import 'package:draggable_scrollbar_sliver/draggable_scrollbar_sliver.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 
+import '../privacy_policy/policy_Text.dart';
 import '../globalWidgets/imageContainerParrot.dart';
 import '../services/auth.dart';
 
@@ -221,17 +222,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 child: const SizedBox(),
                               ),
                               FlatButton(
+                                color: Theme.of(context).primaryColor,
+                                shape: StadiumBorder(),
                                 child: Text(
                                   'Utwórz konto',
                                   style: TextStyle(
                                     color: Theme.of(context).textSelectionColor,
                                   ),
                                 ),
-                                //confirm to registration
                                 onPressed: _createAccount,
                               ),
                             ],
                           ),
+                          const SizedBox(height: 25),
+                          PolicyText(),
                           const SizedBox(height: 10),
                           Text(
                             error,

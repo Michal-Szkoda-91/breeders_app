@@ -53,6 +53,7 @@ dependencies:
   google_mobile_ads: ^0.11.0
   flutter_html: ^1.2.0
   url_launcher: ^5.7.10
+  flutter_markdown: ^0.5.2
 
 
 
@@ -130,6 +131,10 @@ flutter:
     - assets/help/help_screen_11.png
     - assets/help/help_screen_12.png
     - assets/help/help_screen_13.png
+    # policy file
+    - assets/privacy_policy/
+    # - assets/privacy_policy/privacy_policy.md
+    # - assets/privacy_policy/terms_and_condition.md
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

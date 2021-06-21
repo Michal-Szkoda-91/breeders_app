@@ -1,4 +1,4 @@
-package com.example.breeders_app
+package michal.szkoda_hodowla_papug
 
 import io.flutter.embedding.android.FlutterActivity
 
