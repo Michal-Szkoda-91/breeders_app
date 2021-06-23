@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:breeders_app/services/auth.dart';
+import 'package:draggable_scrollbar_sliver/draggable_scrollbar_sliver.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -26,6 +27,7 @@ class _IncubationInformationScreenState
   final firebaseUser = FirebaseAuth.instance.currentUser;
   final AuthService _auth = AuthService();
   List<String> raceList = [];
+  ScrollController _rrectController = ScrollController();
 
   void _createRaceList() {
     widget.pairList.forEach((pair) {
@@ -74,13 +76,17 @@ class _IncubationInformationScreenState
         ),
       ),
       body: MainBackground(
-        child: Expanded(
-          child: Column(
-            children: [
-              BannerPage(),
-              const SizedBox(height: 8),
-              Expanded(
+        child: Column(
+          children: [
+            BannerPage(),
+            const SizedBox(height: 8),
+            Expanded(
+              child: DraggableScrollbar.rrect(
+                controller: _rrectController,
+                heightScrollThumb: 100,
+                backgroundColor: Theme.of(context).accentColor,
                 child: ListView.builder(
+                  controller: _rrectController,
                   itemCount: raceList.length,
                   itemBuilder: (BuildContext context, int index) {
                     return Padding(
@@ -158,8 +164,8 @@ class _IncubationInformationScreenState
                   },
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
