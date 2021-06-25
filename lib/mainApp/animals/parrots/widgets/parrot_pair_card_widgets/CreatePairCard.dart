@@ -17,13 +17,12 @@ class CreatePairCard extends StatefulWidget {
   final Function toArchive;
 
   CreatePairCard({
-    Key key,
-    this.index,
-    this.pairList,
-    this.race,
-    this.delete,
-    this.toArchive,
-  }) : super(key: key);
+    required this.index,
+    required this.pairList,
+    required this.race,
+    required this.delete,
+    required this.toArchive,
+  });
 
   @override
   _CreatePairCardState createState() => _CreatePairCardState();
@@ -58,25 +57,33 @@ class _CreatePairCardState extends State<CreatePairCard> {
                         Text(
                           "Samiec(1.0) - ${widget.pairList[widget.index].maleRingNumber}",
                           style: TextStyle(
-                            color: Theme.of(context).textSelectionColor,
+                            color: Theme.of(context)
+                                .textSelectionTheme
+                                .selectionColor,
                           ),
                         ),
                         Text(
                           "Samica(0.1) - ${widget.pairList[widget.index].femaleRingNumber}",
                           style: TextStyle(
-                            color: Theme.of(context).textSelectionColor,
+                            color: Theme.of(context)
+                                .textSelectionTheme
+                                .selectionColor,
                           ),
                         ),
                         Text(
                           "Kolor - ${widget.pairList[widget.index].pairColor}",
                           style: TextStyle(
-                            color: Theme.of(context).textSelectionColor,
+                            color: Theme.of(context)
+                                .textSelectionTheme
+                                .selectionColor,
                           ),
                         ),
                         Text(
                           "Data parowania - ${widget.pairList[widget.index].pairingData}",
                           style: TextStyle(
-                            color: Theme.of(context).textSelectionColor,
+                            color: Theme.of(context)
+                                .textSelectionTheme
+                                .selectionColor,
                           ),
                         ),
                       ],
@@ -107,7 +114,8 @@ class _CreatePairCardState extends State<CreatePairCard> {
                       content: widget.pairList[widget.index].maleRingNumber,
                     ),
                     Divider(
-                      color: Theme.of(context).textSelectionColor,
+                      color:
+                          Theme.of(context).textSelectionTheme.selectionColor,
                     ),
                     DeleteAndArchiveButtons(
                       index: widget.index,
@@ -116,7 +124,10 @@ class _CreatePairCardState extends State<CreatePairCard> {
                       toArchive: widget.toArchive,
                     ),
                     widget.pairList[widget.index].isArchive == "false"
-                        ? Divider(color: Theme.of(context).textSelectionColor)
+                        ? Divider(
+                            color: Theme.of(context)
+                                .textSelectionTheme
+                                .selectionColor)
                         : const Center(),
                     widget.pairList[widget.index].isArchive == "false"
                         ? EggExpansionTile(
@@ -126,7 +137,10 @@ class _CreatePairCardState extends State<CreatePairCard> {
                             false,
                           )
                         : Center(),
-                    Divider(color: Theme.of(context).textSelectionColor),
+                    Divider(
+                        color: Theme.of(context)
+                            .textSelectionTheme
+                            .selectionColor),
                     widget.pairList[widget.index].isArchive == "false"
                         ? AddPairChildButton(
                             pair: widget.pairList[widget.index],

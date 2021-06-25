@@ -3,14 +3,13 @@ import 'package:flutter/material.dart';
 
 class ActionButton extends StatefulWidget {
   const ActionButton({
-    Key key,
-    @required this.color,
-    @required this.icon,
-    @required this.name,
-    @required this.padding,
-    @required this.function,
-    this.raceName,
-  }) : super(key: key);
+    required this.color,
+    required this.icon,
+    required this.name,
+    required this.padding,
+    required this.function,
+    required this.raceName,
+  });
 
   final Color color;
   final IconData icon;
@@ -63,7 +62,7 @@ class _ActionButtonState extends State<ActionButton> {
                     size: _isClicked ? 35 : 30,
                     color: _isClicked
                         ? Theme.of(context).primaryColor
-                        : Theme.of(context).textSelectionColor,
+                        : Theme.of(context).textSelectionTheme.selectionColor,
                   ),
                   Container(
                     padding: const EdgeInsets.only(top: 35),
@@ -72,7 +71,9 @@ class _ActionButtonState extends State<ActionButton> {
                       style: TextStyle(
                         color: _isClicked
                             ? Theme.of(context).primaryColor
-                            : Theme.of(context).textSelectionColor,
+                            : Theme.of(context)
+                                .textSelectionTheme
+                                .selectionColor,
                       ),
                       textAlign: TextAlign.center,
                     ),

@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-import 'mainApp/animals/parrots/screens/editPair_screen.dart';
 import 'authentication/resetPass_screen.dart';
 import 'authentication/verification_screen.dart';
 import 'mainApp/animals/parrots/screens/addPairParrot_screen.dart';
-import 'mainApp/animals/parrots/screens/incubationInfo_screen.dart';
-import 'mainApp/animals/parrots/screens/pairList_screen.dart';
-import 'mainApp/animals/parrots/screens/addParrot_screen.dart';
+// import 'mainApp/animals/parrots/screens/editPair_screen.dart';
+// import 'mainApp/animals/parrots/screens/incubationInfo_screen.dart';
+// import 'mainApp/animals/parrots/screens/pairList_screen.dart';
+// import 'mainApp/animals/parrots/screens/addParrot_screen.dart';
 import 'mainApp/animals/parrots/screens/parrot_race_list_screen.dart';
 import 'mainApp/animals/parrots/screens/parrotsList.dart';
 import 'fireInitialization/initWidget.dart';
@@ -32,11 +32,13 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Colors.blue[900],
         accentColor: Colors.blue[300],
-        textSelectionColor: Colors.white,
         backgroundColor: Colors.blueAccent[200],
         buttonColor: Colors.blue[200],
         hintColor: Colors.grey[400],
         cardColor: Colors.black,
+        canvasColor: Colors.white,
+        textSelectionTheme:
+            TextSelectionThemeData(selectionColor: Colors.white),
       ),
       home: SafeArea(
         child: Container(
@@ -54,16 +56,16 @@ class MyApp extends StatelessWidget {
       routes: {
         MyApp.routeName: (ctx) => MyApp(),
         ParrotsRaceListScreen.routeName: (ctx) => ParrotsRaceListScreen(),
-        AddParrotScreen.routeName: (ctx) => AddParrotScreen(),
         ParrotsListScreen.routeName: (ctx) => ParrotsListScreen(),
         AddPairScreen.routeName: (ctx) => AddPairScreen(),
-        PairListScreen.routeName: (ctx) => PairListScreen(),
-        IncubationInformationScreen.routeName: (ctx) =>
-            IncubationInformationScreen(),
         VerificationEmailScreen.routeName: (ctx) => VerificationEmailScreen(),
         HelpScreen.routeName: (ctx) => HelpScreen(),
         ResetPasswordScreen.routeName: (ctx) => ResetPasswordScreen(),
-        EditPairScreen.routeName: (ctx) => EditPairScreen(),
+        // AddParrotScreen.routeName: (ctx) => AddParrotScreen(),
+        // PairListScreen.routeName: (ctx) => PairListScreen(),
+        // IncubationInformationScreen.routeName: (ctx) =>
+        //     IncubationInformationScreen(),
+        // EditPairScreen.routeName: (ctx) => EditPairScreen(),
       },
     );
   }

@@ -10,11 +10,10 @@ class ParrotRingButton extends StatelessWidget {
   final String title;
 
   const ParrotRingButton({
-    Key key,
-    this.index,
-    this.createdParrotList,
-    this.title,
-  }) : super(key: key);
+    required this.index,
+    required this.createdParrotList,
+    required this.title,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +32,7 @@ class ParrotRingButton extends StatelessWidget {
               title: new Text(
                 title,
                 style: TextStyle(
-                  color: Theme.of(context).textSelectionColor,
+                  color: Theme.of(context).textSelectionTheme.selectionColor,
                 ),
               ),
               content: Container(
@@ -45,11 +44,15 @@ class ParrotRingButton extends StatelessWidget {
                 ),
               ),
               actions: <Widget>[
-                FlatButton(
+                TextButton(
+                  style: TextButton.styleFrom(
+                    backgroundColor: Theme.of(context).backgroundColor,
+                  ),
                   child: Text(
                     'OK',
                     style: TextStyle(
-                      color: Theme.of(context).textSelectionColor,
+                      color:
+                          Theme.of(context).textSelectionTheme.selectionColor,
                       fontSize: 18,
                     ),
                   ),
@@ -67,7 +70,7 @@ class ParrotRingButton extends StatelessWidget {
             title,
             maxLines: 2,
             style: TextStyle(
-              color: Theme.of(context).textSelectionColor,
+              color: Theme.of(context).textSelectionTheme.selectionColor,
             ),
           ),
         ),

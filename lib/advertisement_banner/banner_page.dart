@@ -4,14 +4,12 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'adHelper.dart';
 
 class BannerPage extends StatefulWidget {
-  BannerPage({Key key}) : super(key: key);
-
   @override
   _BannerPageState createState() => _BannerPageState();
 }
 
 class _BannerPageState extends State<BannerPage> {
-  BannerAd _ad;
+  late BannerAd _ad;
 
   bool _isAddLoaded = false;
 
@@ -22,7 +20,7 @@ class _BannerPageState extends State<BannerPage> {
       adUnitId: AdHelper.bannerAdUnitID,
       size: AdSize.banner,
       request: AdRequest(),
-      listener: AdListener(
+      listener: BannerAdListener(
         onAdLoaded: (_) {
           setState(() {
             _isAddLoaded = true;
@@ -39,7 +37,6 @@ class _BannerPageState extends State<BannerPage> {
   }
 
   void dispose() {
-    // TODO: Dispose a BannerAd object
     _ad.dispose();
     super.dispose();
   }

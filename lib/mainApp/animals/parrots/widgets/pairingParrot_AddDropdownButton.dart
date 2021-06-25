@@ -7,8 +7,7 @@ import '../screens/addPairParrot_screen.dart';
 class CreatePairingParrotDropdownButton extends StatefulWidget {
   final String raceName;
 
-  const CreatePairingParrotDropdownButton({Key key, this.raceName})
-      : super(key: key);
+  const CreatePairingParrotDropdownButton({required this.raceName});
   @override
   _CreatePairingParrotDropdownButtonState createState() =>
       _CreatePairingParrotDropdownButtonState();
@@ -54,7 +53,7 @@ class _CreatePairingParrotDropdownButtonState
               name,
               maxLines: 1,
               style: TextStyle(
-                color: Theme.of(context).textSelectionColor,
+                color: Theme.of(context).textSelectionTheme.selectionColor,
                 fontSize: MediaQuery.of(context).size.width > 350 ? 18 : 14,
               ),
             ),
@@ -63,7 +62,7 @@ class _CreatePairingParrotDropdownButtonState
             ),
             Icon(
               Icons.add,
-              color: Theme.of(context).textSelectionColor,
+              color: Theme.of(context).textSelectionTheme.selectionColor,
               size: 30,
             ),
             const SizedBox(width: 10),

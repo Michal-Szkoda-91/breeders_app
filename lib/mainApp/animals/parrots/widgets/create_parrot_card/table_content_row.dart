@@ -6,13 +6,12 @@ import 'Parrot_Ring_Button.dart';
 
 class TableContentRow extends StatelessWidget {
   const TableContentRow({
-    Key key,
-    @required this.title,
-    @required this.width,
-    @required this.index,
-    @required this.isPair,
-    @required this.createdParrotList,
-  }) : super(key: key);
+    required this.title,
+    required this.width,
+    required this.index,
+    required this.isPair,
+    required this.createdParrotList,
+  });
 
   final String title;
   final double width;
@@ -37,7 +36,7 @@ class TableContentRow extends StatelessWidget {
           ? AutoSizeText(
               title,
               style: TextStyle(
-                color: Theme.of(context).textSelectionColor,
+                color: Theme.of(context).textSelectionTheme.selectionColor,
                 fontSize: 12,
               ),
               textAlign: TextAlign.center,

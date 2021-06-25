@@ -13,8 +13,6 @@ import 'menuDialogs/inkubation_children_Dialog.dart';
 class HelpScreen extends StatelessWidget {
   static const String routeName = "/HelpScreen";
 
-  HelpScreen({Key key}) : super(key: key);
-
   final AddParrotDialog _addParrotDialog = AddParrotDialog();
   final DeleteRaces _deleteRaces = DeleteRaces();
   final AddPairDialog _addPairDialog = AddPairDialog();
@@ -56,12 +54,11 @@ class HelpScreen extends StatelessWidget {
                 function: _archiveDialog.showMaterialDialog,
               ),
               Html(
-                data:
-                    '<p style="text-align: center; color: white">W razie jakichkolwiek pytań lub niejasności chętnie służę pomocą. Skontaktuj się ze mną na adres <a style="color:blue", href="mailto:michal.szkoda.policy@gmail.com">michal.szkoda.policy@gmail.com</a></p>',
-                onLinkTap: (link) {
-                  launch(link);
-                },
-              ),
+                  data:
+                      '<p style="text-align: center; color: white">W razie jakichkolwiek pytań lub niejasności chętnie służę pomocą. Skontaktuj się ze mną na adres <a style="color:blue", href="mailto:michal.szkoda.policy@gmail.com">michal.szkoda.policy@gmail.com</a></p>',
+                  onLinkTap: (url, _, __, ___) {
+                    launch(url.toString());
+                  }),
             ],
           ),
         ),

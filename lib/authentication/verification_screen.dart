@@ -10,8 +10,6 @@ import '../models/global_methods.dart';
 class VerificationEmailScreen extends StatefulWidget {
   static const String routeName = "/VerificationEmailScreen";
 
-  VerificationEmailScreen({Key key}) : super(key: key);
-
   @override
   _VerificationEmailScreenState createState() =>
       _VerificationEmailScreenState();
@@ -21,8 +19,8 @@ class _VerificationEmailScreenState extends State<VerificationEmailScreen> {
   final auth = FirebaseAuth.instance;
   GlobalMethods _globalMethods = GlobalMethods();
 
-  User user;
-  Timer timer;
+  late User user;
+  late Timer timer;
   @override
   void initState() {
     checkEmail();
@@ -56,7 +54,7 @@ class _VerificationEmailScreenState extends State<VerificationEmailScreen> {
                 "Sprawdź pocztę i potwierdź utworzenie konta, wiadomość może być również w folderze SPAM",
                 style: TextStyle(
                   fontSize: 16,
-                  color: Theme.of(context).textSelectionColor,
+                  color: Theme.of(context).textSelectionTheme.selectionColor,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -69,45 +67,45 @@ class _VerificationEmailScreenState extends State<VerificationEmailScreen> {
               child: const CircularProgressIndicator(),
             ),
             Divider(
-              color: Theme.of(context).textSelectionColor,
+              color: Theme.of(context).textSelectionTheme.selectionColor,
             ),
-            FlatButton.icon(
+            TextButton.icon(
               label: Text(
                 "Wyślij email ponownie",
                 style: TextStyle(
                   fontSize: 16,
-                  color: Theme.of(context).textSelectionColor,
+                  color: Theme.of(context).textSelectionTheme.selectionColor,
                 ),
                 textAlign: TextAlign.center,
               ),
               icon: Icon(
                 Icons.email_outlined,
-                color: Theme.of(context).textSelectionColor,
+                color: Theme.of(context).textSelectionTheme.selectionColor,
                 size: 33,
               ),
               onPressed: _sendEmailAgain,
             ),
             Divider(
-              color: Theme.of(context).textSelectionColor,
+              color: Theme.of(context).textSelectionTheme.selectionColor,
             ),
-            FlatButton.icon(
+            TextButton.icon(
               label: Text(
                 "Ekran logowania",
                 style: TextStyle(
                   fontSize: 16,
-                  color: Theme.of(context).textSelectionColor,
+                  color: Theme.of(context).textSelectionTheme.selectionColor,
                 ),
                 textAlign: TextAlign.center,
               ),
               icon: Icon(
                 Icons.logout,
-                color: Theme.of(context).textSelectionColor,
+                color: Theme.of(context).textSelectionTheme.selectionColor,
                 size: 33,
               ),
               onPressed: _returnLoginScreen,
             ),
             Divider(
-              color: Theme.of(context).textSelectionColor,
+              color: Theme.of(context).textSelectionTheme.selectionColor,
             ),
           ],
         ),
@@ -116,7 +114,7 @@ class _VerificationEmailScreenState extends State<VerificationEmailScreen> {
   }
 
   Future<void> checkEmail() async {
-    user = auth.currentUser;
+    user = auth.currentUser!;
     await user.reload();
     if (user.emailVerified) {
       timer.cancel();
@@ -130,7 +128,7 @@ class _VerificationEmailScreenState extends State<VerificationEmailScreen> {
   }
 
   void _sendEmailAgain() async {
-    user = auth.currentUser;
+    user = auth.currentUser!;
     await user.sendEmailVerification().then((_) {
       _globalMethods.showMaterialDialog(context, "Wysłano wiadomość ponownie");
     });

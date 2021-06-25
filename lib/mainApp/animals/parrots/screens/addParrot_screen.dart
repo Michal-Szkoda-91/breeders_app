@@ -1,5 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:draggable_scrollbar_sliver/draggable_scrollbar_sliver.dart';
+import 'package:draggable_scrollbar/draggable_scrollbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -21,8 +21,13 @@ class AddParrotScreen extends StatefulWidget {
   final String race;
   final bool addFromChild;
 
-  AddParrotScreen(
-      {this.parrotMap, this.parrot, this.pair, this.race, this.addFromChild});
+  AddParrotScreen({
+    required this.parrotMap,
+    required this.parrot,
+    required this.pair,
+    required this.race,
+    required this.addFromChild,
+  });
 
   @override
   _RaceListScreenState createState() => _RaceListScreenState();
@@ -61,16 +66,16 @@ class _RaceListScreenState extends State<AddParrotScreen> {
 
   ParrotDataHelper _parrotDataHelper = ParrotDataHelper();
   ParrotPairDataHelper _parrotPairDataHelper = ParrotPairDataHelper();
-  Parrot _createdParrot;
-  Parrot _parrotToDelete;
-  Children _createdChild;
+  late Parrot _createdParrot;
+  late Parrot _parrotToDelete;
+  late Children _createdChild;
   bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    _sexName = _genderMap[1.0];
-    if (widget.parrot != null) {
+    _sexName = _genderMap[1.0].toString();
+    if (widget.parrot.ringNumber == '') {
       _isEditing(widget.parrot);
     }
   }
@@ -90,16 +95,16 @@ class _RaceListScreenState extends State<AddParrotScreen> {
 
   @override
   Widget build(BuildContext context) {
-    RegExp _regExpCountry = RegExp(_countryPatter);
-    RegExp _regExpYear = RegExp(_yearPatter);
-    RegExp _regExpNumber = RegExp(_numberPatter);
+    RegExp _regExpCountry = RegExp(_countryPatter.toString());
+    RegExp _regExpYear = RegExp(_yearPatter.toString());
+    RegExp _regExpNumber = RegExp(_numberPatter.toString());
     final node = FocusScope.of(context);
     return Scaffold(
       endDrawer: CustomDrawer(auth: _auth),
       endDrawerEnableOpenDragGesture: false,
       backgroundColor: Colors.transparent,
       appBar: AppBar(
-        title: widget.parrot != null
+        title: widget.parrot.ringNumber == ''
             ? const Text("Edycja")
             : const Text("Dodawanie Papugi"),
       ),
@@ -109,149 +114,154 @@ class _RaceListScreenState extends State<AddParrotScreen> {
                 controller: _rrectController,
                 heightScrollThumb: 100,
                 backgroundColor: Theme.of(context).accentColor,
-                child: SingleChildScrollView(
+                child: ListView.builder(
                   controller: _rrectController,
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Column(
-                      children: [
-                        const SizedBox(height: 16.0),
-                        customTitle(context),
-                        const SizedBox(height: 30),
-                        Form(
-                          key: _formKey,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              //
-                              //******************************************************* */
-                              //Sex
-                              widget.parrot != null
-                                  ? widget.parrot.pairRingNumber == "brak"
-                                      ? genderSwitchRow(context, _sex)
-                                      : infoText(context, widget.parrot.sex)
-                                  : genderSwitchRow(context, _sex),
-                              widget.pair != null
-                                  ? Center()
-                                  : SizedBox(height: 16.0),
-                              //
-                              //******************************************************* */
-                              //Ring number
-                              infoText(context, "Numer obrączki"),
-                              const SizedBox(height: 16.0),
-                              widget.parrot != null &&
-                                      widget.parrot.pairRingNumber != "brak"
-                                  ? infoText(context, widget.parrot.ringNumber)
-                                  : ringNumberRow(
-                                      context,
-                                      _regExpCountry,
-                                      node,
-                                      _regExpYear,
-                                      _regExpNumber,
-                                      _country,
-                                      _year,
-                                      _symbol,
-                                      _parrotNumber,
-                                    ),
-                              widget.pair != null
-                                  ? const Center()
-                                  : const SizedBox(height: 16.0),
+                  itemCount: 1,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 16.0),
+                          customTitle(context),
+                          const SizedBox(height: 30),
+                          Form(
+                            key: _formKey,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                //
+                                //******************************************************* */
+                                //Sex
+                                widget.parrot.ringNumber == ''
+                                    ? widget.parrot.pairRingNumber == "brak"
+                                        ? genderSwitchRow(context, _sex)
+                                        : infoText(context, widget.parrot.sex)
+                                    : genderSwitchRow(context, _sex),
+                                widget.pair.id == ''
+                                    ? Center()
+                                    : SizedBox(height: 16.0),
+                                //
+                                //******************************************************* */
+                                //Ring number
+                                infoText(context, "Numer obrączki"),
+                                const SizedBox(height: 16.0),
+                                widget.parrot.ringNumber == '' &&
+                                        widget.parrot.pairRingNumber != "brak"
+                                    ? infoText(
+                                        context, widget.parrot.ringNumber)
+                                    : ringNumberRow(
+                                        context,
+                                        _regExpCountry,
+                                        node,
+                                        _regExpYear,
+                                        _regExpNumber,
+                                        _country,
+                                        _year,
+                                        _symbol,
+                                        _parrotNumber,
+                                      ),
+                                widget.pair.id == ''
+                                    ? const Center()
+                                    : const SizedBox(height: 16.0),
 
-                              //
-                              //  Born Time
-                              //
-                              const SizedBox(height: 16.0),
-                              widget.pair != null
-                                  ? Row(
-                                      children: [
-                                        Spacer(),
-                                        buildRowCalendar(context),
-                                        Spacer(),
-                                      ],
-                                    )
-                                  : const SizedBox(height: 16.0),
+                                //
+                                //  Born Time
+                                //
+                                const SizedBox(height: 16.0),
+                                widget.pair.id == ''
+                                    ? Row(
+                                        children: [
+                                          Spacer(),
+                                          buildRowCalendar(context),
+                                          Spacer(),
+                                        ],
+                                      )
+                                    : const SizedBox(height: 16.0),
 
-                              //
-                              //******************************************************* */
-                              //Color
-                              const SizedBox(height: 16.0),
-                              customTextFormField(
-                                context: context,
-                                node: node,
-                                hint: 'Wprowadż barwę papugi',
-                                icon: Icons.color_lens,
-                                mainValue: 'parrotColor',
-                                maxlines: 1,
-                                maxLength: 30,
-                                initvalue: _parrotColor,
-                              ),
-                              const SizedBox(height: 16.0),
+                                //
+                                //******************************************************* */
+                                //Color
+                                const SizedBox(height: 16.0),
+                                customTextFormField(
+                                  context: context,
+                                  node: node,
+                                  hint: 'Wprowadż barwę papugi',
+                                  icon: Icons.color_lens,
+                                  mainValue: 'parrotColor',
+                                  maxlines: 1,
+                                  maxLength: 30,
+                                  initvalue: _parrotColor,
+                                ),
+                                const SizedBox(height: 16.0),
 
-                              //
-                              //******************************************************* */
-                              //Fission
-                              widget.pair != null
-                                  ? const Center()
-                                  : customTextFormField(
-                                      context: context,
-                                      node: node,
-                                      hint: 'Jakie rozszczepienie',
-                                      icon:
-                                          Icons.star_border_purple500_outlined,
-                                      mainValue: 'fission',
-                                      maxlines: 2,
-                                      maxLength: 50,
-                                      initvalue: _fission,
-                                    ),
-                              widget.pair != null
-                                  ? const Center()
-                                  : const SizedBox(height: 16.0), //
-                              //******************************************************* */
-                              //cage number
-                              widget.pair != null
-                                  ? const Center()
-                                  : customTextFormField(
-                                      context: context,
-                                      node: node,
-                                      hint: 'Numer / nazwa klatki',
-                                      icon: Icons.home_outlined,
-                                      mainValue: 'cageNumber',
-                                      maxlines: 1,
-                                      maxLength: 30,
-                                      initvalue: _cageNumber,
-                                    ),
-                              widget.pair != null
-                                  ? const Center()
-                                  : const SizedBox(height: 16.0),
-                              //
-                              //******************************************************* */
-                              //notes
-                              widget.pair != null
-                                  ? const Center()
-                                  : customTextFormField(
-                                      context: context,
-                                      node: node,
-                                      hint: 'Notatka / Dodatkowa informacja',
-                                      icon: Icons.home_outlined,
-                                      mainValue: 'notes',
-                                      maxlines: 10,
-                                      maxLength: 100,
-                                      initvalue: _notes,
-                                    ),
-                            ],
+                                //
+                                //******************************************************* */
+                                //Fission
+                                widget.pair.id == ''
+                                    ? const Center()
+                                    : customTextFormField(
+                                        context: context,
+                                        node: node,
+                                        hint: 'Jakie rozszczepienie',
+                                        icon: Icons
+                                            .star_border_purple500_outlined,
+                                        mainValue: 'fission',
+                                        maxlines: 2,
+                                        maxLength: 50,
+                                        initvalue: _fission,
+                                      ),
+                                widget.pair.id == ''
+                                    ? const Center()
+                                    : const SizedBox(height: 16.0), //
+                                //******************************************************* */
+                                //cage number
+                                widget.pair.id == ''
+                                    ? const Center()
+                                    : customTextFormField(
+                                        context: context,
+                                        node: node,
+                                        hint: 'Numer / nazwa klatki',
+                                        icon: Icons.home_outlined,
+                                        mainValue: 'cageNumber',
+                                        maxlines: 1,
+                                        maxLength: 30,
+                                        initvalue: _cageNumber,
+                                      ),
+                                widget.pair.id == ''
+                                    ? const Center()
+                                    : const SizedBox(height: 16.0),
+                                //
+                                //******************************************************* */
+                                //notes
+                                widget.pair.id == ''
+                                    ? const Center()
+                                    : customTextFormField(
+                                        context: context,
+                                        node: node,
+                                        hint: 'Notatka / Dodatkowa informacja',
+                                        icon: Icons.home_outlined,
+                                        mainValue: 'notes',
+                                        maxlines: 10,
+                                        maxLength: 100,
+                                        initvalue: _notes,
+                                      ),
+                              ],
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 16.0),
-                        (widget.parrot == null && widget.pair == null ||
-                                widget.addFromChild)
-                            ? _addParrotConfimButton(context)
-                            : widget.pair == null
-                                ? _editParrotConfirmButton(context)
-                                : _addParrotConfimButtonChild(context),
-                        const SizedBox(height: 200),
-                      ],
-                    ),
-                  ),
+                          const SizedBox(height: 16.0),
+                          (widget.parrot.ringNumber == '' &&
+                                      widget.pair.id == '' ||
+                                  widget.addFromChild)
+                              ? _addParrotConfimButton(context)
+                              : widget.pair.id == ''
+                                  ? _editParrotConfirmButton(context)
+                                  : _addParrotConfimButtonChild(context),
+                          const SizedBox(height: 200),
+                        ],
+                      ),
+                    );
+                  },
                 ),
               ),
             )
@@ -269,12 +279,14 @@ class _RaceListScreenState extends State<AddParrotScreen> {
         const Expanded(
           child: const SizedBox(),
         ),
-        RaisedButton(
-          color: Theme.of(context).primaryColor,
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            primary: Theme.of(context).primaryColor,
+          ),
           child: Text(
             'Anuluj',
             style: TextStyle(
-              color: Theme.of(context).textSelectionColor,
+              color: Theme.of(context).textSelectionTheme.selectionColor,
             ),
           ),
           //create a parrot
@@ -283,12 +295,14 @@ class _RaceListScreenState extends State<AddParrotScreen> {
           },
         ),
         const SizedBox(width: 20),
-        RaisedButton(
-          color: Theme.of(context).primaryColor,
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            primary: Theme.of(context).primaryColor,
+          ),
           child: Text(
             'Zapisz zmiany',
             style: TextStyle(
-              color: Theme.of(context).textSelectionColor,
+              color: Theme.of(context).textSelectionTheme.selectionColor,
             ),
           ),
           //edit a parrot
@@ -304,12 +318,14 @@ class _RaceListScreenState extends State<AddParrotScreen> {
         const Expanded(
           child: const SizedBox(),
         ),
-        RaisedButton(
-          color: Theme.of(context).primaryColor,
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            primary: Theme.of(context).primaryColor,
+          ),
           child: Text(
             'Anuluj',
             style: TextStyle(
-              color: Theme.of(context).textSelectionColor,
+              color: Theme.of(context).textSelectionTheme.selectionColor,
             ),
           ),
           //create a parrot
@@ -318,12 +334,14 @@ class _RaceListScreenState extends State<AddParrotScreen> {
           },
         ),
         const SizedBox(width: 20),
-        RaisedButton(
-          color: Theme.of(context).primaryColor,
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            primary: Theme.of(context).primaryColor,
+          ),
           child: Text(
             'Dodaj Papugę',
             style: TextStyle(
-              color: Theme.of(context).textSelectionColor,
+              color: Theme.of(context).textSelectionTheme.selectionColor,
             ),
           ),
           //create a parrot
@@ -341,12 +359,14 @@ class _RaceListScreenState extends State<AddParrotScreen> {
         const Expanded(
           child: const SizedBox(),
         ),
-        RaisedButton(
-          color: Theme.of(context).primaryColor,
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            primary: Theme.of(context).primaryColor,
+          ),
           child: Text(
             'Utwórz Potomka',
             style: TextStyle(
-              color: Theme.of(context).textSelectionColor,
+              color: Theme.of(context).textSelectionTheme.selectionColor,
             ),
           ),
           //create a parrot
@@ -361,19 +381,19 @@ class _RaceListScreenState extends State<AddParrotScreen> {
 // ******************************************************************************************
 
   TextFormField customTextFormField({
-    BuildContext context,
-    FocusScopeNode node,
-    String hint,
-    IconData icon,
-    String mainValue,
-    int maxLength,
-    int maxlines,
-    String initvalue,
+    required BuildContext context,
+    required FocusScopeNode node,
+    required String hint,
+    required IconData icon,
+    required String mainValue,
+    required int maxLength,
+    required int maxlines,
+    required String initvalue,
   }) {
     return TextFormField(
       initialValue: initvalue,
       style: customTextStyle(context),
-      cursorColor: Theme.of(context).textSelectionColor,
+      cursorColor: Theme.of(context).textSelectionTheme.selectionColor,
       maxLength: maxLength,
       maxLines: maxlines,
       minLines: 1,
@@ -384,7 +404,7 @@ class _RaceListScreenState extends State<AddParrotScreen> {
       ),
       autovalidateMode: AutovalidateMode.onUserInteraction,
       validator: (val) {
-        if (val.isEmpty || val.length > maxLength) {
+        if (val!.isEmpty || val.length > maxLength) {
           return 'Uzupełnij dane';
         } else {
           return null;
@@ -432,7 +452,7 @@ class _RaceListScreenState extends State<AddParrotScreen> {
             onChanged: (val) {
               setState(() {
                 _sex = val;
-                _sexName = _genderMap[val];
+                _sexName = _genderMap[val].toString();
               });
             },
           ),
@@ -465,15 +485,15 @@ class _RaceListScreenState extends State<AddParrotScreen> {
             maxLength: 4,
             initialValue: initCountry,
             style: customTextStyle(context),
-            cursorColor: Theme.of(context).textSelectionColor,
+            cursorColor: Theme.of(context).textSelectionTheme.selectionColor,
             decoration: _createInputDecoration(
               context,
               'Kraj',
-              null,
+              Icons.ac_unit,
             ),
             autovalidateMode: AutovalidateMode.onUserInteraction,
             validator: (val) {
-              if (val.isEmpty || !_regExpCountry.hasMatch(val)) {
+              if (val!.isEmpty || !_regExpCountry.hasMatch(val)) {
                 return 'Błąd';
               } else {
                 return null;
@@ -500,15 +520,15 @@ class _RaceListScreenState extends State<AddParrotScreen> {
             initialValue: initYear,
             keyboardType: TextInputType.number,
             style: customTextStyle(context),
-            cursorColor: Theme.of(context).textSelectionColor,
+            cursorColor: Theme.of(context).textSelectionTheme.selectionColor,
             decoration: _createInputDecoration(
               context,
               'Rok',
-              null,
+              Icons.ac_unit,
             ),
             autovalidateMode: AutovalidateMode.onUserInteraction,
             validator: (val) {
-              if (val.isEmpty || !_regExpYear.hasMatch(val)) {
+              if (val!.isEmpty || !_regExpYear.hasMatch(val)) {
                 return 'Błąd';
               } else {
                 return null;
@@ -534,15 +554,15 @@ class _RaceListScreenState extends State<AddParrotScreen> {
             textAlign: TextAlign.center,
             maxLength: 6,
             style: customTextStyle(context),
-            cursorColor: Theme.of(context).textSelectionColor,
+            cursorColor: Theme.of(context).textSelectionTheme.selectionColor,
             decoration: _createInputDecoration(
               context,
               'Symbol',
-              null,
+              Icons.ac_unit,
             ),
             autovalidateMode: AutovalidateMode.onUserInteraction,
             validator: (val) {
-              if (val.isEmpty || val.length > 6) {
+              if (val!.isEmpty || val.length > 6) {
                 return 'Błąd';
               } else {
                 return null;
@@ -568,15 +588,15 @@ class _RaceListScreenState extends State<AddParrotScreen> {
             maxLength: 5,
             keyboardType: TextInputType.number,
             style: customTextStyle(context),
-            cursorColor: Theme.of(context).textSelectionColor,
+            cursorColor: Theme.of(context).textSelectionTheme.selectionColor,
             decoration: _createInputDecoration(
               context,
               'Numer',
-              null,
+              Icons.ac_unit,
             ),
             autovalidateMode: AutovalidateMode.onUserInteraction,
             validator: (val) {
-              if (val.isEmpty ||
+              if (val!.isEmpty ||
                   !_regExpNumber.hasMatch(val) ||
                   val.length > 5) {
                 return 'Błąd';
@@ -601,7 +621,7 @@ class _RaceListScreenState extends State<AddParrotScreen> {
       text,
       style: TextStyle(
         fontSize: 18,
-        color: Theme.of(context).textSelectionColor,
+        color: Theme.of(context).textSelectionTheme.selectionColor,
       ),
     );
   }
@@ -610,7 +630,7 @@ class _RaceListScreenState extends State<AddParrotScreen> {
   ///
   ///
   Future<void> _createParrots() async {
-    if (!_formKey.currentState.validate()) {
+    if (!_formKey.currentState!.validate()) {
       _globalMethods.showMaterialDialog(
           context, "Nie udało się dodać papugi, nie pełne dane");
     } else {
@@ -633,7 +653,7 @@ class _RaceListScreenState extends State<AddParrotScreen> {
         } else {
           setState(() {
             String race = "";
-            widget.pair == null
+            widget.pair.id == ''
                 ? race = widget.parrotMap['name']
                 : race = widget.race;
             _createdParrot = Parrot(
@@ -643,10 +663,11 @@ class _RaceListScreenState extends State<AddParrotScreen> {
                 color: _parrotColor,
                 fission: _fission,
                 notes: _notes,
-                sex: _sexName);
+                sex: _sexName,
+                pairRingNumber: '');
           });
           await _parrotDataHelper.createParrotCollection(
-            uid: _firebaseUser.uid,
+            uid: _firebaseUser!.uid,
             parrot: _createdParrot,
             context: context,
           );
@@ -662,7 +683,7 @@ class _RaceListScreenState extends State<AddParrotScreen> {
   ///
   ///
   Future<void> _createChild() async {
-    if (!_formKey.currentState.validate()) {
+    if (!_formKey.currentState!.validate()) {
       _globalMethods.showMaterialDialog(
           context, "Nie udało się dodać papugi, nie pełne dane");
     } else {
@@ -694,7 +715,7 @@ class _RaceListScreenState extends State<AddParrotScreen> {
           });
 
           await _parrotPairDataHelper.createChild(
-            uid: _firebaseUser.uid,
+            uid: _firebaseUser!.uid,
             race: widget.race,
             child: _createdChild,
             pairId: widget.pair.id,
@@ -712,7 +733,7 @@ class _RaceListScreenState extends State<AddParrotScreen> {
   ///
   ///
   Future<void> _editParrot() async {
-    if (!_formKey.currentState.validate()) {
+    if (!_formKey.currentState!.validate()) {
       _globalMethods.showMaterialDialog(
           context, "Nie udało się edytować papugi, nie pełne dane");
     } else {
@@ -757,7 +778,7 @@ class _RaceListScreenState extends State<AddParrotScreen> {
           );
           await _parrotDataHelper
               .updateParrot(
-            uid: _firebaseUser.uid,
+            uid: _firebaseUser!.uid,
             parrot: _createdParrot,
             pairRingNumber: _createdParrot.pairRingNumber,
             context: context,
@@ -765,7 +786,11 @@ class _RaceListScreenState extends State<AddParrotScreen> {
               .then((_) async {
             if (widget.parrot.ringNumber != _ringNumber) {
               await _parrotDataHelper.deleteParrot(
-                  _firebaseUser.uid, _parrotToDelete, context, false);
+                context: context,
+                parrotToDelete: _parrotToDelete,
+                showDialog: false,
+                uid: _firebaseUser!.uid,
+              );
             }
           });
 
@@ -780,7 +805,7 @@ class _RaceListScreenState extends State<AddParrotScreen> {
 //Styl tekstu w inputach
   TextStyle customTextStyle(BuildContext context) {
     return TextStyle(
-      color: Theme.of(context).textSelectionColor,
+      color: Theme.of(context).textSelectionTheme.selectionColor,
       fontSize: 16,
     );
   }
@@ -803,13 +828,13 @@ class _RaceListScreenState extends State<AddParrotScreen> {
         Container(
           width: MediaQuery.of(context).size.width * 0.5,
           child: AutoSizeText(
-            widget.parrot == null
+            widget.parrot.ringNumber == ''
                 ? widget.parrotMap['name']
                 : widget.parrot.race,
             maxLines: 1,
             style: TextStyle(
               fontSize: 24,
-              color: Theme.of(context).textSelectionColor,
+              color: Theme.of(context).textSelectionTheme.selectionColor,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -821,17 +846,17 @@ class _RaceListScreenState extends State<AddParrotScreen> {
   InputDecoration _createInputDecoration(
       BuildContext context, String text, IconData icon) {
     return InputDecoration(
-      contentPadding:
-          EdgeInsets.symmetric(horizontal: icon == null ? 3 : 14, vertical: 10),
+      contentPadding: EdgeInsets.symmetric(
+          horizontal: icon == Icons.ac_unit ? 3 : 14, vertical: 10),
       counterStyle: TextStyle(
         height: double.minPositive,
       ),
       labelText: text,
-      icon: icon == null
+      icon: icon == Icons.ac_unit
           ? null
           : Icon(
               icon,
-              color: Theme.of(context).textSelectionColor,
+              color: Theme.of(context).textSelectionTheme.selectionColor,
             ),
       labelStyle: TextStyle(
         color: Theme.of(context).hintColor,
@@ -850,7 +875,7 @@ class _RaceListScreenState extends State<AddParrotScreen> {
         ),
         borderSide: BorderSide(
           width: 3,
-          color: Theme.of(context).textSelectionColor,
+          color: Theme.of(context).canvasColor,
         ),
       ),
       errorBorder: OutlineInputBorder(
@@ -866,7 +891,7 @@ class _RaceListScreenState extends State<AddParrotScreen> {
           const Radius.circular(5.0),
         ),
         borderSide: BorderSide(
-          color: Theme.of(context).textSelectionColor,
+          color: Theme.of(context).canvasColor,
         ),
       ),
     );
@@ -876,8 +901,10 @@ class _RaceListScreenState extends State<AddParrotScreen> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        FlatButton(
-          color: Theme.of(context).backgroundColor,
+        TextButton(
+          style: TextButton.styleFrom(
+            backgroundColor: Theme.of(context).backgroundColor,
+          ),
           onPressed: () {
             showDatePicker(
               context: context,
@@ -889,7 +916,7 @@ class _RaceListScreenState extends State<AddParrotScreen> {
             ).then((date) {
               setState(() {
                 bornTime =
-                    DateFormat("yyyy-MM-dd", 'pl_PL').format(date).toString();
+                    DateFormat("yyyy-MM-dd", 'pl_PL').format(date!).toString();
               });
             });
           },
@@ -907,7 +934,7 @@ class _RaceListScreenState extends State<AddParrotScreen> {
               bornTime,
               style: TextStyle(
                 fontSize: 18,
-                color: Theme.of(context).textSelectionColor,
+                color: Theme.of(context).textSelectionTheme.selectionColor,
               ),
             ),
           ),
@@ -921,7 +948,7 @@ class _RaceListScreenState extends State<AddParrotScreen> {
       text,
       style: TextStyle(
         fontSize: 16,
-        color: Theme.of(context).textSelectionColor,
+        color: Theme.of(context).textSelectionTheme.selectionColor,
       ),
     );
   }

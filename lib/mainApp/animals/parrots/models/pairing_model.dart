@@ -18,15 +18,15 @@ class ParrotPairing {
   final String picUrl;
 
   ParrotPairing({
-    this.id,
-    this.race,
-    this.maleRingNumber,
-    this.femaleRingNumber,
-    this.pairingData,
-    this.showEggsDate,
-    this.pairColor,
-    this.isArchive,
-    this.picUrl,
+    required this.id,
+    required this.race,
+    required this.maleRingNumber,
+    required this.femaleRingNumber,
+    required this.pairingData,
+    required this.showEggsDate,
+    required this.pairColor,
+    required this.isArchive,
+    required this.picUrl,
   });
 }
 
@@ -42,12 +42,12 @@ class ParrotPairDataHelper {
 //
 //**************** */
   Future<void> createPairCollection({
-    String uid,
-    ParrotPairing pair,
-    String race,
-    Parrot maleParrot,
-    Parrot femaleParrot,
-    BuildContext context,
+    required String uid,
+    required ParrotPairing pair,
+    required String race,
+    required Parrot maleParrot,
+    required Parrot femaleParrot,
+    required BuildContext context,
   }) async {
     final CollectionReference collectionReference =
         FirebaseFirestore.instance.collection(uid);
@@ -65,9 +65,9 @@ class ParrotPairDataHelper {
       "Pic Url": "${pair.picUrl}",
     }, SetOptions(merge: true)).then((_) {
       parrotList.updatedParrotsStatus(
-          parrot: maleParrot, uid: uid, pairRingNumber: pair.femaleRingNumber);
+          uid, maleParrot, pair.femaleRingNumber, context);
       parrotList.updatedParrotsStatus(
-          parrot: femaleParrot, uid: uid, pairRingNumber: pair.maleRingNumber);
+          uid, femaleParrot, pair.maleRingNumber, context);
       _globalMethods.showMaterialDialog(context, "Utworzono parę");
     }).catchError((err) {
       _globalMethods.showMaterialDialog(context,
@@ -85,11 +85,11 @@ class ParrotPairDataHelper {
 //
 //**************** */
   Future<void> createChild({
-    String uid,
-    String race,
-    String pairId,
-    Children child,
-    BuildContext context,
+    required String uid,
+    required String race,
+    required String pairId,
+    required Children child,
+    required BuildContext context,
   }) async {
     final CollectionReference collectionReference =
         FirebaseFirestore.instance.collection(uid);
@@ -124,13 +124,13 @@ class ParrotPairDataHelper {
 //
 //**************** */
   Future<void> deletePair(
-      String uid,
-      String race,
-      String id,
-      Parrot femaleParrot,
-      Parrot maleParrot,
-      String picUrl,
-      BuildContext context) async {
+      {required String uid,
+      required String race,
+      required String id,
+      required Parrot femaleParrot,
+      required Parrot maleParrot,
+      required String picUrl,
+      required BuildContext context}) async {
     final CollectionReference breedCollection =
         FirebaseFirestore.instance.collection(uid);
     ParrotDataHelper parrotList = ParrotDataHelper();
@@ -157,9 +157,17 @@ class ParrotPairDataHelper {
         .delete()
         .then((_) {
       parrotList.updatedParrotsStatus(
-          parrot: maleParrot, uid: uid, pairRingNumber: "brak");
+        uid,
+        maleParrot,
+        "brak",
+        context,
+      );
       parrotList.updatedParrotsStatus(
-          parrot: femaleParrot, uid: uid, pairRingNumber: "brak");
+        uid,
+        femaleParrot,
+        "brak",
+        context,
+      );
       _globalMethods.showMaterialDialog(context, "Usunięto wybraną parę papug");
       print("Pair deleted");
     }).catchError((err) {
@@ -196,9 +204,17 @@ class ParrotPairDataHelper {
       "Is Archive": "true",
     }).then((_) {
       parrotList.updatedParrotsStatus(
-          parrot: maleParrot, uid: uid, pairRingNumber: "brak");
+        uid,
+        maleParrot,
+        "brak",
+        context,
+      );
       parrotList.updatedParrotsStatus(
-          parrot: femaleParrot, uid: uid, pairRingNumber: "brak");
+        uid,
+        femaleParrot,
+        "brak",
+        context,
+      );
       _globalMethods.showMaterialDialog(context, "Przesunięto do archiwum");
       print("Pair updated");
     }).catchError((err) {
@@ -218,13 +234,13 @@ class ParrotPairDataHelper {
 //
 //**************** */
   Future<void> editPair(
-      {String uid,
-      String race,
-      String id,
-      String pairingData,
-      String picUrl,
-      String color,
-      BuildContext context}) async {
+      {required String uid,
+      required String race,
+      required String id,
+      required String pairingData,
+      required String picUrl,
+      required String color,
+      required BuildContext context}) async {
     final CollectionReference breedCollection =
         FirebaseFirestore.instance.collection(uid);
 

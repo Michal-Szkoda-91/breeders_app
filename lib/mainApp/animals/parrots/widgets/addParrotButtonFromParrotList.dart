@@ -1,4 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:breeders_app/mainApp/animals/parrots/models/pairing_model.dart';
+import 'package:breeders_app/mainApp/animals/parrots/models/parrot_model.dart';
 import 'package:flutter/material.dart';
 
 import '../models/parrotsRace_list.dart';
@@ -7,7 +9,7 @@ import '../screens/addParrot_screen.dart';
 class AddParrotFromInsideParrotList extends StatefulWidget {
   final String race;
 
-  AddParrotFromInsideParrotList({Key key, this.race}) : super(key: key);
+  AddParrotFromInsideParrotList({required this.race});
 
   @override
   _AddParrotFromInsideParrotListState createState() =>
@@ -18,7 +20,7 @@ class _AddParrotFromInsideParrotListState
     extends State<AddParrotFromInsideParrotList> {
   final ParrotsRace _parrotsRace = new ParrotsRace();
 
-  Map raceMap;
+  late Map raceMap;
 
   @override
   Widget build(BuildContext context) {
@@ -38,8 +40,29 @@ class _AddParrotFromInsideParrotListState
             MaterialPageRoute(
               builder: (context) => AddParrotScreen(
                 parrotMap: raceMap,
-                parrot: null,
                 addFromChild: false,
+                pair: ParrotPairing(
+                  id: '',
+                  race: '',
+                  maleRingNumber: '',
+                  femaleRingNumber: '',
+                  pairingData: '',
+                  showEggsDate: '',
+                  pairColor: '',
+                  isArchive: '',
+                  picUrl: '',
+                ),
+                race: '',
+                parrot: Parrot(
+                  race: '',
+                  ringNumber: '',
+                  color: '',
+                  fission: '',
+                  cageNumber: '',
+                  sex: '',
+                  notes: '',
+                  pairRingNumber: '',
+                ),
               ),
             ),
           );
@@ -64,13 +87,13 @@ class _AddParrotFromInsideParrotListState
                   "Dodaj Papugę",
                   maxLines: 1,
                   style: TextStyle(
-                    color: Theme.of(context).textSelectionColor,
+                    color: Theme.of(context).textSelectionTheme.selectionColor,
                   ),
                 ),
               ),
               Icon(
                 Icons.add,
-                color: Theme.of(context).textSelectionColor,
+                color: Theme.of(context).textSelectionTheme.selectionColor,
                 size: 30,
               ),
               const SizedBox(width: 10),

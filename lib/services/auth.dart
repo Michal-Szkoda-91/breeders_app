@@ -10,13 +10,13 @@ class AuthService {
   final GoogleSignIn googleSignIn = GoogleSignIn();
   GlobalMethods _globalMethods = GlobalMethods();
 
-  //uuser create
-  UserLogged _userFromFirebaseUser(User user) {
+  //user create
+  UserLogged? _userFromFirebaseUser(User? user) {
     return user != null ? UserLogged(uid: user.uid) : null;
   }
 
   //servers listen
-  Stream<UserLogged> get user {
+  Stream<UserLogged?> get user {
     return _auth.authStateChanges().map(_userFromFirebaseUser);
   }
 
@@ -24,10 +24,10 @@ class AuthService {
 
   Future singInWithGoogle() async {
     try {
-      final GoogleSignInAccount googleSignInAccount =
+      final GoogleSignInAccount? googleSignInAccount =
           await googleSignIn.signIn();
       final GoogleSignInAuthentication googleSignInAuthentication =
-          await googleSignInAccount.authentication;
+          await googleSignInAccount!.authentication;
 
       final AuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleSignInAuthentication.accessToken,
@@ -35,7 +35,7 @@ class AuthService {
       );
       final UserCredential authResult =
           await _auth.signInWithCredential(credential);
-      final User user = authResult.user;
+      final User? user = authResult.user;
       return _userFromFirebaseUser(user);
     } catch (e) {
       print(e.toString());
@@ -49,8 +49,8 @@ class AuthService {
     try {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
-      User user = result.user;
-      user.sendEmailVerification();
+      User? user = result.user;
+      user!.sendEmailVerification();
       return _userFromFirebaseUser(user);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'email-already-in-use') {
@@ -66,8 +66,8 @@ class AuthService {
     try {
       UserCredential result = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
-      User user = result.user;
-      return _userFromFirebaseUser(user);
+      User? user = result.user;
+      return _userFromFirebaseUser(user!);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         _globalMethods.showMaterialDialog(

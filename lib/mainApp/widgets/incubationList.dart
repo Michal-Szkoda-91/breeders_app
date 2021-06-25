@@ -9,7 +9,7 @@ import '../animals/parrots/widgets/parrot_pair_card_widgets/pairCircularContaine
 class IncubationList extends StatelessWidget {
   final List<ParrotPairing> parrotList;
 
-  const IncubationList({this.parrotList});
+  const IncubationList({required this.parrotList});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class IncubationList extends StatelessWidget {
             children: [
               const SizedBox(height: 5),
               Divider(
-                color: Theme.of(context).textSelectionColor,
+                color: Theme.of(context).textSelectionTheme.selectionColor,
                 thickness: 2,
               ),
               parrotList[index].picUrl == "brak"

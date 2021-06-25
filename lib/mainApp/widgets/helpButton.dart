@@ -3,22 +3,20 @@ import 'package:flutter/material.dart';
 import '../../help/help_screen.dart';
 
 class HelpButton extends StatelessWidget {
-  const HelpButton({
-    Key key,
-  }) : super(key: key);
+  const HelpButton({required});
 
   @override
   Widget build(BuildContext context) {
-    return FlatButton.icon(
+    return TextButton.icon(
       icon: Icon(
         Icons.help,
-        color: Theme.of(context).textSelectionColor,
+        color: Theme.of(context).textSelectionTheme.selectionColor,
         size: 30,
       ),
       label: Text(
         'Pomoc',
         style: TextStyle(
-          color: Theme.of(context).textSelectionColor,
+          color: Theme.of(context).textSelectionTheme.selectionColor,
         ),
       ),
       onPressed: () async {

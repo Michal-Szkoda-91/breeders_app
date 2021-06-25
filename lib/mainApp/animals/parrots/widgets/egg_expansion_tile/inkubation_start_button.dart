@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
 import 'package:intl/intl.dart';
 
 class InkubationStartButton extends StatelessWidget {
   const InkubationStartButton({
-    Key key,
-    @required this.countData,
-    @required this.setEggsDate,
-  }) : super(key: key);
+    required this.countData,
+    required this.setEggsDate,
+  });
 
   final Function countData;
   final Function setEggsDate;
@@ -20,10 +18,10 @@ class InkubationStartButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
         color: Colors.black45,
       ),
-      child: FlatButton.icon(
+      child: TextButton.icon(
         icon: Icon(
-          MaterialCommunityIcons.plus,
-          color: Theme.of(context).textSelectionColor,
+          Icons.add,
+          color: Theme.of(context).textSelectionTheme.selectionColor,
         ),
         onPressed: () {
           countData();
@@ -46,7 +44,7 @@ class InkubationStartButton extends StatelessWidget {
         label: Text(
           "Start inkubacji",
           style: TextStyle(
-            color: Theme.of(context).textSelectionColor,
+            color: Theme.of(context).textSelectionTheme.selectionColor,
             fontSize: 14,
           ),
         ),

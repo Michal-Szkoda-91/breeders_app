@@ -1,10 +1,10 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:breeders_app/mainApp/animals/parrots/models/parrot_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
 
+import '../../parrots/models/pairing_model.dart';
+import '../../parrots/models/parrot_model.dart';
 import '../models/parrotsRace_list.dart';
 import '../screens/addParrot_screen.dart';
 import '../models/children_model.dart';
@@ -13,7 +13,7 @@ class ChildrenList extends StatefulWidget {
   final String raceName;
   final String pairId;
 
-  const ChildrenList({this.raceName, this.pairId});
+  const ChildrenList({required this.raceName, required this.pairId});
 
   @override
   _ChildrenListState createState() => _ChildrenListState();
@@ -23,7 +23,7 @@ class _ChildrenListState extends State<ChildrenList> {
   final firebaseUser = FirebaseAuth.instance.currentUser;
   List<Children> _childrenList = [];
   int _childrenCount = 0;
-  Map raceMap;
+  late Map raceMap;
   final ParrotsRace _parrotsRace = new ParrotsRace();
 
   @override
@@ -32,7 +32,7 @@ class _ChildrenListState extends State<ChildrenList> {
     _childrenCount = 0;
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
-          .collection(firebaseUser.uid)
+          .collection(firebaseUser!.uid)
           .doc(widget.raceName)
           .collection("Pairs")
           .doc(widget.pairId)
@@ -66,7 +66,7 @@ class _ChildrenListState extends State<ChildrenList> {
           Text(
             "Ilość potomków:",
             style: TextStyle(
-              color: Theme.of(context).textSelectionColor,
+              color: Theme.of(context).textSelectionTheme.selectionColor,
               fontSize: 16,
             ),
           ),
@@ -78,7 +78,7 @@ class _ChildrenListState extends State<ChildrenList> {
             decoration: BoxDecoration(
               color: Theme.of(context).primaryColor,
               border: Border.all(
-                color: Theme.of(context).textSelectionColor,
+                color: Theme.of(context).canvasColor,
               ),
               borderRadius: const BorderRadius.all(
                 const Radius.circular(20),
@@ -87,7 +87,7 @@ class _ChildrenListState extends State<ChildrenList> {
             child: Text(
               _childrenCount.toString(),
               style: TextStyle(
-                color: Theme.of(context).textSelectionColor,
+                color: Theme.of(context).textSelectionTheme.selectionColor,
                 fontSize: 20,
               ),
             ),
@@ -115,7 +115,7 @@ class _ChildrenListState extends State<ChildrenList> {
       child: Text(
         title,
         style: TextStyle(
-          color: Theme.of(context).textSelectionColor,
+          color: Theme.of(context).textSelectionTheme.selectionColor,
           fontSize: 14,
         ),
       ),
@@ -136,7 +136,7 @@ class _ChildrenListState extends State<ChildrenList> {
       child: AutoSizeText(
         title,
         style: TextStyle(
-          color: Theme.of(context).textSelectionColor,
+          color: Theme.of(context).textSelectionTheme.selectionColor,
         ),
         textAlign: TextAlign.center,
       ),
@@ -204,7 +204,7 @@ class _ChildrenListState extends State<ChildrenList> {
       child: IconButton(
         icon: Icon(
           Icons.add,
-          color: Theme.of(context).textSelectionColor,
+          color: Theme.of(context).textSelectionTheme.selectionColor,
         ),
         onPressed: () {
           raceMap = _parrotsRace.parrotsRaceList
@@ -225,6 +225,17 @@ class _ChildrenListState extends State<ChildrenList> {
                   sex: gender,
                 ),
                 addFromChild: true,
+                pair: ParrotPairing(
+                    id: '',
+                    race: '',
+                    maleRingNumber: '',
+                    femaleRingNumber: '',
+                    pairingData: '',
+                    showEggsDate: '',
+                    pairColor: '',
+                    isArchive: '',
+                    picUrl: ''),
+                race: '',
               ),
             ),
           );
@@ -235,17 +246,17 @@ class _ChildrenListState extends State<ChildrenList> {
 
   Container _genderIcon(BuildContext context, int index) {
     Color colorBackground = Colors.greenAccent;
-    Color colorIcon = Colors.green[700];
-    IconData icon = MaterialCommunityIcons.help;
+    Color colorIcon = Colors.green.shade700;
+    IconData icon = Icons.help;
 
     if (_childrenList[index].gender == "Samiec") {
-      colorBackground = Colors.blue[300];
-      colorIcon = Colors.blue[700];
-      icon = MaterialCommunityIcons.gender_male;
+      colorBackground = Colors.blue.shade300;
+      colorIcon = Colors.blue.shade700;
+      icon = Icons.male;
     } else if (_childrenList[index].gender == "Samica") {
-      colorBackground = Colors.pink[300];
-      colorIcon = Colors.pink[700];
-      icon = MaterialCommunityIcons.gender_female;
+      colorBackground = Colors.pink.shade300;
+      colorIcon = Colors.pink.shade700;
+      icon = Icons.female;
     }
 
     return Container(
@@ -255,7 +266,7 @@ class _ChildrenListState extends State<ChildrenList> {
       decoration: BoxDecoration(
         color: colorBackground,
         border: Border.all(
-          color: Theme.of(context).textSelectionColor,
+          color: Theme.of(context).canvasColor,
         ),
         borderRadius: const BorderRadius.all(
           const Radius.circular(25),
@@ -276,7 +287,7 @@ class _ChildrenListState extends State<ChildrenList> {
         Text(
           "Brak potomstwa",
           style: TextStyle(
-            color: Theme.of(context).textSelectionColor,
+            color: Theme.of(context).textSelectionTheme.selectionColor,
             fontSize: 16,
           ),
         ),
@@ -285,13 +296,13 @@ class _ChildrenListState extends State<ChildrenList> {
   }
 
   void _createChildList(AsyncSnapshot<QuerySnapshot> snapshot) {
-    snapshot.data.docs.forEach((val) {
+    snapshot.data!.docs.forEach((val) {
       _childrenList.add(
         new Children(
           ringNumber: val.id,
-          broodDate: val.data()['Born Date'],
-          color: val.data()['Colors'],
-          gender: val.data()['Sex'],
+          broodDate: val['Born Date'],
+          color: val['Colors'],
+          gender: val['Sex'],
         ),
       );
       _childrenCount++;

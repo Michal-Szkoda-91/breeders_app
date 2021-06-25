@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 
 class PairCircleAvatar extends StatefulWidget {
   const PairCircleAvatar({
-    @required this.picUrl,
-    this.isAssets,
-    this.size,
+    required this.picUrl,
+    required this.isAssets,
+    required this.size,
   });
 
   final String picUrl;
@@ -17,7 +17,7 @@ class PairCircleAvatar extends StatefulWidget {
 }
 
 class _PairCircleAvatarState extends State<PairCircleAvatar> {
-  String takenURL;
+  late String takenURL;
   bool isMaximaze = false;
 
   Future _getImage(String basicUrl) async {
@@ -27,7 +27,7 @@ class _PairCircleAvatarState extends State<PairCircleAvatar> {
 
   @override
   Widget build(BuildContext context) {
-    takenURL = null;
+    takenURL = '';
     return FutureBuilder(
       future: _getImage(widget.picUrl),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -47,7 +47,6 @@ class _PairCircleAvatarState extends State<PairCircleAvatar> {
                 ),
               );
             }
-            break;
           case ConnectionState.done:
             {
               return GestureDetector(
@@ -67,16 +66,15 @@ class _PairCircleAvatarState extends State<PairCircleAvatar> {
                       radius: isMaximaze
                           ? (MediaQuery.of(context).size.width / 2) - 15
                           : widget.size - 3,
-                      backgroundImage: widget.isAssets || takenURL == null
-                          ? AssetImage(
+                      child: widget.isAssets || takenURL == ''
+                          ? Image.asset(
                               "assets/image/parrotsRace/parrot_pair.jpg")
-                          : NetworkImage("$takenURL"),
+                          : Image.network("$takenURL"),
                     ),
                   ),
                 ),
               );
             }
-            break;
 
           default:
             {

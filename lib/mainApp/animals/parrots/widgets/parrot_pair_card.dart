@@ -1,4 +1,4 @@
-import 'package:draggable_scrollbar_sliver/draggable_scrollbar_sliver.dart';
+import 'package:draggable_scrollbar/draggable_scrollbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:group_button/group_button.dart';
@@ -13,9 +13,9 @@ class ParrotPairCard extends StatefulWidget {
   final List<Parrot> parrotList;
   final List<ParrotPairing> pairList;
   const ParrotPairCard({
-    this.pairList,
-    this.race,
-    this.parrotList,
+    required this.pairList,
+    required this.race,
+    required this.parrotList,
   });
 
   @override
@@ -24,8 +24,8 @@ class ParrotPairCard extends StatefulWidget {
 
 class _ParrotPairCardState extends State<ParrotPairCard> {
   ParrotPairDataHelper _parrotPairDataHelper = ParrotPairDataHelper();
-  Parrot chosenMaleParrot;
-  Parrot chosenFemaleParrot;
+  late Parrot chosenMaleParrot;
+  late Parrot chosenFemaleParrot;
   ScrollController _rrectController = ScrollController();
   bool _isLoading = false;
   GlobalMethods _globalMethods = GlobalMethods();
@@ -56,29 +56,32 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
             controller: _rrectController,
             heightScrollThumb: 100,
             backgroundColor: Theme.of(context).accentColor,
-            child: SingleChildScrollView(
+            child: ListView.builder(
               controller: _rrectController,
+              itemCount: 1,
               physics: ScrollPhysics(),
-              child: Column(
-                children: [
-                  _sortingColumn(context),
-                  const SizedBox(height: 15),
-                  ListView.builder(
-                    physics: NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: widget.pairList.length,
-                    itemBuilder: (context, index) {
-                      return CreatePairCard(
-                        index: index,
-                        pairList: widget.pairList,
-                        race: widget.race,
-                        delete: _deletePair,
-                        toArchive: _movingToArchive,
-                      );
-                    },
-                  ),
-                ],
-              ),
+              itemBuilder: (context, index) {
+                return Column(
+                  children: [
+                    _sortingColumn(context),
+                    const SizedBox(height: 15),
+                    ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: widget.pairList.length,
+                      itemBuilder: (context, index) {
+                        return CreatePairCard(
+                          index: index,
+                          pairList: widget.pairList,
+                          race: widget.race,
+                          delete: _deletePair,
+                          toArchive: _movingToArchive,
+                        );
+                      },
+                    ),
+                  ],
+                );
+              },
             ),
           )
         : const Center(
@@ -96,7 +99,7 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
             child: Text(
               "Sortowanie listy par",
               style: TextStyle(
-                color: Theme.of(context).textSelectionColor,
+                color: Theme.of(context).textSelectionTheme.selectionColor,
                 fontSize: 16,
               ),
             ),
@@ -109,11 +112,11 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
             unselectedColor: Theme.of(context).hintColor,
             selectedColor: Theme.of(context).accentColor,
             selectedTextStyle: TextStyle(
-              color: Theme.of(context).textSelectionColor,
+              color: Theme.of(context).textSelectionTheme.selectionColor,
               fontSize: 12,
             ),
             unselectedTextStyle: TextStyle(
-              color: Theme.of(context).textSelectionColor,
+              color: Theme.of(context).textSelectionTheme.selectionColor,
               fontSize: 12,
             ),
             onSelected: (index, isSelected) => _sortingBy(index),
@@ -149,13 +152,13 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
         });
         Navigator.of(context).pop();
         await _parrotPairDataHelper.deletePair(
-          _firebaseUser.uid,
-          widget.race,
-          id,
-          chosenFemaleParrot,
-          chosenMaleParrot,
-          picUrl,
-          context,
+          uid: _firebaseUser!.uid,
+          race: widget.race,
+          id: id,
+          femaleParrot: chosenFemaleParrot,
+          maleParrot: chosenMaleParrot,
+          picUrl: picUrl,
+          context: context,
         );
         setState(() {
           _isLoading = false;
@@ -187,8 +190,14 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
           }
         });
         Navigator.of(context).pop();
-        await _parrotPairDataHelper.moveToArchive(_firebaseUser.uid,
-            widget.race, id, chosenFemaleParrot, chosenMaleParrot, context);
+        await _parrotPairDataHelper.moveToArchive(
+          _firebaseUser!.uid,
+          widget.race,
+          id,
+          chosenFemaleParrot,
+          chosenMaleParrot,
+          context,
+        );
         setState(() {
           _isLoading = false;
         });

@@ -11,12 +11,10 @@ import 'exit_button.dart';
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({
-    Key key,
-    @required AuthService auth,
-  })  : _auth = auth,
-        super(key: key);
+    required this.auth,
+  });
 
-  final AuthService _auth;
+  final AuthService auth;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +31,7 @@ class CustomDrawer extends StatelessWidget {
           child: Column(
             children: [
               const SizedBox(height: 10),
-              const ImageContainerParrotSmall(),
+               ImageContainerParrotSmall(),
               Padding(
                 padding: const EdgeInsets.all(14.0),
                 child: Text(
@@ -41,7 +39,7 @@ class CustomDrawer extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
-                    color: Theme.of(context).textSelectionColor,
+                    color: Theme.of(context).textSelectionTheme.selectionColor,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -62,7 +60,7 @@ class CustomDrawer extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    LogoutButton(auth: _auth),
+                    LogoutButton(auth: auth),
                     ExitButton(),
                   ],
                 ),

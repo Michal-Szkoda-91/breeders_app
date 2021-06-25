@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 import '../screens/parrot_race_list_screen.dart';
 
 class NotConnected extends StatelessWidget {
-  const NotConnected({
-    Key key,
-  }) : super(key: key);
+  const NotConnected({required});
 
   @override
   Widget build(BuildContext context) {
@@ -20,21 +18,23 @@ class NotConnected extends StatelessWidget {
             child: Text(
               "Brak połączenia z internetem, Połącz i spróbuj ponownie wczytać dane",
               style: TextStyle(
-                color: Theme.of(context).textSelectionColor,
+                color: Theme.of(context).textSelectionTheme.selectionColor,
                 fontSize: 24,
               ),
               textAlign: TextAlign.center,
             ),
           ),
           const SizedBox(height: 30),
-          FlatButton(
-            color: Theme.of(context).backgroundColor,
+          TextButton(
+            style: TextButton.styleFrom(
+              backgroundColor: Theme.of(context).backgroundColor,
+            ),
             child: Padding(
               padding: const EdgeInsets.all(20),
               child: Text(
                 "Odśwież",
                 style: TextStyle(
-                  color: Theme.of(context).textSelectionColor,
+                  color: Theme.of(context).textSelectionTheme.selectionColor,
                   fontSize: 24,
                 ),
               ),

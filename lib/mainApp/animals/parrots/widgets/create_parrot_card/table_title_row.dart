@@ -1,16 +1,14 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
 
 class TableTitleRow extends StatefulWidget {
   const TableTitleRow({
-    Key key,
-    @required this.context,
-    @required this.title,
-    @required this.width,
-    @required this.sortedIndex,
-    this.sorting,
-  }) : super(key: key);
+    required this.context,
+    required this.title,
+    required this.width,
+    required this.sortedIndex,
+    required this.sorting,
+  });
 
   final BuildContext context;
   final String title;
@@ -66,16 +64,16 @@ class _TableTitleRowState extends State<TableTitleRow> {
                 style: TextStyle(
                   color: _isClicked
                       ? Theme.of(context).primaryColor
-                      : Theme.of(context).textSelectionColor,
+                      : Theme.of(context).textSelectionTheme.selectionColor,
                   fontSize: MediaQuery.of(context).size.width > 350 ? 14 : 12,
                 ),
               ),
               widget.sortedIndex != 0
                   ? Icon(
-                      MaterialCommunityIcons.arrow_down_drop_circle_outline,
+                      Icons.arrow_downward,
                       color: _isClicked
                           ? Theme.of(context).primaryColor
-                          : Theme.of(context).textSelectionColor,
+                          : Theme.of(context).textSelectionTheme.selectionColor,
                       size: 25,
                     )
                   : Container(

@@ -1,5 +1,5 @@
+import 'package:breeders_app/mainApp/animals/parrots/models/pairing_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
 
 import '../../models/parrot_model.dart';
 import '../../screens/addParrot_screen.dart';
@@ -10,9 +10,11 @@ class DeleteUpgradeButtons extends StatelessWidget {
   final int index;
   final List<Parrot> createdParrotList;
 
-  DeleteUpgradeButtons(
-      {Key key, this.delete, this.index, this.createdParrotList})
-      : super(key: key);
+  DeleteUpgradeButtons({
+    required this.delete,
+    required this.index,
+    required this.createdParrotList,
+  });
 
   final GlobalMethods _globalMethods = GlobalMethods();
 
@@ -26,11 +28,11 @@ class DeleteUpgradeButtons extends StatelessWidget {
           GestureDetector(
             onTap: () {
               _globalMethods.showDeletingDialog(
-                context,
-                createdParrotList[index].ringNumber,
-                "Napewno usunąć tę papugę z hodowli?",
-                delete,
-                createdParrotList[index],
+                context: context,
+                function: delete,
+                title: createdParrotList[index].ringNumber,
+                text: "Napewno usunąć tę papugę z hodowli?",
+                parrot: createdParrotList[index],
               );
             },
             child: const Icon(
@@ -52,12 +54,24 @@ class DeleteUpgradeButtons extends StatelessWidget {
                     },
                     parrot: createdParrotList[index],
                     addFromChild: false,
+                    pair: ParrotPairing(
+                      femaleRingNumber: '',
+                      id: '',
+                      isArchive: '',
+                      maleRingNumber: '',
+                      pairColor: '',
+                      pairingData: '',
+                      picUrl: '',
+                      race: '',
+                      showEggsDate: '',
+                    ),
+                    race: '',
                   ),
                 ),
               );
             },
             child: const Icon(
-              MaterialCommunityIcons.circle_edit_outline,
+              Icons.edit,
               color: Colors.lightBlueAccent,
               size: 30,
             ),

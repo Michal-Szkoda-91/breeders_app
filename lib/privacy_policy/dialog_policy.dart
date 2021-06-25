@@ -4,10 +4,10 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PolicyDialog extends StatelessWidget {
-  PolicyDialog({Key key, @required this.mdFileName})
-      : assert(
-            mdFileName.contains('.md'), 'File must contain the .md extension'),
-        super(key: key);
+  PolicyDialog({
+    required this.mdFileName,
+  }) : assert(
+            mdFileName.contains('.md'), 'File must contain the .md extension');
 
   final String mdFileName;
 
@@ -25,9 +25,9 @@ class PolicyDialog extends StatelessWidget {
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return Markdown(
-                  data: snapshot.data,
+                  data: snapshot.data.toString(),
                   onTapLink: (text, url, title) {
-                    launch(url);
+                    launch(url.toString());
                   },
                 );
               }
@@ -36,12 +36,14 @@ class PolicyDialog extends StatelessWidget {
               );
             },
           )),
-          RaisedButton(
-            color: Theme.of(context).primaryColor,
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              primary: Theme.of(context).primaryColor,
+            ),
             child: Text(
               'OK',
               style: TextStyle(
-                color: Theme.of(context).textSelectionColor,
+                color: Theme.of(context).textSelectionTheme.selectionColor,
               ),
             ),
             onPressed: () {

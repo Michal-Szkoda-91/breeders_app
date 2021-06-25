@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 
 class TableContentNotesRow extends StatelessWidget {
   const TableContentNotesRow({
-    Key key,
-    @required this.title,
-    @required this.width,
-  }) : super(key: key);
+    required this.title,
+    required this.width,
+  });
 
   final String title;
   final double width;
@@ -25,13 +24,13 @@ class TableContentNotesRow extends StatelessWidget {
       alignment: Alignment.center,
       child: title.length > 25
           ? GestureDetector(
-              onTap: () {
+              onTap: () async {
                 return _showInfo(context, title);
               },
               child: Text(
                 title.substring(0, 20) + "... ->",
                 style: TextStyle(
-                  color: Theme.of(context).textSelectionColor,
+                  color: Theme.of(context).textSelectionTheme.selectionColor,
                   fontSize: 14,
                 ),
                 textAlign: TextAlign.center,
@@ -40,7 +39,7 @@ class TableContentNotesRow extends StatelessWidget {
           : Text(
               title,
               style: TextStyle(
-                color: Theme.of(context).textSelectionColor,
+                color: Theme.of(context).textSelectionTheme.selectionColor,
                 fontSize: 14,
               ),
               textAlign: TextAlign.center,
@@ -48,7 +47,7 @@ class TableContentNotesRow extends StatelessWidget {
     );
   }
 
-  Future<void> _showInfo(BuildContext context, String title) {
+  Future _showInfo(BuildContext context, String title) {
     return showDialog<void>(
       barrierDismissible: true,
       context: context,
@@ -59,7 +58,7 @@ class TableContentNotesRow extends StatelessWidget {
             title,
             style: new TextStyle(
               fontSize: 14,
-              color: Theme.of(context).textSelectionColor,
+              color: Theme.of(context).textSelectionTheme.selectionColor,
             ),
             textAlign: TextAlign.center,
           ),

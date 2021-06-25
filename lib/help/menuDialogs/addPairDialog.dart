@@ -1,4 +1,4 @@
-import 'package:draggable_scrollbar_sliver/draggable_scrollbar_sliver.dart';
+import 'package:draggable_scrollbar/draggable_scrollbar.dart';
 import 'package:flutter/material.dart';
 
 class AddPairDialog {
@@ -11,7 +11,8 @@ class AddPairDialog {
         backgroundColor: Theme.of(context).backgroundColor,
         title: new Text(
           "Dodawanie / Usuwanie Par",
-          style: TextStyle(color: Theme.of(context).textSelectionColor),
+          style: TextStyle(
+              color: Theme.of(context).textSelectionTheme.selectionColor),
           textAlign: TextAlign.center,
         ),
         content: Container(
@@ -21,38 +22,41 @@ class AddPairDialog {
             controller: _rrectController,
             heightScrollThumb: 100,
             backgroundColor: Theme.of(context).accentColor,
-            child: SingleChildScrollView(
+            child: ListView.builder(
+              itemCount: 1,
               controller: _rrectController,
-              child: Container(
-                color: Colors.black12,
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                      top: 10, bottom: 10, left: 5, right: 5),
-                  child: Column(
-                    children: [
-                      createText(context,
-                          "DODAJ PARĘ PAPUG do hodowli w ekranie parowania"),
-                      createPicture(context, "assets/help/help_screen_7.png"),
-                      createText(context,
-                          "Wybierz samice i samca z wybranej rasy, jeśli nie ma możliwości wyboru dodaj najpierw odpowiednie papugi."),
-                      createPicture(context, "assets/help/help_screen_8.png"),
-                      createText(context,
-                          "Wpisz kolor, wybierz datę parowania i ewentualnie dodaj zdjęcie aparatem lub wybierz je pamięci telefonu."),
-                      createText(context,
-                          "USUŃ parę wybierając odpowiedni przycisk na karcie PAR"),
-                    ],
+              itemBuilder: (context, index) {
+                return Container(
+                  color: Colors.black12,
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        top: 10, bottom: 10, left: 5, right: 5),
+                    child: Column(
+                      children: [
+                        createText(context,
+                            "DODAJ PARĘ PAPUG do hodowli w ekranie parowania"),
+                        createPicture(context, "assets/help/help_screen_7.png"),
+                        createText(context,
+                            "Wybierz samice i samca z wybranej rasy, jeśli nie ma możliwości wyboru dodaj najpierw odpowiednie papugi."),
+                        createPicture(context, "assets/help/help_screen_8.png"),
+                        createText(context,
+                            "Wpisz kolor, wybierz datę parowania i ewentualnie dodaj zdjęcie aparatem lub wybierz je pamięci telefonu."),
+                        createText(context,
+                            "USUŃ parę wybierając odpowiedni przycisk na karcie PAR"),
+                      ],
+                    ),
                   ),
-                ),
-              ),
+                );
+              },
             ),
           ),
         ),
         actions: [
-          FlatButton(
+          TextButton(
             child: Text(
               "OK",
               style: TextStyle(
-                color: Theme.of(context).textSelectionColor,
+                color: Theme.of(context).textSelectionTheme.selectionColor,
               ),
             ),
             onPressed: () => Navigator.of(ctx).pop(),
@@ -68,7 +72,8 @@ class AddPairDialog {
       child: new Text(
         text,
         textAlign: TextAlign.center,
-        style: TextStyle(color: Theme.of(context).textSelectionColor),
+        style: TextStyle(
+            color: Theme.of(context).textSelectionTheme.selectionColor),
       ),
     );
   }

@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 
 import '../models/pairing_model.dart';
+import '../../parrots/models/parrot_model.dart';
 import '../screens/addParrot_screen.dart';
 
 class AddPairChildButton extends StatefulWidget {
   final String raceName;
   final ParrotPairing pair;
 
-  const AddPairChildButton({this.pair, this.raceName});
+  const AddPairChildButton({required this.pair, required this.raceName});
   @override
   _AddPairChildButtonState createState() => _AddPairChildButtonState();
 }
@@ -24,10 +25,10 @@ class _AddPairChildButtonState extends State<AddPairChildButton> {
             borderRadius: BorderRadius.circular(10),
             color: Colors.black45,
           ),
-          child: FlatButton.icon(
+          child: TextButton.icon(
             icon: Icon(
               Icons.add,
-              color: Theme.of(context).textSelectionColor,
+              color: Theme.of(context).textSelectionTheme.selectionColor,
             ),
             onPressed: () {
               Navigator.push(
@@ -35,7 +36,6 @@ class _AddPairChildButtonState extends State<AddPairChildButton> {
                 MaterialPageRoute(
                   builder: (context) => AddParrotScreen(
                     pair: widget.pair,
-                    parrot: null,
                     parrotMap: {
                       "url": "assets/image/parrot.jpg",
                       "name": "Dodaj Potomka",
@@ -43,6 +43,16 @@ class _AddPairChildButtonState extends State<AddPairChildButton> {
                     },
                     race: widget.raceName,
                     addFromChild: false,
+                    parrot: Parrot(
+                      race: '',
+                      ringNumber: '',
+                      color: '',
+                      fission: '',
+                      cageNumber: '',
+                      sex: '',
+                      notes: '',
+                      pairRingNumber: '',
+                    ),
                   ),
                 ),
               );
@@ -50,7 +60,7 @@ class _AddPairChildButtonState extends State<AddPairChildButton> {
             label: Text(
               "Dodaj Potomstwo",
               style: TextStyle(
-                color: Theme.of(context).textSelectionColor,
+                color: Theme.of(context).textSelectionTheme.selectionColor,
                 fontSize: 14,
               ),
             ),

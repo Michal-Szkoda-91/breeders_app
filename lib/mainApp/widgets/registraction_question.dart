@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class RegisterQuestion extends StatelessWidget {
   const RegisterQuestion({
-    this.function,
+    required this.function,
   });
 
   final Function function;
@@ -15,15 +15,18 @@ class RegisterQuestion extends StatelessWidget {
         Text(
           'Nie masz konta?',
           style: TextStyle(
-            color: Theme.of(context).textSelectionColor,
+            color: Theme.of(context).textSelectionTheme.selectionColor,
             fontSize: MediaQuery.of(context).size.width < 340 ? 10 : 16,
           ),
         ),
-        FlatButton(
+        TextButton(
+          style: TextButton.styleFrom(
+            backgroundColor: Theme.of(context).backgroundColor,
+          ),
           child: Text(
             'Załóż je tutaj',
             style: TextStyle(
-              color: Theme.of(context).textSelectionColor,
+              color: Theme.of(context).textSelectionTheme.selectionColor,
               fontWeight: FontWeight.bold,
               fontSize: MediaQuery.of(context).size.width < 340 ? 10 : 16,
             ),

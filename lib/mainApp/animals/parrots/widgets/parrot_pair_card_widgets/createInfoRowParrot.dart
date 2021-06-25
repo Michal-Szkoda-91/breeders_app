@@ -5,11 +5,10 @@ import '../parrotDialogInformation.dart';
 
 class CreateInfoRowParrot extends StatelessWidget {
   const CreateInfoRowParrot({
-    Key key,
-    @required this.title,
-    @required this.content,
-    this.race,
-  }) : super(key: key);
+    required this.title,
+    required this.content,
+    required this.race,
+  });
 
   final String title;
   final String content;
@@ -41,7 +40,7 @@ class CreateInfoRowParrot extends StatelessWidget {
                 title: new Text(
                   content,
                   style: TextStyle(
-                    color: Theme.of(context).textSelectionColor,
+                    color: Theme.of(context).textSelectionTheme.selectionColor,
                   ),
                 ),
                 content: ParrotDialogInformation(
@@ -49,11 +48,15 @@ class CreateInfoRowParrot extends StatelessWidget {
                   parrotRing: content,
                 ),
                 actions: <Widget>[
-                  FlatButton(
+                  TextButton(
+                    style: TextButton.styleFrom(
+                      backgroundColor: Theme.of(context).backgroundColor,
+                    ),
                     child: Text(
                       'OK',
                       style: TextStyle(
-                        color: Theme.of(context).textSelectionColor,
+                        color:
+                            Theme.of(context).textSelectionTheme.selectionColor,
                         fontSize: 18,
                       ),
                     ),
@@ -78,7 +81,7 @@ class CreateInfoRowParrot extends StatelessWidget {
               content,
               maxLines: 2,
               style: TextStyle(
-                color: Theme.of(context).textSelectionColor,
+                color: Theme.of(context).textSelectionTheme.selectionColor,
               ),
               textAlign: TextAlign.center,
             ),

@@ -6,17 +6,19 @@ import 'package:flutter/material.dart';
 class ExitButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return FlatButton.icon(
-      color: Theme.of(context).primaryColor,
+    return TextButton.icon(
+      style: TextButton.styleFrom(
+        primary: Theme.of(context).primaryColor,
+      ),
       icon: Icon(
         Icons.close,
-        color: Theme.of(context).textSelectionColor,
+        color: Theme.of(context).textSelectionTheme.selectionColor,
         size: 30,
       ),
       label: Text(
         'Zamknij',
         style: TextStyle(
-          color: Theme.of(context).textSelectionColor,
+          color: Theme.of(context).textSelectionTheme.selectionColor,
           fontSize: MediaQuery.of(context).size.width < 340 ? 10 : 16,
         ),
       ),
@@ -36,13 +38,19 @@ class ExitButton extends StatelessWidget {
           textAlign: TextAlign.center,
         ),
         actions: <Widget>[
-          FlatButton(
+          TextButton(
+            style: TextButton.styleFrom(
+              backgroundColor: Theme.of(dialogContext).backgroundColor,
+            ),
             child: AutoSizeText(
               'Zamknij',
             ),
             onPressed: () => exit(0),
           ),
-          FlatButton(
+          TextButton(
+            style: TextButton.styleFrom(
+              backgroundColor: Theme.of(dialogContext).backgroundColor,
+            ),
             child: AutoSizeText(
               'Anuluj',
             ),
