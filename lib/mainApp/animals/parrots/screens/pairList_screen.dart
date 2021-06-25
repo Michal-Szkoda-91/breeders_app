@@ -45,6 +45,8 @@ class _PairListScreenState extends State<PairListScreen> {
       endDrawerEnableOpenDragGesture: false,
       backgroundColor: Colors.transparent,
       appBar: AppBar(
+        leading:
+            (ModalRoute.of(context)?.canPop ?? false) ? BackButton() : null,
         title: Container(
           width: MediaQuery.of(context).size.width * 30,
           child: AutoSizeText(

@@ -33,6 +33,8 @@ class _ParrotsListScreenState extends State<ParrotsListScreen> {
       endDrawerEnableOpenDragGesture: false,
       backgroundColor: Colors.transparent,
       appBar: AppBar(
+        leading:
+            (ModalRoute.of(context)?.canPop ?? false) ? BackButton() : null,
         title: Text(widget.raceName),
       ),
       body: MainBackground(

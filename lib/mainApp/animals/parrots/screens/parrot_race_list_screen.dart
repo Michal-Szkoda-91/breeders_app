@@ -30,6 +30,8 @@ class _ParrotsRaceListScreenState extends State<ParrotsRaceListScreen> {
       endDrawerEnableOpenDragGesture: false,
       backgroundColor: Colors.transparent,
       appBar: AppBar(
+        leading:
+            (ModalRoute.of(context)?.canPop ?? false) ? BackButton() : null,
         title: Text("Hodowla Papug"),
       ),
       body: MainBackground(
@@ -57,7 +59,9 @@ class _ParrotsRaceListScreenState extends State<ParrotsRaceListScreen> {
                     Expanded(
                       child: Column(
                         children: [
-                          CreateParrotsDropdownButton(parrotRingList: [],),
+                          CreateParrotsDropdownButton(
+                            parrotRingList: [],
+                          ),
                           CreateParrotRaceListTile(
                               activeRaceList: _activeRaceList),
                         ],

@@ -1,4 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:breeders_app/mainApp/animals/parrots/models/pairing_model.dart';
+import 'package:breeders_app/mainApp/animals/parrots/models/parrot_model.dart';
+import 'package:breeders_app/mainApp/animals/parrots/screens/addParrot_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -114,22 +117,42 @@ class _CreateParrotsDropdownButtonState
               );
             },
           ).toList(),
-          // onChanged: (value) {
-          //   if (value['name'] != 'Dodaj Papugę') {
-          //     Navigator.push(
-          //       context,
-          //       MaterialPageRoute(
-          //         builder: (context) => AddParrotScreen(
-          //           parrotMap: value,
-          //           parrot: null,
-          //           addFromChild: false,
-          //         ),
-          //       ),
-          //     );
-          //   } else {
-          //     return;
-          //   }
-          // },
+          onChanged: (value) {
+            if ((value as dynamic)['name'] != 'Dodaj Papugę') {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AddParrotScreen(
+                    parrotMap: value,
+                    parrot: Parrot(
+                        race: '',
+                        ringNumber: 'brak',
+                        color: '',
+                        fission: '',
+                        cageNumber: '',
+                        sex: '',
+                        notes: '',
+                        pairRingNumber: ''),
+                    addFromChild: false,
+                    pair: ParrotPairing(
+                      id: '',
+                      race: '',
+                      maleRingNumber: '',
+                      femaleRingNumber: '',
+                      pairingData: '',
+                      showEggsDate: '',
+                      pairColor: '',
+                      isArchive: '',
+                      picUrl: '',
+                    ),
+                    race: '',
+                  ),
+                ),
+              );
+            } else {
+              return;
+            }
+          },
         ),
       ),
     );

@@ -89,8 +89,8 @@ class _EditPairScreenState extends State<EditPairScreen> {
 
   Future getImageFromCamera() async {
     // ignore: deprecated_member_use
-    var image = await _picker
-        .getImage(source: ImageSource.camera, maxWidth: 750, maxHeight: 1000);
+    var image = await _picker.getImage(
+        source: ImageSource.camera, maxWidth: 750, maxHeight: 1000);
     if (image == null) {
       return;
     } else {
@@ -110,6 +110,8 @@ class _EditPairScreenState extends State<EditPairScreen> {
       endDrawerEnableOpenDragGesture: false,
       backgroundColor: Colors.transparent,
       appBar: AppBar(
+        leading:
+            (ModalRoute.of(context)?.canPop ?? false) ? BackButton() : null,
         title: AutoSizeText(
           "Edycja Pary",
           maxLines: 1,

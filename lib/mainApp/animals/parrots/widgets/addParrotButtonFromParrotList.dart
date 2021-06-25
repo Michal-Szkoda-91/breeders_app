@@ -55,7 +55,7 @@ class _AddParrotFromInsideParrotListState
                 race: '',
                 parrot: Parrot(
                   race: '',
-                  ringNumber: '',
+                  ringNumber: 'brak',
                   color: '',
                   fission: '',
                   cageNumber: '',

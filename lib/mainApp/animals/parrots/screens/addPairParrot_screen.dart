@@ -141,6 +141,8 @@ class _AddPairScreenState extends State<AddPairScreen> {
       endDrawerEnableOpenDragGesture: false,
       backgroundColor: Colors.transparent,
       appBar: AppBar(
+        leading:
+            (ModalRoute.of(context)?.canPop ?? false) ? BackButton() : null,
         title: AutoSizeText(
           "Parowanie - ${widget.raceName}",
           maxLines: 1,

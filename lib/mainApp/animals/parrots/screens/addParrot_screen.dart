@@ -75,7 +75,7 @@ class _RaceListScreenState extends State<AddParrotScreen> {
   void initState() {
     super.initState();
     _sexName = _genderMap[1.0].toString();
-    if (widget.parrot.ringNumber == '') {
+    if (widget.parrot.ringNumber != 'brak') {
       _isEditing(widget.parrot);
     }
   }
@@ -104,7 +104,9 @@ class _RaceListScreenState extends State<AddParrotScreen> {
       endDrawerEnableOpenDragGesture: false,
       backgroundColor: Colors.transparent,
       appBar: AppBar(
-        title: widget.parrot.ringNumber == ''
+        leading:
+            (ModalRoute.of(context)?.canPop ?? false) ? BackButton() : null,
+        title: widget.parrot.ringNumber != 'brak'
             ? const Text("Edycja")
             : const Text("Dodawanie Papugi"),
       ),
@@ -133,7 +135,7 @@ class _RaceListScreenState extends State<AddParrotScreen> {
                                 //
                                 //******************************************************* */
                                 //Sex
-                                widget.parrot.ringNumber == ''
+                                widget.parrot.ringNumber != 'brak'
                                     ? widget.parrot.pairRingNumber == "brak"
                                         ? genderSwitchRow(context, _sex)
                                         : infoText(context, widget.parrot.sex)
@@ -146,7 +148,7 @@ class _RaceListScreenState extends State<AddParrotScreen> {
                                 //Ring number
                                 infoText(context, "Numer obrączki"),
                                 const SizedBox(height: 16.0),
-                                widget.parrot.ringNumber == '' &&
+                                widget.parrot.ringNumber != 'brak' &&
                                         widget.parrot.pairRingNumber != "brak"
                                     ? infoText(
                                         context, widget.parrot.ringNumber)
@@ -198,7 +200,7 @@ class _RaceListScreenState extends State<AddParrotScreen> {
                                 //
                                 //******************************************************* */
                                 //Fission
-                                widget.pair.id == ''
+                                widget.pair.id == 'brak'
                                     ? const Center()
                                     : customTextFormField(
                                         context: context,
@@ -211,12 +213,12 @@ class _RaceListScreenState extends State<AddParrotScreen> {
                                         maxLength: 50,
                                         initvalue: _fission,
                                       ),
-                                widget.pair.id == ''
+                                widget.pair.id == 'brak'
                                     ? const Center()
                                     : const SizedBox(height: 16.0), //
                                 //******************************************************* */
                                 //cage number
-                                widget.pair.id == ''
+                                widget.pair.id == 'brak'
                                     ? const Center()
                                     : customTextFormField(
                                         context: context,
@@ -228,19 +230,19 @@ class _RaceListScreenState extends State<AddParrotScreen> {
                                         maxLength: 30,
                                         initvalue: _cageNumber,
                                       ),
-                                widget.pair.id == ''
+                                widget.pair.id == 'brak'
                                     ? const Center()
                                     : const SizedBox(height: 16.0),
                                 //
                                 //******************************************************* */
                                 //notes
-                                widget.pair.id == ''
+                                widget.pair.id == 'brak'
                                     ? const Center()
                                     : customTextFormField(
                                         context: context,
                                         node: node,
                                         hint: 'Notatka / Dodatkowa informacja',
-                                        icon: Icons.home_outlined,
+                                        icon: Icons.note,
                                         mainValue: 'notes',
                                         maxlines: 10,
                                         maxLength: 100,
