@@ -1,4 +1,4 @@
-import 'package:draggable_scrollbar_sliver/draggable_scrollbar_sliver.dart';
+import 'package:draggable_scrollbar/draggable_scrollbar.dart';
 import 'package:flutter/material.dart';
 
 class InkubationChildrenDialog {
@@ -11,7 +11,8 @@ class InkubationChildrenDialog {
         backgroundColor: Theme.of(context).backgroundColor,
         title: new Text(
           "Inkubacja / Potomowstwo",
-          style: TextStyle(color: Theme.of(context).textSelectionColor),
+          style: TextStyle(
+              color: Theme.of(context).textSelectionTheme.selectionColor),
           textAlign: TextAlign.center,
         ),
         content: Container(
@@ -21,40 +22,47 @@ class InkubationChildrenDialog {
             controller: _rrectController,
             heightScrollThumb: 100,
             backgroundColor: Theme.of(context).accentColor,
-            child: SingleChildScrollView(
+            child: ListView.builder(
               controller: _rrectController,
-              child: Container(
-                color: Colors.black12,
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                      top: 10, bottom: 10, left: 5, right: 5),
-                  child: Column(
-                    children: [
-                      createText(context,
-                          "Dla każdej pary możesz wybrać datę rozpoczęcia inkubacji, spowoduję to automatyczne obliczenie orientacyjnego czasu pozostałego do wyklucia jaj."),
-                      createPicture(context, "assets/help/help_screen_9.png"),
-                      createText(context,
-                          "Wybierając ANULUJ INKUBACJĘ spowodujesz zresetowanie licznika, który zawsze możesz ustawić ponownie."),
-                      createText(context,
-                          "Dla danej pary możesz dodać tyle potomswa ile chcesz, wystarczy wybrać przycisk DODAJ POTOMSTWO i uzupełnić dane!"),
-                      createPicture(context, "assets/help/help_screen_10.png"),
-                      createText(context,
-                          "Lista potomków będzie posortowana alfabetycznie wg nr obrączki."),
-                      createText(context,
-                          "Zawartość tabeli POTOMSTWO możesz przesuwać w lewo lub w prawo."),
-                    ],
+              itemCount: 1,
+              itemBuilder: (context, index) {
+                return Container(
+                  color: Colors.black12,
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        top: 10, bottom: 10, left: 5, right: 5),
+                    child: Column(
+                      children: [
+                        createText(context,
+                            "Dla każdej pary możesz wybrać datę rozpoczęcia inkubacji, spowoduję to automatyczne obliczenie orientacyjnego czasu pozostałego do wyklucia jaj."),
+                        createPicture(context, "assets/help/help_screen_9.png"),
+                        createText(context,
+                            "Wybierając ANULUJ INKUBACJĘ spowodujesz zresetowanie licznika, który zawsze możesz ustawić ponownie."),
+                        createText(context,
+                            "Dla danej pary możesz dodać tyle potomswa ile chcesz, wystarczy wybrać przycisk DODAJ POTOMSTWO i uzupełnić dane!"),
+                        createPicture(
+                            context, "assets/help/help_screen_10.png"),
+                        createText(context,
+                            "Lista potomków będzie posortowana alfabetycznie wg nr obrączki."),
+                        createText(context,
+                            "Zawartość tabeli POTOMSTWO możesz przesuwać w lewo lub w prawo."),
+                      ],
+                    ),
                   ),
-                ),
-              ),
+                );
+              },
             ),
           ),
         ),
         actions: [
-          FlatButton(
+          TextButton(
+            style: TextButton.styleFrom(
+              backgroundColor: Theme.of(context).backgroundColor,
+            ),
             child: Text(
               "OK",
               style: TextStyle(
-                color: Theme.of(context).textSelectionColor,
+                color: Theme.of(context).textSelectionTheme.selectionColor,
               ),
             ),
             onPressed: () => Navigator.of(ctx).pop(),
@@ -70,7 +78,8 @@ class InkubationChildrenDialog {
       child: new Text(
         text,
         textAlign: TextAlign.center,
-        style: TextStyle(color: Theme.of(context).textSelectionColor),
+        style: TextStyle(
+            color: Theme.of(context).textSelectionTheme.selectionColor),
       ),
     );
   }

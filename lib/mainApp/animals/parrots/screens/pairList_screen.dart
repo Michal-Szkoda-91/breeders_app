@@ -2,7 +2,6 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
 
 import '../../../../services/auth.dart';
 import '../../../../advertisement_banner/banner_page.dart';
@@ -19,7 +18,7 @@ class PairListScreen extends StatefulWidget {
   final raceName;
   final List<Parrot> parrotList;
 
-  const PairListScreen({this.raceName, this.parrotList});
+  const PairListScreen({this.raceName, required this.parrotList});
 
   @override
   _PairListScreenState createState() => _PairListScreenState();
@@ -31,7 +30,7 @@ class _PairListScreenState extends State<PairListScreen> {
 
   List<ParrotPairing> _pairList = [];
 
-  bool _showArchive;
+  late bool _showArchive;
 
   @override
   void initState() {
@@ -46,6 +45,8 @@ class _PairListScreenState extends State<PairListScreen> {
       endDrawerEnableOpenDragGesture: false,
       backgroundColor: Colors.transparent,
       appBar: AppBar(
+        leading:
+            (ModalRoute.of(context)?.canPop ?? false) ? BackButton() : null,
         title: Container(
           width: MediaQuery.of(context).size.width * 30,
           child: AutoSizeText(
@@ -57,7 +58,7 @@ class _PairListScreenState extends State<PairListScreen> {
       body: MainBackground(
         child: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
-              .collection(firebaseUser.uid)
+              .collection(firebaseUser!.uid)
               .doc(widget.raceName)
               .collection("Pairs")
               .snapshots(),
@@ -125,15 +126,13 @@ class _PairListScreenState extends State<PairListScreen> {
                 !_showArchive ? "Wyświetl archiwum" : "Pokaż aktywne pary",
                 style: TextStyle(
                   fontSize: 18,
-                  color: Theme.of(context).textSelectionColor,
+                  color: Theme.of(context).textSelectionTheme.selectionColor,
                 ),
               ),
               const SizedBox(width: 10),
               Icon(
-                !_showArchive
-                    ? MaterialCommunityIcons.archive
-                    : MaterialCommunityIcons.star,
-                color: Theme.of(context).textSelectionColor,
+                !_showArchive ? Icons.archive : Icons.star,
+                color: Theme.of(context).textSelectionTheme.selectionColor,
               ),
             ],
           ),
@@ -144,32 +143,32 @@ class _PairListScreenState extends State<PairListScreen> {
 
   void _createPairList(AsyncSnapshot<QuerySnapshot> snapshot) {
     _pairList = [];
-    snapshot.data.docs.forEach((val) {
+    snapshot.data!.docs.forEach((val) {
       if (!_showArchive) {
-        if (val.data()['Is Archive'] == "false") {
+        if (val['Is Archive'] == "false") {
           _pairList.add(ParrotPairing(
             id: val.id,
-            pairingData: val.data()['Pairing Data'],
-            femaleRingNumber: val.data()['Female Ring'],
-            maleRingNumber: val.data()['Male Ring'],
-            pairColor: val.data()['Pair Color'],
-            isArchive: val.data()['Is Archive'],
-            showEggsDate: val.data()['Show Eggs Date'],
-            picUrl: val.data()['Pic Url'],
+            pairingData: val['Pairing Data'],
+            femaleRingNumber: val['Female Ring'],
+            maleRingNumber: val['Male Ring'],
+            pairColor: val['Pair Color'],
+            isArchive: val['Is Archive'],
+            showEggsDate: val['Show Eggs Date'],
+            picUrl: val['Pic Url'],
             race: widget.raceName,
           ));
         }
       } else {
-        if (val.data()['Is Archive'] == "true") {
+        if (val['Is Archive'] == "true") {
           _pairList.add(ParrotPairing(
             id: val.id,
-            pairingData: val.data()['Pairing Data'],
-            femaleRingNumber: val.data()['Female Ring'],
-            maleRingNumber: val.data()['Male Ring'],
-            pairColor: val.data()['Pair Color'],
-            isArchive: val.data()['Is Archive'],
-            showEggsDate: val.data()['Show Eggs Date'],
-            picUrl: val.data()['Pic Url'],
+            pairingData: val['Pairing Data'],
+            femaleRingNumber: val['Female Ring'],
+            maleRingNumber: val['Male Ring'],
+            pairColor: val['Pair Color'],
+            isArchive: val['Is Archive'],
+            showEggsDate: val['Show Eggs Date'],
+            picUrl: val['Pic Url'],
             race: widget.raceName,
           ));
         }

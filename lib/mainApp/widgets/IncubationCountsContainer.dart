@@ -3,12 +3,10 @@ import 'package:flutter/material.dart';
 
 class IncubationCountsContainer extends StatelessWidget {
   const IncubationCountsContainer({
-    Key key,
-    @required int incubationTimes,
-  })  : _incubationTimes = incubationTimes,
-        super(key: key);
+    required this.incubationTimes,
+  });
 
-  final int _incubationTimes;
+  final int incubationTimes;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +23,7 @@ class IncubationCountsContainer extends StatelessWidget {
               "Aktywnych inkubacji:",
               maxLines: 1,
               style: TextStyle(
-                color: Theme.of(context).textSelectionColor,
+                color: Theme.of(context).textSelectionTheme.selectionColor,
               ),
             ),
           ),
@@ -36,16 +34,16 @@ class IncubationCountsContainer extends StatelessWidget {
             decoration: BoxDecoration(
               color: Theme.of(context).primaryColor,
               border: Border.all(
-                color: Theme.of(context).textSelectionColor,
+                color: Theme.of(context).canvasColor,
               ),
               borderRadius: const BorderRadius.all(
                 Radius.circular(18),
               ),
             ),
             child: Text(
-              _incubationTimes.toString(),
+              incubationTimes.toString(),
               style: TextStyle(
-                color: Theme.of(context).textSelectionColor,
+                color: Theme.of(context).textSelectionTheme.selectionColor,
                 fontSize: 20,
               ),
             ),

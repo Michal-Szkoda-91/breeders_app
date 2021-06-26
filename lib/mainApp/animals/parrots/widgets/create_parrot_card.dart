@@ -1,10 +1,10 @@
-import 'package:draggable_scrollbar_sliver/draggable_scrollbar_sliver.dart';
+import 'package:draggable_scrollbar/draggable_scrollbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../models/global_methods.dart';
-import '../models/parrot_model.dart';
 import '../screens/parrot_race_list_screen.dart';
+import '../models/parrot_model.dart';
 import 'addParrotButtonFromParrotList.dart';
 import 'create_parrot_card/genderIcon.dart';
 import 'create_parrot_card/table_content_notes_row.dart';
@@ -15,12 +15,10 @@ import 'create_parrot_card/upgrade_delete_buttons.dart';
 
 class ParrotCard extends StatefulWidget {
   const ParrotCard({
-    Key key,
-    @required List<Parrot> createdParrotList,
-  })  : _createdParrotList = createdParrotList,
-        super(key: key);
+    required this.createdParrotList,
+  });
 
-  final List<Parrot> _createdParrotList;
+  final List<Parrot> createdParrotList;
 
   @override
   _ParrotCardState createState() => _ParrotCardState();
@@ -36,36 +34,36 @@ class _ParrotCardState extends State<ParrotCard> {
     switch (index) {
       case 1:
         setState(() {
-          widget._createdParrotList
+          widget.createdParrotList
               .sort((a, b) => a.ringNumber.compareTo(b.ringNumber));
         });
         break;
       case 2:
         setState(() {
-          widget._createdParrotList.sort((a, b) => a.color.compareTo(b.color));
+          widget.createdParrotList.sort((a, b) => a.color.compareTo(b.color));
         });
         break;
       case 3:
         setState(() {
-          widget._createdParrotList
+          widget.createdParrotList
               .sort((a, b) => a.fission.compareTo(b.fission));
         });
         break;
       case 4:
         setState(() {
-          widget._createdParrotList
+          widget.createdParrotList
               .sort((a, b) => a.cageNumber.compareTo(b.cageNumber));
         });
         break;
       case 5:
         setState(() {
-          widget._createdParrotList
+          widget.createdParrotList
               .sort((a, b) => a.pairRingNumber.compareTo(b.pairRingNumber));
         });
         break;
       case 6:
         setState(() {
-          widget._createdParrotList.sort((a, b) => a.sex.compareTo(b.sex));
+          widget.createdParrotList.sort((a, b) => a.sex.compareTo(b.sex));
         });
         break;
       default:
@@ -83,14 +81,15 @@ class _ParrotCardState extends State<ParrotCard> {
               controller: _rrectController,
               heightScrollThumb: 100,
               backgroundColor: Theme.of(context).accentColor,
-              child: Padding(
+              child: ListView.builder(
                 padding: const EdgeInsets.all(6.0),
-                child: SingleChildScrollView(
-                  controller: _rrectController,
-                  child: Column(
+                controller: _rrectController,
+                itemCount: 1,
+                itemBuilder: (context, index) {
+                  return Column(
                     children: [
                       AddParrotFromInsideParrotList(
-                          race: widget._createdParrotList[0].race),
+                          race: widget.createdParrotList[0].race),
                       const SizedBox(height: 10),
                       Stack(
                         children: [
@@ -154,7 +153,7 @@ class _ParrotCardState extends State<ParrotCard> {
                                   ),
                                   ListView.builder(
                                     physics: NeverScrollableScrollPhysics(),
-                                    itemCount: widget._createdParrotList.length,
+                                    itemCount: widget.createdParrotList.length,
                                     shrinkWrap: true,
                                     itemBuilder: (context, index) {
                                       return Stack(
@@ -170,13 +169,13 @@ class _ParrotCardState extends State<ParrotCard> {
                                                 GenderIcon(
                                                   index: index,
                                                   createdParrotList:
-                                                      widget._createdParrotList,
+                                                      widget.createdParrotList,
                                                 ),
                                                 TableContentRow(
                                                     createdParrotList: widget
-                                                        ._createdParrotList,
+                                                        .createdParrotList,
                                                     title: widget
-                                                        ._createdParrotList[
+                                                        .createdParrotList[
                                                             index]
                                                         .pairRingNumber,
                                                     width: 100.0,
@@ -184,34 +183,33 @@ class _ParrotCardState extends State<ParrotCard> {
                                                     isPair: true),
                                                 TableContentNormalRow(
                                                   title: widget
-                                                      ._createdParrotList[index]
+                                                      .createdParrotList[index]
                                                       .color,
                                                   width: 150.0,
                                                 ),
                                                 TableContentNotesRow(
                                                   title: widget
-                                                      ._createdParrotList[index]
+                                                      .createdParrotList[index]
                                                       .fission,
                                                   width: 200.0,
                                                 ),
                                                 TableContentNormalRow(
                                                   title: widget
-                                                      ._createdParrotList[index]
+                                                      .createdParrotList[index]
                                                       .cageNumber,
                                                   width: 150.0,
                                                 ),
                                                 TableContentNotesRow(
                                                   title: widget
-                                                      ._createdParrotList[index]
+                                                      .createdParrotList[index]
                                                       .notes,
                                                   width: 150.0,
                                                 ),
                                                 DeleteUpgradeButtons(
                                                   index: index,
                                                   createdParrotList:
-                                                      widget._createdParrotList,
+                                                      widget.createdParrotList,
                                                   delete: _deleteParrot,
-                                                  
                                                 ),
                                               ],
                                             ),
@@ -252,7 +250,7 @@ class _ParrotCardState extends State<ParrotCard> {
                                 ),
                                 ListView.builder(
                                   physics: NeverScrollableScrollPhysics(),
-                                  itemCount: widget._createdParrotList.length,
+                                  itemCount: widget.createdParrotList.length,
                                   shrinkWrap: true,
                                   itemBuilder: (context, index) {
                                     return Container(
@@ -267,9 +265,9 @@ class _ParrotCardState extends State<ParrotCard> {
                                           ),
                                           TableContentRow(
                                             createdParrotList:
-                                                widget._createdParrotList,
+                                                widget.createdParrotList,
                                             title: widget
-                                                ._createdParrotList[index]
+                                                .createdParrotList[index]
                                                 .ringNumber,
                                             width: 110.0,
                                             index: index,
@@ -286,8 +284,8 @@ class _ParrotCardState extends State<ParrotCard> {
                         ],
                       ),
                     ],
-                  ),
-                ),
+                  );
+                },
               ),
             ),
           );
@@ -307,19 +305,22 @@ class _ParrotCardState extends State<ParrotCard> {
         _globalMethods.showMaterialDialog(
             context, "brak połączenia z internetem.");
       } else {
-        if (widget._createdParrotList.length == 1) {
-          Navigator.of(context).pushNamedAndRemoveUntil(
-              ParrotsRaceListScreen.routeName, (Route<dynamic> route) => false);
-          await _parrotHelper.deleteRaceList(
-              _firebaseUser.uid, parrot.race, context);
+        if (widget.createdParrotList.length == 1) {
+          Navigator.of(context).pop();
+          _globalMethods.showMaterialDialog(context,
+              "Nie można usunąć ostatniej papugi. Przejdź do listy ras i usuń całą rasę!");
         } else {
           Navigator.of(context).pop();
-          await _parrotHelper.deleteParrot(_firebaseUser.uid, parrot, context, true);
+          await _parrotHelper.deleteParrot(
+              uid: _firebaseUser!.uid,
+              parrotToDelete: parrot,
+              context: context,
+              showDialog: true);
         }
+        setState(() {
+          _isLoading = false;
+        });
       }
-      setState(() {
-        _isLoading = false;
-      });
     });
   }
 }

@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:draggable_scrollbar_sliver/draggable_scrollbar_sliver.dart';
+import 'package:draggable_scrollbar/draggable_scrollbar.dart';
 import 'package:flutter/painting.dart';
-import 'package:flutter_icons/flutter_icons.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -15,7 +14,7 @@ import 'create_race_listTile/race_parrot_card.dart';
 
 class CreateParrotRaceListTile extends StatefulWidget {
   const CreateParrotRaceListTile({
-    this.activeRaceList,
+    required this.activeRaceList,
   });
 
   final List<String> activeRaceList;
@@ -30,7 +29,7 @@ class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
   GlobalMethods _globalMethods = GlobalMethods();
   ParrotDataHelper _parrotDataHelper = ParrotDataHelper();
   ScrollController _rrectController = ScrollController();
-  int _parrotCount;
+  late int _parrotCount;
   List<String> parrotRingList = [''];
   List<Parrot> parrotList = [];
   bool _isLoading = false;
@@ -48,7 +47,7 @@ class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
           itemBuilder: (context, index) {
             return StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
-                  .collection(firebaseUser.uid)
+                  .collection(firebaseUser!.uid)
                   .doc(widget.activeRaceList[index])
                   .collection("Birds")
                   .snapshots(),
@@ -85,17 +84,17 @@ class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
 
   void _countParrot(AsyncSnapshot<QuerySnapshot> snapshot) {
     _parrotCount = 0;
-    snapshot.data.docs.forEach((val) {
+    snapshot.data!.docs.forEach((val) {
       _parrotCount++;
       parrotList.add(Parrot(
         ringNumber: val.id,
-        cageNumber: val.data()['Cage number'],
-        color: val.data()['Colors'],
-        fission: val.data()['Fission'],
-        notes: val.data()['Notes'],
-        pairRingNumber: val.data()['PairRingNumber'],
-        race: val.data()['Race Name'],
-        sex: val.data()['Sex'],
+        cageNumber: val['Cage number'],
+        color: val['Colors'],
+        fission: val['Fission'],
+        notes: val['Notes'],
+        pairRingNumber: val['PairRingNumber'],
+        race: val['Race Name'],
+        sex: val['Sex'],
       ));
     });
   }
@@ -134,7 +133,7 @@ class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
           function: _deleteRace,
           title: widget.activeRaceList[index],
           color: Colors.red,
-          icon: MaterialCommunityIcons.delete,
+          icon: Icons.delete,
           name: "Usuń hodowlę",
           padding: 25.0,
         ),
@@ -178,12 +177,13 @@ class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
         _globalMethods.showMaterialDialog(
             context, "brak połączenia z internetem.");
       } else {
-        setState(() {
-          _isLoading = false;
-        });
         Navigator.of(context).pop();
-        await _parrotDataHelper.deleteRaceList(firebaseUser.uid, name, context);
+        await _parrotDataHelper.deleteRaceList(
+            firebaseUser!.uid, name, context);
       }
+      setState(() {
+        _isLoading = false;
+      });
     });
   }
 }

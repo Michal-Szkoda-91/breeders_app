@@ -1,4 +1,4 @@
-import 'package:draggable_scrollbar_sliver/draggable_scrollbar_sliver.dart';
+import 'package:draggable_scrollbar/draggable_scrollbar.dart';
 import 'package:flutter/material.dart';
 
 class AddParrotDialog {
@@ -11,7 +11,8 @@ class AddParrotDialog {
         backgroundColor: Theme.of(context).backgroundColor,
         title: new Text(
           "Dodawanie / Edycja / Usuwanie Papug",
-          style: TextStyle(color: Theme.of(context).textSelectionColor),
+          style: TextStyle(
+              color: Theme.of(context).textSelectionTheme.selectionColor),
           textAlign: TextAlign.center,
         ),
         content: Container(
@@ -21,44 +22,52 @@ class AddParrotDialog {
             controller: _rrectController,
             heightScrollThumb: 100,
             backgroundColor: Theme.of(context).accentColor,
-            child: SingleChildScrollView(
+            child: ListView.builder(
               controller: _rrectController,
-              child: Container(
-                color: Colors.black12,
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                      top: 10, bottom: 10, left: 5, right: 5),
-                  child: Column(
-                    children: [
-                      createText(context,
-                          "DODAJ PAPUGĘ do hodowli na głównym ekranie:"),
-                      createPicture(context, "assets/help/help_screen_1.png"),
-                      createText(context, "Wybierz interesującą Cię rasę:"),
-                      createPicture(context, "assets/help/help_screen_2.png"),
-                      createText(context, "A teraz uzupełnij wszystkie dane:"),
-                      createPicture(context, "assets/help/help_screen_3.png"),
-                      createText(context,
-                          "Jeśli para ma potomstwo można dodać je do hodowli papug przesuwając tabelę w lewo i klikajać w odpowiedni przycisk."),
-                      createPicture(context, "assets/help/help_screen_13.png"),
-                      createText(context,
-                          "EDYTUJ już istniejący wpis w ekranie hodolwi, przesuwając zwartość tabeli Papug w bok:"),
-                      createPicture(context, "assets/help/help_screen_4.png"),
-                      createText(context,
-                          "Aby USUNĄĆ jedną wybraną papugę należy na końcu tabeli w ekranie hodowli wybrać ikonę kosza:"),
-                      createPicture(context, "assets/help/help_screen_5.png"),
-                    ],
+              itemCount: 1,
+              itemBuilder: (context, index) {
+                return Container(
+                  color: Colors.black12,
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        top: 10, bottom: 10, left: 5, right: 5),
+                    child: Column(
+                      children: [
+                        createText(context,
+                            "DODAJ PAPUGĘ do hodowli na głównym ekranie:"),
+                        createPicture(context, "assets/help/help_screen_1.png"),
+                        createText(context, "Wybierz interesującą Cię rasę:"),
+                        createPicture(context, "assets/help/help_screen_2.png"),
+                        createText(
+                            context, "A teraz uzupełnij wszystkie dane:"),
+                        createPicture(context, "assets/help/help_screen_3.png"),
+                        createText(context,
+                            "Jeśli para ma potomstwo można dodać je do hodowli papug przesuwając tabelę w lewo i klikajać w odpowiedni przycisk."),
+                        createPicture(
+                            context, "assets/help/help_screen_13.png"),
+                        createText(context,
+                            "EDYTUJ już istniejący wpis w ekranie hodolwi, przesuwając zwartość tabeli Papug w bok:"),
+                        createPicture(context, "assets/help/help_screen_4.png"),
+                        createText(context,
+                            "Aby USUNĄĆ jedną wybraną papugę należy na końcu tabeli w ekranie hodowli wybrać ikonę kosza:"),
+                        createPicture(context, "assets/help/help_screen_5.png"),
+                      ],
+                    ),
                   ),
-                ),
-              ),
+                );
+              },
             ),
           ),
         ),
         actions: [
-          FlatButton(
+          TextButton(
+            style: TextButton.styleFrom(
+              backgroundColor: Theme.of(context).backgroundColor,
+            ),
             child: Text(
               "OK",
               style: TextStyle(
-                color: Theme.of(context).textSelectionColor,
+                color: Theme.of(context).textSelectionTheme.selectionColor,
               ),
             ),
             onPressed: () => Navigator.of(ctx).pop(),
@@ -74,7 +83,8 @@ class AddParrotDialog {
       child: new Text(
         text,
         textAlign: TextAlign.center,
-        style: TextStyle(color: Theme.of(context).textSelectionColor),
+        style: TextStyle(
+            color: Theme.of(context).textSelectionTheme.selectionColor),
       ),
     );
   }

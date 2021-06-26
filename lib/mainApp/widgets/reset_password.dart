@@ -13,15 +13,18 @@ class ResetPassword extends StatelessWidget {
           Text(
             'Zapomniane hasło?',
             style: TextStyle(
-              color: Theme.of(context).textSelectionColor,
+              color: Theme.of(context).textSelectionTheme.selectionColor,
               fontSize: MediaQuery.of(context).size.width < 340 ? 10 : 16,
             ),
           ),
-          FlatButton(
+          TextButton(
+            style: TextButton.styleFrom(
+              backgroundColor: Theme.of(context).backgroundColor,
+            ),
             child: Text(
               'Zresetuj je!',
               style: TextStyle(
-                color: Theme.of(context).textSelectionColor,
+                color: Theme.of(context).textSelectionTheme.selectionColor,
                 fontWeight: FontWeight.bold,
                 fontSize: MediaQuery.of(context).size.width < 340 ? 10 : 16,
               ),

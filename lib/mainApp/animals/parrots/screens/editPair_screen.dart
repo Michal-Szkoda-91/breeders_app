@@ -3,7 +3,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path/path.dart';
 
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:draggable_scrollbar_sliver/draggable_scrollbar_sliver.dart';
+import 'package:draggable_scrollbar/draggable_scrollbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -25,11 +25,11 @@ class EditPairScreen extends StatefulWidget {
   final String raceName;
 
   const EditPairScreen(
-      {this.raceName,
-      this.pairingData,
-      this.picUrl,
-      this.pairColor,
-      this.pairID});
+      {required this.raceName,
+      required this.pairingData,
+      required this.picUrl,
+      required this.pairColor,
+      required this.pairID});
 
   @override
   _EditPairScreenState createState() => _EditPairScreenState();
@@ -47,12 +47,13 @@ class _EditPairScreenState extends State<EditPairScreen> {
   File _image = new File('assets/image/parrotsRace/parrot_pair.jpg');
   bool _isBlinking = false;
 
-  String _pairColor;
-  String _pictureUrl;
-  String _pairTime;
+  late String _pairColor;
+  late String _pictureUrl;
+  late String _pairTime;
   bool _isLoading = false;
-  String takenURL;
+  late String takenURL;
   bool _isPhotoChanged = false;
+  final _picker = ImagePicker();
 
   @override
   void initState() {
@@ -69,14 +70,17 @@ class _EditPairScreenState extends State<EditPairScreen> {
 
   Future getImageFromGalery() async {
     // ignore: deprecated_member_use
-    var image = await ImagePicker.pickImage(
-        source: ImageSource.gallery, maxWidth: 750, maxHeight: 1000);
+    var image = await _picker.getImage(
+      source: ImageSource.gallery,
+      maxWidth: 750,
+      maxHeight: 1000,
+    );
 
     if (image == null) {
       return;
     } else {
       setState(() {
-        _image = image;
+        _image = image as File;
         _isPhotoChoosen = false;
         _isPhotoChanged = true;
       });
@@ -85,13 +89,13 @@ class _EditPairScreenState extends State<EditPairScreen> {
 
   Future getImageFromCamera() async {
     // ignore: deprecated_member_use
-    var image = await ImagePicker.pickImage(
+    var image = await _picker.getImage(
         source: ImageSource.camera, maxWidth: 750, maxHeight: 1000);
     if (image == null) {
       return;
     } else {
       setState(() {
-        _image = image;
+        _image = image as File;
         _isPhotoChoosen = false;
         _isPhotoChanged = true;
       });
@@ -106,6 +110,8 @@ class _EditPairScreenState extends State<EditPairScreen> {
       endDrawerEnableOpenDragGesture: false,
       backgroundColor: Colors.transparent,
       appBar: AppBar(
+        leading:
+            (ModalRoute.of(context)?.canPop ?? false) ? BackButton() : null,
         title: AutoSizeText(
           "Edycja Pary",
           maxLines: 1,
@@ -117,46 +123,55 @@ class _EditPairScreenState extends State<EditPairScreen> {
                 controller: _rrectController,
                 heightScrollThumb: 100,
                 backgroundColor: Theme.of(context).accentColor,
-                child: SingleChildScrollView(
+                child: ListView.builder(
                   controller: _rrectController,
-                  child: Column(
-                    children: [
-                      _createTitle(context),
-                      const SizedBox(height: 15),
-                      _createForm(context, node),
-                      const SizedBox(height: 15),
-                      buildRowCalendar(context),
-                      const SizedBox(height: 25),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          FlatButton(
-                            color: Theme.of(context).backgroundColor,
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: _createInfoText(
-                              context,
-                              'Anuluj',
+                  itemCount: 1,
+                  itemBuilder: (context, index) {
+                    return Column(
+                      children: [
+                        _createTitle(context),
+                        const SizedBox(height: 15),
+                        _createForm(context, node),
+                        const SizedBox(height: 15),
+                        buildRowCalendar(context),
+                        const SizedBox(height: 25),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            TextButton(
+                              style: TextButton.styleFrom(
+                                backgroundColor:
+                                    Theme.of(context).backgroundColor,
+                              ),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: _createInfoText(
+                                context,
+                                'Anuluj',
+                              ),
                             ),
-                          ),
-                          FlatButton(
-                            color: Theme.of(context).backgroundColor,
-                            onPressed: () {
-                              _sendPictureToStorage(context);
-                            },
-                            child: _createInfoText(
-                              context,
-                              'Edytuj',
+                            TextButton(
+                              style: TextButton.styleFrom(
+                                backgroundColor:
+                                    Theme.of(context).backgroundColor,
+                              ),
+                              onPressed: () {
+                                _sendPictureToStorage(context);
+                              },
+                              child: _createInfoText(
+                                context,
+                                'Edytuj',
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 200,
-                      )
-                    ],
-                  ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 200,
+                        )
+                      ],
+                    );
+                  },
                 ),
               ),
             )
@@ -189,23 +204,21 @@ class _EditPairScreenState extends State<EditPairScreen> {
                             child: CircularProgressIndicator(),
                           );
                         }
-                        break;
                       case ConnectionState.done:
                         {
                           return CircleAvatar(
                             radius: 46,
-                            backgroundImage: widget.picUrl != "brak" &&
-                                    !_isPhotoChanged
-                                ? NetworkImage("$takenURL")
+                            child: widget.picUrl != "brak" && !_isPhotoChanged
+                                ? Image.network("$takenURL")
                                 : _image.path ==
                                         'assets/image/parrotsRace/parrot_pair.jpg'
-                                    ? AssetImage(_image.path)
-                                    : FileImage(
+                                    ? Image.asset(_image.path)
+                                    : Image.file(
                                         _image,
                                       ),
                           );
                         }
-                        break;
+
                       default:
                         return Center(
                           child: CircularProgressIndicator(),
@@ -222,7 +235,7 @@ class _EditPairScreenState extends State<EditPairScreen> {
                   maxLines: 1,
                   style: TextStyle(
                     fontSize: 24,
-                    color: Theme.of(context).textSelectionColor,
+                    color: Theme.of(context).textSelectionTheme.selectionColor,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -244,7 +257,8 @@ class _EditPairScreenState extends State<EditPairScreen> {
                     icon: Icon(
                       Icons.camera_alt_outlined,
                       size: 35,
-                      color: Theme.of(context).textSelectionColor,
+                      color:
+                          Theme.of(context).textSelectionTheme.selectionColor,
                     ),
                     onPressed: () {
                       setState(() {
@@ -265,7 +279,9 @@ class _EditPairScreenState extends State<EditPairScreen> {
                               icon: Icon(
                                 Icons.folder,
                                 size: 35,
-                                color: Theme.of(context).textSelectionColor,
+                                color: Theme.of(context)
+                                    .textSelectionTheme
+                                    .selectionColor,
                               ),
                               onPressed: () {
                                 getImageFromGalery();
@@ -284,7 +300,9 @@ class _EditPairScreenState extends State<EditPairScreen> {
                               icon: Icon(
                                 Icons.camera,
                                 size: 35,
-                                color: Theme.of(context).textSelectionColor,
+                                color: Theme.of(context)
+                                    .textSelectionTheme
+                                    .selectionColor,
                               ),
                               onPressed: () {
                                 getImageFromCamera();
@@ -327,16 +345,16 @@ class _EditPairScreenState extends State<EditPairScreen> {
         child: TextFormField(
           initialValue: _pairColor,
           style: customTextStyle(context),
-          cursorColor: Theme.of(context).textSelectionColor,
+          cursorColor: Theme.of(context).textSelectionTheme.selectionColor,
           maxLength: 30,
           maxLines: 1,
           decoration: _createInputDecoration(
             context,
             'Kolor Pary',
-            null,
+            Icons.ac_unit,
           ),
           validator: (val) {
-            if (val.isEmpty) {
+            if (val!.isEmpty) {
               return 'Uzupełnij dane';
             } else if (val.length > 30) {
               return 'Zbyt długi tekst';
@@ -358,7 +376,7 @@ class _EditPairScreenState extends State<EditPairScreen> {
   //Styl tekstu w inputach
   TextStyle customTextStyle(BuildContext context) {
     return TextStyle(
-      color: Theme.of(context).textSelectionColor,
+      color: Theme.of(context).textSelectionTheme.selectionColor,
       fontSize: 16,
     );
   }
@@ -368,7 +386,7 @@ class _EditPairScreenState extends State<EditPairScreen> {
       text,
       style: TextStyle(
         fontSize: 16,
-        color: Theme.of(context).textSelectionColor,
+        color: Theme.of(context).textSelectionTheme.selectionColor,
       ),
     );
   }
@@ -386,7 +404,7 @@ class _EditPairScreenState extends State<EditPairScreen> {
               parrot.ringNumber,
               maxLines: 1,
               style: TextStyle(
-                color: Theme.of(context).textSelectionColor,
+                color: Theme.of(context).textSelectionTheme.selectionColor,
               ),
             ),
             SizedBox(height: 2),
@@ -394,11 +412,11 @@ class _EditPairScreenState extends State<EditPairScreen> {
               "Kolor: " + parrot.color,
               maxLines: 2,
               style: TextStyle(
-                color: Theme.of(context).textSelectionColor,
+                color: Theme.of(context).textSelectionTheme.selectionColor,
               ),
             ),
             Divider(
-              color: Theme.of(context).textSelectionColor,
+              color: Theme.of(context).textSelectionTheme.selectionColor,
               height: 7,
               thickness: 1,
             ),
@@ -412,8 +430,10 @@ class _EditPairScreenState extends State<EditPairScreen> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        FlatButton(
-          color: Theme.of(context).backgroundColor,
+        TextButton(
+          style: TextButton.styleFrom(
+            backgroundColor: Theme.of(context).backgroundColor,
+          ),
           onPressed: () {
             showDatePicker(
               context: context,
@@ -425,7 +445,7 @@ class _EditPairScreenState extends State<EditPairScreen> {
             ).then((date) {
               setState(() {
                 _pairTime =
-                    DateFormat("yyyy-MM-dd", 'pl_PL').format(date).toString();
+                    DateFormat("yyyy-MM-dd", 'pl_PL').format(date!).toString();
               });
             });
           },
@@ -442,7 +462,8 @@ class _EditPairScreenState extends State<EditPairScreen> {
             child: Text(
               _pairTime,
               style: TextStyle(
-                  fontSize: 18, color: Theme.of(context).textSelectionColor),
+                  fontSize: 18,
+                  color: Theme.of(context).textSelectionTheme.selectionColor),
             ),
           ),
         ),
@@ -453,17 +474,17 @@ class _EditPairScreenState extends State<EditPairScreen> {
   InputDecoration _createInputDecoration(
       BuildContext context, String text, IconData icon) {
     return InputDecoration(
-      contentPadding:
-          EdgeInsets.symmetric(horizontal: icon == null ? 3 : 14, vertical: 10),
+      contentPadding: EdgeInsets.symmetric(
+          horizontal: icon == Icons.ac_unit ? 3 : 14, vertical: 10),
       counterStyle: TextStyle(
         height: double.minPositive,
       ),
       labelText: text,
-      icon: icon == null
+      icon: icon == Icons.ac_unit
           ? null
           : Icon(
               icon,
-              color: Theme.of(context).textSelectionColor,
+              color: Theme.of(context).textSelectionTheme.selectionColor,
             ),
       labelStyle: TextStyle(
         color: Theme.of(context).hintColor,
@@ -482,7 +503,7 @@ class _EditPairScreenState extends State<EditPairScreen> {
         ),
         borderSide: BorderSide(
           width: 3,
-          color: Theme.of(context).textSelectionColor,
+          color: Theme.of(context).canvasColor,
         ),
       ),
       errorBorder: OutlineInputBorder(
@@ -498,7 +519,7 @@ class _EditPairScreenState extends State<EditPairScreen> {
           const Radius.circular(5.0),
         ),
         borderSide: BorderSide(
-          color: Theme.of(context).textSelectionColor,
+          color: Theme.of(context).canvasColor,
         ),
       ),
     );
@@ -527,7 +548,7 @@ class _EditPairScreenState extends State<EditPairScreen> {
   }
 
   Future<void> _sendPictureToStorage(BuildContext context) async {
-    if (!_formKey.currentState.validate()) {
+    if (!_formKey.currentState!.validate()) {
       _globalMethods.showMaterialDialog(
           context, "Nie można utworzyć pary, niepełne dane");
       return;
@@ -557,7 +578,7 @@ class _EditPairScreenState extends State<EditPairScreen> {
   Future<void> _editPair(BuildContext context) async {
     await _parrotPairDataHelper
         .editPair(
-      uid: firebaseUser.uid,
+      uid: firebaseUser!.uid,
       race: widget.raceName,
       id: widget.pairID,
       pairingData: _pairTime,

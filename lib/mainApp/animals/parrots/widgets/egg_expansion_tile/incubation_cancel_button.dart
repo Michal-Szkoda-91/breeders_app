@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 
 class IncubationCancelButton extends StatelessWidget {
   const IncubationCancelButton({
-    Key key,
-    @required this.setEggsDate,
-  }) : super(key: key);
+    required this.setEggsDate,
+  });
 
   final Function setEggsDate;
   @override
@@ -15,10 +14,10 @@ class IncubationCancelButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
         color: Colors.black45,
       ),
-      child: FlatButton.icon(
+      child: TextButton.icon(
         icon: Icon(
           Icons.cancel,
-          color: Theme.of(context).textSelectionColor,
+          color: Theme.of(context).textSelectionTheme.selectionColor,
         ),
         onPressed: () {
           setEggsDate("brak");
@@ -26,7 +25,7 @@ class IncubationCancelButton extends StatelessWidget {
         label: Text(
           "Anuluj Inkubację",
           style: TextStyle(
-            color: Theme.of(context).textSelectionColor,
+            color: Theme.of(context).textSelectionTheme.selectionColor,
             fontSize: 14,
           ),
         ),

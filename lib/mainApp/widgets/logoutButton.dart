@@ -6,26 +6,26 @@ import '../../main.dart';
 
 class LogoutButton extends StatelessWidget {
   const LogoutButton({
-    Key key,
-    @required AuthService auth,
-  })  : _auth = auth,
-        super(key: key);
+    required this.auth,
+  });
 
-  final AuthService _auth;
+  final AuthService auth;
 
   @override
   Widget build(BuildContext context) {
-    return FlatButton.icon(
-        color: Theme.of(context).primaryColor,
+    return TextButton.icon(
+        style: TextButton.styleFrom(
+          primary: Theme.of(context).primaryColor,
+        ),
         icon: Icon(
           Icons.logout,
-          color: Theme.of(context).textSelectionColor,
+          color: Theme.of(context).textSelectionTheme.selectionColor,
           size: 30,
         ),
         label: Text(
           'Wyloguj',
           style: TextStyle(
-            color: Theme.of(context).textSelectionColor,
+            color: Theme.of(context).textSelectionTheme.selectionColor,
             fontSize: MediaQuery.of(context).size.width < 340 ? 10 : 16,
           ),
         ),
@@ -44,13 +44,20 @@ class LogoutButton extends StatelessWidget {
           textAlign: TextAlign.center,
         ),
         actions: <Widget>[
-          FlatButton(
+          TextButton(
+            style: TextButton.styleFrom(
+              backgroundColor: Theme.of(dialogContext).backgroundColor,
+            ),
             child: AutoSizeText(
               'Wyloguj',
+              style: TextStyle(
+                color:
+                    Theme.of(dialogContext).textSelectionTheme.selectionColor,
+              ),
             ),
             onPressed: () async {
               Navigator.of(ctx).pop();
-              await _auth.signOut();
+              await auth.signOut();
               Navigator.pushAndRemoveUntil(
                 dialogContext,
                 MaterialPageRoute(
@@ -60,9 +67,16 @@ class LogoutButton extends StatelessWidget {
               );
             },
           ),
-          FlatButton(
+          TextButton(
+            style: TextButton.styleFrom(
+              backgroundColor: Theme.of(dialogContext).backgroundColor,
+            ),
             child: AutoSizeText(
               'Anuluj',
+              style: TextStyle(
+                color:
+                    Theme.of(dialogContext).textSelectionTheme.selectionColor,
+              ),
             ),
             onPressed: () {
               Navigator.pop(ctx);

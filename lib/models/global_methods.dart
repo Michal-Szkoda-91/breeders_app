@@ -8,8 +8,12 @@ class GlobalMethods {
   var arrowConteiner = Container(
       width: 6, child: Icon(Icons.arrow_back_ios_rounded, color: Colors.red));
 
-  Future<void> showDeletingDialog(BuildContext context, String title,
-      String text, Function function, Parrot parrot) async {
+  Future<void> showDeletingDialog(
+      {required BuildContext context,
+      required String title,
+      required String text,
+      required Function function,
+      required Parrot parrot}) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: true,
@@ -20,14 +24,14 @@ class GlobalMethods {
             title,
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: Theme.of(context).textSelectionColor,
+              color: Theme.of(context).textSelectionTheme.selectionColor,
             ),
           ),
           content: Text(
             text,
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: Theme.of(context).textSelectionColor,
+              color: Theme.of(context).textSelectionTheme.selectionColor,
             ),
           ),
           actions: [
@@ -35,15 +39,17 @@ class GlobalMethods {
               child: Text(
                 "OK",
                 style: TextStyle(
-                  color: Theme.of(context).textSelectionColor,
+                  color: Theme.of(context).textSelectionTheme.selectionColor,
                   fontSize: 20,
                 ),
               ),
               onPressed: () async {
-                if (parrot == null) {
+                if (parrot.ringNumber == 'brak') {
+                  print("GORA____________");
                   await function(title);
                 } else {
                   await function(title, parrot);
+                  print("DOL___________________________---");
                 }
               },
             ),
@@ -51,7 +57,7 @@ class GlobalMethods {
               child: Text(
                 "Anuluj",
                 style: TextStyle(
-                  color: Theme.of(context).textSelectionColor,
+                  color: Theme.of(context).textSelectionTheme.selectionColor,
                   fontSize: 20,
                 ),
               ),
@@ -68,17 +74,19 @@ class GlobalMethods {
   showMaterialDialog(BuildContext context, String text) async {
     await showDialog(
       context: context,
-      builder: (_) => new AlertDialog(
+      builder: (ctx) => new AlertDialog(
         backgroundColor: Theme.of(context).backgroundColor,
         title: new Text(
           "Informacja",
-          style: TextStyle(color: Theme.of(context).textSelectionColor),
+          style: TextStyle(
+              color: Theme.of(context).textSelectionTheme.selectionColor),
           textAlign: TextAlign.center,
         ),
         content: new Text(
           text,
           textAlign: TextAlign.center,
-          style: TextStyle(color: Theme.of(context).textSelectionColor),
+          style: TextStyle(
+              color: Theme.of(context).textSelectionTheme.selectionColor),
         ),
       ),
     );
@@ -88,7 +96,6 @@ class GlobalMethods {
     try {
       final result = await InternetAddress.lookup('google.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-        // Navigator.of(context).pop();
         return true;
       }
     } on SocketException catch (e) {

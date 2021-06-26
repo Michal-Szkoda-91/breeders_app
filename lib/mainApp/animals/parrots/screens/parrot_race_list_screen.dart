@@ -30,12 +30,14 @@ class _ParrotsRaceListScreenState extends State<ParrotsRaceListScreen> {
       endDrawerEnableOpenDragGesture: false,
       backgroundColor: Colors.transparent,
       appBar: AppBar(
+        leading:
+            (ModalRoute.of(context)?.canPop ?? false) ? BackButton() : null,
         title: Text("Hodowla Papug"),
       ),
       body: MainBackground(
         child: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
-              .collection(firebaseUser.uid)
+              .collection(firebaseUser!.uid)
               .snapshots(),
           builder:
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -57,7 +59,9 @@ class _ParrotsRaceListScreenState extends State<ParrotsRaceListScreen> {
                     Expanded(
                       child: Column(
                         children: [
-                          const CreateParrotsDropdownButton(),
+                          CreateParrotsDropdownButton(
+                            parrotRingList: [],
+                          ),
                           CreateParrotRaceListTile(
                               activeRaceList: _activeRaceList),
                         ],
@@ -75,7 +79,7 @@ class _ParrotsRaceListScreenState extends State<ParrotsRaceListScreen> {
   void createListRace(AsyncSnapshot<QuerySnapshot> snapshot) {
     _activeRaceList.clear();
 
-    snapshot.data.docs.forEach((val) {
+    snapshot.data!.docs.forEach((val) {
       _activeRaceList.add(val.id);
     });
     _activeRaceList

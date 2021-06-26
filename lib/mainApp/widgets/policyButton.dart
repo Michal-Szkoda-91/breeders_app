@@ -3,22 +3,18 @@ import 'package:flutter/material.dart';
 import '../../privacy_policy/dialog_policy.dart';
 
 class PolicyButton extends StatelessWidget {
-  const PolicyButton({
-    Key key,
-  }) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
-    return FlatButton.icon(
+    return TextButton.icon(
       icon: Icon(
         Icons.policy,
-        color: Theme.of(context).textSelectionColor,
+        color: Theme.of(context).textSelectionTheme.selectionColor,
         size: 30,
       ),
       label: Text(
         'Polityka Prywatności',
         style: TextStyle(
-          color: Theme.of(context).textSelectionColor,
+          color: Theme.of(context).textSelectionTheme.selectionColor,
         ),
       ),
       onPressed: () async {

@@ -9,8 +9,8 @@ class ParrotDialogInformation extends StatefulWidget {
   final String parrotRing;
   final String parrotRace;
 
-  const ParrotDialogInformation({Key key, this.parrotRing, this.parrotRace})
-      : super(key: key);
+  const ParrotDialogInformation(
+      {required this.parrotRing, required this.parrotRace});
   @override
   _ParrotDialogInformationState createState() =>
       _ParrotDialogInformationState();
@@ -18,13 +18,13 @@ class ParrotDialogInformation extends StatefulWidget {
 
 class _ParrotDialogInformationState extends State<ParrotDialogInformation> {
   final firebaseUser = FirebaseAuth.instance.currentUser;
-  Parrot _createdParrot;
+  late Parrot _createdParrot;
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
-          .collection(firebaseUser.uid)
+          .collection(firebaseUser!.uid)
           .doc(widget.parrotRace)
           .collection("Birds")
           .snapshots(),
@@ -77,17 +77,17 @@ class _ParrotDialogInformationState extends State<ParrotDialogInformation> {
   }
 
   void _createParrot(AsyncSnapshot<QuerySnapshot> snapshot) {
-    snapshot.data.docs.forEach((val) {
+    snapshot.data!.docs.forEach((val) {
       if (val.id == widget.parrotRing) {
         _createdParrot = Parrot(
           ringNumber: val.id,
-          cageNumber: val.data()['Cage number'],
-          color: val.data()['Colors'],
-          fission: val.data()['Fission'],
-          notes: val.data()['Notes'],
-          pairRingNumber: val.data()['PairRingNumber'],
+          cageNumber: val['Cage number'],
+          color: val['Colors'],
+          fission: val['Fission'],
+          notes: val['Notes'],
+          pairRingNumber: val['PairRingNumber'],
           race: widget.parrotRace,
-          sex: val.data()['Sex'],
+          sex: val['Sex'],
         );
       }
     });

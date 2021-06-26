@@ -5,9 +5,9 @@ class Children {
   final String broodDate;
 
   Children({
-    this.ringNumber,
-    this.color,
-    this.gender,
-    this.broodDate,
+    required this.ringNumber,
+    required this.color,
+    required this.gender,
+    required this.broodDate,
   });
 }

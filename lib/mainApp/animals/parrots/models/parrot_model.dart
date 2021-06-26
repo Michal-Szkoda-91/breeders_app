@@ -15,14 +15,14 @@ class Parrot {
   final String pairRingNumber;
 
   Parrot({
-    this.race,
-    this.ringNumber,
-    this.color,
-    this.fission,
-    this.cageNumber,
-    this.sex,
-    this.notes,
-    this.pairRingNumber,
+    required this.race,
+    required this.ringNumber,
+    required this.color,
+    required this.fission,
+    required this.cageNumber,
+    required this.sex,
+    required this.notes,
+    required this.pairRingNumber,
   });
 }
 
@@ -37,9 +37,9 @@ class ParrotDataHelper {
 //
 //**************** */
   Future<dynamic> createParrotCollection({
-    String uid,
-    Parrot parrot,
-    BuildContext context,
+    required String uid,
+    required Parrot parrot,
+    required BuildContext context,
   }) async {
     final CollectionReference collectionReference =
         FirebaseFirestore.instance.collection(uid);
@@ -54,7 +54,7 @@ class ParrotDataHelper {
         .doc(parrot.ringNumber)
         .get();
 
-    if (snapShot == null || !snapShot.exists) {
+    if (!snapShot.exists) {
       await collectionReference
           .doc(parrot.race)
           .collection("Birds")
@@ -88,10 +88,10 @@ class ParrotDataHelper {
 //
 //**************** */
   Future<dynamic> updateParrot({
-    String uid,
-    Parrot parrot,
-    String pairRingNumber,
-    BuildContext context,
+    required String uid,
+    required Parrot parrot,
+    required String pairRingNumber,
+    required BuildContext context,
   }) async {
     final CollectionReference collectionReference =
         FirebaseFirestore.instance.collection(uid);
@@ -127,12 +127,12 @@ class ParrotDataHelper {
 //
 //
 //**************** */
-  Future<dynamic> updatedParrotsStatus({
+  Future<dynamic> updatedParrotsStatus(
     String uid,
     Parrot parrot,
     String pairRingNumber,
     BuildContext context,
-  }) async {
+  ) async {
     final CollectionReference collectionReference =
         FirebaseFirestore.instance.collection(uid);
 
@@ -210,8 +210,7 @@ class ParrotDataHelper {
         doc.reference.delete();
         //Delete picture from storage
         try {
-          final ref =
-              FirebaseStorage.instance.ref().child(doc.data()['Pic Url']);
+          final ref = FirebaseStorage.instance.ref().child(doc['Pic Url']);
           await ref.delete();
           print("pic deleted");
         } catch (e) {
@@ -242,8 +241,12 @@ class ParrotDataHelper {
 //
 //
 //**************** */
-  Future<void> deleteParrot(String uid, Parrot parrotToDelete,
-      BuildContext context, bool showDialog) async {
+  Future<void> deleteParrot({
+    required String uid,
+    required Parrot parrotToDelete,
+    required BuildContext context,
+    required bool showDialog,
+  }) async {
     final CollectionReference breedCollection =
         FirebaseFirestore.instance.collection(uid);
 

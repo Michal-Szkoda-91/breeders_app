@@ -1,4 +1,4 @@
-import 'package:draggable_scrollbar_sliver/draggable_scrollbar_sliver.dart';
+import 'package:draggable_scrollbar/draggable_scrollbar.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 
@@ -41,7 +41,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
-    RegExp _regExpPassword = RegExp(_passwordPattern);
+    RegExp _regExpPassword = RegExp(_passwordPattern.toString());
     final node = FocusScope.of(context);
     final key = GlobalKey<State<Tooltip>>();
     return _isLoading
@@ -52,212 +52,231 @@ class _RegisterScreenState extends State<RegisterScreen> {
             controller: _rrectController,
             heightScrollThumb: 100,
             backgroundColor: Theme.of(context).accentColor,
-            child: SingleChildScrollView(
+            child: ListView.builder(
               controller: _rrectController,
-              child: Column(
-                children: [
-                  const SizedBox(height: 10),
-                  Text(
-                    'Utwórz konto',
-                    style: TextStyle(
-                      color: Theme.of(context).textSelectionColor,
-                      fontSize: 24,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  const ImageContainerParrot(),
-                  const SizedBox(height: 10),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 30),
-                    child: Form(
-                      key: _formKey,
-                      child: Column(
-                        children: [
-                          //
-                          //******************************************************* */
-                          //Email Form
-                          TextFormField(
-                            // maxLength: 20,
-                            style: customTextStyle(context),
-                            cursorColor: Theme.of(context).textSelectionColor,
-                            decoration: _createInputDecoration(
-                              context,
-                              'Email',
-                              Icons.email,
-                              false,
-                              null,
-                            ),
-                            autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
-                            validator: (val) {
-                              if (val.isEmpty) {
-                                return 'Wprowadź email';
-                              } else if (!EmailValidator.validate(val)) {
-                                return 'Nieprawidłowy email';
-                              } else {
-                                return null;
-                              }
-                            },
-                            onChanged: (val) {
-                              setState(() {
-                                email = val;
-                              });
-                            },
-                            onEditingComplete: () => node.nextFocus(),
-                          ),
-                          const SizedBox(height: 10),
-                          //
-                          //******************************************************* */
-                          //Info Tooltip
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Align(
-                              alignment: Alignment.centerRight,
-                              child: Tooltip(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(15),
-                                  color: Theme.of(context).backgroundColor,
-                                ),
-                                textStyle: TextStyle(
-                                  fontSize: 16,
-                                  color: Theme.of(context).textSelectionColor,
-                                ),
-                                margin: EdgeInsets.all(10.0),
-                                padding: EdgeInsets.all(10.0),
-                                waitDuration: Duration(milliseconds: 0),
-                                showDuration: Duration(seconds: 8),
-                                message: _hint,
-                                preferBelow: false,
-                                key: key,
-                                child: GestureDetector(
-                                  behavior: HitTestBehavior.opaque,
-                                  onTap: () {
-                                    final dynamic tooltip = key.currentState;
-                                    tooltip?.ensureTooltipVisible();
-                                  },
-                                  child: Icon(
-                                    Icons.help_outline_outlined,
-                                    size: 20,
-                                    color: Theme.of(context).textSelectionColor,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          //
-                          //******************************************************* */
-                          //Password Form
-                          TextFormField(
-                            maxLength: 20,
-                            style: customTextStyle(context),
-                            cursorColor: Theme.of(context).textSelectionColor,
-                            decoration: _createInputDecoration(
-                              context,
-                              'Hasło',
-                              Icons.lock_outlined,
-                              true,
-                              1,
-                            ),
-                            autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
-                            validator: (val) {
-                              if (val.isEmpty) {
-                                return 'Wprowadź hasło';
-                              } else if (!_regExpPassword.hasMatch(val)) {
-                                return 'Nieprawidłowe hasło';
-                              } else {
-                                return null;
-                              }
-                            },
-                            obscureText: _passwordObscure,
-                            onChanged: (val) {
-                              setState(() {
-                                password = val;
-                              });
-                            },
-                            onEditingComplete: () => node.nextFocus(),
-                          ),
-                          const SizedBox(height: 10),
-                          //
-                          //******************************************************* */
-                          // Repeat Password Form
-                          TextFormField(
-                            maxLength: 20,
-                            style: customTextStyle(context),
-                            cursorColor: Theme.of(context).textSelectionColor,
-                            decoration: _createInputDecoration(
-                              context,
-                              'Potwierdź hasło',
-                              Icons.lock_outlined,
-                              true,
-                              2,
-                            ),
-                            autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
-
-                            validator: (val) {
-                              if (val.isEmpty) {
-                                return 'Potwierdź hasło';
-                              } else if (!_regExpPassword.hasMatch(val)) {
-                                return 'Nieprawidłowe hasło';
-                              } else if (val != password) {
-                                return 'Hasła muszą być identyczne';
-                              } else {
-                                return null;
-                              }
-                            },
-                            obscureText: _passwordSecondObscure,
-                            onChanged: (val) {
-                              setState(() {
-                                passwordRepeated = val;
-                              });
-                            },
-                            //dodac tu fnkcje jak po klikniecu zaloguj
-                            onEditingComplete: _createAccount,
-                          ),
-                          const SizedBox(height: 10),
-                          Row(
-                            children: [
-                              const Expanded(
-                                child: const SizedBox(),
-                              ),
-                              FlatButton(
-                                color: Theme.of(context).primaryColor,
-                                shape: StadiumBorder(),
-                                child: Text(
-                                  'Utwórz konto',
-                                  style: TextStyle(
-                                    color: Theme.of(context).textSelectionColor,
-                                  ),
-                                ),
-                                onPressed: _createAccount,
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 25),
-                          PolicyText(),
-                          const SizedBox(height: 10),
-                          Text(
-                            error,
-                            style: TextStyle(
-                              color: Colors.redAccent,
-                              fontSize: 16,
-                            ),
-                          ),
-                        ],
+              itemCount: 1,
+              itemBuilder: (context, index) {
+                return Column(
+                  children: [
+                    const SizedBox(height: 10),
+                    Text(
+                      'Utwórz konto',
+                      style: TextStyle(
+                        color:
+                            Theme.of(context).textSelectionTheme.selectionColor,
+                        fontSize: 24,
                       ),
                     ),
-                  )
-                ],
-              ),
+                    const SizedBox(height: 10),
+                    ImageContainerParrot(),
+                    const SizedBox(height: 10),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 30),
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          children: [
+                            //
+                            //******************************************************* */
+                            //Email Form
+                            TextFormField(
+                              // maxLength: 20,
+                              style: customTextStyle(context),
+                              cursorColor: Theme.of(context)
+                                  .textSelectionTheme
+                                  .selectionColor,
+                              decoration: _createInputDecoration(
+                                context,
+                                'Email',
+                                Icons.email,
+                                false,
+                                0,
+                              ),
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                              validator: (val) {
+                                if (val!.isEmpty) {
+                                  return 'Wprowadź email';
+                                } else if (!EmailValidator.validate(val)) {
+                                  return 'Nieprawidłowy email';
+                                } else {
+                                  return null;
+                                }
+                              },
+                              onChanged: (val) {
+                                setState(() {
+                                  email = val;
+                                });
+                              },
+                              onEditingComplete: () => node.nextFocus(),
+                            ),
+                            const SizedBox(height: 10),
+                            //
+                            //******************************************************* */
+                            //Info Tooltip
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Align(
+                                alignment: Alignment.centerRight,
+                                child: Tooltip(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(15),
+                                    color: Theme.of(context).backgroundColor,
+                                  ),
+                                  textStyle: TextStyle(
+                                    fontSize: 16,
+                                    color: Theme.of(context)
+                                        .textSelectionTheme
+                                        .selectionColor,
+                                  ),
+                                  margin: EdgeInsets.all(10.0),
+                                  padding: EdgeInsets.all(10.0),
+                                  waitDuration: Duration(milliseconds: 0),
+                                  showDuration: Duration(seconds: 8),
+                                  message: _hint,
+                                  preferBelow: false,
+                                  key: key,
+                                  child: GestureDetector(
+                                    behavior: HitTestBehavior.opaque,
+                                    onTap: () {
+                                      final dynamic tooltip = key.currentState;
+                                      tooltip?.ensureTooltipVisible();
+                                    },
+                                    child: Icon(
+                                      Icons.help_outline_outlined,
+                                      size: 20,
+                                      color: Theme.of(context)
+                                          .textSelectionTheme
+                                          .selectionColor,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            //
+                            //******************************************************* */
+                            //Password Form
+                            TextFormField(
+                              maxLength: 20,
+                              style: customTextStyle(context),
+                              cursorColor: Theme.of(context)
+                                  .textSelectionTheme
+                                  .selectionColor,
+                              decoration: _createInputDecoration(
+                                context,
+                                'Hasło',
+                                Icons.lock_outlined,
+                                true,
+                                1,
+                              ),
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                              validator: (val) {
+                                if (val!.isEmpty) {
+                                  return 'Wprowadź hasło';
+                                } else if (!_regExpPassword.hasMatch(val)) {
+                                  return 'Nieprawidłowe hasło';
+                                } else {
+                                  return null;
+                                }
+                              },
+                              obscureText: _passwordObscure,
+                              onChanged: (val) {
+                                setState(() {
+                                  password = val;
+                                });
+                              },
+                              onEditingComplete: () => node.nextFocus(),
+                            ),
+                            const SizedBox(height: 10),
+                            //
+                            //******************************************************* */
+                            // Repeat Password Form
+                            TextFormField(
+                              maxLength: 20,
+                              style: customTextStyle(context),
+                              cursorColor: Theme.of(context)
+                                  .textSelectionTheme
+                                  .selectionColor,
+                              decoration: _createInputDecoration(
+                                context,
+                                'Potwierdź hasło',
+                                Icons.lock_outlined,
+                                true,
+                                2,
+                              ),
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+
+                              validator: (val) {
+                                if (val!.isEmpty) {
+                                  return 'Potwierdź hasło';
+                                } else if (!_regExpPassword.hasMatch(val)) {
+                                  return 'Nieprawidłowe hasło';
+                                } else if (val != password) {
+                                  return 'Hasła muszą być identyczne';
+                                } else {
+                                  return null;
+                                }
+                              },
+                              obscureText: _passwordSecondObscure,
+                              onChanged: (val) {
+                                setState(() {
+                                  passwordRepeated = val;
+                                });
+                              },
+                              //dodac tu fnkcje jak po klikniecu zaloguj
+                              onEditingComplete: _createAccount,
+                            ),
+                            const SizedBox(height: 10),
+                            Row(
+                              children: [
+                                const Expanded(
+                                  child: const SizedBox(),
+                                ),
+                                TextButton(
+                                  style: TextButton.styleFrom(
+                                    backgroundColor:
+                                        Theme.of(context).primaryColor,
+                                    shape: StadiumBorder(),
+                                  ),
+                                  child: Text(
+                                    'Utwórz konto',
+                                    style: TextStyle(
+                                      color: Theme.of(context)
+                                          .textSelectionTheme
+                                          .selectionColor,
+                                    ),
+                                  ),
+                                  onPressed: _createAccount,
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 25),
+                            PolicyText(),
+                            const SizedBox(height: 10),
+                            Text(
+                              error,
+                              style: TextStyle(
+                                color: Colors.redAccent,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
+                );
+              },
             ),
           );
   }
 
   void _createAccount() async {
-    if (!_formKey.currentState.validate()) {
+    if (!_formKey.currentState!.validate()) {
       _showHint(_hint);
-    } else if (_formKey.currentState.validate()) {
+    } else if (_formKey.currentState!.validate()) {
       setState(() {
         _isLoading = true;
       });
@@ -274,7 +293,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 //Styl tekstu w inputach
   TextStyle customTextStyle(BuildContext context) {
     return TextStyle(
-      color: Theme.of(context).textSelectionColor,
+      color: Theme.of(context).textSelectionTheme.selectionColor,
       fontSize: 16,
     );
   }
@@ -290,7 +309,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       labelText: text,
       icon: Icon(
         icon,
-        color: Theme.of(context).textSelectionColor,
+        color: Theme.of(context).textSelectionTheme.selectionColor,
       ),
       labelStyle: TextStyle(
         color: Theme.of(context).hintColor,
@@ -311,7 +330,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               child: Icon(
                 Icons.remove_red_eye_outlined,
                 size: 20,
-                color: Theme.of(context).textSelectionColor,
+                color: Theme.of(context).textSelectionTheme.selectionColor,
               ),
             )
           : null,
@@ -329,7 +348,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           const Radius.circular(30.0),
         ),
         borderSide: BorderSide(
-          color: Theme.of(context).textSelectionColor,
+          color: Theme.of(context).canvasColor,
         ),
       ),
       errorBorder: OutlineInputBorder(
@@ -345,7 +364,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           const Radius.circular(30.0),
         ),
         borderSide: BorderSide(
-          color: Theme.of(context).textSelectionColor,
+          color: Theme.of(context).canvasColor,
         ),
       ),
     );

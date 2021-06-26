@@ -3,21 +3,24 @@ import 'package:flutter/material.dart';
 
 class GoogleButton extends StatelessWidget {
   const GoogleButton({
-    Key key,
-    @required this.function,
-  }) : super(key: key);
+    required this.function,
+  });
 
   final Function function;
 
   @override
   Widget build(BuildContext context) {
-    return RaisedButton(
-      onPressed: function,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(30),
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        shadowColor: Theme.of(context).accentColor,
+        primary: Theme.of(context).primaryColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30),
+        ),
       ),
-      splashColor: Theme.of(context).accentColor,
-      color: Theme.of(context).primaryColor,
+      onPressed: () {
+        function();
+      },
       child: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Row(
@@ -34,7 +37,7 @@ class GoogleButton extends StatelessWidget {
                 maxLines: 1,
                 style: TextStyle(
                   fontSize: 16,
-                  color: Theme.of(context).textSelectionColor,
+                  color: Theme.of(context).textSelectionTheme.selectionColor,
                 ),
               ),
             )

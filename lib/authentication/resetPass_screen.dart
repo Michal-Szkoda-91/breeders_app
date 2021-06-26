@@ -34,7 +34,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 Text(
                   "Wpisz adres Email na którym chesz ustawić nowę hasło, następnie wybierz RESET i sprawdź skrzynkę email",
                   style: TextStyle(
-                    color: Theme.of(context).textSelectionColor,
+                    color: Theme.of(context).textSelectionTheme.selectionColor,
                     fontSize: 16,
                   ),
                   textAlign: TextAlign.center,
@@ -44,7 +44,8 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   key: _formKey,
                   child: TextFormField(
                     style: customTextStyle(context),
-                    cursorColor: Theme.of(context).textSelectionColor,
+                    cursorColor:
+                        Theme.of(context).textSelectionTheme.selectionColor,
                     decoration: _createInputDecoration(
                       context,
                       'Email',
@@ -53,7 +54,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                     ),
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     validator: (val) {
-                      if (val.isEmpty) {
+                      if (val!.isEmpty) {
                         return 'Wprowadź email';
                       } else if (!EmailValidator.validate(val)) {
                         return 'Nieprawidłowy email';
@@ -73,24 +74,32 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    RaisedButton(
-                      color: Theme.of(context).primaryColor,
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: Theme.of(context).primaryColor,
+                      ),
                       child: Text(
                         "Anuluj",
                         style: TextStyle(
-                          color: Theme.of(context).textSelectionColor,
+                          color: Theme.of(context)
+                              .textSelectionTheme
+                              .selectionColor,
                         ),
                       ),
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
                     ),
-                    RaisedButton(
-                      color: Theme.of(context).primaryColor,
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: Theme.of(context).primaryColor,
+                      ),
                       child: Text(
                         "Reset Hasła",
                         style: TextStyle(
-                          color: Theme.of(context).textSelectionColor,
+                          color: Theme.of(context)
+                              .textSelectionTheme
+                              .selectionColor,
                         ),
                       ),
                       onPressed: () {
@@ -115,15 +124,19 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
       globalMethods.showMaterialDialog(context, "Email jest nie prawidłowy");
     } else {
       final _authReset = FirebaseAuth.instance;
-      await _authReset.sendPasswordResetEmail(email: email);
-      globalMethods.showMaterialDialog(context,
-          "Wysłano wiadomość resetującą hasło. Pamiętaj, że nowe musi odpowiadać wymaganiaom postawionym w aplikacji tzn. Zawierać conajmniej jedną małą i dużą literę oraz cyfrę.");
+      await _authReset.sendPasswordResetEmail(email: email).then((value) {
+        globalMethods.showMaterialDialog(context,
+            "Wysłano wiadomość resetującą hasło. Pamiętaj, że nowe musi odpowiadać wymaganiaom postawionym w aplikacji tzn. Zawierać conajmniej jedną małą i dużą literę oraz cyfrę.");
+      }).catchError((err) {
+        globalMethods.showMaterialDialog(context,
+            "Przepraszamy, nie udało się wysłać wiadomośći email! Sprawdź poprawność danych i spróbuj ponownie.");
+      });
     }
   }
 
   TextStyle customTextStyle(BuildContext context) {
     return TextStyle(
-      color: Theme.of(context).textSelectionColor,
+      color: Theme.of(context).textSelectionTheme.selectionColor,
       fontSize: 14,
     );
   }
@@ -139,7 +152,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
       labelText: text,
       icon: Icon(
         icon,
-        color: Theme.of(context).textSelectionColor,
+        color: Theme.of(context).textSelectionTheme.selectionColor,
       ),
       labelStyle: TextStyle(
         color: Theme.of(context).hintColor,
@@ -159,7 +172,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
           const Radius.circular(30.0),
         ),
         borderSide: BorderSide(
-          color: Theme.of(context).textSelectionColor,
+          color: Theme.of(context).canvasColor,
         ),
       ),
       errorBorder: OutlineInputBorder(
@@ -175,7 +188,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
           const Radius.circular(30.0),
         ),
         borderSide: BorderSide(
-          color: Theme.of(context).textSelectionColor,
+          color: Theme.of(context).canvasColor,
         ),
       ),
     );

@@ -1,6 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:breeders_app/services/auth.dart';
-import 'package:draggable_scrollbar_sliver/draggable_scrollbar_sliver.dart';
+import 'package:draggable_scrollbar/draggable_scrollbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -15,7 +15,7 @@ class IncubationInformationScreen extends StatefulWidget {
 
   final List<ParrotPairing> pairList;
 
-  const IncubationInformationScreen({this.pairList});
+  const IncubationInformationScreen({required this.pairList});
 
   @override
   _IncubationInformationScreenState createState() =>
@@ -67,6 +67,8 @@ class _IncubationInformationScreenState
       endDrawerEnableOpenDragGesture: false,
       backgroundColor: Colors.transparent,
       appBar: AppBar(
+        leading:
+            (ModalRoute.of(context)?.canPop ?? false) ? BackButton() : null,
         title: Container(
           width: MediaQuery.of(context).size.width * 30,
           child: AutoSizeText(
@@ -101,7 +103,9 @@ class _IncubationInformationScreenState
                               AutoSizeText(
                                 raceList[index],
                                 style: TextStyle(
-                                  color: Theme.of(context).textSelectionColor,
+                                  color: Theme.of(context)
+                                      .textSelectionTheme
+                                      .selectionColor,
                                 ),
                               ),
                               Row(
@@ -126,8 +130,7 @@ class _IncubationInformationScreenState
                                     decoration: BoxDecoration(
                                       color: Theme.of(context).backgroundColor,
                                       border: Border.all(
-                                        color: Theme.of(context)
-                                            .textSelectionColor,
+                                        color: Theme.of(context).canvasColor,
                                       ),
                                       borderRadius: BorderRadius.all(
                                         const Radius.circular(18),
@@ -139,8 +142,7 @@ class _IncubationInformationScreenState
                                         raceList[index],
                                       ).toString(),
                                       style: TextStyle(
-                                        color: Theme.of(context)
-                                            .textSelectionColor,
+                                        color: Theme.of(context).canvasColor,
                                         fontSize: 16,
                                       ),
                                     ),

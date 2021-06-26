@@ -15,18 +15,17 @@ class Wrapper extends StatefulWidget {
 
 class _WrapperState extends State<Wrapper> {
   Future<InitializationStatus> _initGoogleMobileAds() {
-    // TODO: Initialize Google Mobile Ads SDK
     return MobileAds.instance.initialize();
   }
 
-  User loggedUser;
+  late User? loggedUser;
 
   final auth = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
     loggedUser = auth.currentUser;
-    final user = Provider.of<UserLogged>(context);
+    final user = Provider.of<UserLogged?>(context);
     if (user == null) {
       return FutureBuilder(
         // Initialize FlutterFire:
@@ -45,7 +44,7 @@ class _WrapperState extends State<Wrapper> {
         },
       );
     } else {
-      return loggedUser.emailVerified
+      return loggedUser!.emailVerified
           ? ParrotsRaceListScreen()
           : VerificationEmailScreen();
     }

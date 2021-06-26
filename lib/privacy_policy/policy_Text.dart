@@ -3,9 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 class PolicyText extends StatelessWidget {
-  const PolicyText({
-    Key key,
-  }) : super(key: key);
+  const PolicyText({required});
 
   @override
   Widget build(BuildContext context) {

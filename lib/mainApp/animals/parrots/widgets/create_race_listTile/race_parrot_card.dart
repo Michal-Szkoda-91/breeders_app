@@ -1,19 +1,16 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
 
 import 'action_button.dart';
 
 class RaceParrotCard extends StatelessWidget {
   const RaceParrotCard(
-      {Key key,
-      @required this.index,
-      @required this.raceName,
-      @required this.parrotCount,
-      @required this.activeRace,
-      this.navToBreed,
-      this.navToPair})
-      : super(key: key);
+      {required this.index,
+      required this.raceName,
+      required this.parrotCount,
+      required this.activeRace,
+      required this.navToBreed,
+      required this.navToPair});
 
   final int index;
   final String raceName;
@@ -50,7 +47,9 @@ class RaceParrotCard extends StatelessWidget {
                           activeRace,
                           maxLines: 1,
                           style: TextStyle(
-                            color: Theme.of(context).textSelectionColor,
+                            color: Theme.of(context)
+                                .textSelectionTheme
+                                .selectionColor,
                           ),
                         ),
                         const SizedBox(height: 10.0),
@@ -61,7 +60,9 @@ class RaceParrotCard extends StatelessWidget {
                               "Ilość ptaków: ",
                               maxLines: 1,
                               style: TextStyle(
-                                color: Theme.of(context).textSelectionColor,
+                                color: Theme.of(context)
+                                    .textSelectionTheme
+                                    .selectionColor,
                               ),
                             ),
                             const SizedBox(width: 7.0),
@@ -72,7 +73,7 @@ class RaceParrotCard extends StatelessWidget {
                               decoration: BoxDecoration(
                                 color: Theme.of(context).primaryColor,
                                 border: Border.all(
-                                  color: Theme.of(context).textSelectionColor,
+                                  color: Theme.of(context).canvasColor,
                                 ),
                                 borderRadius: const BorderRadius.all(
                                   Radius.circular(18),
@@ -81,7 +82,9 @@ class RaceParrotCard extends StatelessWidget {
                               child: Text(
                                 parrotCount.toString(),
                                 style: TextStyle(
-                                  color: Theme.of(context).textSelectionColor,
+                                  color: Theme.of(context)
+                                      .textSelectionTheme
+                                      .selectionColor,
                                   fontSize: 20,
                                 ),
                               ),
@@ -96,8 +99,8 @@ class RaceParrotCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     ActionButton(
-                      color: Colors.pink[300],
-                      icon: MaterialCommunityIcons.heart_multiple,
+                      color: Colors.pink.shade300,
+                      icon: Icons.favorite_border_sharp,
                       name: "Parowanie",
                       padding: 5,
                       function: navToPair,
@@ -105,7 +108,7 @@ class RaceParrotCard extends StatelessWidget {
                     ),
                     ActionButton(
                       color: Colors.blueAccent,
-                      icon: MaterialCommunityIcons.home_group,
+                      icon: Icons.home,
                       name: "Hodowla",
                       padding: 5,
                       function: navToBreed,

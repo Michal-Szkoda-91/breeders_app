@@ -1,4 +1,4 @@
-import 'package:draggable_scrollbar_sliver/draggable_scrollbar_sliver.dart';
+import 'package:draggable_scrollbar/draggable_scrollbar.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 
@@ -11,7 +11,7 @@ import '../services/auth.dart';
 class SignInScreen extends StatefulWidget {
   final Function changePage;
 
-  const SignInScreen({Key key, this.changePage}) : super(key: key);
+  const SignInScreen({required this.changePage});
   @override
   _SignInScreenState createState() => _SignInScreenState();
 }
@@ -21,7 +21,7 @@ class _SignInScreenState extends State<SignInScreen> {
   final _formKey = GlobalKey<FormState>();
   ScrollController _rrectController = ScrollController();
 
-  bool _isLoading;
+  late bool _isLoading;
   @protected
   void initState() {
     super.initState();
@@ -40,7 +40,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
   @override
   Widget build(BuildContext context) {
-    RegExp _regExpPassword = RegExp(_passwordPattern);
+    RegExp _regExpPassword = RegExp(_passwordPattern.toString());
     final node = FocusScope.of(context);
     return _isLoading
         ? Center(
@@ -50,127 +50,133 @@ class _SignInScreenState extends State<SignInScreen> {
             controller: _rrectController,
             heightScrollThumb: 100,
             backgroundColor: Theme.of(context).accentColor,
-            child: SingleChildScrollView(
+            child: ListView.builder(
               controller: _rrectController,
-              child: Column(
-                children: [
-                  SizedBox(height: _sizedBoxHeight),
-                  Text(
-                    'Zaloguj się',
-                    style: TextStyle(
-                      color: Theme.of(context).textSelectionColor,
-                      fontSize: 24,
-                    ),
-                  ),
-                  SizedBox(height: _sizedBoxHeight),
-                  const ImageContainerParrot(),
-                  SizedBox(height: _sizedBoxHeight),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: Form(
-                      key: _formKey,
-                      child: Column(
-                        children: [
-                          //
-                          //******************************************************* */
-                          //Email Form
-                          TextFormField(
-                            style: customTextStyle(context),
-                            cursorColor: Theme.of(context).textSelectionColor,
-                            decoration: _createInputDecoration(
-                              context,
-                              'Email',
-                              Icons.email,
-                              false,
-                            ),
-                            autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
-                            validator: (val) {
-                              if (val.isEmpty) {
-                                return 'Wprowadź email';
-                              } else if (!EmailValidator.validate(val)) {
-                                return 'Nieprawidłowy email';
-                              } else {
-                                return null;
-                              }
-                            },
-                            onChanged: (val) {
-                              setState(() {
-                                email = val;
-                              });
-                            },
-                            onEditingComplete: () => node.nextFocus(),
-                          ),
-                          SizedBox(height: _sizedBoxHeight),
-                          //
-                          //******************************************************* */
-                          //Password Form
-                          TextFormField(
-                            maxLength: 20,
-                            style: customTextStyle(context),
-                            cursorColor: Theme.of(context).textSelectionColor,
-                            decoration: _createInputDecoration(
-                              context,
-                              'Hasło',
-                              Icons.lock_outlined,
-                              true,
-                            ),
-                            autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
-                            validator: (val) {
-                              if (val.isEmpty) {
-                                return 'Wprowadź hasło';
-                              } else if (!_regExpPassword.hasMatch(val)) {
-                                return 'Nieprawidłowe hasło';
-                              } else {
-                                return null;
-                              }
-                            },
-                            obscureText: _passwordObscure,
-                            onChanged: (val) {
-                              setState(() {
-                                password = val;
-                              });
-                            },
-                            onEditingComplete: confirmSignIn,
-                          ),
-                          SizedBox(height: _sizedBoxHeight),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: SizedBox(),
-                              ),
-                              RaisedButton(
-                                color: Theme.of(context).primaryColor,
-                                shape: StadiumBorder(),
-                                child: Text(
-                                  'Zaloguj się',
-                                  style: TextStyle(
-                                    color: Theme.of(context).textSelectionColor,
-                                  ),
-                                ),
-                                onPressed: confirmSignIn,
-                              ),
-                            ],
-                          ),
-                          Text(
-                            error,
-                            style: TextStyle(
-                              color: Colors.redAccent,
-                              fontSize: 16,
-                            ),
-                          ),
-                          SizedBox(height: _sizedBoxHeight),
-                          GoogleButton(function: _googleSingIn),
-                          const SizedBox(height: 45),
-                          RegisterQuestion(function: widget.changePage),
-                          ResetPassword(),
-                        ],
+              itemCount: 1,
+              itemBuilder: (context, index) {
+                return Column(
+                  children: [
+                    SizedBox(height: _sizedBoxHeight),
+                    Text(
+                      'Zaloguj się',
+                      style: TextStyle(
+                        color:
+                            Theme.of(context).textSelectionTheme.selectionColor,
+                        fontSize: 24,
                       ),
                     ),
-                  ),
-                ],
-              ),
+                    SizedBox(height: _sizedBoxHeight),
+                    ImageContainerParrot(),
+                    SizedBox(height: _sizedBoxHeight),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          children: [
+                            //
+                            //******************************************************* */
+                            //Email Form
+                            TextFormField(
+                              style: customTextStyle(context),
+                              cursorColor: Theme.of(context)
+                                  .textSelectionTheme
+                                  .selectionColor,
+                              decoration: _createInputDecoration(
+                                context,
+                                'Email',
+                                Icons.email,
+                                false,
+                              ),
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                              validator: (val) {
+                                if (val!.isEmpty) {
+                                  return 'Wprowadź email';
+                                } else if (!EmailValidator.validate(val)) {
+                                  return 'Nieprawidłowy email';
+                                } else {
+                                  return null;
+                                }
+                              },
+                              onChanged: (val) {
+                                setState(() {
+                                  email = val;
+                                });
+                              },
+                              onEditingComplete: () => node.nextFocus(),
+                            ),
+                            SizedBox(height: _sizedBoxHeight),
+                            //
+                            //******************************************************* */
+                            //Password Form
+                            TextFormField(
+                              maxLength: 20,
+                              style: customTextStyle(context),
+                              cursorColor: Theme.of(context)
+                                  .textSelectionTheme
+                                  .selectionColor,
+                              decoration: _createInputDecoration(
+                                context,
+                                'Hasło',
+                                Icons.lock_outlined,
+                                true,
+                              ),
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                              validator: (val) {
+                                if (val!.isEmpty) {
+                                  return 'Wprowadź hasło';
+                                } else if (!_regExpPassword.hasMatch(val)) {
+                                  return 'Nieprawidłowe hasło';
+                                } else {
+                                  return null;
+                                }
+                              },
+                              obscureText: _passwordObscure,
+                              onChanged: (val) {
+                                setState(() {
+                                  password = val;
+                                });
+                              },
+                              onEditingComplete: confirmSignIn,
+                            ),
+                            SizedBox(height: _sizedBoxHeight),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: SizedBox(),
+                                ),
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    shape: StadiumBorder(),
+                                    primary: Theme.of(context).primaryColor,
+                                  ),
+                                  child: Text(
+                                    'Zaloguj się',
+                                    style: TextStyle(
+                                      color: Theme.of(context)
+                                          .textSelectionTheme
+                                          .selectionColor,
+                                    ),
+                                  ),
+                                  onPressed: confirmSignIn,
+                                ),
+                              ],
+                            ),
+
+                            SizedBox(height: _sizedBoxHeight),
+                            GoogleButton(function: _googleSingIn),
+                            const SizedBox(height: 45),
+                            RegisterQuestion(function: widget.changePage),
+                            ResetPassword(),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              },
             ),
           );
   }
@@ -190,7 +196,7 @@ class _SignInScreenState extends State<SignInScreen> {
   }
 
   void confirmSignIn() async {
-    if (_formKey.currentState.validate()) {
+    if (_formKey.currentState!.validate()) {
       setState(() {
         _isLoading = true;
       });
@@ -208,7 +214,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
   TextStyle customTextStyle(BuildContext context) {
     return TextStyle(
-      color: Theme.of(context).textSelectionColor,
+      color: Theme.of(context).textSelectionTheme.selectionColor,
       fontSize: 14,
     );
   }
@@ -224,7 +230,7 @@ class _SignInScreenState extends State<SignInScreen> {
       labelText: text,
       icon: Icon(
         icon,
-        color: Theme.of(context).textSelectionColor,
+        color: Theme.of(context).textSelectionTheme.selectionColor,
       ),
       labelStyle: TextStyle(
         color: Theme.of(context).hintColor,
@@ -240,7 +246,7 @@ class _SignInScreenState extends State<SignInScreen> {
               child: Icon(
                 Icons.remove_red_eye_outlined,
                 size: 20,
-                color: Theme.of(context).textSelectionColor,
+                color: Theme.of(context).textSelectionTheme.selectionColor,
               ),
             )
           : null,
@@ -258,7 +264,7 @@ class _SignInScreenState extends State<SignInScreen> {
           const Radius.circular(30.0),
         ),
         borderSide: BorderSide(
-          color: Theme.of(context).textSelectionColor,
+          color: Theme.of(context).canvasColor,
         ),
       ),
       errorBorder: OutlineInputBorder(
@@ -274,7 +280,7 @@ class _SignInScreenState extends State<SignInScreen> {
           const Radius.circular(30.0),
         ),
         borderSide: BorderSide(
-          color: Theme.of(context).textSelectionColor,
+          color: Theme.of(context).canvasColor,
         ),
       ),
     );

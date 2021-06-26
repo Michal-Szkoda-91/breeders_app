@@ -5,7 +5,7 @@ class CreateInfoRow extends StatelessWidget {
   final String title;
   final String content;
 
-  const CreateInfoRow({Key key, this.title, this.content}) : super(key: key);
+  const CreateInfoRow({required this.title, required this.content});
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,7 @@ class CreateInfoRow extends StatelessWidget {
             child: AutoSizeText(content,
                 maxLines: 2,
                 style: TextStyle(
-                  color: Theme.of(context).textSelectionColor,
+                  color: Theme.of(context).textSelectionTheme.selectionColor,
                 ),
                 textAlign: TextAlign.right),
           ),

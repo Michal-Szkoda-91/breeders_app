@@ -8,12 +8,10 @@ class ContentColumn extends StatelessWidget {
   final int incubationLength;
 
   const ContentColumn(
-      {Key key,
-      this.showEggDate,
-      this.daysToBorn,
-      this.bornTimeString,
-      this.incubationLength})
-      : super(key: key);
+      {required this.showEggDate,
+      required this.daysToBorn,
+      required this.bornTimeString,
+      required this.incubationLength});
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +25,7 @@ class ContentColumn extends StatelessWidget {
                 showEggDate == "brak" ? "Brak jajek" : "Dni do wylęgu:",
                 maxLines: 1,
                 style: TextStyle(
-                  color: Theme.of(context).textSelectionColor,
+                  color: Theme.of(context).textSelectionTheme.selectionColor,
                 ),
               ),
             ),
@@ -44,7 +42,7 @@ class ContentColumn extends StatelessWidget {
                               ? Colors.red
                               : Theme.of(context).primaryColor,
                       border: Border.all(
-                        color: Theme.of(context).textSelectionColor,
+                        color: Theme.of(context).canvasColor,
                       ),
                       borderRadius: BorderRadius.all(
                         Radius.circular(18),
@@ -53,7 +51,8 @@ class ContentColumn extends StatelessWidget {
                     child: Text(
                       daysToBorn < 0 ? "-" : daysToBorn.toString(),
                       style: TextStyle(
-                        color: Theme.of(context).textSelectionColor,
+                        color:
+                            Theme.of(context).textSelectionTheme.selectionColor,
                         fontSize: 18,
                       ),
                     ),
@@ -81,7 +80,8 @@ class ContentColumn extends StatelessWidget {
                   Text(
                     "${incubationLength.toString()} dni",
                     style: TextStyle(
-                      color: Theme.of(context).textSelectionColor,
+                      color:
+                          Theme.of(context).textSelectionTheme.selectionColor,
                       fontSize:
                           MediaQuery.of(context).size.width < 330 ? 10 : 14,
                     ),
@@ -108,7 +108,8 @@ class ContentColumn extends StatelessWidget {
                   Text(
                     showEggDate,
                     style: TextStyle(
-                      color: Theme.of(context).textSelectionColor,
+                      color:
+                          Theme.of(context).textSelectionTheme.selectionColor,
                       fontSize:
                           MediaQuery.of(context).size.width < 330 ? 10 : 14,
                     ),
@@ -135,7 +136,8 @@ class ContentColumn extends StatelessWidget {
                   Text(
                     bornTimeString,
                     style: TextStyle(
-                      color: Theme.of(context).textSelectionColor,
+                      color:
+                          Theme.of(context).textSelectionTheme.selectionColor,
                       fontSize:
                           MediaQuery.of(context).size.width < 330 ? 10 : 14,
                     ),

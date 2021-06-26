@@ -3,10 +3,9 @@ import 'package:flutter/material.dart';
 
 class InfoParrowRow extends StatelessWidget {
   const InfoParrowRow({
-    Key key,
-    @required this.title,
-    @required this.content,
-  }) : super(key: key);
+    required this.title,
+    required this.content,
+  });
 
   final String title;
   final String content;
@@ -27,11 +26,11 @@ class InfoParrowRow extends StatelessWidget {
         AutoSizeText(
           content,
           style: TextStyle(
-            color: Theme.of(context).textSelectionColor,
+            color: Theme.of(context).textSelectionTheme.selectionColor,
           ),
         ),
         Divider(
-          color: Theme.of(context).textSelectionColor,
+          color: Theme.of(context).textSelectionTheme.selectionColor,
         )
       ],
     );

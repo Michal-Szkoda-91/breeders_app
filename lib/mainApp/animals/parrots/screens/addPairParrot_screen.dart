@@ -4,10 +4,9 @@ import 'package:path/path.dart';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:draggable_scrollbar_sliver/draggable_scrollbar_sliver.dart';
+import 'package:draggable_scrollbar/draggable_scrollbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
@@ -43,15 +42,16 @@ class _AddPairScreenState extends State<AddPairScreen> {
   List<Parrot> _allParrotList = [];
   List<Parrot> _maleParrotList = [];
   List<Parrot> _femaleParrotList = [];
-  String _choosenMaleParrotRingNumber;
-  String _choosenFeMaleParrotRingNumber;
-  Parrot _femaleParrotChoosen;
-  Parrot _maleParrotChoosen;
+  String _choosenMaleParrotRingNumber = '';
+  String _choosenFeMaleParrotRingNumber = '';
+  late Parrot _femaleParrotChoosen;
+  late Parrot _maleParrotChoosen;
   String _pairColor = "";
   String _pictureUrl = "brak";
   String _pairTime =
       DateFormat("yyyy-MM-dd", 'pl_PL').format(DateTime.now()).toString();
   bool _isLoading = false;
+  final _picker = ImagePicker();
 
   void _createListsOfParrot(List<Parrot> allParrotsList) {
     _maleParrotList.clear();
@@ -61,28 +61,28 @@ class _AddPairScreenState extends State<AddPairScreen> {
           parrot.race == widget.raceName &&
           parrot.pairRingNumber == "brak") {
         _maleParrotList.add(parrot);
-        if (_choosenMaleParrotRingNumber == null)
+        if (_choosenMaleParrotRingNumber == '')
           _choosenMaleParrotRingNumber = _maleParrotList[0].ringNumber;
       } else if (parrot.sex == "Samica" &&
           parrot.race == widget.raceName &&
           parrot.pairRingNumber == "brak") {
         _femaleParrotList.add(parrot);
-        if (_choosenFeMaleParrotRingNumber == null)
+        if (_choosenFeMaleParrotRingNumber == '')
           _choosenFeMaleParrotRingNumber = _femaleParrotList[0].ringNumber;
       }
     });
   }
 
-  ParrotPairing _createdPair;
+  late ParrotPairing _createdPair;
 
   //load stream only once
-  StreamBuilder _streamBuilder;
+  late StreamBuilder _streamBuilder;
   @override
   void initState() {
     super.initState();
     _streamBuilder = StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
-          .collection(firebaseUser.uid)
+          .collection(firebaseUser!.uid)
           .doc(widget.raceName)
           .collection("Birds")
           .snapshots(),
@@ -106,15 +106,14 @@ class _AddPairScreenState extends State<AddPairScreen> {
   }
 
   Future getImageFromGalery() async {
-    // ignore: deprecated_member_use
-    var image = await ImagePicker.pickImage(
+    PickedFile? image = await _picker.getImage(
         source: ImageSource.gallery, maxWidth: 750, maxHeight: 1000);
 
     if (image == null) {
       return;
     } else {
       setState(() {
-        _image = image;
+        _image = image as File;
         _isPhotoChoosen = false;
       });
     }
@@ -122,13 +121,13 @@ class _AddPairScreenState extends State<AddPairScreen> {
 
   Future getImageFromCamera() async {
     // ignore: deprecated_member_use
-    var image = await ImagePicker.pickImage(
+    PickedFile? image = await _picker.getImage(
         source: ImageSource.camera, maxWidth: 750, maxHeight: 1000);
     if (image == null) {
       return;
     } else {
       setState(() {
-        _image = image;
+        _image = image as File;
         _isPhotoChoosen = false;
       });
     }
@@ -142,6 +141,8 @@ class _AddPairScreenState extends State<AddPairScreen> {
       endDrawerEnableOpenDragGesture: false,
       backgroundColor: Colors.transparent,
       appBar: AppBar(
+        leading:
+            (ModalRoute.of(context)?.canPop ?? false) ? BackButton() : null,
         title: AutoSizeText(
           "Parowanie - ${widget.raceName}",
           maxLines: 1,
@@ -153,47 +154,56 @@ class _AddPairScreenState extends State<AddPairScreen> {
                 controller: _rrectController,
                 heightScrollThumb: 100,
                 backgroundColor: Theme.of(context).accentColor,
-                child: SingleChildScrollView(
+                child: ListView.builder(
                   controller: _rrectController,
-                  child: Column(
-                    children: [
-                      _createTitle(context),
-                      _streamBuilder,
-                      const SizedBox(height: 15),
-                      _createForm(context, node),
-                      const SizedBox(height: 15),
-                      buildRowCalendar(context),
-                      const SizedBox(height: 25),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          FlatButton(
-                            color: Theme.of(context).backgroundColor,
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: _createInfoText(
-                              context,
-                              'Anuluj',
+                  itemCount: 1,
+                  itemBuilder: (context, index) {
+                    return Column(
+                      children: [
+                        _createTitle(context),
+                        _streamBuilder,
+                        const SizedBox(height: 15),
+                        _createForm(context, node),
+                        const SizedBox(height: 15),
+                        buildRowCalendar(context),
+                        const SizedBox(height: 25),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            TextButton(
+                              style: TextButton.styleFrom(
+                                backgroundColor:
+                                    Theme.of(context).backgroundColor,
+                              ),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: _createInfoText(
+                                context,
+                                'Anuluj',
+                              ),
                             ),
-                          ),
-                          FlatButton(
-                            color: Theme.of(context).backgroundColor,
-                            onPressed: () {
-                              _sendPictureToStorage(context);
-                            },
-                            child: _createInfoText(
-                              context,
-                              'Utwórz parę',
+                            TextButton(
+                              style: TextButton.styleFrom(
+                                backgroundColor:
+                                    Theme.of(context).backgroundColor,
+                              ),
+                              onPressed: () {
+                                _sendPictureToStorage(context);
+                              },
+                              child: _createInfoText(
+                                context,
+                                'Utwórz parę',
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 200,
-                      )
-                    ],
-                  ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 200,
+                        )
+                      ],
+                    );
+                  },
                 ),
               ),
             )
@@ -216,15 +226,17 @@ class _AddPairScreenState extends State<AddPairScreen> {
               CircleAvatar(
                 radius: 50,
                 backgroundColor: Theme.of(context).backgroundColor,
-                child: CircleAvatar(
-                  radius: 46,
-                  backgroundImage:
-                      _image.path == 'assets/image/parrotsRace/parrot_pair.jpg'
-                          ? AssetImage(_image.path)
-                          : FileImage(
-                              _image,
-                            ),
-                ),
+                child: _image.path == 'assets/image/parrotsRace/parrot_pair.jpg'
+                    ? CircleAvatar(
+                        radius: 46,
+                        backgroundImage: AssetImage(_image.path),
+                      )
+                    : CircleAvatar(
+                        radius: 46,
+                        backgroundImage: NetworkImage(
+                          _image.path,
+                        ),
+                      ),
               ),
               Spacer(),
               Container(
@@ -234,7 +246,7 @@ class _AddPairScreenState extends State<AddPairScreen> {
                   maxLines: 1,
                   style: TextStyle(
                     fontSize: 24,
-                    color: Theme.of(context).textSelectionColor,
+                    color: Theme.of(context).textSelectionTheme.selectionColor,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -256,7 +268,8 @@ class _AddPairScreenState extends State<AddPairScreen> {
                     icon: Icon(
                       Icons.camera_alt_outlined,
                       size: 35,
-                      color: Theme.of(context).textSelectionColor,
+                      color:
+                          Theme.of(context).textSelectionTheme.selectionColor,
                     ),
                     onPressed: () {
                       setState(() {
@@ -277,7 +290,9 @@ class _AddPairScreenState extends State<AddPairScreen> {
                               icon: Icon(
                                 Icons.folder,
                                 size: 35,
-                                color: Theme.of(context).textSelectionColor,
+                                color: Theme.of(context)
+                                    .textSelectionTheme
+                                    .selectionColor,
                               ),
                               onPressed: () {
                                 getImageFromGalery();
@@ -296,7 +311,9 @@ class _AddPairScreenState extends State<AddPairScreen> {
                               icon: Icon(
                                 Icons.camera,
                                 size: 35,
-                                color: Theme.of(context).textSelectionColor,
+                                color: Theme.of(context)
+                                    .textSelectionTheme
+                                    .selectionColor,
                               ),
                               onPressed: () {
                                 getImageFromCamera();
@@ -332,16 +349,16 @@ class _AddPairScreenState extends State<AddPairScreen> {
 
   void _createParrotsList(AsyncSnapshot<QuerySnapshot> snapshot) {
     _allParrotList = [];
-    snapshot.data.docs.forEach((val) {
+    snapshot.data!.docs.forEach((val) {
       _allParrotList.add(Parrot(
         ringNumber: val.id,
-        cageNumber: val.data()['Cage number'],
-        color: val.data()['Colors'],
-        fission: val.data()['Fission'],
-        notes: val.data()['Notes'],
-        pairRingNumber: val.data()['PairRingNumber'],
+        cageNumber: val['Cage number'],
+        color: val['Colors'],
+        fission: val['Fission'],
+        notes: val['Notes'],
+        pairRingNumber: val['PairRingNumber'],
         race: widget.raceName,
-        sex: val.data()['Sex'],
+        sex: val['Sex'],
       ));
     });
   }
@@ -357,7 +374,7 @@ class _AddPairScreenState extends State<AddPairScreen> {
                 text: "Samica (0,1)",
                 alterText: "Brak Samic z wybranego gatunku",
                 color: Colors.pink,
-                icon: MaterialCommunityIcons.gender_female,
+                icon: Icons.female,
                 gender: _createDropdownButtonFeMale,
                 list: _femaleParrotList),
             const SizedBox(height: 15),
@@ -366,7 +383,7 @@ class _AddPairScreenState extends State<AddPairScreen> {
               text: "Samiec (1,0)",
               alterText: "Brak Samców z wybranego gatunku",
               color: Colors.blue,
-              icon: MaterialCommunityIcons.gender_male,
+              icon: Icons.male,
               gender: _createDropdownButtonMale,
               list: _maleParrotList,
             ),
@@ -385,16 +402,16 @@ class _AddPairScreenState extends State<AddPairScreen> {
         child: TextFormField(
           initialValue: _pairColor,
           style: customTextStyle(context),
-          cursorColor: Theme.of(context).textSelectionColor,
+          cursorColor: Theme.of(context).textSelectionTheme.selectionColor,
           maxLength: 30,
           maxLines: 1,
           decoration: _createInputDecoration(
             context,
             'Kolor Pary',
-            null,
+            Icons.ac_unit,
           ),
           validator: (val) {
-            if (val.isEmpty) {
+            if (val!.isEmpty) {
               return 'Uzupełnij dane';
             } else if (val.length > 30) {
               return 'Zbyt długi tekst';
@@ -416,19 +433,19 @@ class _AddPairScreenState extends State<AddPairScreen> {
   //Styl tekstu w inputach
   TextStyle customTextStyle(BuildContext context) {
     return TextStyle(
-      color: Theme.of(context).textSelectionColor,
+      color: Theme.of(context).textSelectionTheme.selectionColor,
       fontSize: 16,
     );
   }
 
   Card createCard(
-      {BuildContext context,
-      String text,
-      String alterText,
-      Color color,
-      IconData icon,
-      Function gender,
-      List list}) {
+      {required BuildContext context,
+      required String text,
+      required String alterText,
+      required Color color,
+      required IconData icon,
+      required Function gender,
+      required List list}) {
     return Card(
       color: Colors.transparent,
       shadowColor: Theme.of(context).cardColor,
@@ -457,7 +474,7 @@ class _AddPairScreenState extends State<AddPairScreen> {
       text,
       style: TextStyle(
         fontSize: 16,
-        color: Theme.of(context).textSelectionColor,
+        color: Theme.of(context).textSelectionTheme.selectionColor,
       ),
     );
   }
@@ -470,7 +487,7 @@ class _AddPairScreenState extends State<AddPairScreen> {
       icon: Icon(
         Icons.arrow_downward,
         size: 30,
-        color: Theme.of(context).textSelectionColor,
+        color: Theme.of(context).textSelectionTheme.selectionColor,
       ),
       iconSize: 24,
       elevation: 40,
@@ -503,7 +520,7 @@ class _AddPairScreenState extends State<AddPairScreen> {
               parrot.ringNumber,
               maxLines: 1,
               style: TextStyle(
-                color: Theme.of(context).textSelectionColor,
+                color: Theme.of(context).textSelectionTheme.selectionColor,
               ),
             ),
             SizedBox(height: 2),
@@ -511,11 +528,11 @@ class _AddPairScreenState extends State<AddPairScreen> {
               "Kolor: " + parrot.color,
               maxLines: 2,
               style: TextStyle(
-                color: Theme.of(context).textSelectionColor,
+                color: Theme.of(context).textSelectionTheme.selectionColor,
               ),
             ),
             Divider(
-              color: Theme.of(context).textSelectionColor,
+              color: Theme.of(context).textSelectionTheme.selectionColor,
               height: 7,
               thickness: 1,
             ),
@@ -533,7 +550,7 @@ class _AddPairScreenState extends State<AddPairScreen> {
       icon: Icon(
         Icons.arrow_downward,
         size: 30,
-        color: Theme.of(context).textSelectionColor,
+        color: Theme.of(context).textSelectionTheme.selectionColor,
       ),
       iconSize: 24,
       elevation: 40,
@@ -561,7 +578,7 @@ class _AddPairScreenState extends State<AddPairScreen> {
         Text(
           text,
           style: TextStyle(
-            color: Theme.of(context).textSelectionColor,
+            color: Theme.of(context).textSelectionTheme.selectionColor,
             fontSize: 24,
           ),
         ),
@@ -579,8 +596,10 @@ class _AddPairScreenState extends State<AddPairScreen> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        FlatButton(
-          color: Theme.of(context).backgroundColor,
+        TextButton(
+          style: TextButton.styleFrom(
+            backgroundColor: Theme.of(context).backgroundColor,
+          ),
           onPressed: () {
             showDatePicker(
               context: context,
@@ -592,7 +611,7 @@ class _AddPairScreenState extends State<AddPairScreen> {
             ).then((date) {
               setState(() {
                 _pairTime =
-                    DateFormat("yyyy-MM-dd", 'pl_PL').format(date).toString();
+                    DateFormat("yyyy-MM-dd", 'pl_PL').format(date!).toString();
               });
             });
           },
@@ -609,7 +628,8 @@ class _AddPairScreenState extends State<AddPairScreen> {
             child: Text(
               _pairTime,
               style: TextStyle(
-                  fontSize: 18, color: Theme.of(context).textSelectionColor),
+                  fontSize: 18,
+                  color: Theme.of(context).textSelectionTheme.selectionColor),
             ),
           ),
         ),
@@ -620,17 +640,17 @@ class _AddPairScreenState extends State<AddPairScreen> {
   InputDecoration _createInputDecoration(
       BuildContext context, String text, IconData icon) {
     return InputDecoration(
-      contentPadding:
-          EdgeInsets.symmetric(horizontal: icon == null ? 3 : 14, vertical: 10),
+      contentPadding: EdgeInsets.symmetric(
+          horizontal: icon == Icons.ac_unit ? 3 : 14, vertical: 10),
       counterStyle: TextStyle(
         height: double.minPositive,
       ),
       labelText: text,
-      icon: icon == null
+      icon: icon == Icons.ac_unit
           ? null
           : Icon(
               icon,
-              color: Theme.of(context).textSelectionColor,
+              color: Theme.of(context).textSelectionTheme.selectionColor,
             ),
       labelStyle: TextStyle(
         color: Theme.of(context).hintColor,
@@ -649,7 +669,7 @@ class _AddPairScreenState extends State<AddPairScreen> {
         ),
         borderSide: BorderSide(
           width: 3,
-          color: Theme.of(context).textSelectionColor,
+          color: Theme.of(context).canvasColor,
         ),
       ),
       errorBorder: OutlineInputBorder(
@@ -665,7 +685,7 @@ class _AddPairScreenState extends State<AddPairScreen> {
           const Radius.circular(5.0),
         ),
         borderSide: BorderSide(
-          color: Theme.of(context).textSelectionColor,
+          color: Theme.of(context).canvasColor,
         ),
       ),
     );
@@ -694,9 +714,9 @@ class _AddPairScreenState extends State<AddPairScreen> {
   }
 
   Future<void> _sendPictureToStorage(BuildContext context) async {
-    if (_choosenFeMaleParrotRingNumber == null ||
-        _choosenFeMaleParrotRingNumber == null ||
-        !_formKey.currentState.validate()) {
+    if (_choosenFeMaleParrotRingNumber == '' ||
+        _choosenFeMaleParrotRingNumber == '' ||
+        !_formKey.currentState!.validate()) {
       _globalMethods.showMaterialDialog(
           context, "Nie można utworzyć pary, niepełne dane");
       return;
@@ -736,13 +756,13 @@ class _AddPairScreenState extends State<AddPairScreen> {
         title: Text(
           "Uwaga!",
           style: TextStyle(
-            color: Theme.of(context).textSelectionColor,
+            color: Theme.of(context).textSelectionTheme.selectionColor,
           ),
         ),
         content: Text(
           "Nie wybrano zdjęcia par. Czy mimo to chcesz kontynuwać?",
           style: TextStyle(
-            color: Theme.of(context).textSelectionColor,
+            color: Theme.of(context).textSelectionTheme.selectionColor,
           ),
           textAlign: TextAlign.center,
         ),
@@ -753,12 +773,13 @@ class _AddPairScreenState extends State<AddPairScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                FlatButton(
+                TextButton(
                     child: AutoSizeText(
                       "Kontynuuj",
                       maxLines: 1,
                       style: TextStyle(
-                        color: Theme.of(context).textSelectionColor,
+                        color:
+                            Theme.of(context).textSelectionTheme.selectionColor,
                       ),
                     ),
                     onPressed: () async {
@@ -770,12 +791,13 @@ class _AddPairScreenState extends State<AddPairScreen> {
                         await _createPair(context);
                       });
                     }),
-                FlatButton(
+                TextButton(
                   child: AutoSizeText(
                     "Uzupełnij \nzdjęcie",
                     maxLines: 2,
                     style: TextStyle(
-                      color: Theme.of(context).textSelectionColor,
+                      color:
+                          Theme.of(context).textSelectionTheme.selectionColor,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -812,6 +834,9 @@ class _AddPairScreenState extends State<AddPairScreen> {
         pairingData: _pairTime,
         pairColor: _pairColor,
         picUrl: _pictureUrl,
+        isArchive: '',
+        race: '',
+        showEggsDate: '',
       );
       _maleParrotList.forEach((parrot) {
         if (parrot.ringNumber == _choosenMaleParrotRingNumber) {
@@ -827,7 +852,7 @@ class _AddPairScreenState extends State<AddPairScreen> {
     Navigator.of(context).pop();
     await _parrotPairDataHelper
         .createPairCollection(
-      uid: firebaseUser.uid,
+      uid: firebaseUser!.uid,
       pair: _createdPair,
       race: widget.raceName,
       maleParrot: _maleParrotChoosen,
@@ -835,8 +860,8 @@ class _AddPairScreenState extends State<AddPairScreen> {
       context: context,
     )
         .then((_) {
-      _choosenFeMaleParrotRingNumber = null;
-      _choosenMaleParrotRingNumber = null;
+      _choosenFeMaleParrotRingNumber = '';
+      _choosenMaleParrotRingNumber = '';
       setState(() {
         _isLoading = false;
       });

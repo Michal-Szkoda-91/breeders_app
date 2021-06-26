@@ -33,12 +33,14 @@ class _ParrotsListScreenState extends State<ParrotsListScreen> {
       endDrawerEnableOpenDragGesture: false,
       backgroundColor: Colors.transparent,
       appBar: AppBar(
+        leading:
+            (ModalRoute.of(context)?.canPop ?? false) ? BackButton() : null,
         title: Text(widget.raceName),
       ),
       body: MainBackground(
         child: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
-              .collection(firebaseUser.uid)
+              .collection(firebaseUser!.uid)
               .doc(widget.raceName)
               .collection("Birds")
               .snapshots(),
@@ -63,7 +65,9 @@ class _ParrotsListScreenState extends State<ParrotsListScreen> {
                         ? Text(
                             "Brak Papug",
                             style: TextStyle(
-                              color: Theme.of(context).textSelectionColor,
+                              color: Theme.of(context)
+                                  .textSelectionTheme
+                                  .selectionColor,
                             ),
                           )
                         : ParrotCard(createdParrotList: _createdParrotList),
@@ -78,16 +82,16 @@ class _ParrotsListScreenState extends State<ParrotsListScreen> {
 
   void _createParrotList(AsyncSnapshot<QuerySnapshot> snapshot) {
     _createdParrotList = [];
-    snapshot.data.docs.forEach((val) {
+    snapshot.data!.docs.forEach((val) {
       _createdParrotList.add(Parrot(
         ringNumber: val.id,
-        cageNumber: val.data()['Cage number'],
-        color: val.data()['Colors'],
-        fission: val.data()['Fission'],
-        notes: val.data()['Notes'],
-        pairRingNumber: val.data()['PairRingNumber'],
+        cageNumber: val['Cage number'],
+        color: val['Colors'],
+        fission: val['Fission'],
+        notes: val['Notes'],
+        pairRingNumber: val['PairRingNumber'],
         race: widget.raceName,
-        sex: val.data()['Sex'],
+        sex: val['Sex'],
       ));
     });
   }

@@ -110,7 +110,7 @@ class _EggExpansionTileState extends State<EggExpansionTile> {
             context, "brak połączenia z internetem.");
       } else {
         await _parrotPairDataHelper.setEggIncubationTime(
-            _firebaseUser.uid, widget.raceName, widget.pairID, date, context);
+            _firebaseUser!.uid, widget.raceName, widget.pairID, date, context);
         _countData();
         setState(() {
           _isLoading = false;

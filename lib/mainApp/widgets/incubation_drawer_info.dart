@@ -7,8 +7,6 @@ import '../animals/parrots/screens/incubationInfo_screen.dart';
 import 'IncubationCountsContainer.dart';
 
 class IncubationInformation extends StatefulWidget {
-  IncubationInformation({Key key}) : super(key: key);
-
   @override
   _IncubationInformationState createState() => _IncubationInformationState();
 }
@@ -23,13 +21,13 @@ class _IncubationInformationState extends State<IncubationInformation> {
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
       stream:
-          FirebaseFirestore.instance.collection(firebaseUser.uid).snapshots(),
+          FirebaseFirestore.instance.collection(firebaseUser!.uid).snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError)
           return Text(
             'Nie można wyświetlić informacji o inkubacji. Błąd danych.',
             style: TextStyle(
-              color: Theme.of(context).textSelectionColor,
+              color: Theme.of(context).textSelectionTheme.selectionColor,
               fontSize: 16,
             ),
             textAlign: TextAlign.center,
@@ -47,7 +45,8 @@ class _IncubationInformationState extends State<IncubationInformation> {
                 ? Text(
                     "Brak Par oczekujących na wylęg",
                     style: TextStyle(
-                      color: Theme.of(context).textSelectionColor,
+                      color:
+                          Theme.of(context).textSelectionTheme.selectionColor,
                       fontSize: 16,
                     ),
                     textAlign: TextAlign.center,
@@ -84,27 +83,26 @@ class _IncubationInformationState extends State<IncubationInformation> {
 
   void _loadInkubationData(AsyncSnapshot<QuerySnapshot> snapshot) {
     _incubationTimes = 0;
-    snapshot.data.docs.forEach((val) {
+    snapshot.data!.docs.forEach((val) {
       FirebaseFirestore.instance
-          .collection(firebaseUser.uid)
+          .collection(firebaseUser!.uid)
           .doc(val.id)
           .collection("Pairs")
           .get()
           .then((snap) {
         for (DocumentSnapshot doc in snap.docs) {
-          if (doc.data()['Show Eggs Date'] != "brak" &&
-              doc.data()['Is Archive'] != "true") {
+          if (doc['Show Eggs Date'] != "brak" && doc['Is Archive'] != "true") {
             _pairList.add(
               ParrotPairing(
                 id: doc.id,
-                femaleRingNumber: doc.data()['Female Ring'],
-                maleRingNumber: doc.data()['Male Ring'],
-                isArchive: doc.data()['Is Archive'],
-                pairColor: doc.data()['Pair Color'],
-                pairingData: doc.data()['Pairing Data'],
-                picUrl: doc.data()['Pic Url'],
-                race: doc.data()['Race'],
-                showEggsDate: doc.data()['Show Eggs Date'],
+                femaleRingNumber: doc['Female Ring'],
+                maleRingNumber: doc['Male Ring'],
+                isArchive: doc['Is Archive'],
+                pairColor: doc['Pair Color'],
+                pairingData: doc['Pairing Data'],
+                picUrl: doc['Pic Url'],
+                race: doc['Race'],
+                showEggsDate: doc['Show Eggs Date'],
               ),
             );
             setState(() {

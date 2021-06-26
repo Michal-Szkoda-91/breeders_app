@@ -1,5 +1,5 @@
+import 'package:breeders_app/mainApp/animals/parrots/models/parrot_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
 
 import '../../screens/editPair_screen.dart';
 import '../../models/pairing_model.dart';
@@ -12,10 +12,10 @@ class DeleteAndArchiveButtons extends StatefulWidget {
   final Function toArchive;
 
   DeleteAndArchiveButtons({
-    @required this.index,
-    this.pairList,
-    this.delete,
-    this.toArchive,
+    required this.index,
+    required this.pairList,
+    required this.delete,
+    required this.toArchive,
   });
 
   @override
@@ -34,8 +34,10 @@ class _DeleteAndArchiveButtonsState extends State<DeleteAndArchiveButtons> {
         Container(
           width: MediaQuery.of(context).size.width * 0.25,
           child: FittedBox(
-            child: FlatButton.icon(
-              padding: const EdgeInsets.all(5.0),
+            child: TextButton.icon(
+              style: TextButton.styleFrom(
+                padding: const EdgeInsets.all(5.0),
+              ),
               label: Text(
                 "Usuń",
                 style: TextStyle(
@@ -43,24 +45,32 @@ class _DeleteAndArchiveButtonsState extends State<DeleteAndArchiveButtons> {
                 ),
               ),
               icon: const Icon(
-                MaterialCommunityIcons.delete,
+                Icons.delete,
                 color: Colors.red,
               ),
               onPressed: () {
                 _globalMethods.showDeletingDialog(
-                  context,
-                  "Usuń parę",
-                  "Napewno usunąć wybraną parę z hodowli?",
-                  (_) {
-                    widget.delete(
-                      widget.pairList[widget.index].id,
-                      widget.pairList[widget.index].femaleRingNumber,
-                      widget.pairList[widget.index].maleRingNumber,
-                      widget.pairList[widget.index].picUrl,
-                    );
-                  },
-                  null,
-                );
+                    context: context,
+                    title: "Usuń parę",
+                    text: "Napewno usunąć wybraną parę z hodowli?",
+                    function: (_) {
+                      widget.delete(
+                        widget.pairList[widget.index].id,
+                        widget.pairList[widget.index].femaleRingNumber,
+                        widget.pairList[widget.index].maleRingNumber,
+                        widget.pairList[widget.index].picUrl,
+                      );
+                    },
+                    parrot: Parrot(
+                      race: '',
+                      ringNumber: 'brak',
+                      color: '',
+                      fission: '',
+                      cageNumber: '',
+                      sex: '',
+                      notes: '',
+                      pairRingNumber: '',
+                    ));
               },
             ),
           ),
@@ -69,8 +79,10 @@ class _DeleteAndArchiveButtonsState extends State<DeleteAndArchiveButtons> {
             ? Container(
                 width: MediaQuery.of(context).size.width * 0.33,
                 child: FittedBox(
-                  child: FlatButton.icon(
-                    padding: const EdgeInsets.all(5.0),
+                  child: TextButton.icon(
+                    style: TextButton.styleFrom(
+                      padding: const EdgeInsets.all(5.0),
+                    ),
                     label: Text(
                       "Archiwum",
                       style: TextStyle(
@@ -78,23 +90,32 @@ class _DeleteAndArchiveButtonsState extends State<DeleteAndArchiveButtons> {
                       ),
                     ),
                     icon: const Icon(
-                      MaterialCommunityIcons.archive,
+                      Icons.archive,
                       color: Colors.blueGrey,
                     ),
                     onPressed: () {
                       _globalMethods.showDeletingDialog(
-                        context,
-                        "Przenieś do archiwum",
-                        "Napewno ustawić wybraną parę jako nie aktywną? \nNie można cofnąć operacji",
-                        (_) {
-                          widget.toArchive(
-                            widget.pairList[widget.index].id,
-                            widget.pairList[widget.index].femaleRingNumber,
-                            widget.pairList[widget.index].maleRingNumber,
-                          );
-                        },
-                        null,
-                      );
+                          context: context,
+                          title: "Przenieś do archiwum",
+                          text:
+                              "Napewno ustawić wybraną parę jako nie aktywną? \nNie można cofnąć operacji",
+                          function: (_) {
+                            widget.toArchive(
+                              widget.pairList[widget.index].id,
+                              widget.pairList[widget.index].femaleRingNumber,
+                              widget.pairList[widget.index].maleRingNumber,
+                            );
+                          },
+                          parrot: Parrot(
+                            race: '',
+                            ringNumber: 'brak',
+                            color: '',
+                            fission: '',
+                            cageNumber: '',
+                            sex: '',
+                            notes: '',
+                            pairRingNumber: '',
+                          ));
                     },
                   ),
                 ),
@@ -104,8 +125,10 @@ class _DeleteAndArchiveButtonsState extends State<DeleteAndArchiveButtons> {
             ? Container(
                 width: MediaQuery.of(context).size.width * 0.25,
                 child: FittedBox(
-                  child: FlatButton.icon(
-                    padding: const EdgeInsets.all(5.0),
+                  child: TextButton.icon(
+                    style: TextButton.styleFrom(
+                      padding: const EdgeInsets.all(5.0),
+                    ),
                     label: Text(
                       "Edytuj",
                       style: TextStyle(
@@ -113,7 +136,7 @@ class _DeleteAndArchiveButtonsState extends State<DeleteAndArchiveButtons> {
                       ),
                     ),
                     icon: const Icon(
-                      MaterialCommunityIcons.circle_edit_outline,
+                      Icons.edit,
                       color: Colors.blueAccent,
                     ),
                     onPressed: () {
