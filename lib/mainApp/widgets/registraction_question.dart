@@ -20,9 +20,6 @@ class RegisterQuestion extends StatelessWidget {
           ),
         ),
         TextButton(
-          style: TextButton.styleFrom(
-            backgroundColor: Theme.of(context).backgroundColor,
-          ),
           child: Text(
             'Załóż je tutaj',
             style: TextStyle(

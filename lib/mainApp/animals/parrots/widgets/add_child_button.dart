@@ -45,7 +45,7 @@ class _AddPairChildButtonState extends State<AddPairChildButton> {
                     addFromChild: false,
                     parrot: Parrot(
                       race: '',
-                      ringNumber: '',
+                      ringNumber: 'brak',
                       color: '',
                       fission: '',
                       cageNumber: '',

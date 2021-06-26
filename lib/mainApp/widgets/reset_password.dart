@@ -18,9 +18,6 @@ class ResetPassword extends StatelessWidget {
             ),
           ),
           TextButton(
-            style: TextButton.styleFrom(
-              backgroundColor: Theme.of(context).backgroundColor,
-            ),
             child: Text(
               'Zresetuj je!',
               style: TextStyle(
