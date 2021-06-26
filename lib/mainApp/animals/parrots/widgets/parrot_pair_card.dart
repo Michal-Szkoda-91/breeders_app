@@ -33,16 +33,20 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
   _sortingBy(int index) {
     switch (index) {
       case 0:
-        setState(() {
-          widget.pairList
-              .sort((a, b) => b.pairingData.compareTo(a.pairingData));
-        });
+        if (mounted) {
+          setState(() {
+            widget.pairList
+                .sort((a, b) => b.pairingData.compareTo(a.pairingData));
+          });
+        }
         break;
       case 1:
-        setState(() {
-          widget.pairList.sort((a, b) =>
-              a.pairColor.toLowerCase().compareTo(b.pairColor.toLowerCase()));
-        });
+        if (mounted) {
+          setState(() {
+            widget.pairList.sort((a, b) =>
+                a.pairColor.toLowerCase().compareTo(b.pairColor.toLowerCase()));
+          });
+        }
         break;
       default:
         break;
@@ -130,17 +134,21 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
   Future<void> _deletePair(
       String id, String femaleId, String maleID, String picUrl) async {
     final _firebaseUser = FirebaseAuth.instance.currentUser;
-    setState(() {
-      _isLoading = true;
-    });
+    if (mounted) {
+      setState(() {
+        _isLoading = true;
+      });
+    }
     await _globalMethods.checkInternetConnection(context).then((result) async {
       if (!result) {
         Navigator.of(context).pop();
         _globalMethods.showMaterialDialog(
             context, "Brak połączenia z internetem.");
-        setState(() {
-          _isLoading = false;
-        });
+        if (mounted) {
+          setState(() {
+            _isLoading = false;
+          });
+        }
         return;
       } else {
         widget.parrotList.forEach((parr) {
@@ -151,6 +159,7 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
           }
         });
         Navigator.of(context).pop();
+
         await _parrotPairDataHelper.deletePair(
           uid: _firebaseUser!.uid,
           race: widget.race,
@@ -160,24 +169,30 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
           picUrl: picUrl,
           context: context,
         );
-        setState(() {
-          _isLoading = false;
-        });
+        if (mounted) {
+          setState(() {
+            _isLoading = false;
+          });
+        }
       }
     });
   }
 
   Future<void> _movingToArchive(
       String id, String femaleId, String maleID) async {
-    setState(() {
-      _isLoading = true;
-    });
+    if (mounted) {
+      setState(() {
+        _isLoading = true;
+      });
+    }
     final _firebaseUser = FirebaseAuth.instance.currentUser;
     await _globalMethods.checkInternetConnection(context).then((result) async {
       if (!result) {
-        setState(() {
-          _isLoading = false;
-        });
+        if (mounted) {
+          setState(() {
+            _isLoading = false;
+          });
+        }
         Navigator.of(context).pop();
         _globalMethods.showMaterialDialog(
             context, "Brak połączenia z internetem.");
@@ -198,9 +213,11 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
           chosenMaleParrot,
           context,
         );
-        setState(() {
-          _isLoading = false;
-        });
+        if (mounted) {
+          setState(() {
+            _isLoading = false;
+          });
+        }
       }
     });
   }

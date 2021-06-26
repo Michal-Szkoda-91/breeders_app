@@ -44,17 +44,19 @@ class _EggExpansionTileState extends State<EggExpansionTile> {
   }
 
   void _countData() {
-    setState(() {
-      if (widget.showEggDate != "brak") {
-        //subtraction data
-        DateTime today = DateTime.now();
-        DateTime incubationTime = DateTime.parse(widget.showEggDate);
-        DateTime bornTime =
-            incubationTime.add(Duration(days: _incubationDuration));
-        _daysToBorn = bornTime.difference(today).inDays + 1;
-        _bornTimeString = DateFormat("yyyy-MM-dd").format(bornTime);
-      }
-    });
+    if (mounted) {
+      setState(() {
+        if (widget.showEggDate != "brak") {
+          //subtraction data
+          DateTime today = DateTime.now();
+          DateTime incubationTime = DateTime.parse(widget.showEggDate);
+          DateTime bornTime =
+              incubationTime.add(Duration(days: _incubationDuration));
+          _daysToBorn = bornTime.difference(today).inDays + 1;
+          _bornTimeString = DateFormat("yyyy-MM-dd").format(bornTime);
+        }
+      });
+    }
   }
 
   @override
@@ -98,23 +100,29 @@ class _EggExpansionTileState extends State<EggExpansionTile> {
 
   Future<void> _setEggsDate(String date) async {
     final _firebaseUser = FirebaseAuth.instance.currentUser;
-    setState(() {
-      _isLoading = true;
-    });
+    if (mounted) {
+      setState(() {
+        _isLoading = true;
+      });
+    }
     await _globalMethods.checkInternetConnection(context).then((result) async {
       if (!result) {
-        setState(() {
-          _isLoading = false;
-        });
+        if (mounted) {
+          setState(() {
+            _isLoading = false;
+          });
+        }
         _globalMethods.showMaterialDialog(
             context, "brak połączenia z internetem.");
       } else {
         await _parrotPairDataHelper.setEggIncubationTime(
             _firebaseUser!.uid, widget.raceName, widget.pairID, date, context);
         _countData();
-        setState(() {
-          _isLoading = false;
-        });
+        if (mounted) {
+          setState(() {
+            _isLoading = false;
+          });
+        }
       }
     });
   }

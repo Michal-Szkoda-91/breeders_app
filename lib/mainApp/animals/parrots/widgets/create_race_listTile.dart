@@ -165,14 +165,18 @@ class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
   }
 
   Future<void> _deleteRace(String name) async {
-    setState(() {
-      _isLoading = true;
-    });
+    if (mounted) {
+      setState(() {
+        _isLoading = true;
+      });
+    }
     await _globalMethods.checkInternetConnection(context).then((result) async {
       if (!result) {
-        setState(() {
-          _isLoading = false;
-        });
+        if (mounted) {
+          setState(() {
+            _isLoading = false;
+          });
+        }
         Navigator.of(context).pop();
         _globalMethods.showMaterialDialog(
             context, "brak połączenia z internetem.");
@@ -181,9 +185,11 @@ class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
         await _parrotDataHelper.deleteRaceList(
             firebaseUser!.uid, name, context);
       }
-      setState(() {
-        _isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     });
   }
 }

@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:path/path.dart';
+import 'package:path/path.dart' as Path;
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:draggable_scrollbar/draggable_scrollbar.dart';
@@ -44,7 +44,8 @@ class _EditPairScreenState extends State<EditPairScreen> {
   ParrotPairDataHelper _parrotPairDataHelper = ParrotPairDataHelper();
   ScrollController _rrectController = ScrollController();
   bool _isPhotoChoosen = false;
-  File _image = new File('assets/image/parrotsRace/parrot_pair.jpg');
+  PickedFile? _image =
+      new PickedFile('assets/image/parrotsRace/parrot_pair.jpg');
   bool _isBlinking = false;
 
   late String _pairColor;
@@ -70,35 +71,41 @@ class _EditPairScreenState extends State<EditPairScreen> {
 
   Future getImageFromGalery() async {
     // ignore: deprecated_member_use
-    var image = await _picker.getImage(
+    PickedFile? image = await _picker.getImage(
       source: ImageSource.gallery,
       maxWidth: 750,
       maxHeight: 1000,
     );
-
     if (image == null) {
       return;
     } else {
-      setState(() {
-        _image = image as File;
-        _isPhotoChoosen = false;
-        _isPhotoChanged = true;
-      });
+      if (mounted) {
+        setState(() {
+          _image = image;
+          _isPhotoChoosen = false;
+          _isPhotoChanged = true;
+        });
+      }
     }
   }
 
   Future getImageFromCamera() async {
     // ignore: deprecated_member_use
-    var image = await _picker.getImage(
-        source: ImageSource.camera, maxWidth: 750, maxHeight: 1000);
+    PickedFile? image = await _picker.getImage(
+      source: ImageSource.camera,
+      maxWidth: 750,
+      maxHeight: 1000,
+    );
     if (image == null) {
       return;
     } else {
-      setState(() {
-        _image = image as File;
-        _isPhotoChoosen = false;
-        _isPhotoChanged = true;
-      });
+      if (mounted) {
+        setState(() {
+          _image = image;
+          _isPhotoChoosen = false;
+          _isPhotoChanged = true;
+        });
+      }
     }
   }
 
@@ -206,17 +213,25 @@ class _EditPairScreenState extends State<EditPairScreen> {
                         }
                       case ConnectionState.done:
                         {
-                          return CircleAvatar(
-                            radius: 46,
-                            child: widget.picUrl != "brak" && !_isPhotoChanged
-                                ? Image.network("$takenURL")
-                                : _image.path ==
-                                        'assets/image/parrotsRace/parrot_pair.jpg'
-                                    ? Image.asset(_image.path)
-                                    : Image.file(
-                                        _image,
-                                      ),
-                          );
+                          if (widget.picUrl != "brak" && !_isPhotoChanged) {
+                            return CircleAvatar(
+                              radius: 46,
+                              backgroundImage: NetworkImage("$takenURL"),
+                            );
+                          } else if (_image!.path ==
+                              'assets/image/parrotsRace/parrot_pair.jpg') {
+                            return CircleAvatar(
+                              radius: 46,
+                              backgroundImage: AssetImage(_image!.path),
+                            );
+                          } else {
+                            return CircleAvatar(
+                              radius: 46,
+                              backgroundImage: FileImage(
+                                File(_image!.path),
+                              ),
+                            );
+                          }
                         }
 
                       default:
@@ -261,9 +276,11 @@ class _EditPairScreenState extends State<EditPairScreen> {
                           Theme.of(context).textSelectionTheme.selectionColor,
                     ),
                     onPressed: () {
-                      setState(() {
-                        _isPhotoChoosen = true;
-                      });
+                      if (mounted) {
+                        setState(() {
+                          _isPhotoChoosen = true;
+                        });
+                      }
                     },
                   ),
                 ),
@@ -363,9 +380,11 @@ class _EditPairScreenState extends State<EditPairScreen> {
             }
           },
           onChanged: (val) {
-            setState(() {
-              _pairColor = val;
-            });
+            if (mounted) {
+              setState(() {
+                _pairColor = val;
+              });
+            }
           },
           onEditingComplete: () => node.nextFocus(),
         ),
@@ -443,10 +462,13 @@ class _EditPairScreenState extends State<EditPairScreen> {
               lastDate: DateTime(2050),
               cancelText: "Anuluj",
             ).then((date) {
-              setState(() {
-                _pairTime =
-                    DateFormat("yyyy-MM-dd", 'pl_PL').format(date!).toString();
-              });
+              if (mounted) {
+                setState(() {
+                  _pairTime = DateFormat("yyyy-MM-dd", 'pl_PL')
+                      .format(date!)
+                      .toString();
+                });
+              }
             });
           },
           child: _createInfoText(
@@ -534,15 +556,17 @@ class _EditPairScreenState extends State<EditPairScreen> {
 //
 //
 //Firebase methods
-  Future sendPicture(BuildContext context) async {
-    if (_image.path == 'assets/image/parrotsRace/parrot_pair.jpg') {
+  Future sendPicture() async {
+    if (_image!.path == 'assets/image/parrotsRace/parrot_pair.jpg') {
       return;
     } else {
-      setState(() {
-        _pictureUrl = basename(_image.path);
-      });
+      if (mounted) {
+        setState(() {
+          _pictureUrl = Path.basename(_image!.path);
+        });
+      }
       Reference ref = FirebaseStorage.instance.ref().child(_pictureUrl);
-      UploadTask uploadTask = ref.putFile(_image);
+      UploadTask uploadTask = ref.putFile(File(_image!.path));
       await uploadTask;
     }
   }
@@ -561,11 +585,13 @@ class _EditPairScreenState extends State<EditPairScreen> {
               context, "brak połączenia z internetem.");
           return;
         } else {
-          setState(() {
-            _isLoading = true;
-          });
-          await sendPicture(context).then((_) {
-            _editPair(context);
+          if (mounted) {
+            setState(() {
+              _isLoading = true;
+            });
+          }
+          await sendPicture().then((_) {
+            _editPair();
           }).catchError((error) {
             _globalMethods.showMaterialDialog(context,
                 "Nie udało się wczytać zdjęcia, Spróbuj ponownie póżniej");
@@ -575,7 +601,7 @@ class _EditPairScreenState extends State<EditPairScreen> {
     }
   }
 
-  Future<void> _editPair(BuildContext context) async {
+  Future<void> _editPair() async {
     await _parrotPairDataHelper
         .editPair(
       uid: firebaseUser!.uid,
@@ -597,13 +623,17 @@ class _EditPairScreenState extends State<EditPairScreen> {
           print("error occured $e");
         }
       }
-      setState(() {
-        _isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }).catchError((err) {
-      setState(() {
-        _isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     });
   }
 }

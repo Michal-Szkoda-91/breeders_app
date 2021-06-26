@@ -51,9 +51,11 @@ class _PairCircleAvatarState extends State<PairCircleAvatar> {
             {
               return GestureDetector(
                 onTap: () {
-                  setState(() {
-                    isMaximaze = !isMaximaze;
-                  });
+                  if (mounted) {
+                    setState(() {
+                      isMaximaze = !isMaximaze;
+                    });
+                  }
                 },
                 child: Align(
                   alignment: Alignment.topCenter,

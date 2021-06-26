@@ -45,9 +45,11 @@ class _CreatePairCardState extends State<CreatePairCard> {
             padding: const EdgeInsets.fromLTRB(5.0, 40.0, 5.0, 10.0),
             child: ExpansionTile(
               onExpansionChanged: (_) {
-                setState(() {
-                  _isExpanded = !_isExpanded;
-                });
+                if (mounted) {
+                  setState(() {
+                    _isExpanded = !_isExpanded;
+                  });
+                }
               },
               title: _isExpanded
                   ? Center()

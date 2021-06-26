@@ -131,7 +131,6 @@ class ParrotDataHelper {
     String uid,
     Parrot parrot,
     String pairRingNumber,
-    BuildContext context,
   ) async {
     final CollectionReference collectionReference =
         FirebaseFirestore.instance.collection(uid);
@@ -210,7 +209,7 @@ class ParrotDataHelper {
         doc.reference.delete();
         //Delete picture from storage
         try {
-          final ref = FirebaseStorage.instance.ref().child(doc['Pic Url']);
+          final ref = FirebaseStorage.instanceFor().ref().child(doc['Pic Url']);
           await ref.delete();
           print("pic deleted");
         } catch (e) {

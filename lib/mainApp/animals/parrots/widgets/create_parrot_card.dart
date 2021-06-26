@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../models/global_methods.dart';
-import '../screens/parrot_race_list_screen.dart';
 import '../models/parrot_model.dart';
 import 'addParrotButtonFromParrotList.dart';
 import 'create_parrot_card/genderIcon.dart';
@@ -33,38 +32,50 @@ class _ParrotCardState extends State<ParrotCard> {
   _sortingBy(int index) {
     switch (index) {
       case 1:
-        setState(() {
-          widget.createdParrotList
-              .sort((a, b) => a.ringNumber.compareTo(b.ringNumber));
-        });
+        if (mounted) {
+          setState(() {
+            widget.createdParrotList
+                .sort((a, b) => a.ringNumber.compareTo(b.ringNumber));
+          });
+        }
         break;
       case 2:
-        setState(() {
-          widget.createdParrotList.sort((a, b) => a.color.compareTo(b.color));
-        });
+        if (mounted) {
+          setState(() {
+            widget.createdParrotList.sort((a, b) => a.color.compareTo(b.color));
+          });
+        }
         break;
       case 3:
-        setState(() {
-          widget.createdParrotList
-              .sort((a, b) => a.fission.compareTo(b.fission));
-        });
+        if (mounted) {
+          setState(() {
+            widget.createdParrotList
+                .sort((a, b) => a.fission.compareTo(b.fission));
+          });
+        }
         break;
       case 4:
-        setState(() {
-          widget.createdParrotList
-              .sort((a, b) => a.cageNumber.compareTo(b.cageNumber));
-        });
+        if (mounted) {
+          setState(() {
+            widget.createdParrotList
+                .sort((a, b) => a.cageNumber.compareTo(b.cageNumber));
+          });
+        }
         break;
       case 5:
-        setState(() {
-          widget.createdParrotList
-              .sort((a, b) => a.pairRingNumber.compareTo(b.pairRingNumber));
-        });
+        if (mounted) {
+          setState(() {
+            widget.createdParrotList
+                .sort((a, b) => a.pairRingNumber.compareTo(b.pairRingNumber));
+          });
+        }
         break;
       case 6:
-        setState(() {
-          widget.createdParrotList.sort((a, b) => a.sex.compareTo(b.sex));
-        });
+        if (mounted) {
+          setState(() {
+            widget.createdParrotList.sort((a, b) => a.sex.compareTo(b.sex));
+          });
+        }
         break;
       default:
     }
@@ -293,14 +304,18 @@ class _ParrotCardState extends State<ParrotCard> {
 
   Future<void> _deleteParrot(String ring, Parrot parrot) async {
     final _firebaseUser = FirebaseAuth.instance.currentUser;
-    setState(() {
-      _isLoading = true;
-    });
+    if (mounted) {
+      setState(() {
+        _isLoading = true;
+      });
+    }
     await _globalMethods.checkInternetConnection(context).then((result) async {
       if (!result) {
-        setState(() {
-          _isLoading = false;
-        });
+        if (mounted) {
+          setState(() {
+            _isLoading = false;
+          });
+        }
         Navigator.of(context).pop();
         _globalMethods.showMaterialDialog(
             context, "brak połączenia z internetem.");
@@ -317,9 +332,11 @@ class _ParrotCardState extends State<ParrotCard> {
               context: context,
               showDialog: true);
         }
-        setState(() {
-          _isLoading = false;
-        });
+        if (mounted) {
+          setState(() {
+            _isLoading = false;
+          });
+        }
       }
     });
   }

@@ -63,9 +63,11 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                       }
                     },
                     onChanged: (val) {
-                      setState(() {
-                        email = val;
-                      });
+                      if (mounted) {
+                        setState(() {
+                          email = val;
+                        });
+                      }
                     },
                     onEditingComplete: () => _resetPass(email, context),
                   ),
