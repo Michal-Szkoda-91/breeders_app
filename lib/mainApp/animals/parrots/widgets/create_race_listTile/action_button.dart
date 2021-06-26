@@ -26,13 +26,17 @@ class _ActionButtonState extends State<ActionButton> {
   bool _isClicked = false;
 
   void _animation() {
-    setState(() {
-      _isClicked = !_isClicked;
-    });
-    Future.delayed(const Duration(milliseconds: 100)).then((_) {
+    if (mounted) {
       setState(() {
         _isClicked = !_isClicked;
       });
+    }
+    Future.delayed(const Duration(milliseconds: 100)).then((_) {
+      if (mounted) {
+        setState(() {
+          _isClicked = !_isClicked;
+        });
+      }
       widget.function(widget.raceName);
     });
   }

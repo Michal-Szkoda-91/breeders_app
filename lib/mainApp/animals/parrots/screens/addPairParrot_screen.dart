@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:path/path.dart';
+import 'package:path/path.dart' as Path;
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -36,7 +36,8 @@ class _AddPairScreenState extends State<AddPairScreen> {
   ParrotPairDataHelper _parrotPairDataHelper = ParrotPairDataHelper();
   ScrollController _rrectController = ScrollController();
   bool _isPhotoChoosen = false;
-  File _image = new File('assets/image/parrotsRace/parrot_pair.jpg');
+  PickedFile? _image =
+      new PickedFile('assets/image/parrotsRace/parrot_pair.jpg');
   bool _isBlinking = false;
 
   List<Parrot> _allParrotList = [];
@@ -107,29 +108,38 @@ class _AddPairScreenState extends State<AddPairScreen> {
 
   Future getImageFromGalery() async {
     PickedFile? image = await _picker.getImage(
-        source: ImageSource.gallery, maxWidth: 750, maxHeight: 1000);
-
+      source: ImageSource.gallery,
+      maxWidth: 750,
+      maxHeight: 1000,
+    );
     if (image == null) {
       return;
     } else {
-      setState(() {
-        _image = image as File;
-        _isPhotoChoosen = false;
-      });
+      if (mounted) {
+        setState(() {
+          _image = image;
+          _isPhotoChoosen = false;
+        });
+      }
     }
   }
 
   Future getImageFromCamera() async {
     // ignore: deprecated_member_use
     PickedFile? image = await _picker.getImage(
-        source: ImageSource.camera, maxWidth: 750, maxHeight: 1000);
+      source: ImageSource.camera,
+      maxWidth: 750,
+      maxHeight: 1000,
+    );
     if (image == null) {
       return;
     } else {
-      setState(() {
-        _image = image as File;
-        _isPhotoChoosen = false;
-      });
+      if (mounted) {
+        setState(() {
+          _image = image;
+          _isPhotoChoosen = false;
+        });
+      }
     }
   }
 
@@ -189,7 +199,7 @@ class _AddPairScreenState extends State<AddPairScreen> {
                                     Theme.of(context).backgroundColor,
                               ),
                               onPressed: () {
-                                _sendPictureToStorage(context);
+                                _sendPictureToStorage();
                               },
                               child: _createInfoText(
                                 context,
@@ -226,17 +236,18 @@ class _AddPairScreenState extends State<AddPairScreen> {
               CircleAvatar(
                 radius: 50,
                 backgroundColor: Theme.of(context).backgroundColor,
-                child: _image.path == 'assets/image/parrotsRace/parrot_pair.jpg'
-                    ? CircleAvatar(
-                        radius: 46,
-                        backgroundImage: AssetImage(_image.path),
-                      )
-                    : CircleAvatar(
-                        radius: 46,
-                        backgroundImage: NetworkImage(
-                          _image.path,
-                        ),
-                      ),
+                child:
+                    _image!.path == 'assets/image/parrotsRace/parrot_pair.jpg'
+                        ? CircleAvatar(
+                            radius: 46,
+                            backgroundImage: AssetImage(_image!.path),
+                          )
+                        : CircleAvatar(
+                            radius: 46,
+                            backgroundImage: FileImage(
+                              File(_image!.path),
+                            ),
+                          ),
               ),
               Spacer(),
               Container(
@@ -272,9 +283,11 @@ class _AddPairScreenState extends State<AddPairScreen> {
                           Theme.of(context).textSelectionTheme.selectionColor,
                     ),
                     onPressed: () {
-                      setState(() {
-                        _isPhotoChoosen = true;
-                      });
+                      if (mounted) {
+                        setState(() {
+                          _isPhotoChoosen = true;
+                        });
+                      }
                     },
                   ),
                 ),
@@ -420,9 +433,11 @@ class _AddPairScreenState extends State<AddPairScreen> {
             }
           },
           onChanged: (val) {
-            setState(() {
-              _pairColor = val;
-            });
+            if (mounted) {
+              setState(() {
+                _pairColor = val;
+              });
+            }
           },
           onEditingComplete: () => node.nextFocus(),
         ),
@@ -494,9 +509,11 @@ class _AddPairScreenState extends State<AddPairScreen> {
       dropdownColor: Theme.of(context).backgroundColor,
       underline: Container(height: 0),
       onChanged: (val) {
-        setState(() {
-          _choosenMaleParrotRingNumber = val;
-        });
+        if (mounted) {
+          setState(() {
+            _choosenMaleParrotRingNumber = val;
+          });
+        }
       },
       items: _maleParrotList.map((parrot) {
         return DropdownMenuItem(
@@ -557,9 +574,11 @@ class _AddPairScreenState extends State<AddPairScreen> {
       dropdownColor: Theme.of(context).backgroundColor,
       underline: Container(height: 0),
       onChanged: (val) {
-        setState(() {
-          _choosenFeMaleParrotRingNumber = val;
-        });
+        if (mounted) {
+          setState(() {
+            _choosenFeMaleParrotRingNumber = val;
+          });
+        }
       },
       items: _femaleParrotList.map((parrot) {
         return DropdownMenuItem(
@@ -609,10 +628,13 @@ class _AddPairScreenState extends State<AddPairScreen> {
               lastDate: DateTime(2050),
               cancelText: "Anuluj",
             ).then((date) {
-              setState(() {
-                _pairTime =
-                    DateFormat("yyyy-MM-dd", 'pl_PL').format(date!).toString();
-              });
+              if (mounted) {
+                setState(() {
+                  _pairTime = DateFormat("yyyy-MM-dd", 'pl_PL')
+                      .format(date!)
+                      .toString();
+                });
+              }
             });
           },
           child: _createInfoText(
@@ -700,20 +722,22 @@ class _AddPairScreenState extends State<AddPairScreen> {
 //
 //
 //Firebase methods
-  Future sendPicture(BuildContext context) async {
-    if (_image.path == 'assets/image/parrotsRace/parrot_pair.jpg') {
+  Future sendPicture() async {
+    if (_image!.path == 'assets/image/parrotsRace/parrot_pair.jpg') {
       return;
     } else {
-      setState(() {
-        _pictureUrl = basename(_image.path);
-      });
+      if (mounted) {
+        setState(() {
+          _pictureUrl = Path.basename(_image!.path);
+        });
+      }
       Reference ref = FirebaseStorage.instance.ref().child(_pictureUrl);
-      UploadTask uploadTask = ref.putFile(_image);
+      UploadTask uploadTask = ref.putFile(File(_image!.path));
       await uploadTask;
     }
   }
 
-  Future<void> _sendPictureToStorage(BuildContext context) async {
+  Future<void> _sendPictureToStorage() async {
     if (_choosenFeMaleParrotRingNumber == '' ||
         _choosenFeMaleParrotRingNumber == '' ||
         !_formKey.currentState!.validate()) {
@@ -729,14 +753,16 @@ class _AddPairScreenState extends State<AddPairScreen> {
               context, "brak połączenia z internetem.");
           return;
         } else {
-          if (_image.path == 'assets/image/parrotsRace/parrot_pair.jpg') {
-            _showPicQuestionDialog(context);
+          if (_image!.path == 'assets/image/parrotsRace/parrot_pair.jpg') {
+            _showPicQuestionDialog();
           } else {
-            setState(() {
-              _isLoading = true;
-            });
-            await sendPicture(context).then((_) {
-              _createPair(context);
+            if (mounted) {
+              setState(() {
+                _isLoading = true;
+              });
+            }
+            await sendPicture().then((_) async {
+              await _createPair();
             }).catchError((error) {
               _globalMethods.showMaterialDialog(context,
                   "Nie udało się wczytać zdjęcia, Spróbuj ponownie póżniej");
@@ -747,7 +773,7 @@ class _AddPairScreenState extends State<AddPairScreen> {
     }
   }
 
-  Future _showPicQuestionDialog(BuildContext context) {
+  Future<void> _showPicQuestionDialog() {
     return showDialog(
       barrierDismissible: false,
       context: context,
@@ -783,12 +809,14 @@ class _AddPairScreenState extends State<AddPairScreen> {
                       ),
                     ),
                     onPressed: () async {
-                      setState(() {
-                        _isLoading = true;
-                      });
+                      if (mounted) {
+                        setState(() {
+                          _isLoading = true;
+                        });
+                      }
                       Navigator.of(ctx).pop();
-                      await sendPicture(context).then((_) async {
-                        await _createPair(context);
+                      await sendPicture().then((_) async {
+                        await _createPair();
                       });
                     }),
                 TextButton(
@@ -796,8 +824,7 @@ class _AddPairScreenState extends State<AddPairScreen> {
                     "Uzupełnij \nzdjęcie",
                     maxLines: 2,
                     style: TextStyle(
-                      color:
-                          Theme.of(context).textSelectionTheme.selectionColor,
+                      color: Theme.of(ctx).textSelectionTheme.selectionColor,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -825,31 +852,32 @@ class _AddPairScreenState extends State<AddPairScreen> {
     );
   }
 
-  Future<void> _createPair(BuildContext context) async {
-    setState(() {
-      _createdPair = ParrotPairing(
-        id: "$_choosenFeMaleParrotRingNumber - $_choosenMaleParrotRingNumber - ${DateTime.now()}",
-        femaleRingNumber: _choosenFeMaleParrotRingNumber,
-        maleRingNumber: _choosenMaleParrotRingNumber,
-        pairingData: _pairTime,
-        pairColor: _pairColor,
-        picUrl: _pictureUrl,
-        isArchive: '',
-        race: '',
-        showEggsDate: '',
-      );
-      _maleParrotList.forEach((parrot) {
-        if (parrot.ringNumber == _choosenMaleParrotRingNumber) {
-          _maleParrotChoosen = parrot;
-        }
+  Future<void> _createPair() async {
+    if (mounted) {
+      setState(() {
+        _createdPair = ParrotPairing(
+          id: "$_choosenFeMaleParrotRingNumber - $_choosenMaleParrotRingNumber - ${DateTime.now()}",
+          femaleRingNumber: _choosenFeMaleParrotRingNumber,
+          maleRingNumber: _choosenMaleParrotRingNumber,
+          pairingData: _pairTime,
+          pairColor: _pairColor,
+          picUrl: _pictureUrl,
+          isArchive: '',
+          race: '',
+          showEggsDate: '',
+        );
+        _maleParrotList.forEach((parrot) {
+          if (parrot.ringNumber == _choosenMaleParrotRingNumber) {
+            _maleParrotChoosen = parrot;
+          }
+        });
+        _femaleParrotList.forEach((parrot) {
+          if (parrot.ringNumber == _choosenFeMaleParrotRingNumber) {
+            _femaleParrotChoosen = parrot;
+          }
+        });
       });
-      _femaleParrotList.forEach((parrot) {
-        if (parrot.ringNumber == _choosenFeMaleParrotRingNumber) {
-          _femaleParrotChoosen = parrot;
-        }
-      });
-    });
-    Navigator.of(context).pop();
+    }
     await _parrotPairDataHelper
         .createPairCollection(
       uid: firebaseUser!.uid,
@@ -862,48 +890,70 @@ class _AddPairScreenState extends State<AddPairScreen> {
         .then((_) {
       _choosenFeMaleParrotRingNumber = '';
       _choosenMaleParrotRingNumber = '';
-      setState(() {
-        _isLoading = false;
-      });
+      if (mounted) {
+        if (mounted) {
+          setState(() {
+            _isLoading = false;
+          });
+        }
+      }
     }).catchError((err) {
-      setState(() {
-        _isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     });
   }
 
   _blinkingCamera() async {
-    setState(() {
-      _isBlinking = true;
-    });
+    if (mounted) {
+      setState(() {
+        _isBlinking = true;
+      });
+    }
     await Future.delayed(const Duration(milliseconds: 200));
-    setState(() {
-      _isBlinking = false;
-    });
+    if (mounted) {
+      setState(() {
+        _isBlinking = false;
+      });
+    }
     await Future.delayed(const Duration(milliseconds: 200));
-    setState(() {
-      _isBlinking = true;
-    });
+    if (mounted) {
+      setState(() {
+        _isBlinking = true;
+      });
+    }
     await Future.delayed(const Duration(milliseconds: 200));
-    setState(() {
-      _isBlinking = false;
-    });
+    if (mounted) {
+      setState(() {
+        _isBlinking = false;
+      });
+    }
     await Future.delayed(const Duration(milliseconds: 200));
-    setState(() {
-      _isBlinking = true;
-    });
+    if (mounted) {
+      setState(() {
+        _isBlinking = true;
+      });
+    }
     await Future.delayed(const Duration(milliseconds: 200));
-    setState(() {
-      _isBlinking = false;
-    });
+    if (mounted) {
+      setState(() {
+        _isBlinking = false;
+      });
+    }
     await Future.delayed(const Duration(milliseconds: 200));
 
-    setState(() {
-      _isBlinking = true;
-    });
+    if (mounted) {
+      setState(() {
+        _isBlinking = true;
+      });
+    }
     await Future.delayed(const Duration(milliseconds: 200));
-    setState(() {
-      _isBlinking = false;
-    });
+    if (mounted) {
+      setState(() {
+        _isBlinking = false;
+      });
+    }
   }
 }

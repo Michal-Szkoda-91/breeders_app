@@ -106,9 +106,11 @@ class _PairListScreenState extends State<PairListScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: GestureDetector(
         onTap: () {
-          setState(() {
-            _showArchive = !_showArchive;
-          });
+          if (mounted) {
+            setState(() {
+              _showArchive = !_showArchive;
+            });
+          }
         },
         child: Container(
           width: double.infinity,

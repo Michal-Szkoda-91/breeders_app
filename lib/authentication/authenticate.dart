@@ -97,11 +97,13 @@ class _AuthenticateState extends State<Authenticate> {
   }
 
   void _changePage(index) {
-    setState(() {
-      this._controller.animateToPage(index,
-          duration: const Duration(milliseconds: 800), curve: Curves.ease);
-      this._page = index;
-    });
+    if (mounted) {
+      setState(() {
+        this._controller.animateToPage(index,
+            duration: const Duration(milliseconds: 800), curve: Curves.ease);
+        this._page = index;
+      });
+    }
   }
 
 //Dialog wyswietlany przy zamykaniu aplikacji

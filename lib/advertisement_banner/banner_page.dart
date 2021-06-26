@@ -22,9 +22,11 @@ class _BannerPageState extends State<BannerPage> {
       request: AdRequest(),
       listener: BannerAdListener(
         onAdLoaded: (_) {
-          setState(() {
-            _isAddLoaded = true;
-          });
+          if (mounted) {
+            setState(() {
+              _isAddLoaded = true;
+            });
+          }
         },
         onAdFailedToLoad: (ad, error) {
           // Releases an ad resource when it fails to load

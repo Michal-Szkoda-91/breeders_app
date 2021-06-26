@@ -72,24 +72,39 @@ class GlobalMethods {
   }
 
   showMaterialDialog(BuildContext context, String text) async {
-    await showDialog(
-      context: context,
-      builder: (ctx) => new AlertDialog(
-        backgroundColor: Theme.of(context).backgroundColor,
-        title: new Text(
-          "Informacja",
-          style: TextStyle(
-              color: Theme.of(context).textSelectionTheme.selectionColor),
-          textAlign: TextAlign.center,
-        ),
-        content: new Text(
-          text,
-          textAlign: TextAlign.center,
-          style: TextStyle(
-              color: Theme.of(context).textSelectionTheme.selectionColor),
-        ),
-      ),
-    );
+    return showDialog<void>(
+        context: context,
+        builder: (BuildContext ctx) {
+          return AlertDialog(
+            backgroundColor: Theme.of(context).backgroundColor,
+            title: new Text(
+              "Informacja",
+              style: TextStyle(
+                  color: Theme.of(context).textSelectionTheme.selectionColor),
+              textAlign: TextAlign.center,
+            ),
+            content: new Text(
+              text,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  color: Theme.of(context).textSelectionTheme.selectionColor),
+            ),
+            actions: [
+              TextButton(
+                child: Text(
+                  "OK",
+                  style: TextStyle(
+                    color: Theme.of(context).textSelectionTheme.selectionColor,
+                    fontSize: 20,
+                  ),
+                ),
+                onPressed: () {
+                  Navigator.of(ctx).pop();
+                },
+              ),
+            ],
+          );
+        });
   }
 
   Future<bool> checkInternetConnection(BuildContext context) async {

@@ -24,13 +24,17 @@ class _TableTitleRowState extends State<TableTitleRow> {
   bool _isClicked = false;
 
   void _animation() {
-    setState(() {
-      _isClicked = !_isClicked;
-    });
-    Future.delayed(const Duration(milliseconds: 50)).then((_) {
+    if (mounted) {
       setState(() {
         _isClicked = !_isClicked;
       });
+    }
+    Future.delayed(const Duration(milliseconds: 50)).then((_) {
+      if (mounted) {
+        setState(() {
+          _isClicked = !_isClicked;
+        });
+      }
       if (widget.sortedIndex != 0) widget.sorting(widget.sortedIndex);
     });
   }

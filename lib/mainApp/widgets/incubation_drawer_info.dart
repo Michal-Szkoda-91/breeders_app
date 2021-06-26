@@ -105,15 +105,19 @@ class _IncubationInformationState extends State<IncubationInformation> {
                 showEggsDate: doc['Show Eggs Date'],
               ),
             );
-            setState(() {
-              _incubationTimes++;
-            });
+            if (mounted) {
+              setState(() {
+                _incubationTimes++;
+              });
+            }
           }
         }
       }).then((_) {
-        setState(() {
-          _isLoading = false;
-        });
+        if (mounted) {
+          setState(() {
+            _isLoading = false;
+          });
+        }
       });
     });
   }

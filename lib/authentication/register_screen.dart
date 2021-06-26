@@ -104,9 +104,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 }
                               },
                               onChanged: (val) {
-                                setState(() {
-                                  email = val;
-                                });
+                                if (mounted) {
+                                  setState(() {
+                                    email = val;
+                                  });
+                                }
                               },
                               onEditingComplete: () => node.nextFocus(),
                             ),
@@ -182,9 +184,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               },
                               obscureText: _passwordObscure,
                               onChanged: (val) {
-                                setState(() {
-                                  password = val;
-                                });
+                                if (mounted) {
+                                  setState(() {
+                                    password = val;
+                                  });
+                                }
                               },
                               onEditingComplete: () => node.nextFocus(),
                             ),
@@ -221,9 +225,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               },
                               obscureText: _passwordSecondObscure,
                               onChanged: (val) {
-                                setState(() {
-                                  passwordRepeated = val;
-                                });
+                                if (mounted) {
+                                  setState(() {
+                                    passwordRepeated = val;
+                                  });
+                                }
                               },
                               //dodac tu fnkcje jak po klikniecu zaloguj
                               onEditingComplete: _createAccount,
@@ -277,13 +283,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
     if (!_formKey.currentState!.validate()) {
       _showHint(_hint);
     } else if (_formKey.currentState!.validate()) {
-      setState(() {
-        _isLoading = true;
-      });
-      await _auth.registerWithEmaAndPass(email, password, context).then((e) {
+      if (mounted) {
         setState(() {
-          _isLoading = false;
+          _isLoading = true;
         });
+      }
+      await _auth.registerWithEmaAndPass(email, password, context).then((e) {
+        if (mounted) {
+          setState(() {
+            _isLoading = false;
+          });
+        }
       }).catchError((e) {
         _isLoading = false;
       });
@@ -318,14 +328,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
       suffix: eyeIcon
           ? GestureDetector(
               onTap: () {
-                setState(() {
-                  if (change == 1) {
-                    _passwordObscure = !_passwordObscure;
-                  } else if (change == 2) {
-                    _passwordSecondObscure = !_passwordSecondObscure;
-                  } else
-                    return;
-                });
+                if (mounted) {
+                  setState(() {
+                    if (change == 1) {
+                      _passwordObscure = !_passwordObscure;
+                    } else if (change == 2) {
+                      _passwordSecondObscure = !_passwordSecondObscure;
+                    } else
+                      return;
+                  });
+                }
               },
               child: Icon(
                 Icons.remove_red_eye_outlined,

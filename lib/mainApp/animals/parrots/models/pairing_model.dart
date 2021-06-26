@@ -63,12 +63,18 @@ class ParrotPairDataHelper {
       "Is Archive": "false",
       "Show Eggs Date": "brak",
       "Pic Url": "${pair.picUrl}",
-    }, SetOptions(merge: true)).then((_) {
-      parrotList.updatedParrotsStatus(
-          uid, maleParrot, pair.femaleRingNumber, context);
-      parrotList.updatedParrotsStatus(
-          uid, femaleParrot, pair.maleRingNumber, context);
-      _globalMethods.showMaterialDialog(context, "Utworzono parę");
+    }, SetOptions(merge: true)).then((_) async {
+      await parrotList
+          .updatedParrotsStatus(uid, maleParrot, pair.femaleRingNumber)
+          .then((value) async {
+        await parrotList
+            .updatedParrotsStatus(uid, femaleParrot, pair.maleRingNumber)
+            .then((value) async {
+          Navigator.of(context).pop();
+          await _globalMethods.showMaterialDialog(context, "Utworzono parę");
+          print("Created Pair");
+        });
+      });
     }).catchError((err) {
       _globalMethods.showMaterialDialog(context,
           "Operacja nieudana, nieznany błąd, spróbuj ponownie pózniej");
@@ -160,13 +166,11 @@ class ParrotPairDataHelper {
         uid,
         maleParrot,
         "brak",
-        context,
       );
       parrotList.updatedParrotsStatus(
         uid,
         femaleParrot,
         "brak",
-        context,
       );
       _globalMethods.showMaterialDialog(context, "Usunięto wybraną parę papug");
       print("Pair deleted");
@@ -178,7 +182,7 @@ class ParrotPairDataHelper {
 
     //Delete picture from storage
     try {
-      final ref = FirebaseStorage.instance.ref().child(picUrl);
+      final ref = FirebaseStorage.instanceFor().ref().child(picUrl);
       await ref.delete();
       print("pic deleted");
     } catch (e) {
@@ -207,13 +211,11 @@ class ParrotPairDataHelper {
         uid,
         maleParrot,
         "brak",
-        context,
       );
       parrotList.updatedParrotsStatus(
         uid,
         femaleParrot,
         "brak",
-        context,
       );
       _globalMethods.showMaterialDialog(context, "Przesunięto do archiwum");
       print("Pair updated");

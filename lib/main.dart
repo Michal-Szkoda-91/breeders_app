@@ -57,7 +57,7 @@ class MyApp extends StatelessWidget {
         //   MyApp.routeName: (ctx) => MyApp(),
         ParrotsRaceListScreen.routeName: (ctx) => ParrotsRaceListScreen(),
         //   ParrotsListScreen.routeName: (ctx) => ParrotsListScreen(),
-        //   AddPairScreen.routeName: (ctx) => AddPairScreen(),
+        // AddPairScreen.routeName: (ctx) => AddPairScreen(),
         //   VerificationEmailScreen.routeName: (ctx) => VerificationEmailScreen(),
         //   HelpScreen.routeName: (ctx) => HelpScreen(),
         //   ResetPasswordScreen.routeName: (ctx) => ResetPasswordScreen(),

@@ -100,9 +100,11 @@ class _SignInScreenState extends State<SignInScreen> {
                                 }
                               },
                               onChanged: (val) {
-                                setState(() {
-                                  email = val;
-                                });
+                                if (mounted) {
+                                  setState(() {
+                                    email = val;
+                                  });
+                                }
                               },
                               onEditingComplete: () => node.nextFocus(),
                             ),
@@ -135,9 +137,11 @@ class _SignInScreenState extends State<SignInScreen> {
                               },
                               obscureText: _passwordObscure,
                               onChanged: (val) {
-                                setState(() {
-                                  password = val;
-                                });
+                                if (mounted) {
+                                  setState(() {
+                                    password = val;
+                                  });
+                                }
                               },
                               onEditingComplete: confirmSignIn,
                             ),
@@ -182,14 +186,18 @@ class _SignInScreenState extends State<SignInScreen> {
   }
 
   void _googleSingIn() async {
-    setState(() {
-      _isLoading = true;
-    });
+    if (mounted) {
+      setState(() {
+        _isLoading = true;
+      });
+    }
     dynamic result = await _auth.singInWithGoogle();
     if (result == null) {
-      setState(() {
-        _isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     } else {
       return;
     }
@@ -197,19 +205,25 @@ class _SignInScreenState extends State<SignInScreen> {
 
   void confirmSignIn() async {
     if (_formKey.currentState!.validate()) {
-      setState(() {
-        _isLoading = true;
-      });
-      await _auth.singInWithEmailAndPass(email, password, context).then((_) {
+      if (mounted) {
         setState(() {
-          _isLoading = false;
+          _isLoading = true;
         });
-      }).catchError((e) {
-        setState(() {
-          _isLoading = false;
-        });
-      });
+      }
     }
+    await _auth.singInWithEmailAndPass(email, password, context).then((_) {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }).catchError((e) {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    });
   }
 
   TextStyle customTextStyle(BuildContext context) {
@@ -239,9 +253,11 @@ class _SignInScreenState extends State<SignInScreen> {
       suffix: eyeIcon
           ? GestureDetector(
               onTap: () {
-                setState(() {
-                  _passwordObscure = !_passwordObscure;
-                });
+                if (mounted) {
+                  setState(() {
+                    _passwordObscure = !_passwordObscure;
+                  });
+                }
               },
               child: Icon(
                 Icons.remove_red_eye_outlined,

@@ -413,24 +413,26 @@ class _RaceListScreenState extends State<AddParrotScreen> {
         }
       },
       onChanged: (val) {
-        setState(() {
-          switch (mainValue) {
-            case 'parrotColor':
-              _parrotColor = val;
-              break;
-            case 'fission':
-              _fission = val;
-              break;
-            case 'cageNumber':
-              _cageNumber = val;
-              break;
-            case 'notes':
-              _notes = val;
-              break;
-            default:
-              return;
-          }
-        });
+        if (mounted) {
+          setState(() {
+            switch (mainValue) {
+              case 'parrotColor':
+                _parrotColor = val;
+                break;
+              case 'fission':
+                _fission = val;
+                break;
+              case 'cageNumber':
+                _cageNumber = val;
+                break;
+              case 'notes':
+                _notes = val;
+                break;
+              default:
+                return;
+            }
+          });
+        }
       },
       onEditingComplete: () => node.nextFocus(),
     );
@@ -452,10 +454,12 @@ class _RaceListScreenState extends State<AddParrotScreen> {
             min: 1,
             divisions: 2,
             onChanged: (val) {
-              setState(() {
-                _sex = val;
-                _sexName = _genderMap[val].toString();
-              });
+              if (mounted) {
+                setState(() {
+                  _sex = val;
+                  _sexName = _genderMap[val].toString();
+                });
+              }
             },
           ),
         ),
@@ -502,9 +506,11 @@ class _RaceListScreenState extends State<AddParrotScreen> {
               }
             },
             onChanged: (val) {
-              setState(() {
-                _country = val;
-              });
+              if (mounted) {
+                setState(() {
+                  _country = val;
+                });
+              }
             },
             onEditingComplete: () => node.nextFocus(),
           ),
@@ -537,9 +543,11 @@ class _RaceListScreenState extends State<AddParrotScreen> {
               }
             },
             onChanged: (val) {
-              setState(() {
-                _year = val;
-              });
+              if (mounted) {
+                setState(() {
+                  _year = val;
+                });
+              }
             },
             onEditingComplete: () => node.nextFocus(),
           ),
@@ -571,9 +579,11 @@ class _RaceListScreenState extends State<AddParrotScreen> {
               }
             },
             onChanged: (val) {
-              setState(() {
-                _symbol = val;
-              });
+              if (mounted) {
+                setState(() {
+                  _symbol = val;
+                });
+              }
             },
             onEditingComplete: () => node.nextFocus(),
           ),
@@ -607,9 +617,11 @@ class _RaceListScreenState extends State<AddParrotScreen> {
               }
             },
             onChanged: (val) {
-              setState(() {
-                _parrotNumber = val;
-              });
+              if (mounted) {
+                setState(() {
+                  _parrotNumber = val;
+                });
+              }
             },
             onEditingComplete: () => node.nextFocus(),
           ),
@@ -636,46 +648,56 @@ class _RaceListScreenState extends State<AddParrotScreen> {
       _globalMethods.showMaterialDialog(
           context, "Nie udało się dodać papugi, nie pełne dane");
     } else {
-      setState(() {
-        _isLoading = true;
-      });
+      if (mounted) {
+        setState(() {
+          _isLoading = true;
+        });
+      }
       await _globalMethods
           .checkInternetConnection(context)
           .then((result) async {
-        setState(() {
-          _ringNumber = "$_country-$_year-$_symbol-$_parrotNumber";
-        });
+        if (mounted) {
+          setState(() {
+            _ringNumber = "$_country-$_year-$_symbol-$_parrotNumber";
+          });
+        }
         if (!result) {
           _globalMethods.showMaterialDialog(
               context, "brak połączenia z internetem.");
-          setState(() {
-            _isLoading = false;
-          });
+          if (mounted) {
+            setState(() {
+              _isLoading = false;
+            });
+          }
           return;
         } else {
-          setState(() {
-            String race = "";
-            widget.pair.id == ''
-                ? race = widget.parrotMap['name']
-                : race = widget.race;
-            _createdParrot = Parrot(
-                race: race,
-                ringNumber: _ringNumber,
-                cageNumber: _cageNumber,
-                color: _parrotColor,
-                fission: _fission,
-                notes: _notes,
-                sex: _sexName,
-                pairRingNumber: '');
-          });
+          if (mounted) {
+            setState(() {
+              String race = "";
+              widget.pair.id == ''
+                  ? race = widget.parrotMap['name']
+                  : race = widget.race;
+              _createdParrot = Parrot(
+                  race: race,
+                  ringNumber: _ringNumber,
+                  cageNumber: _cageNumber,
+                  color: _parrotColor,
+                  fission: _fission,
+                  notes: _notes,
+                  sex: _sexName,
+                  pairRingNumber: '');
+            });
+          }
           await _parrotDataHelper.createParrotCollection(
             uid: _firebaseUser!.uid,
             parrot: _createdParrot,
             context: context,
           );
-          setState(() {
-            _isLoading = false;
-          });
+          if (mounted) {
+            setState(() {
+              _isLoading = false;
+            });
+          }
         }
       });
     }
@@ -689,32 +711,40 @@ class _RaceListScreenState extends State<AddParrotScreen> {
       _globalMethods.showMaterialDialog(
           context, "Nie udało się dodać papugi, nie pełne dane");
     } else {
-      setState(() {
-        _isLoading = true;
-      });
+      if (mounted) {
+        setState(() {
+          _isLoading = true;
+        });
+      }
       await _globalMethods
           .checkInternetConnection(context)
           .then((result) async {
-        setState(() {
-          _ringNumber = "$_country-$_year-$_symbol-$_parrotNumber";
-        });
+        if (mounted) {
+          setState(() {
+            _ringNumber = "$_country-$_year-$_symbol-$_parrotNumber";
+          });
+        }
 
         if (!result) {
           _globalMethods.showMaterialDialog(
               context, "brak połączenia z internetem.");
-          setState(() {
-            _isLoading = false;
-          });
+          if (mounted) {
+            setState(() {
+              _isLoading = false;
+            });
+          }
           return;
         } else {
-          setState(() {
-            _createdChild = Children(
-              broodDate: bornTime,
-              color: _parrotColor,
-              gender: _sexName,
-              ringNumber: _ringNumber,
-            );
-          });
+          if (mounted) {
+            setState(() {
+              _createdChild = Children(
+                broodDate: bornTime,
+                color: _parrotColor,
+                gender: _sexName,
+                ringNumber: _ringNumber,
+              );
+            });
+          }
 
           await _parrotPairDataHelper.createChild(
             uid: _firebaseUser!.uid,
@@ -723,9 +753,11 @@ class _RaceListScreenState extends State<AddParrotScreen> {
             pairId: widget.pair.id,
             context: context,
           );
-          setState(() {
-            _isLoading = false;
-          });
+          if (mounted) {
+            setState(() {
+              _isLoading = false;
+            });
+          }
         }
       });
     }
@@ -739,18 +771,22 @@ class _RaceListScreenState extends State<AddParrotScreen> {
       _globalMethods.showMaterialDialog(
           context, "Nie udało się edytować papugi, nie pełne dane");
     } else {
-      setState(() {
-        _isLoading = true;
-      });
+      if (mounted) {
+        setState(() {
+          _isLoading = true;
+        });
+      }
       await _globalMethods
           .checkInternetConnection(context)
           .then((result) async {
         if (!result) {
           _globalMethods.showMaterialDialog(
               context, "brak połączenia z internetem.");
-          setState(() {
-            _isLoading = false;
-          });
+          if (mounted) {
+            setState(() {
+              _isLoading = false;
+            });
+          }
           return;
         } else {
           setState(
@@ -795,9 +831,11 @@ class _RaceListScreenState extends State<AddParrotScreen> {
               );
             }
           });
-          setState(() {
-            _isLoading = false;
-          });
+          if (mounted) {
+            setState(() {
+              _isLoading = false;
+            });
+          }
         }
       });
     }
@@ -915,10 +953,13 @@ class _RaceListScreenState extends State<AddParrotScreen> {
               lastDate: DateTime(2050),
               cancelText: "Anuluj",
             ).then((date) {
-              setState(() {
-                bornTime =
-                    DateFormat("yyyy-MM-dd", 'pl_PL').format(date!).toString();
-              });
+              if (mounted) {
+                setState(() {
+                  bornTime = DateFormat("yyyy-MM-dd", 'pl_PL')
+                      .format(date!)
+                      .toString();
+                });
+              }
             });
           },
           child: _createInfoText(
