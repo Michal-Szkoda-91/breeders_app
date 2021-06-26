@@ -62,15 +62,21 @@ class _PairCircleAvatarState extends State<PairCircleAvatar> {
                         ? (MediaQuery.of(context).size.width / 2) - 10
                         : widget.size,
                     backgroundColor: Theme.of(context).primaryColor,
-                    child: CircleAvatar(
-                      radius: isMaximaze
-                          ? (MediaQuery.of(context).size.width / 2) - 15
-                          : widget.size - 3,
-                      child: widget.isAssets || takenURL == ''
-                          ? Image.asset(
-                              "assets/image/parrotsRace/parrot_pair.jpg")
-                          : Image.network("$takenURL"),
-                    ),
+                    child: widget.isAssets || takenURL == ''
+                        ? CircleAvatar(
+                            radius: isMaximaze
+                                ? (MediaQuery.of(context).size.width / 2) - 15
+                                : widget.size - 3,
+                            backgroundImage: AssetImage(
+                                "assets/image/parrotsRace/parrot_pair.jpg"),
+                            // NetworkImage("$takenURL"),
+                          )
+                        : CircleAvatar(
+                            radius: isMaximaze
+                                ? (MediaQuery.of(context).size.width / 2) - 15
+                                : widget.size - 3,
+                            backgroundImage: NetworkImage("$takenURL"),
+                          ),
                   ),
                 ),
               );

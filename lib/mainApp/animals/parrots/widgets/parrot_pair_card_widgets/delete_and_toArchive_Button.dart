@@ -63,7 +63,7 @@ class _DeleteAndArchiveButtonsState extends State<DeleteAndArchiveButtons> {
                     },
                     parrot: Parrot(
                       race: '',
-                      ringNumber: '',
+                      ringNumber: 'brak',
                       color: '',
                       fission: '',
                       cageNumber: '',
@@ -108,7 +108,7 @@ class _DeleteAndArchiveButtonsState extends State<DeleteAndArchiveButtons> {
                           },
                           parrot: Parrot(
                             race: '',
-                            ringNumber: '',
+                            ringNumber: 'brak',
                             color: '',
                             fission: '',
                             cageNumber: '',

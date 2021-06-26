@@ -69,9 +69,25 @@ class AuthService {
       User? user = result.user;
       return _userFromFirebaseUser(user!);
     } on FirebaseAuthException catch (e) {
+      print("______________$e");
       if (e.code == 'user-not-found') {
         _globalMethods.showMaterialDialog(
             context, "Użytkownik nie istnieje, załóż konto");
+      } else if (e.code == 'wrong-password') {
+        _globalMethods.showMaterialDialog(
+          context,
+          "Niepoprawne hasło!",
+        );
+      } else if (e.code == 'too-many-requests') {
+        _globalMethods.showMaterialDialog(
+          context,
+          "Zbyt wiele prób, spróbuj poźniej!",
+        );
+      } else {
+        _globalMethods.showMaterialDialog(
+          context,
+          "Coś poszło nie tak... spróbuj poźniej!",
+        );
       }
     } catch (e) {
       _globalMethods.showMaterialDialog(

@@ -124,9 +124,13 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
       globalMethods.showMaterialDialog(context, "Email jest nie prawidłowy");
     } else {
       final _authReset = FirebaseAuth.instance;
-      await _authReset.sendPasswordResetEmail(email: email);
-      globalMethods.showMaterialDialog(context,
-          "Wysłano wiadomość resetującą hasło. Pamiętaj, że nowe musi odpowiadać wymaganiaom postawionym w aplikacji tzn. Zawierać conajmniej jedną małą i dużą literę oraz cyfrę.");
+      await _authReset.sendPasswordResetEmail(email: email).then((value) {
+        globalMethods.showMaterialDialog(context,
+            "Wysłano wiadomość resetującą hasło. Pamiętaj, że nowe musi odpowiadać wymaganiaom postawionym w aplikacji tzn. Zawierać conajmniej jedną małą i dużą literę oraz cyfrę.");
+      }).catchError((err) {
+        globalMethods.showMaterialDialog(context,
+            "Przepraszamy, nie udało się wysłać wiadomośći email! Sprawdź poprawność danych i spróbuj ponownie.");
+      });
     }
   }
 

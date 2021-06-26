@@ -226,15 +226,17 @@ class _AddPairScreenState extends State<AddPairScreen> {
               CircleAvatar(
                 radius: 50,
                 backgroundColor: Theme.of(context).backgroundColor,
-                child: CircleAvatar(
-                  radius: 46,
-                  child:
-                      _image.path == 'assets/image/parrotsRace/parrot_pair.jpg'
-                          ? Image.asset(_image.path)
-                          : Image.network(
-                              _image.path,
-                            ),
-                ),
+                child: _image.path == 'assets/image/parrotsRace/parrot_pair.jpg'
+                    ? CircleAvatar(
+                        radius: 46,
+                        backgroundImage: AssetImage(_image.path),
+                      )
+                    : CircleAvatar(
+                        radius: 46,
+                        backgroundImage: NetworkImage(
+                          _image.path,
+                        ),
+                      ),
               ),
               Spacer(),
               Container(

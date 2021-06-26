@@ -131,6 +131,9 @@ class _VerificationEmailScreenState extends State<VerificationEmailScreen> {
     user = auth.currentUser!;
     await user.sendEmailVerification().then((_) {
       _globalMethods.showMaterialDialog(context, "Wysłano wiadomość ponownie");
+    }).catchError((err) {
+      _globalMethods.showMaterialDialog(context,
+          "Przepraszamy, Nie udało się wysłać wiadomości email. Spróbuj ponownie później.");
     });
   }
 

@@ -44,10 +44,12 @@ class GlobalMethods {
                 ),
               ),
               onPressed: () async {
-                if (parrot.ringNumber == '') {
+                if (parrot.ringNumber == 'brak') {
+                  print("GORA____________");
                   await function(title);
                 } else {
                   await function(title, parrot);
+                  print("DOL___________________________---");
                 }
               },
             ),
@@ -72,7 +74,7 @@ class GlobalMethods {
   showMaterialDialog(BuildContext context, String text) async {
     await showDialog(
       context: context,
-      builder: (_) => new AlertDialog(
+      builder: (ctx) => new AlertDialog(
         backgroundColor: Theme.of(context).backgroundColor,
         title: new Text(
           "Informacja",
@@ -94,7 +96,6 @@ class GlobalMethods {
     try {
       final result = await InternetAddress.lookup('google.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-        // Navigator.of(context).pop();
         return true;
       }
     } on SocketException catch (e) {

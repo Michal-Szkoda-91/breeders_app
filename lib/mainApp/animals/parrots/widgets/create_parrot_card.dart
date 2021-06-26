@@ -3,8 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../models/global_methods.dart';
-import '../models/parrot_model.dart';
 import '../screens/parrot_race_list_screen.dart';
+import '../models/parrot_model.dart';
 import 'addParrotButtonFromParrotList.dart';
 import 'create_parrot_card/genderIcon.dart';
 import 'create_parrot_card/table_content_notes_row.dart';
@@ -306,26 +306,21 @@ class _ParrotCardState extends State<ParrotCard> {
             context, "brak połączenia z internetem.");
       } else {
         if (widget.createdParrotList.length == 1) {
-          Navigator.of(context).pushNamedAndRemoveUntil(
-              ParrotsRaceListScreen.routeName, (Route<dynamic> route) => false);
-          await _parrotHelper.deleteRaceList(
-            context: context,
-            raceName: parrot.race,
-            uid: _firebaseUser!.uid,
-          );
+          Navigator.of(context).pop();
+          _globalMethods.showMaterialDialog(context,
+              "Nie można usunąć ostatniej papugi. Przejdź do listy ras i usuń całą rasę!");
         } else {
           Navigator.of(context).pop();
           await _parrotHelper.deleteParrot(
-            uid: _firebaseUser!.uid,
-            parrotToDelete: parrot,
-            showDialog: true,
-            context: context,
-          );
+              uid: _firebaseUser!.uid,
+              parrotToDelete: parrot,
+              context: context,
+              showDialog: true);
         }
+        setState(() {
+          _isLoading = false;
+        });
       }
-      setState(() {
-        _isLoading = false;
-      });
     });
   }
 }

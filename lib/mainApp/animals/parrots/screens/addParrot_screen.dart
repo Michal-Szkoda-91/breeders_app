@@ -171,7 +171,7 @@ class _RaceListScreenState extends State<AddParrotScreen> {
                                 //  Born Time
                                 //
                                 const SizedBox(height: 16.0),
-                                widget.pair.id == ''
+                                widget.pair.id != ''
                                     ? Row(
                                         children: [
                                           Spacer(),
@@ -252,7 +252,7 @@ class _RaceListScreenState extends State<AddParrotScreen> {
                             ),
                           ),
                           const SizedBox(height: 16.0),
-                          (widget.parrot.ringNumber == '' &&
+                          (widget.parrot.ringNumber == 'brak' &&
                                       widget.pair.id == '' ||
                                   widget.addFromChild)
                               ? _addParrotConfimButton(context)
@@ -795,7 +795,6 @@ class _RaceListScreenState extends State<AddParrotScreen> {
               );
             }
           });
-
           setState(() {
             _isLoading = false;
           });

@@ -163,11 +163,8 @@ class ParrotDataHelper {
 //
 //
 //**************** */
-  Future<void> deleteRaceList({
-    required String uid,
-    required String raceName,
-    required BuildContext context,
-  }) async {
+  Future<void> deleteRaceList(
+      String uid, String raceName, BuildContext context) async {
     final CollectionReference collectionReference =
         FirebaseFirestore.instance.collection(uid);
     //delete all birds in collection

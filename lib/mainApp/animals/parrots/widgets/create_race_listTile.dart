@@ -177,13 +177,13 @@ class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
         _globalMethods.showMaterialDialog(
             context, "brak połączenia z internetem.");
       } else {
-        setState(() {
-          _isLoading = false;
-        });
         Navigator.of(context).pop();
         await _parrotDataHelper.deleteRaceList(
-            uid: firebaseUser!.uid, raceName: name, context: context);
+            firebaseUser!.uid, name, context);
       }
+      setState(() {
+        _isLoading = false;
+      });
     });
   }
 }

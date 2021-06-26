@@ -44,6 +44,10 @@ class ExitButton extends StatelessWidget {
             ),
             child: AutoSizeText(
               'Zamknij',
+              style: TextStyle(
+                color:
+                    Theme.of(dialogContext).textSelectionTheme.selectionColor,
+              ),
             ),
             onPressed: () => exit(0),
           ),
@@ -53,6 +57,10 @@ class ExitButton extends StatelessWidget {
             ),
             child: AutoSizeText(
               'Anuluj',
+              style: TextStyle(
+                color:
+                    Theme.of(dialogContext).textSelectionTheme.selectionColor,
+              ),
             ),
             onPressed: () {
               Navigator.pop(ctx);

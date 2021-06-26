@@ -50,6 +50,10 @@ class LogoutButton extends StatelessWidget {
             ),
             child: AutoSizeText(
               'Wyloguj',
+              style: TextStyle(
+                color:
+                    Theme.of(dialogContext).textSelectionTheme.selectionColor,
+              ),
             ),
             onPressed: () async {
               Navigator.of(ctx).pop();
@@ -69,6 +73,10 @@ class LogoutButton extends StatelessWidget {
             ),
             child: AutoSizeText(
               'Anuluj',
+              style: TextStyle(
+                color:
+                    Theme.of(dialogContext).textSelectionTheme.selectionColor,
+              ),
             ),
             onPressed: () {
               Navigator.pop(ctx);

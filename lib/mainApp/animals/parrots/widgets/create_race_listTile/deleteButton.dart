@@ -43,7 +43,7 @@ class Deletebutton extends StatelessWidget {
               context: context,
               parrot: Parrot(
                   race: '',
-                  ringNumber: '',
+                  ringNumber: 'brak',
                   color: '',
                   fission: '',
                   cageNumber: '',

@@ -164,13 +164,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                 ),
                               ],
                             ),
-                            Text(
-                              error,
-                              style: TextStyle(
-                                color: Colors.redAccent,
-                                fontSize: 16,
-                              ),
-                            ),
+
                             SizedBox(height: _sizedBoxHeight),
                             GoogleButton(function: _googleSingIn),
                             const SizedBox(height: 45),
