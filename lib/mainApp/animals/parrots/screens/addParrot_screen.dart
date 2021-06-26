@@ -200,7 +200,7 @@ class _RaceListScreenState extends State<AddParrotScreen> {
                                 //
                                 //******************************************************* */
                                 //Fission
-                                widget.pair.id == 'brak'
+                                widget.pair.id == 'brak' || widget.pair.id != ''
                                     ? const Center()
                                     : customTextFormField(
                                         context: context,
@@ -213,12 +213,12 @@ class _RaceListScreenState extends State<AddParrotScreen> {
                                         maxLength: 50,
                                         initvalue: _fission,
                                       ),
-                                widget.pair.id == 'brak'
+                                widget.pair.id == 'brak' || widget.pair.id != ''
                                     ? const Center()
                                     : const SizedBox(height: 16.0), //
                                 //******************************************************* */
                                 //cage number
-                                widget.pair.id == 'brak'
+                                widget.pair.id == 'brak' || widget.pair.id != ''
                                     ? const Center()
                                     : customTextFormField(
                                         context: context,
@@ -230,13 +230,13 @@ class _RaceListScreenState extends State<AddParrotScreen> {
                                         maxLength: 30,
                                         initvalue: _cageNumber,
                                       ),
-                                widget.pair.id == 'brak'
+                                widget.pair.id == 'brak' || widget.pair.id != ''
                                     ? const Center()
                                     : const SizedBox(height: 16.0),
                                 //
                                 //******************************************************* */
                                 //notes
-                                widget.pair.id == 'brak'
+                                widget.pair.id == 'brak' || widget.pair.id != ''
                                     ? const Center()
                                     : customTextFormField(
                                         context: context,
