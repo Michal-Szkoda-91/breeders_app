@@ -48,8 +48,8 @@ class _RaceListScreenState extends State<AddParrotScreen> {
   String _ringNumber = "";
   String _parrotColor = "";
   String _fission = "";
-  String _cageNumber = "brak";
-  String _notes = "brak";
+  String _cageNumber = "";
+  String _notes = "";
   Map<double, String> _genderMap = {
     1.0: 'Samiec',
     2.0: 'Samica',
@@ -209,7 +209,7 @@ class _RaceListScreenState extends State<AddParrotScreen> {
                                         icon: Icons
                                             .star_border_purple500_outlined,
                                         mainValue: 'fission',
-                                        maxlines: 2,
+                                        maxlines: 1,
                                         maxLength: 50,
                                         initvalue: _fission,
                                       ),

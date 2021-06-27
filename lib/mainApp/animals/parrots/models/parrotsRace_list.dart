@@ -106,16 +106,16 @@ class ParrotsRace {
     },
     ///// P
     {
-      "url": 'assets/image/parrotsRace/Patagonka.jpg',
-      'name': 'Patagonka',
-      'lac': '( lac: Cyanoliseus patagonus )',
-      'icubationTime': 21
-    },
-    {
       "url": 'assets/image/parrotsRace/Papużka_falista.jpg',
       'name': 'Papużka_falista',
       'lac': '( lac: Melopsittacus )',
       'icubationTime': 18
+    },
+    {
+      "url": 'assets/image/parrotsRace/Patagonka.jpg',
+      'name': 'Patagonka',
+      'lac': '( lac: Cyanoliseus patagonus )',
+      'icubationTime': 21
     },
     {
       "url": 'assets/image/parrotsRace/Piona.jpg',
@@ -158,7 +158,7 @@ class ParrotsRace {
     /////// W
     {
       "url": 'assets/image/parrotsRace/Wróbliczka.jpg',
-      'name': 'Wróbliczka ',
+      'name': 'Wróbliczka',
       'lac': '( lac: Forpus )',
       'icubationTime': 21
     },
@@ -187,8 +187,8 @@ class ParrotsRace {
     'Modrolotka',
     'Nierozłączka',
     'Nimfa',
-    'Papużka_falista',
     'Patagonka',
+    'Papużka_falista',
     'Piona',
     'Rozella',
     'Rudosterka',

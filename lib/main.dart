@@ -4,7 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'fireInitialization/initWidget.dart';
 // import 'mainApp/animals/parrots/screens/parrot_race_list_screen.dart';
-// import 'authentication/resetPass_screen.dart';
+import 'authentication/resetPass_screen.dart';
 // import 'authentication/verification_screen.dart';
 // import 'mainApp/animals/parrots/screens/addPairParrot_screen.dart';
 // // import 'mainApp/animals/parrots/screens/editPair_screen.dart';
@@ -12,7 +12,7 @@ import 'fireInitialization/initWidget.dart';
 // // import 'mainApp/animals/parrots/screens/pairList_screen.dart';
 // // import 'mainApp/animals/parrots/screens/addParrot_screen.dart';
 // import 'mainApp/animals/parrots/screens/parrotsList.dart';
-// import 'help/help_screen.dart';
+import 'help/help_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,6 +30,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Aplikacja Hodowcy',
       theme: ThemeData(
+        brightness: Brightness.dark,
         primaryColor: Colors.blue[900],
         accentColor: Colors.blue[300],
         backgroundColor: Colors.blueAccent[200],
@@ -59,8 +60,8 @@ class MyApp extends StatelessWidget {
         //   ParrotsListScreen.routeName: (ctx) => ParrotsListScreen(),
         // AddPairScreen.routeName: (ctx) => AddPairScreen(),
         //   VerificationEmailScreen.routeName: (ctx) => VerificationEmailScreen(),
-        //   HelpScreen.routeName: (ctx) => HelpScreen(),
-        //   ResetPasswordScreen.routeName: (ctx) => ResetPasswordScreen(),
+        HelpScreen.routeName: (ctx) => HelpScreen(),
+        ResetPasswordScreen.routeName: (ctx) => ResetPasswordScreen(),
         //   // AddParrotScreen.routeName: (ctx) => AddParrotScreen(),
         //   // PairListScreen.routeName: (ctx) => PairListScreen(),
         //   // IncubationInformationScreen.routeName: (ctx) =>

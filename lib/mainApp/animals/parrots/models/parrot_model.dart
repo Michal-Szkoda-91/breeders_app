@@ -6,7 +6,7 @@ import '../../../../models/global_methods.dart';
 
 class Parrot {
   final String race;
-  final String ringNumber;
+  late final String ringNumber;
   final String color;
   final String fission;
   final String cageNumber;
