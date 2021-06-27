@@ -739,7 +739,7 @@ class _AddPairScreenState extends State<AddPairScreen> {
 
   Future<void> _sendPictureToStorage() async {
     if (_choosenFeMaleParrotRingNumber == '' ||
-        _choosenFeMaleParrotRingNumber == '' ||
+        _choosenMaleParrotRingNumber == '' ||
         !_formKey.currentState!.validate()) {
       _globalMethods.showMaterialDialog(
           context, "Nie można utworzyć pary, niepełne dane");

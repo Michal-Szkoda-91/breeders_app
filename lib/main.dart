@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'fireInitialization/initWidget.dart';
-import 'mainApp/animals/parrots/screens/parrot_race_list_screen.dart';
+// import 'mainApp/animals/parrots/screens/parrot_race_list_screen.dart';
 // import 'authentication/resetPass_screen.dart';
 // import 'authentication/verification_screen.dart';
 // import 'mainApp/animals/parrots/screens/addPairParrot_screen.dart';
@@ -55,7 +55,7 @@ class MyApp extends StatelessWidget {
       ),
       routes: {
         //   MyApp.routeName: (ctx) => MyApp(),
-        ParrotsRaceListScreen.routeName: (ctx) => ParrotsRaceListScreen(),
+        // ParrotsRaceListScreen.routeName: (ctx) => ParrotsRaceListScreen(),
         //   ParrotsListScreen.routeName: (ctx) => ParrotsListScreen(),
         // AddPairScreen.routeName: (ctx) => AddPairScreen(),
         //   VerificationEmailScreen.routeName: (ctx) => VerificationEmailScreen(),
