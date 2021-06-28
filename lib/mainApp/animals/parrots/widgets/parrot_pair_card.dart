@@ -1,3 +1,4 @@
+import 'package:diacritic/diacritic.dart';
 import 'package:draggable_scrollbar/draggable_scrollbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -44,7 +45,8 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
         if (mounted) {
           setState(() {
             widget.pairList.sort((a, b) =>
-                a.pairColor.toLowerCase().compareTo(b.pairColor.toLowerCase()));
+                removeDiacritics(a.pairColor.toLowerCase())
+                    .compareTo(removeDiacritics(b.pairColor.toLowerCase())));
           });
         }
         break;

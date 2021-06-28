@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:diacritic/diacritic.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -60,7 +61,8 @@ class _IncubationInformationState extends State<IncubationInformation> {
                         splashColor: Theme.of(context).primaryColor,
                         onTap: () {
                           Navigator.of(context).pop();
-                          _pairList.sort((a, b) => a.race.compareTo(b.race));
+                          _pairList.sort((a, b) => removeDiacritics(a.race)
+                              .compareTo(removeDiacritics(b.race)));
                           Navigator.push(
                             context,
                             MaterialPageRoute(

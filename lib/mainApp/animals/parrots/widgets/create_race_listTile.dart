@@ -43,6 +43,7 @@ class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
         backgroundColor: Theme.of(context).accentColor,
         child: ListView.builder(
           itemCount: widget.activeRaceList.length,
+          physics: ScrollPhysics(),
           controller: _rrectController,
           itemBuilder: (context, index) {
             return StreamBuilder<QuerySnapshot>(
