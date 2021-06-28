@@ -1,3 +1,4 @@
+import 'package:diacritic/diacritic.dart';
 import 'package:draggable_scrollbar/draggable_scrollbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -34,39 +35,43 @@ class _ParrotCardState extends State<ParrotCard> {
       case 1:
         if (mounted) {
           setState(() {
-            widget.createdParrotList
-                .sort((a, b) => a.ringNumber.compareTo(b.ringNumber));
+            widget.createdParrotList.sort((a, b) =>
+                removeDiacritics(a.ringNumber)
+                    .compareTo(removeDiacritics(b.ringNumber)));
           });
         }
         break;
       case 2:
         if (mounted) {
           setState(() {
-            widget.createdParrotList.sort((a, b) => a.color.compareTo(b.color));
+            widget.createdParrotList.sort((a, b) =>
+                removeDiacritics(a.color).compareTo(removeDiacritics(b.color)));
           });
         }
         break;
       case 3:
         if (mounted) {
           setState(() {
-            widget.createdParrotList
-                .sort((a, b) => a.fission.compareTo(b.fission));
+            widget.createdParrotList.sort((a, b) => removeDiacritics(a.fission)
+                .compareTo(removeDiacritics(b.fission)));
           });
         }
         break;
       case 4:
         if (mounted) {
           setState(() {
-            widget.createdParrotList
-                .sort((a, b) => a.cageNumber.compareTo(b.cageNumber));
+            widget.createdParrotList.sort((a, b) =>
+                removeDiacritics(a.cageNumber)
+                    .compareTo(removeDiacritics(b.cageNumber)));
           });
         }
         break;
       case 5:
         if (mounted) {
           setState(() {
-            widget.createdParrotList
-                .sort((a, b) => a.pairRingNumber.compareTo(b.pairRingNumber));
+            widget.createdParrotList.sort((a, b) =>
+                removeDiacritics(a.pairRingNumber)
+                    .compareTo(removeDiacritics(b.pairRingNumber)));
           });
         }
         break;

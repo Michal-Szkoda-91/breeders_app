@@ -39,6 +39,7 @@ class _AddPairScreenState extends State<AddPairScreen> {
   PickedFile? _image =
       new PickedFile('assets/image/parrotsRace/parrot_pair.jpg');
   bool _isBlinking = false;
+  bool _isDataReady = false;
 
   List<Parrot> _allParrotList = [];
   List<Parrot> _maleParrotList = [];
@@ -76,34 +77,32 @@ class _AddPairScreenState extends State<AddPairScreen> {
 
   late ParrotPairing _createdPair;
 
-  //load stream only once
-  late StreamBuilder _streamBuilder;
-  @override
-  void initState() {
-    super.initState();
-    _streamBuilder = StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance
-          .collection(firebaseUser!.uid)
-          .doc(widget.raceName)
-          .collection("Birds")
-          .snapshots(),
-      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        if (snapshot.hasError) return Text('Błąd danych');
-        switch (snapshot.connectionState) {
-          case ConnectionState.waiting:
-            return Center(
-              child: Padding(
-                padding: const EdgeInsets.all(50.0),
-                child: CircularProgressIndicator(),
-              ),
-            );
-          default:
-            _createParrotsList(snapshot);
-            _createListsOfParrot(_allParrotList);
-            return _createContent(context);
-        }
-      },
-    );
+  Future<void> getParrotsFromStream() async {
+    FirebaseFirestore.instance
+        .collection(firebaseUser!.uid)
+        .doc(widget.raceName)
+        .collection("Birds")
+        .get()
+        .then((snapshot) {
+      _allParrotList = [];
+      snapshot.docs.forEach((val) {
+        _allParrotList.add(Parrot(
+          ringNumber: val.id,
+          cageNumber: val['Cage number'],
+          color: val['Colors'],
+          fission: val['Fission'],
+          notes: val['Notes'],
+          pairRingNumber: val['PairRingNumber'],
+          race: widget.raceName,
+          sex: val['Sex'],
+        ));
+      });
+    }).then((value) {
+      _createListsOfParrot(_allParrotList);
+      setState(() {
+        _isDataReady = true;
+      });
+    });
   }
 
   Future getImageFromGalery() async {
@@ -125,7 +124,6 @@ class _AddPairScreenState extends State<AddPairScreen> {
   }
 
   Future getImageFromCamera() async {
-    // ignore: deprecated_member_use
     PickedFile? image = await _picker.getImage(
       source: ImageSource.camera,
       maxWidth: 750,
@@ -144,8 +142,15 @@ class _AddPairScreenState extends State<AddPairScreen> {
   }
 
   @override
+  void initState() {
+    getParrotsFromStream();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final node = FocusScope.of(context);
+    // getParrotsFromStream();
     return Scaffold(
       endDrawer: CustomDrawer(auth: _auth),
       endDrawerEnableOpenDragGesture: false,
@@ -171,7 +176,11 @@ class _AddPairScreenState extends State<AddPairScreen> {
                     return Column(
                       children: [
                         _createTitle(context),
-                        _streamBuilder,
+                        !_isDataReady
+                            ? Center(
+                                child: CircularProgressIndicator(),
+                              )
+                            : _createContent(context),
                         const SizedBox(height: 15),
                         _createForm(context, node),
                         const SizedBox(height: 15),
@@ -358,22 +367,6 @@ class _AddPairScreenState extends State<AddPairScreen> {
         ],
       ),
     );
-  }
-
-  void _createParrotsList(AsyncSnapshot<QuerySnapshot> snapshot) {
-    _allParrotList = [];
-    snapshot.data!.docs.forEach((val) {
-      _allParrotList.add(Parrot(
-        ringNumber: val.id,
-        cageNumber: val['Cage number'],
-        color: val['Colors'],
-        fission: val['Fission'],
-        notes: val['Notes'],
-        pairRingNumber: val['PairRingNumber'],
-        race: widget.raceName,
-        sex: val['Sex'],
-      ));
-    });
   }
 
   Padding _createContent(BuildContext context) {
