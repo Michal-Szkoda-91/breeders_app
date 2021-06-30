@@ -148,21 +148,23 @@ class _RaceListScreenState extends State<AddParrotScreen> {
                                 //Ring number
                                 infoText(context, "Numer obrączki"),
                                 const SizedBox(height: 16.0),
-                                widget.parrot.ringNumber != 'brak' &&
-                                        widget.parrot.pairRingNumber != "brak"
-                                    ? infoText(
-                                        context, widget.parrot.ringNumber)
-                                    : ringNumberRow(
-                                        context,
-                                        _regExpCountry,
-                                        node,
-                                        _regExpYear,
-                                        _regExpNumber,
-                                        _country,
-                                        _year,
-                                        _symbol,
-                                        _parrotNumber,
-                                      ),
+                                // widget.parrot.ringNumber != 'brak'
+                                // &&
+                                //         widget.parrot.pairRingNumber != "brak"
+                                // ? infoText(
+                                //     context, widget.parrot.ringNumber)
+                                // :
+                                ringNumberRow(
+                                  context,
+                                  _regExpCountry,
+                                  node,
+                                  _regExpYear,
+                                  _regExpNumber,
+                                  _country,
+                                  _year,
+                                  _symbol,
+                                  _parrotNumber,
+                                ),
                                 widget.pair.id == ''
                                     ? const Center()
                                     : const SizedBox(height: 16.0),
@@ -823,11 +825,20 @@ class _RaceListScreenState extends State<AddParrotScreen> {
           )
               .then((_) async {
             if (widget.parrot.ringNumber != _ringNumber) {
-              await _parrotDataHelper.deleteParrot(
+              await _parrotDataHelper.deleteOnlyParrot(
                 context: context,
                 parrotToDelete: _parrotToDelete,
                 showDialog: false,
                 uid: _firebaseUser!.uid,
+              );
+            }
+          }).then((value) async {
+            if (_createdParrot.pairRingNumber != 'brak' &&
+                widget.parrot.ringNumber != _ringNumber) {
+              await _parrotDataHelper.updatePairedParrot(
+                uid: _firebaseUser!.uid,
+                parrot: _createdParrot,
+                oldRing: widget.parrot.ringNumber,
               );
             }
           });
