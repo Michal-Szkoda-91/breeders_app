@@ -1,6 +1,7 @@
 import 'package:breeders_app/privacy_policy/dialog_policy.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PolicyText extends StatelessWidget {
   const PolicyText({required});
@@ -57,6 +58,24 @@ class PolicyText extends StatelessWidget {
                     );
                   },
                 );
+              },
+          ),
+          TextSpan(
+            text: "\nDostępnych również",
+            style: TextStyle(
+              fontSize: 16,
+              height: 1.5,
+            ),
+          ),
+          TextSpan(
+            text: "\nNa stronie",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            ),
+            recognizer: TapGestureRecognizer()
+              ..onTap = () {
+                launch("https://hodowla-papug-polityka.000webhostapp.com/");
               },
           ),
         ],

@@ -40,6 +40,7 @@ class _AddPairScreenState extends State<AddPairScreen> {
       new PickedFile('assets/image/parrotsRace/parrot_pair.jpg');
   bool _isBlinking = false;
   bool _isDataReady = false;
+  bool _isClicked = false;
 
   List<Parrot> _allParrotList = [];
   List<Parrot> _maleParrotList = [];
@@ -279,7 +280,7 @@ class _AddPairScreenState extends State<AddPairScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 CircleAvatar(
-                  backgroundColor: _isBlinking
+                  backgroundColor: _isBlinking || _isClicked
                       ? Colors.orange
                       : Theme.of(context).backgroundColor,
                   radius: _isBlinking ? 30 : 25,
@@ -292,9 +293,10 @@ class _AddPairScreenState extends State<AddPairScreen> {
                           Theme.of(context).textSelectionTheme.selectionColor,
                     ),
                     onPressed: () {
+                      _animation();
                       if (mounted) {
                         setState(() {
-                          _isPhotoChoosen = true;
+                          _isPhotoChoosen = !_isPhotoChoosen;
                         });
                       }
                     },
@@ -367,6 +369,21 @@ class _AddPairScreenState extends State<AddPairScreen> {
         ],
       ),
     );
+  }
+
+  void _animation() {
+    if (mounted) {
+      setState(() {
+        _isClicked = !_isClicked;
+      });
+    }
+    Future.delayed(const Duration(milliseconds: 200)).then((_) {
+      if (mounted) {
+        setState(() {
+          _isClicked = !_isClicked;
+        });
+      }
+    });
   }
 
   Padding _createContent(BuildContext context) {

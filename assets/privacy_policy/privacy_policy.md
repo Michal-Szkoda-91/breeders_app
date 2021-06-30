@@ -1,6 +1,6 @@
 **Polityka Prywatności**
 
-Michał Szkoda zbudował aplikację Hodowla Papug jako wspieraną przez reklamy. Niniejsza USŁUGA jest świadczona przez Michała Szkoda bez żadnych kosztów i jest przeznaczona do użytku w takim stanie, w jakim jest.
+Aplikcajca Hodowla Papug jest darmowa. Została stworzona przez Michała Szkoda i jest dostępna w sklepie Google Play. Aplikacja wyświetla banery reklamowe udostępnione przez serwis AdMob.
 
 Ta strona służy do informowania odwiedzających o moich zasadach dotyczących gromadzenia, wykorzystywania i ujawniania Danych osobowych, jeśli ktoś zdecyduje się skorzystać z mojej Usługi.
 
@@ -30,34 +30,34 @@ Chcę poinformować, że za każdym razem, gdy korzystasz z mojej Usługi, w prz
 
 Pliki cookie to pliki z niewielką ilością danych, które są powszechnie używane jako anonimowe unikatowe identyfikatory. Są one wysyłane do przeglądarki z odwiedzanych stron internetowych i są przechowywane w pamięci wewnętrznej urządzenia.
 
-Ta Usługa nie używa tych "plików cookie" jawnie. Aplikacja może jednak używać kodu i bibliotek innych firm, które używają "plików cookie" do zbierania informacji i ulepszania swoich usług. Użytkownik ma możliwość zaakceptowania lub odrzucenia tych plików cookie i wiedzieć, kiedy plik cookie jest wysyłany na Twoje urządzenie. Jeśli zdecydujesz się odrzucić nasze pliki cookie, możesz nie być w stanie korzystać z niektórych części tej Usługi.
+Aplikacja nie używa tych "plików cookie" jawnie. Aplikacja może jednak używać kodu i bibliotek innych firm, które używają "plików cookie" do zbierania informacji i ulepszania swoich usług. Użytkownik ma możliwość zaakceptowania lub odrzucenia tych plików cookie i wiedzieć, kiedy plik cookie jest wysyłany na Twoje urządzenie. Jeśli zdecydujesz się odrzucić nasze pliki cookie, możesz nie być w stanie korzystać z niektórych części tej Usługi.
 
 **Usługodawcy**
 
 Mogę zatrudniać firmy zewnętrzne i osoby fizyczne z następujących powodów:
 
-* Aby ułatwić naszą Usługę;
-* Świadczenie Usługi w naszym imieniu;
-* Wykonywanie usług związanych z usługami; lub
-* Aby pomóc nam w analizie sposobu, w jaki nasza Usługa jest używana.
+* Aby ułatwić moją Usługę;
+* Świadczenie Usługi w moim imieniu;
+* Wykonywanie usług związanych z usługami; 
+* Aby pomóc w analizie sposobu, w jaki moja Usługa jest używana.
 
-Chcę poinformować użytkowników tej Usługi, że te osoby trzecie mają dostęp do Twoich Danych Osobowych. Powodem jest wykonywanie powierzonych im zadań w naszym imieniu. Są one jednak zobowiązane do nieujawniania ani nie wykorzystywania informacji do jakichkolwiek innych celów.
+Chcę poinformować użytkowników Hodowli Papug, że te osoby trzecie mają dostęp do Twoich Danych Osobowych. Powodem jest wykonywanie powierzonych im zadań w moim imieniu. Są one jednak zobowiązane do nieujawniania ani nie wykorzystywania informacji do jakichkolwiek innych celów.
 
 **Bezpieczeństwo**
 
-Cenię Twoje zaufanie do przekazywania nam Twoich Danych Osobowych, dlatego staram się wykorzystywać komercyjnie akceptowalne środki ich ochrony. Ale pamiętaj, że żadna metoda transmisji przez Internet, ani metoda elektronicznego przechowywania nie jest w 100% bezpieczna i niezawodna, i nie mogę zagwarantować jej absolutnego bezpieczeństwa.
+Cenię Twoje zaufanie do przekazywania mi Twoich Danych Osobowych, dlatego staram się wykorzystywać komercyjnie akceptowalne środki ich ochrony. Ale pamiętaj, że żadna metoda transmisji przez Internet, ani metoda elektronicznego przechowywania nie jest w 100% bezpieczna i niezawodna, i nie mogę zagwarantować jej absolutnego bezpieczeństwa.
 
 **Linki i inne strony**
 
-Niniejsza Usługa może zawierać łącza do innych witryn. Jeśli klikniesz na link strony trzeciej, zostaniesz przekierowany do tej witryny. Należy pamiętać, że te zewnętrzne strony nie są obsługiwane przeze mnie. Dlatego bardzo zalecam zapoznanie się z Polityką prywatności tych stron internetowych. Nie mam kontroli i nie biorę żadnej odpowiedzialności za treści, polityki prywatności lub praktyki jakichkolwiek witryn lub usług osób trzecich.
+Niniejsza Usługa może zawierać łącza do innych witryn. Jeśli klikniesz na link strony, zostaniesz przekierowany do tej witryny. Należy pamiętać, że te zewnętrzne strony nie są obsługiwane przeze mnie. Dlatego bardzo zalecam zapoznanie się z Polityką prywatności tych stron internetowych. Nie mam kontroli i nie biorę żadnej odpowiedzialności za treści, polityki prywatności lub praktyki jakichkolwiek witryn lub usług osób trzecich.
 
 **Prywatność dzieci**
 
-Usługi te nie są adresowe do osób poniżej 13 roku życia. Nie zbieram świadomie danych osobowych dzieci poniżej 13 roku życia. W przypadku, gdy odkryję, że dziecko poniżej 13 roku życia przekazało mi dane osobowe, natychmiast usuwam to z naszych serwerów. Jeśli jesteś rodzicem lub opiekunem i masz świadomość, że Twoje dziecko przekazało nam dane osobowe, skontaktuj się ze mną, abym mógł podjąć niezbędne działania.
+Usługi te nie są adresowe do osób poniżej 13 roku życia. Nie zbieram świadomie danych osobowych dzieci poniżej 13 roku życia. W przypadku, gdy odkryję, że dziecko poniżej 13 roku życia przekazało mi dane osobowe, natychmiast usuwam je z moich baz danych. Jeśli jesteś rodzicem lub opiekunem i masz świadomość, że Twoje dziecko przekazało mi dane osobowe, skontaktuj się ze mną, abym mógł podjąć niezbędne działania.
 
 **Zmiany w niniejszej Polityce prywatności**
 
-Od czasu do czasu mogę aktualizować naszą Politykę prywatności. W związku z tym zaleca się okresowe przeglądanie tej strony pod kątem jakichkolwiek zmian. Powiadomię Cię o wszelkich zmianach, publikując nową Politykę prywatności na tej stronie.
+Od czasu do czasu mogę aktualizować moją Politykę prywatności. W związku z tym zaleca się okresowe przeglądanie tej strony pod kątem jakichkolwiek zmian. Powiadomię Cię o wszelkich zmianach, publikując nową Politykę prywatności w aplikacji oraz na stronie internetowej.
 
 Polityka ta obowiązuje od 2021-06-21
 
