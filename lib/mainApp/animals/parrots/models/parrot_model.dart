@@ -162,6 +162,62 @@ class ParrotDataHelper {
 //
 //
 //**************** */
+  Future<dynamic> updatePairedParrot({
+    required String uid,
+    required Parrot parrot,
+    required String oldRing,
+  }) async {
+    final CollectionReference collectionReference =
+        FirebaseFirestore.instance.collection(uid);
+
+    await collectionReference
+        .doc(parrot.race)
+        .collection("Birds")
+        .doc(parrot.pairRingNumber)
+        .update({
+      "PairRingNumber": parrot.ringNumber,
+    }).then((_) async {
+      await collectionReference
+          .doc(parrot.race)
+          .collection("Pairs")
+          .get()
+          .then((snapshot) async {
+        for (DocumentSnapshot doc in snapshot.docs) {
+          if (doc['Male Ring'] == oldRing) {
+            print("______________________________${doc['Male Ring']}");
+            await collectionReference
+                .doc(parrot.race)
+                .collection("Pairs")
+                .doc(doc.id)
+                .update({
+              "Male Ring": parrot.ringNumber,
+            });
+          }
+          if (doc['Female Ring'] == oldRing) {
+            await collectionReference
+                .doc(parrot.race)
+                .collection("Pairs")
+                .doc(doc.id)
+                .update({
+              "Female Ring": parrot.ringNumber,
+            });
+          }
+        }
+      });
+      print("parrot edited");
+    }).catchError((err) {
+      print("error occured $err");
+    });
+  }
+
+//
+//
+//
+//**************** */
+//
+//
+//
+//**************** */
   Future<void> deleteRaceList(
       String uid, String raceName, BuildContext context) async {
     final CollectionReference collectionReference =
@@ -254,10 +310,20 @@ class ParrotDataHelper {
           .doc(parrotToDelete.race)
           .collection("Pairs")
           .get()
-          .then((snapshot) {
+          .then((snapshot) async {
         for (DocumentSnapshot doc in snapshot.docs) {
-          if (doc.id.contains(parrotToDelete.ringNumber)) {
+          if (doc['Male Ring'] == parrotToDelete.ringNumber ||
+              doc['Female Ring'] == parrotToDelete.ringNumber) {
             doc.reference.delete();
+            print("++__________________${doc['Pic Url']}");
+            try {
+              final ref =
+                  FirebaseStorage.instanceFor().ref().child(doc['Pic Url']);
+              await ref.delete();
+              print("pic deleted");
+            } catch (e) {
+              print("error occured $e");
+            }
           }
         }
       });
@@ -269,6 +335,42 @@ class ParrotDataHelper {
         "PairRingNumber": "brak",
       });
     }
+    await breedCollection
+        .doc(parrotToDelete.race)
+        .collection("Birds")
+        .doc(parrotToDelete.ringNumber)
+        .delete()
+        .then((_) {
+      if (showDialog) {
+        _globalMethods.showMaterialDialog(context,
+            "Usunięto papugę o numerze obrączki ${parrotToDelete.ringNumber}");
+      }
+    }).catchError((err) {
+      if (showDialog) {
+        _globalMethods.showMaterialDialog(context,
+            "Operacja nieudana, nieznany błąd, spróbuj ponownie pózniej");
+      }
+      print("error occured $err");
+    });
+  }
+
+  //
+//
+//
+//**************** */
+//
+//
+//
+//**************** */
+  Future<void> deleteOnlyParrot({
+    required String uid,
+    required Parrot parrotToDelete,
+    required BuildContext context,
+    required bool showDialog,
+  }) async {
+    final CollectionReference breedCollection =
+        FirebaseFirestore.instance.collection(uid);
+
     await breedCollection
         .doc(parrotToDelete.race)
         .collection("Birds")
