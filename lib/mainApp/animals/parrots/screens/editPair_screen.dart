@@ -55,6 +55,7 @@ class _EditPairScreenState extends State<EditPairScreen> {
   late String takenURL;
   bool _isPhotoChanged = false;
   final _picker = ImagePicker();
+  bool _isClicked = false;
 
   @override
   void initState() {
@@ -168,7 +169,7 @@ class _EditPairScreenState extends State<EditPairScreen> {
                               },
                               child: _createInfoText(
                                 context,
-                                'Edytuj',
+                                'Zpisz zmiany',
                               ),
                             ),
                           ],
@@ -263,7 +264,7 @@ class _EditPairScreenState extends State<EditPairScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 CircleAvatar(
-                  backgroundColor: _isBlinking
+                  backgroundColor: _isBlinking || _isClicked
                       ? Colors.orange
                       : Theme.of(context).backgroundColor,
                   radius: _isBlinking ? 30 : 25,
@@ -277,8 +278,9 @@ class _EditPairScreenState extends State<EditPairScreen> {
                     ),
                     onPressed: () {
                       if (mounted) {
+                        _animation();
                         setState(() {
-                          _isPhotoChoosen = true;
+                          _isPhotoChoosen = !_isPhotoChoosen;
                         });
                       }
                     },
@@ -351,6 +353,21 @@ class _EditPairScreenState extends State<EditPairScreen> {
         ],
       ),
     );
+  }
+
+  void _animation() {
+    if (mounted) {
+      setState(() {
+        _isClicked = !_isClicked;
+      });
+    }
+    Future.delayed(const Duration(milliseconds: 200)).then((_) {
+      if (mounted) {
+        setState(() {
+          _isClicked = !_isClicked;
+        });
+      }
+    });
   }
 
   Widget _createForm(BuildContext context, FocusScopeNode node) {

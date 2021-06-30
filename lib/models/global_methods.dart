@@ -45,11 +45,9 @@ class GlobalMethods {
               ),
               onPressed: () async {
                 if (parrot.ringNumber == 'brak') {
-                  print("GORA____________");
                   await function(title);
                 } else {
                   await function(title, parrot);
-                  print("DOL___________________________---");
                 }
               },
             ),
