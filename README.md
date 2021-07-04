@@ -7,6 +7,7 @@ Technologia: Flutter oraz Dart. Aplikacja pisana z użyciem Visual Studio Code. 
 Aplikcja jest przeniesiona do najnowszej wersji Flutter i obsługuję Null Safety.
 
 Aplikacja jest dotępna w sklepie Google Play
+https://play.google.com/store/apps/details?id=michal.szkoda_hodowla_papug
 
 ![Webp net-resizeimage (1)](https://user-images.githubusercontent.com/68157494/122677038-cb61dd00-d1e0-11eb-8656-251d793e8d60.png)              ![Webp net-resizeimage (2)](https://user-images.githubusercontent.com/68157494/122677196-8db18400-d1e1-11eb-99f4-3f0a0f0e716b.png)              ![Webp net-resizeimage (3)](https://user-images.githubusercontent.com/68157494/122677342-41b30f00-d1e2-11eb-9171-bf5fae65e7ab.png)              ![Webp net-resizeimage (4)](https://user-images.githubusercontent.com/68157494/122677484-ba19d000-d1e2-11eb-8801-b22363aa0b95.png)
 
