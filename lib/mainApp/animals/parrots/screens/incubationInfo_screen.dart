@@ -80,8 +80,6 @@ class _IncubationInformationScreenState
       body: MainBackground(
         child: Column(
           children: [
-            BannerPage(),
-            const SizedBox(height: 8),
             Expanded(
               child: DraggableScrollbar.rrect(
                 controller: _rrectController,
@@ -167,6 +165,8 @@ class _IncubationInformationScreenState
                 ),
               ),
             ),
+            const SizedBox(height: 8),
+            BannerPage(),
           ],
         ),
       ),

@@ -59,8 +59,6 @@ class _ParrotsListScreenState extends State<ParrotsListScreen> {
                 _createParrotList(snapshot);
                 return Column(
                   children: [
-                    BannerPage(),
-                    const SizedBox(height: 8),
                     _createdParrotList.length == 0
                         ? Text(
                             "Brak Papug",
@@ -71,6 +69,8 @@ class _ParrotsListScreenState extends State<ParrotsListScreen> {
                             ),
                           )
                         : ParrotCard(createdParrotList: _createdParrotList),
+                    const SizedBox(height: 8),
+                    BannerPage(),
                   ],
                 );
             }

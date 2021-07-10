@@ -50,6 +50,7 @@ dependencies:
   flutter_html: ^2.1.0
   url_launcher: ^6.0.7
   flutter_markdown: ^0.6.2
+  
 
 
 
