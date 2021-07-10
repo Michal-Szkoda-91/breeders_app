@@ -77,8 +77,6 @@ class _PairListScreenState extends State<PairListScreen> {
                 _createPairList(snapshot);
                 return Column(
                   children: [
-                    BannerPage(),
-                    const SizedBox(height: 8),
                     !_showArchive
                         ? CreatePairingParrotDropdownButton(
                             raceName: widget.raceName,
@@ -92,6 +90,8 @@ class _PairListScreenState extends State<PairListScreen> {
                         parrotList: widget.parrotList,
                       ),
                     ),
+                    const SizedBox(height: 8),
+                    BannerPage(),
                   ],
                 );
             }

@@ -54,8 +54,6 @@ class _ParrotsRaceListScreenState extends State<ParrotsRaceListScreen> {
                 createListRace(snapshot);
                 return Column(
                   children: [
-                    BannerPage(),
-                    const SizedBox(height: 8),
                     Expanded(
                       child: Column(
                         children: [
@@ -64,6 +62,8 @@ class _ParrotsRaceListScreenState extends State<ParrotsRaceListScreen> {
                           ),
                           CreateParrotRaceListTile(
                               activeRaceList: _activeRaceList),
+                          const SizedBox(height: 8),
+                          BannerPage(),
                         ],
                       ),
                     ),
