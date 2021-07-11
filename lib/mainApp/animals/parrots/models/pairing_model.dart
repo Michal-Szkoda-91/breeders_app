@@ -121,6 +121,42 @@ class ParrotPairDataHelper {
     });
   }
 
+  //
+//
+//
+//**************** */
+//
+//
+//
+//**************** */
+  Future<void> deleteChild({
+    required String uid,
+    required String race,
+    required String pairId,
+    required String childID,
+    required BuildContext context,
+  }) async {
+    final CollectionReference collectionReference =
+        FirebaseFirestore.instance.collection(uid);
+
+    await collectionReference
+        .doc(race)
+        .collection("Pairs")
+        .doc(pairId)
+        .collection("Child")
+        .doc(childID)
+        .delete()
+        .then((_) {
+      // Navigator.of(context).pop();
+      _globalMethods.showMaterialDialog(context, "Usunięto Potomka");
+      print("parrot added");
+    }).catchError((err) {
+      _globalMethods.showMaterialDialog(context,
+          "Operacja nieudana, nieznany błąd, spróbuj ponownie pózniej");
+      print("error occured $err");
+    });
+  }
+
 //
 //
 //
@@ -287,5 +323,58 @@ class ParrotPairDataHelper {
           "Operacja nieudana, nieznany błąd, spróbuj ponownie pózniej");
       print("error occured $err");
     });
+  }
+
+  //
+//
+//
+//**************** */
+//
+//
+//
+//**************** */
+  Future<void> editChild({
+    required String uid,
+    required String race,
+    required String pairId,
+    required Children child,
+    required BuildContext context,
+    required String ringToDel,
+  }) async {
+    final CollectionReference collectionReference =
+        FirebaseFirestore.instance.collection(uid);
+
+    await collectionReference
+        .doc(race)
+        .collection("Pairs")
+        .doc(pairId)
+        .collection("Child")
+        .doc(ringToDel)
+        .delete()
+        .then(
+      (value) async {
+        await collectionReference
+            .doc(race)
+            .collection("Pairs")
+            .doc(pairId)
+            .collection("Child")
+            .doc(child.ringNumber)
+            .set({
+          "Colors": "${child.color}",
+          "Sex": "${child.gender}",
+          "Born Date": "${child.broodDate}"
+        }, SetOptions(merge: false)).then((_) {
+          Navigator.of(context).pop();
+          _globalMethods.showMaterialDialog(context, "Edytowano dane");
+          print("parrot added");
+        }).catchError(
+          (err) {
+            _globalMethods.showMaterialDialog(context,
+                "Operacja nieudana, nieznany błąd, spróbuj ponownie pózniej");
+            print("error occured $err");
+          },
+        );
+      },
+    );
   }
 }

@@ -65,7 +65,7 @@ class _ParrotPairCardState extends State<ParrotPairCard> {
             child: ListView.builder(
               controller: _rrectController,
               itemCount: 1,
-              physics: ScrollPhysics(),
+              // physics: ScrollPhysics(),
               itemBuilder: (context, index) {
                 return Column(
                   children: [
