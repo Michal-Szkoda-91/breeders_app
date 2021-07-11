@@ -66,6 +66,7 @@ class DeleteUpgradeButtons extends StatelessWidget {
                       showEggsDate: '',
                     ),
                     race: '',
+                    data: '',
                   ),
                 ),
               );

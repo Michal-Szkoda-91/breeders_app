@@ -123,6 +123,7 @@ class _CreateParrotsDropdownButtonState
                 context,
                 MaterialPageRoute(
                   builder: (context) => AddParrotScreen(
+                    data: '',
                     parrotMap: value,
                     parrot: Parrot(
                         race: '',

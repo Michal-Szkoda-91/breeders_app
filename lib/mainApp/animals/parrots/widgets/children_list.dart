@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../models/global_methods.dart';
 import '../../parrots/models/pairing_model.dart';
 import '../../parrots/models/parrot_model.dart';
 import '../models/parrotsRace_list.dart';
@@ -12,8 +13,13 @@ import '../models/children_model.dart';
 class ChildrenList extends StatefulWidget {
   final String raceName;
   final String pairId;
+  final ParrotPairing pair;
 
-  const ChildrenList({required this.raceName, required this.pairId});
+  const ChildrenList({
+    required this.raceName,
+    required this.pairId,
+    required this.pair,
+  });
 
   @override
   _ChildrenListState createState() => _ChildrenListState();
@@ -25,6 +31,15 @@ class _ChildrenListState extends State<ChildrenList> {
   int _childrenCount = 0;
   late Map raceMap;
   final ParrotsRace _parrotsRace = new ParrotsRace();
+  GlobalMethods _globalMethods = GlobalMethods();
+  ParrotPairDataHelper _parrotPairDataHelper = ParrotPairDataHelper();
+  bool _isLoading = false;
+  @override
+  void initState() {
+    super.initState();
+    _childrenCount = 0;
+    _childrenList = [];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,9 +66,13 @@ class _ChildrenListState extends State<ChildrenList> {
 
           default:
             _createChildList(snapshot);
-            return _childrenCount == 0
-                ? _createdNoChildRow(context)
-                : _createdChildExpansionTile(context);
+            return _isLoading
+                ? Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : _childrenCount == 0
+                    ? _createdNoChildRow(context)
+                    : _createdChildExpansionTile(context);
         }
       },
     );
@@ -61,6 +80,7 @@ class _ChildrenListState extends State<ChildrenList> {
 
   ExpansionTile _createdChildExpansionTile(BuildContext context) {
     return ExpansionTile(
+      initiallyExpanded: false,
       title: Row(
         children: [
           Text(
@@ -149,7 +169,7 @@ class _ChildrenListState extends State<ChildrenList> {
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Container(
-            width: 415,
+            width: 515,
             child: Column(
               children: [
                 Row(
@@ -159,7 +179,7 @@ class _ChildrenListState extends State<ChildrenList> {
                     _createTitleRow(context, "Nr obrączki"),
                     _createTitleRow(context, "Kolor"),
                     _createTitleRow(context, "Data ur."),
-                    const SizedBox(width: 55),
+                    const SizedBox(width: 155),
                   ],
                 ),
                 ListView.builder(
@@ -168,7 +188,7 @@ class _ChildrenListState extends State<ChildrenList> {
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
                     return Container(
-                      width: 390,
+                      width: 490,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
@@ -184,6 +204,11 @@ class _ChildrenListState extends State<ChildrenList> {
                             _childrenList[index].color,
                             _childrenList[index].gender,
                           ),
+                          _createEditChild(_childrenList[index]),
+                          _createdDeleteChildButton(
+                            context,
+                            _childrenList[index].ringNumber,
+                          ),
                         ],
                       ),
                     );
@@ -194,6 +219,55 @@ class _ChildrenListState extends State<ChildrenList> {
           ),
         ),
       ],
+    );
+  }
+
+  IconButton _createdDeleteChildButton(BuildContext ctx, String ringNumber) {
+    return IconButton(
+      onPressed: () {
+        _deleteChild(ringNumber);
+      },
+      icon: Icon(
+        Icons.delete,
+        color: Colors.red,
+      ),
+    );
+  }
+
+  IconButton _createEditChild(Children child) {
+    return IconButton(
+      onPressed: () async {
+        await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => AddParrotScreen(
+              pair: widget.pair,
+              parrotMap: {
+                "url": "assets/image/parrot.jpg",
+                "name": "Edytuj Dane",
+                "icubationTime": "21"
+              },
+              race: widget.raceName,
+              addFromChild: false,
+              parrot: Parrot(
+                race: widget.raceName,
+                ringNumber: child.ringNumber,
+                color: child.color,
+                fission: '',
+                cageNumber: '',
+                sex: child.gender,
+                notes: '',
+                pairRingNumber: '',
+              ),
+              data: child.broodDate,
+            ),
+          ),
+        ).then((value) => setState(() {}));
+      },
+      icon: Icon(
+        Icons.edit,
+        color: Colors.indigoAccent,
+      ),
     );
   }
 
@@ -236,6 +310,7 @@ class _ChildrenListState extends State<ChildrenList> {
                     isArchive: '',
                     picUrl: ''),
                 race: '',
+                data: '',
               ),
             ),
           );
@@ -308,5 +383,37 @@ class _ChildrenListState extends State<ChildrenList> {
       _childrenCount++;
     });
     _childrenList.sort((a, b) => b.broodDate.compareTo(a.broodDate));
+  }
+
+  Future<void> _deleteChild(
+    String ringNumber,
+  ) async {
+    final _firebaseUser = FirebaseAuth.instance.currentUser;
+    setState(() {
+      _isLoading = true;
+    });
+    await _globalMethods.checkInternetConnection(context).then(
+      (result) async {
+        if (!result) {
+          _globalMethods.showMaterialDialog(
+              context, "Brak połączenia z internetem.");
+          return;
+        } else {
+          _parrotPairDataHelper
+              .deleteChild(
+            context: context,
+            uid: _firebaseUser!.uid,
+            race: widget.raceName,
+            pairId: widget.pairId,
+            childID: ringNumber,
+          )
+              .then((_) {
+            setState(() {
+              _isLoading = false;
+            });
+          });
+        }
+      },
+    );
   }
 }

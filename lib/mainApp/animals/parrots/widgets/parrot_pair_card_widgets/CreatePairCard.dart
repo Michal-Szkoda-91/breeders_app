@@ -153,6 +153,7 @@ class _CreatePairCardState extends State<CreatePairCard> {
                     ChildrenList(
                       pairId: widget.pairList[widget.index].id,
                       raceName: widget.race,
+                      pair: widget.pairList[widget.index],
                     ),
                   ],
                 ),

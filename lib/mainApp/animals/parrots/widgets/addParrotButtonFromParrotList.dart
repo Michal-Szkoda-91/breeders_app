@@ -52,6 +52,7 @@ class _AddParrotFromInsideParrotListState
                   isArchive: '',
                   picUrl: '',
                 ),
+                data: '',
                 race: '',
                 parrot: Parrot(
                   race: '',

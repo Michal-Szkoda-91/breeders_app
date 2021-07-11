@@ -20,6 +20,7 @@ class AddParrotScreen extends StatefulWidget {
   final ParrotPairing pair;
   final String race;
   final bool addFromChild;
+  final String data;
 
   AddParrotScreen({
     required this.parrotMap,
@@ -27,6 +28,7 @@ class AddParrotScreen extends StatefulWidget {
     required this.pair,
     required this.race,
     required this.addFromChild,
+    required this.data,
   });
 
   @override
@@ -59,6 +61,7 @@ class _RaceListScreenState extends State<AddParrotScreen> {
   String _sexName = "";
   String bornTime =
       DateFormat("yyyy-MM-dd", 'pl_PL').format(DateTime.now()).toString();
+  String ringToDelChildren = '';
 
   Pattern _countryPatter = r'^([A-Z]+)$';
   Pattern _yearPatter = r'^(\d{2}|\d{4})$';
@@ -77,6 +80,10 @@ class _RaceListScreenState extends State<AddParrotScreen> {
     _sexName = _genderMap[1.0].toString();
     if (widget.parrot.ringNumber != 'brak') {
       _isEditing(widget.parrot);
+    }
+    if (widget.data != '') {
+      bornTime = widget.data;
+      ringToDelChildren = widget.parrot.ringNumber;
     }
   }
 
@@ -136,7 +143,8 @@ class _RaceListScreenState extends State<AddParrotScreen> {
                                 //******************************************************* */
                                 //Sex
                                 widget.parrot.ringNumber != 'brak'
-                                    ? widget.parrot.pairRingNumber == "brak"
+                                    ? widget.parrot.pairRingNumber == "brak" ||
+                                            widget.pair.id != ''
                                         ? genderSwitchRow(context, _sex)
                                         : infoText(context, widget.parrot.sex)
                                     : genderSwitchRow(context, _sex),
@@ -148,12 +156,7 @@ class _RaceListScreenState extends State<AddParrotScreen> {
                                 //Ring number
                                 infoText(context, "Numer obrączki"),
                                 const SizedBox(height: 16.0),
-                                // widget.parrot.ringNumber != 'brak'
-                                // &&
-                                //         widget.parrot.pairRingNumber != "brak"
-                                // ? infoText(
-                                //     context, widget.parrot.ringNumber)
-                                // :
+
                                 ringNumberRow(
                                   context,
                                   _regExpCountry,
@@ -357,29 +360,66 @@ class _RaceListScreenState extends State<AddParrotScreen> {
     );
   }
 
-  Row _addParrotConfimButtonChild(BuildContext context) {
-    return Row(
-      children: [
-        const Expanded(
-          child: const SizedBox(),
-        ),
-        ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            primary: Theme.of(context).primaryColor,
+  Widget _addParrotConfimButtonChild(BuildContext context) {
+    if (widget.data != '') {
+      return Row(
+        children: [
+          const Expanded(
+            child: const SizedBox(),
           ),
-          child: Text(
-            'Utwórz Potomka',
-            style: TextStyle(
-              color: Theme.of(context).textSelectionTheme.selectionColor,
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              primary: Theme.of(context).primaryColor,
             ),
+            child: Text(
+              'Anuluj',
+              style: TextStyle(
+                color: Theme.of(context).textSelectionTheme.selectionColor,
+              ),
+            ),
+            //create a parrot
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
           ),
-          //create a parrot
-          onPressed: () {
-            _createChild();
-          },
-        ),
-      ],
-    );
+          const SizedBox(width: 20),
+          ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: Theme.of(context).primaryColor,
+              ),
+              child: Text(
+                'Zapisz zmiany',
+                style: TextStyle(
+                  color: Theme.of(context).textSelectionTheme.selectionColor,
+                ),
+              ),
+              onPressed: _editChild),
+        ],
+      );
+    } else {
+      return Row(
+        children: [
+          const Expanded(
+            child: const SizedBox(),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              primary: Theme.of(context).primaryColor,
+            ),
+            child: Text(
+              'Utwórz Potomka',
+              style: TextStyle(
+                color: Theme.of(context).textSelectionTheme.selectionColor,
+              ),
+            ),
+            //create a parrot
+            onPressed: () {
+              _createChild();
+            },
+          ),
+        ],
+      );
+    }
   }
   //BUILD METODS
 // ******************************************************************************************
@@ -754,6 +794,64 @@ class _RaceListScreenState extends State<AddParrotScreen> {
             child: _createdChild,
             pairId: widget.pair.id,
             context: context,
+          );
+          if (mounted) {
+            setState(() {
+              _isLoading = false;
+            });
+          }
+        }
+      });
+    }
+  }
+
+  Future _editChild() async {
+    if (!_formKey.currentState!.validate()) {
+      _globalMethods.showMaterialDialog(
+          context, "Nie zmienić danych, nie pełne dane");
+    } else {
+      if (mounted) {
+        setState(() {
+          _isLoading = true;
+        });
+      }
+      await _globalMethods
+          .checkInternetConnection(context)
+          .then((result) async {
+        if (mounted) {
+          setState(
+            () {
+              _ringNumber = "$_country-$_year-$_symbol-$_parrotNumber";
+            },
+          );
+        }
+        if (!result) {
+          _globalMethods.showMaterialDialog(
+              context, "brak połączenia z internetem.");
+          if (mounted) {
+            setState(() {
+              _isLoading = false;
+            });
+          }
+          return;
+        } else {
+          if (mounted) {
+            setState(() {
+              _createdChild = Children(
+                broodDate: bornTime,
+                color: _parrotColor,
+                gender: _sexName,
+                ringNumber: _ringNumber,
+              );
+            });
+          }
+          await _parrotPairDataHelper.editChild(
+            uid: _firebaseUser!.uid,
+            race: widget.race,
+            pairId: widget.pair.id,
+            child: _createdChild,
+            context: context,
+            ringToDel: ringToDelChildren,
           );
           if (mounted) {
             setState(() {
