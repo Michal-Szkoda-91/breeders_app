@@ -380,7 +380,7 @@ class _EditPairScreenState extends State<EditPairScreen> {
           initialValue: _pairColor,
           style: customTextStyle(context),
           cursorColor: Theme.of(context).textSelectionTheme.selectionColor,
-          maxLength: 30,
+          maxLength: 60,
           maxLines: 1,
           decoration: _createInputDecoration(
             context,
@@ -390,7 +390,7 @@ class _EditPairScreenState extends State<EditPairScreen> {
           validator: (val) {
             if (val!.isEmpty) {
               return 'Uzupełnij dane';
-            } else if (val.length > 30) {
+            } else if (val.length > 60) {
               return 'Zbyt długi tekst';
             } else {
               return null;
