@@ -1,7 +1,9 @@
+import 'package:breeders_app/mainApp/animals/parrots/widgets/tutorial_dialog_parrot_CRUD.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:diacritic/diacritic.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../advertisement_banner/banner_page.dart';
 import '../widgets/notConnected_information.dart';
@@ -22,6 +24,37 @@ class _ParrotsRaceListScreenState extends State<ParrotsRaceListScreen> {
   final AuthService _auth = AuthService();
   final firebaseUser = FirebaseAuth.instance.currentUser;
   List<String> _activeRaceList = [];
+  bool _showTutorial = true;
+  bool _didChangeReady = false;
+
+  //Shared Prefs
+
+  loadShare() async {
+    SharedPreferences _prefs = await SharedPreferences.getInstance();
+    bool? firstTime = _prefs.getBool('show_Tutorial');
+    if (firstTime != null && firstTime) {
+      print("________________________False");
+      setState(() {
+        _showTutorial = false;
+      });
+    } else {
+      print("________________________True");
+      setState(() {
+        _showTutorial = true;
+      });
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (!_didChangeReady) {
+      loadShare();
+      setState(() {
+        _didChangeReady = true;
+      });
+    }
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +85,9 @@ class _ParrotsRaceListScreenState extends State<ParrotsRaceListScreen> {
                 );
               default:
                 createListRace(snapshot);
+                if (_showTutorial) {
+                  Future.delayed(Duration.zero, () => showAlert(context));
+                }
                 return Column(
                   children: [
                     Expanded(
@@ -76,13 +112,23 @@ class _ParrotsRaceListScreenState extends State<ParrotsRaceListScreen> {
     );
   }
 
-  void createListRace(AsyncSnapshot<QuerySnapshot> snapshot) {
+  void createListRace(AsyncSnapshot<QuerySnapshot> snapshot) async {
     _activeRaceList.clear();
-
     snapshot.data!.docs.forEach((val) {
       _activeRaceList.add(val.id);
     });
     _activeRaceList
         .sort((a, b) => removeDiacritics(a).compareTo(removeDiacritics(b)));
+  }
+
+  showAlert(BuildContext ctx) async {
+    await showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        insetPadding: EdgeInsets.zero,
+        backgroundColor: Colors.transparent,
+        content: TutorialParrotCrud(),
+      ),
+    );
   }
 }
