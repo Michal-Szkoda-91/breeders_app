@@ -125,4 +125,17 @@ class GlobalMethods {
     }
     return false;
   }
+
+  Route createRoute(dynamic screen) {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => screen,
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        return ScaleTransition(
+          scale: animation,
+          child: child,
+        );
+      },
+      transitionDuration: Duration(milliseconds: 700),
+    );
+  }
 }

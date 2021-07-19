@@ -3,6 +3,7 @@ import 'package:diacritic/diacritic.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import 'package:breeders_app/models/global_methods.dart';
 import '../animals/parrots/models/pairing_model.dart';
 import '../animals/parrots/screens/incubationInfo_screen.dart';
 import 'IncubationCountsContainer.dart';
@@ -17,6 +18,7 @@ class _IncubationInformationState extends State<IncubationInformation> {
   int _incubationTimes = 0;
   bool _isLoading = true;
   List<ParrotPairing> _pairList = [];
+  GlobalMethods _globalMethods = GlobalMethods();
 
   @override
   Widget build(BuildContext context) {
@@ -63,10 +65,9 @@ class _IncubationInformationState extends State<IncubationInformation> {
                           Navigator.of(context).pop();
                           _pairList.sort((a, b) => removeDiacritics(a.race)
                               .compareTo(removeDiacritics(b.race)));
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => IncubationInformationScreen(
+                          Navigator.of(context).push(
+                            _globalMethods.createRoute(
+                              IncubationInformationScreen(
                                 pairList: _pairList,
                               ),
                             ),

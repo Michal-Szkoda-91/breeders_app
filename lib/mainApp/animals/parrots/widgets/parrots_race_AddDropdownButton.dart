@@ -1,10 +1,11 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:breeders_app/mainApp/animals/parrots/models/pairing_model.dart';
-import 'package:breeders_app/mainApp/animals/parrots/models/parrot_model.dart';
-import 'package:breeders_app/mainApp/animals/parrots/screens/addParrot_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import 'package:breeders_app/mainApp/animals/parrots/models/pairing_model.dart';
+import 'package:breeders_app/mainApp/animals/parrots/models/parrot_model.dart';
+import 'package:breeders_app/mainApp/animals/parrots/screens/addParrot_screen.dart';
+import 'package:breeders_app/models/global_methods.dart';
 import '../models/parrotsRace_list.dart';
 // import '../screens/addParrot_screen.dart';
 
@@ -22,6 +23,7 @@ class _CreateParrotsDropdownButtonState
   final firebaseUser = FirebaseAuth.instance.currentUser;
 
   ParrotsRace _parrotsRace = new ParrotsRace();
+  GlobalMethods _globalMethods = GlobalMethods();
 
   @override
   Widget build(BuildContext context) {
@@ -119,10 +121,9 @@ class _CreateParrotsDropdownButtonState
           ).toList(),
           onChanged: (value) {
             if ((value as dynamic)['name'] != 'Dodaj Papugę') {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AddParrotScreen(
+              Navigator.of(context).push(
+                _globalMethods.createRoute(
+                  AddParrotScreen(
                     data: '',
                     parrotMap: value,
                     parrot: Parrot(

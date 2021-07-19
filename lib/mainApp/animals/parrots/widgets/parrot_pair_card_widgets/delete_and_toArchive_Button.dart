@@ -151,10 +151,9 @@ class _DeleteAndArchiveButtonsState extends State<DeleteAndArchiveButtons> {
   }
 
   void _editPair() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => EditPairScreen(
+    Navigator.of(context).push(
+      _globalMethods.createRoute(
+        EditPairScreen(
           raceName: widget.pairList[widget.index].race,
           pairColor: widget.pairList[widget.index].pairColor,
           pairID: widget.pairList[widget.index].id,
