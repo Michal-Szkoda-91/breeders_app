@@ -1,6 +1,7 @@
 import 'package:breeders_app/privacy_policy/dialog_policy.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PolicyText extends StatelessWidget {
@@ -25,13 +26,16 @@ class PolicyText extends StatelessWidget {
             ),
             recognizer: TapGestureRecognizer()
               ..onTap = () {
-                showDialog(
+                showAnimatedDialog(
                   context: context,
                   builder: (context) {
                     return PolicyDialog(
                       mdFileName: 'terms_and_condition.md',
                     );
                   },
+                  animationType: DialogTransitionType.scale,
+                  curve: Curves.fastOutSlowIn,
+                  duration: Duration(seconds: 2),
                 );
               },
           ),
@@ -50,13 +54,16 @@ class PolicyText extends StatelessWidget {
             ),
             recognizer: TapGestureRecognizer()
               ..onTap = () {
-                showDialog(
+                showAnimatedDialog(
                   context: context,
                   builder: (context) {
                     return PolicyDialog(
                       mdFileName: 'privacy_policy.md',
                     );
                   },
+                  animationType: DialogTransitionType.scale,
+                  curve: Curves.fastOutSlowIn,
+                  duration: Duration(seconds: 2),
                 );
               },
           ),

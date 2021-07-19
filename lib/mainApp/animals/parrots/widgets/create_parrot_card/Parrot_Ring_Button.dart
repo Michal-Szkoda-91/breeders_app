@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 
 import '../parrotDialogInformation.dart';
 import '../../models/parrot_model.dart';
@@ -24,7 +25,7 @@ class ParrotRingButton extends StatelessWidget {
         splashColor: Theme.of(context).primaryColor,
         borderRadius: BorderRadius.circular(8),
         onTap: () {
-          showDialog(
+          showAnimatedDialog(
             context: context,
             builder: (ctx) => new AlertDialog(
               backgroundColor: Theme.of(context).backgroundColor,
@@ -62,6 +63,9 @@ class ParrotRingButton extends StatelessWidget {
                 )
               ],
             ),
+            animationType: DialogTransitionType.scale,
+            curve: Curves.fastOutSlowIn,
+            duration: Duration(seconds: 2),
           );
         },
         child: Container(

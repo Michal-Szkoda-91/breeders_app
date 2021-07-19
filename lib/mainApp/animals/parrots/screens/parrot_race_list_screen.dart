@@ -1,10 +1,11 @@
-import 'package:breeders_app/mainApp/animals/parrots/widgets/tutorial_dialog_parrot_CRUD.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:diacritic/diacritic.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 
+import '../widgets/tutorial_dialog_parrot_CRUD.dart';
 import '../../../../advertisement_banner/banner_page.dart';
 import '../widgets/notConnected_information.dart';
 import '../widgets/parrots_race_AddDropdownButton.dart';
@@ -84,7 +85,8 @@ class _ParrotsRaceListScreenState extends State<ParrotsRaceListScreen> {
               default:
                 createListRace(snapshot);
                 if (_showTutorial) {
-                  Future.delayed(Duration.zero, () => showAlert(context));
+                  Future.delayed(
+                      Duration(seconds: 3), () => showAlert(context));
                 }
                 return Column(
                   children: [
@@ -120,13 +122,16 @@ class _ParrotsRaceListScreenState extends State<ParrotsRaceListScreen> {
   }
 
   showAlert(BuildContext ctx) async {
-    await showDialog(
+    await showAnimatedDialog(
       context: context,
       builder: (ctx) => AlertDialog(
         insetPadding: EdgeInsets.zero,
         backgroundColor: Colors.transparent,
         content: TutorialParrotCrud(),
       ),
+      animationType: DialogTransitionType.fadeScale,
+      curve: Curves.fastOutSlowIn,
+      duration: Duration(seconds: 2),
     );
   }
 }

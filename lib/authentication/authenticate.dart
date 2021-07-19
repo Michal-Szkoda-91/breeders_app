@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
 import 'register_screen.dart';
@@ -108,7 +109,7 @@ class _AuthenticateState extends State<Authenticate> {
 
 //Dialog wyswietlany przy zamykaniu aplikacji
   _showDialog(BuildContext dialogContext) {
-    showDialog(
+    showAnimatedDialog(
       context: dialogContext,
       builder: (ctx) => new AlertDialog(
         title: const Text(
@@ -132,6 +133,9 @@ class _AuthenticateState extends State<Authenticate> {
           )
         ],
       ),
+      animationType: DialogTransitionType.scale,
+      curve: Curves.fastOutSlowIn,
+      duration: Duration(seconds: 2),
     );
   }
 }
