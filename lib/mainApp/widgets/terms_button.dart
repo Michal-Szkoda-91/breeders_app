@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 
 import '../../privacy_policy/dialog_policy.dart';
 
@@ -20,13 +21,16 @@ class TermsButton extends StatelessWidget {
         ),
       ),
       onPressed: () async {
-        showDialog(
+        showAnimatedDialog(
           context: context,
           builder: (context) {
             return PolicyDialog(
               mdFileName: 'terms_and_condition.md',
             );
           },
+          animationType: DialogTransitionType.scale,
+          curve: Curves.fastOutSlowIn,
+          duration: Duration(seconds: 2),
         );
       },
     );

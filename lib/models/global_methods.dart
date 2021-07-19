@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'dart:io';
 
 import '../mainApp/animals/parrots/models/parrot_model.dart';
@@ -14,7 +15,7 @@ class GlobalMethods {
       required String text,
       required Function function,
       required Parrot parrot}) async {
-    return showDialog<void>(
+    return showAnimatedDialog<void>(
       context: context,
       barrierDismissible: true,
       builder: (BuildContext ctx) {
@@ -66,43 +67,50 @@ class GlobalMethods {
           ],
         );
       },
+      animationType: DialogTransitionType.scale,
+      curve: Curves.fastOutSlowIn,
+      duration: Duration(seconds: 2),
     );
   }
 
   showMaterialDialog(BuildContext context, String text) async {
-    return showDialog<void>(
-        context: context,
-        builder: (BuildContext ctx) {
-          return AlertDialog(
-            backgroundColor: Theme.of(context).backgroundColor,
-            title: new Text(
-              "Informacja",
-              style: TextStyle(
-                  color: Theme.of(context).textSelectionTheme.selectionColor),
-              textAlign: TextAlign.center,
-            ),
-            content: new Text(
-              text,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  color: Theme.of(context).textSelectionTheme.selectionColor),
-            ),
-            actions: [
-              TextButton(
-                child: Text(
-                  "OK",
-                  style: TextStyle(
-                    color: Theme.of(context).textSelectionTheme.selectionColor,
-                    fontSize: 20,
-                  ),
+    return showAnimatedDialog<void>(
+      context: context,
+      builder: (BuildContext ctx) {
+        return AlertDialog(
+          backgroundColor: Theme.of(context).backgroundColor,
+          title: new Text(
+            "Informacja",
+            style: TextStyle(
+                color: Theme.of(context).textSelectionTheme.selectionColor),
+            textAlign: TextAlign.center,
+          ),
+          content: new Text(
+            text,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                color: Theme.of(context).textSelectionTheme.selectionColor),
+          ),
+          actions: [
+            TextButton(
+              child: Text(
+                "OK",
+                style: TextStyle(
+                  color: Theme.of(context).textSelectionTheme.selectionColor,
+                  fontSize: 20,
                 ),
-                onPressed: () {
-                  Navigator.of(ctx).pop();
-                },
               ),
-            ],
-          );
-        });
+              onPressed: () {
+                Navigator.of(ctx).pop();
+              },
+            ),
+          ],
+        );
+      },
+      animationType: DialogTransitionType.scale,
+      curve: Curves.linear,
+      duration: Duration(seconds: 1),
+    );
   }
 
   Future<bool> checkInternetConnection(BuildContext context) async {

@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 
 import '../../services/auth.dart';
 import '../../main.dart';
@@ -34,9 +35,9 @@ class LogoutButton extends StatelessWidget {
         });
   }
 
-  //Dialog wyswietlany przy zamykaniu aplikacji
+  //Dialog wyswietlany przy wylogowywani aplikacji
   _showDialog(BuildContext dialogContext) {
-    showDialog(
+    showAnimatedDialog(
       context: dialogContext,
       builder: (ctx) => new AlertDialog(
         title: const Text(
@@ -84,6 +85,9 @@ class LogoutButton extends StatelessWidget {
           )
         ],
       ),
+      animationType: DialogTransitionType.scale,
+      curve: Curves.fastOutSlowIn,
+      duration: Duration(seconds: 2),
     );
   }
 }

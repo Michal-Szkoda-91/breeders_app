@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 
 import '../animals/parrots/widgets/tutorial_dialog_parrot_CRUD.dart';
 
@@ -18,11 +19,14 @@ class TutorialButton extends StatelessWidget {
         ),
       ),
       onPressed: () async {
-        showDialog(
+        showAnimatedDialog(
           context: context,
           builder: (context) {
             return TutorialParrotCrud();
           },
+          animationType: DialogTransitionType.scale,
+          curve: Curves.fastOutSlowIn,
+          duration: Duration(seconds: 2),
         );
       },
     );

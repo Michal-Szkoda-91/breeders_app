@@ -13,44 +13,48 @@ class PolicyDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Dialog(
-      insetPadding: EdgeInsets.all(15),
-      child: Column(
-        children: [
-          Expanded(
-              child: FutureBuilder(
-            future: Future.delayed(Duration(milliseconds: 150)).then((val) {
-              return rootBundle.loadString('assets/privacy_policy/$mdFileName');
-            }),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return Markdown(
-                  data: snapshot.data.toString(),
-                  onTapLink: (text, url, title) {
-                    launch(url.toString());
-                  },
+    return Padding(
+      padding: const EdgeInsets.only(top: 40),
+      child: Dialog(
+        insetPadding: EdgeInsets.all(15),
+        child: Column(
+          children: [
+            Expanded(
+                child: FutureBuilder(
+              future: Future.delayed(Duration(milliseconds: 150)).then((val) {
+                return rootBundle
+                    .loadString('assets/privacy_policy/$mdFileName');
+              }),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return Markdown(
+                    data: snapshot.data.toString(),
+                    onTapLink: (text, url, title) {
+                      launch(url.toString());
+                    },
+                  );
+                }
+                return Center(
+                  child: CircularProgressIndicator(),
                 );
-              }
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            },
-          )),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              primary: Theme.of(context).primaryColor,
-            ),
-            child: Text(
-              'OK',
-              style: TextStyle(
-                color: Theme.of(context).textSelectionTheme.selectionColor,
+              },
+            )),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: Theme.of(context).primaryColor,
               ),
+              child: Text(
+                'OK',
+                style: TextStyle(
+                  color: Theme.of(context).textSelectionTheme.selectionColor,
+                ),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
             ),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

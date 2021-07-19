@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 
 import '../parrotDialogInformation.dart';
 
@@ -32,7 +33,7 @@ class CreateInfoRowParrot extends StatelessWidget {
           splashColor: Theme.of(context).primaryColor,
           borderRadius: BorderRadius.circular(10),
           onTap: () {
-            showDialog(
+            showAnimatedDialog(
               context: context,
               builder: (ctx) => new AlertDialog(
                 backgroundColor: Theme.of(context).backgroundColor,
@@ -66,6 +67,9 @@ class CreateInfoRowParrot extends StatelessWidget {
                   )
                 ],
               ),
+              animationType: DialogTransitionType.scale,
+              curve: Curves.fastOutSlowIn,
+              duration: Duration(seconds: 2),
             );
           },
           child: Container(

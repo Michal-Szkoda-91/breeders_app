@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 
 class ExitButton extends StatelessWidget {
   @override
@@ -30,7 +31,7 @@ class ExitButton extends StatelessWidget {
 
   //Dialog wyswietlany przy zamykaniu aplikacji
   _showDialog(BuildContext dialogContext) {
-    showDialog(
+    showAnimatedDialog(
       context: dialogContext,
       builder: (ctx) => new AlertDialog(
         title: const Text(
@@ -68,6 +69,9 @@ class ExitButton extends StatelessWidget {
           )
         ],
       ),
+      animationType: DialogTransitionType.scale,
+      curve: Curves.fastOutSlowIn,
+      duration: Duration(seconds: 2),
     );
   }
 }

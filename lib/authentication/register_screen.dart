@@ -1,6 +1,7 @@
 import 'package:draggable_scrollbar/draggable_scrollbar.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 
 import '../privacy_policy/policy_Text.dart';
 import '../globalWidgets/imageContainerParrot.dart';
@@ -383,9 +384,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   Future<void> _showHint(String hint) async {
-    return showDialog<void>(
+    return showAnimatedDialog<void>(
       context: context,
-      barrierDismissible: false, // user must tap button!
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
           backgroundColor: Theme.of(context).accentColor,
@@ -404,7 +405,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
             TextButton(
               child: Text(
                 'OK',
-                style: TextStyle(color: Theme.of(context).primaryColor),
+                style: TextStyle(
+                  color: Theme.of(context).textSelectionTheme.selectionColor,
+                ),
               ),
               onPressed: () {
                 Navigator.of(context).pop();
@@ -413,6 +416,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ],
         );
       },
+      animationType: DialogTransitionType.scale,
+      curve: Curves.fastOutSlowIn,
+      duration: Duration(seconds: 2),
     );
   }
 }

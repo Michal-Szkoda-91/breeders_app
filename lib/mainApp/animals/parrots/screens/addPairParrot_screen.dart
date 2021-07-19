@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:path/path.dart' as Path;
 
 import 'package:auto_size_text/auto_size_text.dart';
@@ -784,7 +785,7 @@ class _AddPairScreenState extends State<AddPairScreen> {
   }
 
   Future<void> _showPicQuestionDialog() {
-    return showDialog(
+    return showAnimatedDialog(
       barrierDismissible: false,
       context: context,
       builder: (ctx) => new AlertDialog(
@@ -859,6 +860,9 @@ class _AddPairScreenState extends State<AddPairScreen> {
           ),
         ],
       ),
+      animationType: DialogTransitionType.scale,
+      curve: Curves.fastOutSlowIn,
+      duration: Duration(seconds: 2),
     );
   }
 

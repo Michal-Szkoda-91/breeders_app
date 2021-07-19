@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 
 class TableContentNotesRow extends StatelessWidget {
   const TableContentNotesRow({
@@ -48,7 +49,7 @@ class TableContentNotesRow extends StatelessWidget {
   }
 
   Future _showInfo(BuildContext context, String title) {
-    return showDialog<void>(
+    return showAnimatedDialog<void>(
       barrierDismissible: true,
       context: context,
       builder: (BuildContext context) {
@@ -64,6 +65,9 @@ class TableContentNotesRow extends StatelessWidget {
           ),
         );
       },
+      animationType: DialogTransitionType.scale,
+      curve: Curves.fastOutSlowIn,
+      duration: Duration(seconds: 2),
     );
   }
 }
