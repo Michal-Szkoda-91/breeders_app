@@ -33,12 +33,10 @@ class _ParrotsRaceListScreenState extends State<ParrotsRaceListScreen> {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
     bool? firstTime = _prefs.getBool('show_Tutorial');
     if (firstTime != null && firstTime) {
-      print("________________________False");
       setState(() {
         _showTutorial = false;
       });
     } else {
-      print("________________________True");
       setState(() {
         _showTutorial = true;
       });

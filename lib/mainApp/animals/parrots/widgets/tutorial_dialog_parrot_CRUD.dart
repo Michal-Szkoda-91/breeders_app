@@ -1,7 +1,10 @@
-import 'package:breeders_app/mainApp/animals/parrots/screens/parrot_race_list_screen.dart';
-import 'package:breeders_app/mainApp/animals/parrots/screens/parrotsList.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../screens/parrot_race_list_screen.dart';
+import 'tutorial_widgets/dots_container.dart';
+import 'tutorial_widgets/tutorial_pic_container.dart';
+import 'tutorial_widgets/tutorial_text_container.dart';
 
 class TutorialParrotCrud extends StatefulWidget {
   @override
@@ -24,56 +27,20 @@ class _TutorialParrotCrudState extends State<TutorialParrotCrud> {
         child: Column(
           children: [
             const SizedBox(height: 5.0),
-            Container(
-              alignment: Alignment.center,
-              width: size.width * 0.9,
-              color: Theme.of(context).primaryColor,
-              child: Padding(
-                padding: const EdgeInsets.all(3.0),
-                child: Text(
-                  "Samouczek",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-              ),
-            ),
+            TutorialPicContainer(screenNumber: _screenNumber),
             const SizedBox(height: 5.0),
-            Container(
-              color: Theme.of(context).primaryColor,
-              height: size.height * 0.4,
-              width: size.width * 0.9,
-              child: Text('obraz nr $_screenNumber'),
-            ),
-            const SizedBox(height: 5.0),
-            Container(
-              color: Theme.of(context).primaryColor,
-              height: size.height * 0.25,
-              width: size.width * 0.9,
-              child: Text('Tekst nr $_screenNumber'),
-            ),
-            const SizedBox(height: 5.0),
-            DotsContainer(
-              screenNumber: _screenNumber,
-            ),
-            const SizedBox(height: 5.0),
+            TutorialTextContainer(screenNumber: _screenNumber),
+            DotsContainer(screenNumber: _screenNumber),
             Container(
               width: size.width * 0.9,
               color: Theme.of(context).primaryColor,
               child: TextButton.icon(
-                onPressed: () async {
-                  final SharedPreferences prefs = await _prefs;
-                  prefs.setBool('show_Tutorial', true);
-                  Navigator.pop(context);
-                  Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                          builder: (BuildContext context) =>
-                              ParrotsRaceListScreen()),
-                      (route) => false);
-                },
+                onPressed: _closeDialog,
                 icon: Icon(Icons.close),
-                label: Text("Pomiń"),
+                label: Text("Pomiń samouczek"),
               ),
             ),
+            const SizedBox(height: 5.0),
           ],
         ),
       ),
@@ -82,56 +49,29 @@ class _TutorialParrotCrudState extends State<TutorialParrotCrud> {
 
   void _switfScreen(DragEndDetails detail) {
     if (detail.primaryVelocity! > 0 && _screenNumber > 1) {
-      print("________________ w lewo");
       setState(() {
         _screenNumber--;
       });
-    } else if (detail.primaryVelocity! < 0 && _screenNumber < 5) {
-      print("________________ w prawo");
+    } else if (detail.primaryVelocity! < 0 && _screenNumber < 7) {
       setState(() {
         _screenNumber++;
       });
     }
   }
-}
 
-class DotsContainer extends StatelessWidget {
-  const DotsContainer({
-    required this.screenNumber,
-  });
-
-  final int screenNumber;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      alignment: Alignment.center,
-      width: MediaQuery.of(context).size.width * 0.9,
-      height: MediaQuery.of(context).size.height * 0.05,
-      child: Padding(
-        padding: const EdgeInsets.all(3.0),
-        child: Center(
-          child: ListView.builder(
-              shrinkWrap: true,
-              scrollDirection: Axis.horizontal,
-              itemCount: 5,
-              itemBuilder: (context, i) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 5),
-                  child: CircleAvatar(
-                    backgroundColor: Theme.of(context).primaryColor,
-                    radius: 7,
-                    child: CircleAvatar(
-                      backgroundColor: i + 1 == screenNumber
-                          ? Theme.of(context).primaryColor
-                          : Theme.of(context).backgroundColor,
-                      radius: 4,
-                    ),
-                  ),
-                );
-              }),
-        ),
-      ),
-    );
+  _closeDialog() async {
+    final SharedPreferences prefs = await _prefs;
+    bool? firstTime = prefs.getBool('show_Tutorial');
+    if (firstTime == null) {
+      prefs.setBool('show_Tutorial', true);
+      Navigator.pop(context);
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+              builder: (BuildContext context) => ParrotsRaceListScreen()),
+          (route) => false);
+    } else {
+      Navigator.pop(context);
+    }
   }
 }

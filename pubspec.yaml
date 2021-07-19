@@ -88,51 +88,13 @@ flutter:
     - assets/image/animal_Icon.jpg
     - assets/icon/splash.png
     #Parrots race
-    - assets/image/parrotsRace/parrot_Icon.jpg
-    - assets/image/parrotsRace/Aleksandretta.jpg
-    - assets/image/parrotsRace/Lorysa.jpg
-    - assets/image/parrotsRace/Nimfa.jpg
-    - assets/image/parrotsRace/Rozella.jpg
-    - assets/image/parrotsRace/Świergotka.jpg
-    - assets/image/parrotsRace/Kakadu.jpg
-    - assets/image/parrotsRace/Ara.jpg
-    - assets/image/parrotsRace/Modrolotka.jpg
-    - assets/image/parrotsRace/Łąkówka.jpg
-    - assets/image/parrotsRace/Mnicha.jpg
-    - assets/image/parrotsRace/Rudosterka.jpg
-    - assets/image/parrotsRace/Amazonka.jpg
-    - assets/image/parrotsRace/Konura.jpg
-    - assets/image/parrotsRace/Barwinka.jpg
-    - assets/image/parrotsRace/Nierozłączka.jpg
-    - assets/image/parrotsRace/Papużka_falista.jpg
-    - assets/image/parrotsRace/parrot_pair.jpg
-    - assets/image/parrotsRace/Kapturnica.jpg
-    - assets/image/parrotsRace/Żako.jpg
-    - assets/image/parrotsRace/Lora.jpg
-    - assets/image/parrotsRace/Szkarłatka.jpg
-    - assets/image/parrotsRace/Afrykanka.jpg
-    - assets/image/parrotsRace/Patagonka.jpg
-    - assets/image/parrotsRace/Stokówka.jpg
-    - assets/image/parrotsRace/Wróbliczka.jpg
-    - assets/image/parrotsRace/Piona.jpg
+    - assets/image/parrotsRace/
     # Help Screens
-    - assets/help/help_screen_1.png
-    - assets/help/help_screen_2.png
-    - assets/help/help_screen_3.png
-    - assets/help/help_screen_4.png
-    - assets/help/help_screen_5.png
-    - assets/help/help_screen_6.png
-    - assets/help/help_screen_7.png
-    - assets/help/help_screen_8.png
-    - assets/help/help_screen_9.png
-    - assets/help/help_screen_10.png
-    - assets/help/help_screen_11.png
-    - assets/help/help_screen_12.png
-    - assets/help/help_screen_13.png
-    # policy file
+    - assets/help/
+    # policy files
     - assets/privacy_policy/
-    # - assets/privacy_policy/privacy_policy.md
-    # - assets/privacy_policy/terms_and_condition.md
+    # tutorial files
+    - assets/tutorial/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

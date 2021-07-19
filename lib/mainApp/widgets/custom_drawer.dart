@@ -1,3 +1,4 @@
+import 'package:breeders_app/mainApp/widgets/tutorial_button.dart';
 import 'package:flutter/material.dart';
 
 import '../../globalWidgets/imageContainerChinchila.dart';
@@ -31,7 +32,7 @@ class CustomDrawer extends StatelessWidget {
           child: Column(
             children: [
               const SizedBox(height: 10),
-               ImageContainerParrotSmall(),
+              ImageContainerParrotSmall(),
               Padding(
                 padding: const EdgeInsets.all(14.0),
                 child: Text(
@@ -51,6 +52,7 @@ class CustomDrawer extends StatelessWidget {
               const Divider(thickness: 2),
               Spacer(),
               const Divider(thickness: 2),
+              TutorialButton(),
               HelpButton(),
               PolicyButton(),
               TermsButton(),
