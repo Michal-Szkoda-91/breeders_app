@@ -1,8 +1,9 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:breeders_app/mainApp/animals/parrots/models/pairing_model.dart';
-import 'package:breeders_app/mainApp/animals/parrots/models/parrot_model.dart';
 import 'package:flutter/material.dart';
 
+import 'package:breeders_app/mainApp/animals/parrots/models/pairing_model.dart';
+import 'package:breeders_app/mainApp/animals/parrots/models/parrot_model.dart';
+import 'package:breeders_app/models/global_methods.dart';
 import '../models/parrotsRace_list.dart';
 import '../screens/addParrot_screen.dart';
 
@@ -19,6 +20,7 @@ class AddParrotFromInsideParrotList extends StatefulWidget {
 class _AddParrotFromInsideParrotListState
     extends State<AddParrotFromInsideParrotList> {
   final ParrotsRace _parrotsRace = new ParrotsRace();
+  GlobalMethods _globalMethods = GlobalMethods();
 
   late Map raceMap;
 
@@ -35,10 +37,9 @@ class _AddParrotFromInsideParrotListState
       child: InkWell(
         splashColor: Theme.of(context).primaryColor,
         onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => AddParrotScreen(
+          Navigator.of(context).push(
+            _globalMethods.createRoute(
+              AddParrotScreen(
                 parrotMap: raceMap,
                 addFromChild: false,
                 pair: ParrotPairing(

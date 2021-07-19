@@ -143,10 +143,9 @@ class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
   }
 
   void _navigateToParrotsList(String raceName) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => ParrotsListScreen(
+    Navigator.of(context).push(
+      _globalMethods.createRoute(
+        ParrotsListScreen(
           raceName: raceName,
         ),
       ),
@@ -154,10 +153,9 @@ class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
   }
 
   void _navigateToPairingList(String raceName) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => PairListScreen(
+    Navigator.of(context).push(
+      _globalMethods.createRoute(
+        PairListScreen(
           raceName: raceName,
           parrotList: parrotList,
         ),

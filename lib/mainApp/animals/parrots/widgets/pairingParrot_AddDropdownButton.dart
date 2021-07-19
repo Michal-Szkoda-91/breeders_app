@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import 'package:breeders_app/models/global_methods.dart';
 import '../screens/addPairParrot_screen.dart';
 
 class CreatePairingParrotDropdownButton extends StatefulWidget {
@@ -16,6 +17,7 @@ class CreatePairingParrotDropdownButton extends StatefulWidget {
 class _CreatePairingParrotDropdownButtonState
     extends State<CreatePairingParrotDropdownButton> {
   final firebaseUser = FirebaseAuth.instance.currentUser;
+  GlobalMethods _globalMethods = GlobalMethods();
 
   String url = 'assets/image/parrotsRace/parrot_Icon.jpg';
   String name = 'Utwórz Parę';
@@ -73,10 +75,9 @@ class _CreatePairingParrotDropdownButtonState
   }
 
   void _navigateToAddPairParrotScreen(String raceName) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => AddPairScreen(
+    Navigator.of(context).push(
+      _globalMethods.createRoute(
+        AddPairScreen(
           raceName: raceName,
         ),
       ),
