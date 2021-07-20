@@ -27,45 +27,47 @@ class ParrotRingButton extends StatelessWidget {
         onTap: () {
           showAnimatedDialog(
             context: context,
-            builder: (ctx) => new AlertDialog(
-              backgroundColor: Theme.of(context).backgroundColor,
-              scrollable: true,
-              title: new Text(
-                title,
-                style: TextStyle(
-                  color: Theme.of(context).textSelectionTheme.selectionColor,
-                ),
-              ),
-              content: Container(
-                width: MediaQuery.of(context).size.width * 0.7,
-                height: MediaQuery.of(context).size.height * 0.7,
-                child: ParrotDialogInformation(
-                  parrotRace: createdParrotList[index].race,
-                  parrotRing: title,
-                ),
-              ),
-              actions: <Widget>[
-                TextButton(
-                  style: TextButton.styleFrom(
-                    backgroundColor: Theme.of(context).backgroundColor,
+            builder: (ctx) => SafeArea(
+              child: new AlertDialog(
+                backgroundColor: Theme.of(context).backgroundColor,
+                scrollable: true,
+                title: new Text(
+                  title,
+                  style: TextStyle(
+                    color: Theme.of(context).textSelectionTheme.selectionColor,
                   ),
-                  child: Text(
-                    'OK',
-                    style: TextStyle(
-                      color:
-                          Theme.of(context).textSelectionTheme.selectionColor,
-                      fontSize: 18,
+                ),
+                content: Container(
+                  width: MediaQuery.of(context).size.width * 0.7,
+                  height: MediaQuery.of(context).size.height * 0.7,
+                  child: ParrotDialogInformation(
+                    parrotRace: createdParrotList[index].race,
+                    parrotRing: title,
+                  ),
+                ),
+                actions: <Widget>[
+                  TextButton(
+                    style: TextButton.styleFrom(
+                      backgroundColor: Theme.of(context).backgroundColor,
                     ),
-                  ),
-                  onPressed: () {
-                    Navigator.of(ctx).pop();
-                  },
-                )
-              ],
+                    child: Text(
+                      'OK',
+                      style: TextStyle(
+                        color:
+                            Theme.of(context).textSelectionTheme.selectionColor,
+                        fontSize: 18,
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.of(ctx).pop();
+                    },
+                  )
+                ],
+              ),
             ),
             animationType: DialogTransitionType.scale,
             curve: Curves.fastOutSlowIn,
-            duration: Duration(seconds: 2),
+            duration: Duration(milliseconds: 1400),
           );
         },
         child: Container(

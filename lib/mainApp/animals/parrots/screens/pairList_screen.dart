@@ -40,62 +40,64 @@ class _PairListScreenState extends State<PairListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      endDrawer: CustomDrawer(auth: _auth),
-      endDrawerEnableOpenDragGesture: false,
-      backgroundColor: Colors.transparent,
-      appBar: AppBar(
-        leading:
-            (ModalRoute.of(context)?.canPop ?? false) ? BackButton() : null,
-        title: Container(
-          width: MediaQuery.of(context).size.width * 30,
-          child: AutoSizeText(
-            'Pary: ${widget.raceName}',
-            maxLines: 1,
+    return SafeArea(
+      child: Scaffold(
+        endDrawer: CustomDrawer(auth: _auth),
+        endDrawerEnableOpenDragGesture: false,
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          leading:
+              (ModalRoute.of(context)?.canPop ?? false) ? BackButton() : null,
+          title: Container(
+            width: MediaQuery.of(context).size.width * 30,
+            child: AutoSizeText(
+              'Pary: ${widget.raceName}',
+              maxLines: 1,
+            ),
           ),
         ),
-      ),
-      body: MainBackground(
-        child: StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance
-              .collection(firebaseUser!.uid)
-              .doc(widget.raceName)
-              .collection("Pairs")
-              .snapshots(),
-          builder:
-              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-            if (snapshot.hasError) return Text('Błąd danych');
-            switch (snapshot.connectionState) {
-              case ConnectionState.waiting:
-                return Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(50.0),
-                    child: const CircularProgressIndicator(),
-                  ),
-                );
-              default:
-                _createPairList(snapshot);
-                return Column(
-                  children: [
-                    !_showArchive
-                        ? CreatePairingParrotDropdownButton(
-                            raceName: widget.raceName,
-                          )
-                        : const SizedBox(height: 1),
-                    _changeView(context),
-                    Expanded(
-                      child: ParrotPairCard(
-                        pairList: _pairList,
-                        race: widget.raceName,
-                        parrotList: widget.parrotList,
-                      ),
+        body: MainBackground(
+          child: StreamBuilder<QuerySnapshot>(
+            stream: FirebaseFirestore.instance
+                .collection(firebaseUser!.uid)
+                .doc(widget.raceName)
+                .collection("Pairs")
+                .snapshots(),
+            builder:
+                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              if (snapshot.hasError) return Text('Błąd danych');
+              switch (snapshot.connectionState) {
+                case ConnectionState.waiting:
+                  return Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(50.0),
+                      child: const CircularProgressIndicator(),
                     ),
-                    const SizedBox(height: 8),
-                    BannerPage(),
-                  ],
-                );
-            }
-          },
+                  );
+                default:
+                  _createPairList(snapshot);
+                  return Column(
+                    children: [
+                      !_showArchive
+                          ? CreatePairingParrotDropdownButton(
+                              raceName: widget.raceName,
+                            )
+                          : const SizedBox(height: 1),
+                      _changeView(context),
+                      Expanded(
+                        child: ParrotPairCard(
+                          pairList: _pairList,
+                          race: widget.raceName,
+                          parrotList: widget.parrotList,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      BannerPage(),
+                    ],
+                  );
+              }
+            },
+          ),
         ),
       ),
     );

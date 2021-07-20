@@ -152,87 +152,88 @@ class _AddPairScreenState extends State<AddPairScreen> {
   @override
   Widget build(BuildContext context) {
     final node = FocusScope.of(context);
-    // getParrotsFromStream();
-    return Scaffold(
-      endDrawer: CustomDrawer(auth: _auth),
-      endDrawerEnableOpenDragGesture: false,
-      backgroundColor: Colors.transparent,
-      appBar: AppBar(
-        leading:
-            (ModalRoute.of(context)?.canPop ?? false) ? BackButton() : null,
-        title: AutoSizeText(
-          "Parowanie - ${widget.raceName}",
-          maxLines: 1,
+    return SafeArea(
+      child: Scaffold(
+        endDrawer: CustomDrawer(auth: _auth),
+        endDrawerEnableOpenDragGesture: false,
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          leading:
+              (ModalRoute.of(context)?.canPop ?? false) ? BackButton() : null,
+          title: AutoSizeText(
+            "Parowanie - ${widget.raceName}",
+            maxLines: 1,
+          ),
         ),
-      ),
-      body: !_isLoading
-          ? MainBackground(
-              child: DraggableScrollbar.rrect(
-                controller: _rrectController,
-                heightScrollThumb: 100,
-                backgroundColor: Theme.of(context).accentColor,
-                child: ListView.builder(
+        body: !_isLoading
+            ? MainBackground(
+                child: DraggableScrollbar.rrect(
                   controller: _rrectController,
-                  itemCount: 1,
-                  itemBuilder: (context, index) {
-                    return Column(
-                      children: [
-                        _createTitle(context),
-                        !_isDataReady
-                            ? Center(
-                                child: CircularProgressIndicator(),
-                              )
-                            : _createContent(context),
-                        const SizedBox(height: 15),
-                        _createForm(context, node),
-                        const SizedBox(height: 15),
-                        buildRowCalendar(context),
-                        const SizedBox(height: 25),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            TextButton(
-                              style: TextButton.styleFrom(
-                                backgroundColor:
-                                    Theme.of(context).backgroundColor,
+                  heightScrollThumb: 100,
+                  backgroundColor: Theme.of(context).accentColor,
+                  child: ListView.builder(
+                    controller: _rrectController,
+                    itemCount: 1,
+                    itemBuilder: (context, index) {
+                      return Column(
+                        children: [
+                          _createTitle(context),
+                          !_isDataReady
+                              ? Center(
+                                  child: CircularProgressIndicator(),
+                                )
+                              : _createContent(context),
+                          const SizedBox(height: 15),
+                          _createForm(context, node),
+                          const SizedBox(height: 15),
+                          buildRowCalendar(context),
+                          const SizedBox(height: 25),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              TextButton(
+                                style: TextButton.styleFrom(
+                                  backgroundColor:
+                                      Theme.of(context).backgroundColor,
+                                ),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: _createInfoText(
+                                  context,
+                                  'Anuluj',
+                                ),
                               ),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: _createInfoText(
-                                context,
-                                'Anuluj',
+                              TextButton(
+                                style: TextButton.styleFrom(
+                                  backgroundColor:
+                                      Theme.of(context).backgroundColor,
+                                ),
+                                onPressed: () {
+                                  _sendPictureToStorage();
+                                },
+                                child: _createInfoText(
+                                  context,
+                                  'Utwórz parę',
+                                ),
                               ),
-                            ),
-                            TextButton(
-                              style: TextButton.styleFrom(
-                                backgroundColor:
-                                    Theme.of(context).backgroundColor,
-                              ),
-                              onPressed: () {
-                                _sendPictureToStorage();
-                              },
-                              child: _createInfoText(
-                                context,
-                                'Utwórz parę',
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 200,
-                        )
-                      ],
-                    );
-                  },
+                            ],
+                          ),
+                          SizedBox(
+                            height: 200,
+                          )
+                        ],
+                      );
+                    },
+                  ),
+                ),
+              )
+            : MainBackground(
+                child: Center(
+                  child: CircularProgressIndicator(),
                 ),
               ),
-            )
-          : MainBackground(
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
-            ),
+      ),
     );
   }
 
@@ -862,7 +863,7 @@ class _AddPairScreenState extends State<AddPairScreen> {
       ),
       animationType: DialogTransitionType.scale,
       curve: Curves.fastOutSlowIn,
-      duration: Duration(seconds: 2),
+      duration: Duration(milliseconds: 1400),
     );
   }
 

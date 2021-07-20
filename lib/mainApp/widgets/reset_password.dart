@@ -1,8 +1,10 @@
+import 'package:breeders_app/authentication/resetPass_screen.dart';
+import 'package:breeders_app/models/global_methods.dart';
 import 'package:flutter/material.dart';
 
-import '../../authentication/resetPass_screen.dart';
-
 class ResetPassword extends StatelessWidget {
+  GlobalMethods _globalMethods = GlobalMethods();
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -27,9 +29,10 @@ class ResetPassword extends StatelessWidget {
               ),
             ),
             onPressed: () {
-              Navigator.pushNamed(
-                context,
-                ResetPasswordScreen.routeName,
+              Navigator.of(context).push(
+                _globalMethods.createRoute(
+                  ResetPasswordScreen(),
+                ),
               );
             },
           ),

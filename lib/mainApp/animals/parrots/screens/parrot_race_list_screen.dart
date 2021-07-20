@@ -59,6 +59,7 @@ class _ParrotsRaceListScreenState extends State<ParrotsRaceListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       endDrawer: CustomDrawer(auth: _auth),
+      
       endDrawerEnableOpenDragGesture: false,
       backgroundColor: Colors.transparent,
       appBar: AppBar(
@@ -131,7 +132,7 @@ class _ParrotsRaceListScreenState extends State<ParrotsRaceListScreen> {
       ),
       animationType: DialogTransitionType.fadeScale,
       curve: Curves.fastOutSlowIn,
-      duration: Duration(seconds: 2),
+      duration: Duration(milliseconds: 1400),
     );
   }
 }

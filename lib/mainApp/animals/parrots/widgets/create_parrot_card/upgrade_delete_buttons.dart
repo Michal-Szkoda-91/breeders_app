@@ -43,10 +43,9 @@ class DeleteUpgradeButtons extends StatelessWidget {
           ),
           GestureDetector(
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AddParrotScreen(
+              Navigator.of(context).push(
+                _globalMethods.createRoute(
+                  AddParrotScreen(
                     parrotMap: {
                       "url": "assets/image/parrot.jpg",
                       "name": "Edytuj Papugę",

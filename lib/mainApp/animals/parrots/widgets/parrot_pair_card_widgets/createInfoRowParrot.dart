@@ -35,41 +35,45 @@ class CreateInfoRowParrot extends StatelessWidget {
           onTap: () {
             showAnimatedDialog(
               context: context,
-              builder: (ctx) => new AlertDialog(
-                backgroundColor: Theme.of(context).backgroundColor,
-                scrollable: true,
-                title: new Text(
-                  content,
-                  style: TextStyle(
-                    color: Theme.of(context).textSelectionTheme.selectionColor,
+              builder: (ctx) => SafeArea(
+                child: new AlertDialog(
+                  backgroundColor: Theme.of(context).backgroundColor,
+                  scrollable: true,
+                  title: new Text(
+                    content,
+                    style: TextStyle(
+                      color:
+                          Theme.of(context).textSelectionTheme.selectionColor,
+                    ),
                   ),
-                ),
-                content: ParrotDialogInformation(
-                  parrotRace: race,
-                  parrotRing: content,
-                ),
-                actions: <Widget>[
-                  TextButton(
-                    style: TextButton.styleFrom(
-                      backgroundColor: Theme.of(context).backgroundColor,
-                    ),
-                    child: Text(
-                      'OK',
-                      style: TextStyle(
-                        color:
-                            Theme.of(context).textSelectionTheme.selectionColor,
-                        fontSize: 18,
+                  content: ParrotDialogInformation(
+                    parrotRace: race,
+                    parrotRing: content,
+                  ),
+                  actions: <Widget>[
+                    TextButton(
+                      style: TextButton.styleFrom(
+                        backgroundColor: Theme.of(context).backgroundColor,
                       ),
-                    ),
-                    onPressed: () {
-                      Navigator.of(ctx).pop();
-                    },
-                  )
-                ],
+                      child: Text(
+                        'OK',
+                        style: TextStyle(
+                          color: Theme.of(context)
+                              .textSelectionTheme
+                              .selectionColor,
+                          fontSize: 18,
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.of(ctx).pop();
+                      },
+                    )
+                  ],
+                ),
               ),
               animationType: DialogTransitionType.scale,
               curve: Curves.fastOutSlowIn,
-              duration: Duration(seconds: 2),
+              duration: Duration(milliseconds: 1400),
             );
           },
           child: Container(

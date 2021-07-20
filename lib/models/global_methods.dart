@@ -69,7 +69,7 @@ class GlobalMethods {
       },
       animationType: DialogTransitionType.scale,
       curve: Curves.fastOutSlowIn,
-      duration: Duration(seconds: 2),
+      duration: Duration(milliseconds: 1400),
     );
   }
 
@@ -109,7 +109,7 @@ class GlobalMethods {
       },
       animationType: DialogTransitionType.scale,
       curve: Curves.linear,
-      duration: Duration(seconds: 1),
+      duration: Duration(milliseconds: 800),
     );
   }
 

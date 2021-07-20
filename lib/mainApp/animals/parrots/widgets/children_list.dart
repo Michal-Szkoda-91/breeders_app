@@ -237,32 +237,33 @@ class _ChildrenListState extends State<ChildrenList> {
   IconButton _createEditChild(Children child) {
     return IconButton(
       onPressed: () async {
-        await Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => AddParrotScreen(
-              pair: widget.pair,
-              parrotMap: {
-                "url": "assets/image/parrot.jpg",
-                "name": "Edytuj Dane",
-                "icubationTime": "21"
-              },
-              race: widget.raceName,
-              addFromChild: false,
-              parrot: Parrot(
-                race: widget.raceName,
-                ringNumber: child.ringNumber,
-                color: child.color,
-                fission: '',
-                cageNumber: '',
-                sex: child.gender,
-                notes: '',
-                pairRingNumber: '',
+        Navigator.of(context)
+            .push(
+              _globalMethods.createRoute(
+                AddParrotScreen(
+                  pair: widget.pair,
+                  parrotMap: {
+                    "url": "assets/image/parrot.jpg",
+                    "name": "Edytuj Dane",
+                    "icubationTime": "21"
+                  },
+                  race: widget.raceName,
+                  addFromChild: false,
+                  parrot: Parrot(
+                    race: widget.raceName,
+                    ringNumber: child.ringNumber,
+                    color: child.color,
+                    fission: '',
+                    cageNumber: '',
+                    sex: child.gender,
+                    notes: '',
+                    pairRingNumber: '',
+                  ),
+                  data: child.broodDate,
+                ),
               ),
-              data: child.broodDate,
-            ),
-          ),
-        ).then((value) => setState(() {}));
+            )
+            .then((value) => setState(() {}));
       },
       icon: Icon(
         Icons.edit,
@@ -283,37 +284,34 @@ class _ChildrenListState extends State<ChildrenList> {
         onPressed: () {
           raceMap = _parrotsRace.parrotsRaceList
               .firstWhere((element) => element["name"] == widget.raceName);
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => AddParrotScreen(
-                parrotMap: raceMap,
-                parrot: new Parrot(
-                  ringNumber: ringNumber,
-                  color: color,
-                  cageNumber: "brak",
-                  fission: "brak",
-                  notes: "brak",
-                  pairRingNumber: "brak",
-                  race: widget.raceName,
-                  sex: gender,
-                ),
-                addFromChild: true,
-                pair: ParrotPairing(
-                    id: '',
-                    race: '',
-                    maleRingNumber: '',
-                    femaleRingNumber: '',
-                    pairingData: '',
-                    showEggsDate: '',
-                    pairColor: '',
-                    isArchive: '',
-                    picUrl: ''),
-                race: '',
-                data: '',
+          Navigator.of(context).push(_globalMethods.createRoute(
+            AddParrotScreen(
+              parrotMap: raceMap,
+              parrot: new Parrot(
+                ringNumber: ringNumber,
+                color: color,
+                cageNumber: "brak",
+                fission: "brak",
+                notes: "brak",
+                pairRingNumber: "brak",
+                race: widget.raceName,
+                sex: gender,
               ),
+              addFromChild: true,
+              pair: ParrotPairing(
+                  id: '',
+                  race: '',
+                  maleRingNumber: '',
+                  femaleRingNumber: '',
+                  pairingData: '',
+                  showEggsDate: '',
+                  pairColor: '',
+                  isArchive: '',
+                  picUrl: ''),
+              race: '',
+              data: '',
             ),
-          );
+          ));
         },
       ),
     );

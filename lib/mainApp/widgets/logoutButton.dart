@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:breeders_app/models/global_methods.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 
@@ -57,15 +58,11 @@ class LogoutButton extends StatelessWidget {
               ),
             ),
             onPressed: () async {
+              GlobalMethods _globalMethods = GlobalMethods();
               Navigator.of(ctx).pop();
               await auth.signOut();
-              Navigator.pushAndRemoveUntil(
-                dialogContext,
-                MaterialPageRoute(
-                  builder: ((context) => MyApp()),
-                ),
-                (Route<dynamic> route) => false,
-              );
+              Navigator.of(ctx).pushAndRemoveUntil(
+                  _globalMethods.createRoute(MyApp()), (route) => false);
             },
           ),
           TextButton(
@@ -87,7 +84,7 @@ class LogoutButton extends StatelessWidget {
       ),
       animationType: DialogTransitionType.scale,
       curve: Curves.fastOutSlowIn,
-      duration: Duration(seconds: 2),
+      duration: Duration(milliseconds: 1400),
     );
   }
 }

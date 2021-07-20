@@ -106,177 +106,186 @@ class _RaceListScreenState extends State<AddParrotScreen> {
     RegExp _regExpYear = RegExp(_yearPatter.toString());
     RegExp _regExpNumber = RegExp(_numberPatter.toString());
     final node = FocusScope.of(context);
-    return Scaffold(
-      endDrawer: CustomDrawer(auth: _auth),
-      endDrawerEnableOpenDragGesture: false,
-      backgroundColor: Colors.transparent,
-      appBar: AppBar(
-        leading:
-            (ModalRoute.of(context)?.canPop ?? false) ? BackButton() : null,
-        title: widget.parrot.ringNumber != 'brak'
-            ? const Text("Edycja")
-            : const Text("Dodawanie Papugi"),
-      ),
-      body: !_isLoading
-          ? MainBackground(
-              child: DraggableScrollbar.rrect(
-                controller: _rrectController,
-                heightScrollThumb: 100,
-                backgroundColor: Theme.of(context).accentColor,
-                child: ListView.builder(
+    return SafeArea(
+      child: Scaffold(
+        endDrawer: CustomDrawer(auth: _auth),
+        endDrawerEnableOpenDragGesture: false,
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          leading:
+              (ModalRoute.of(context)?.canPop ?? false) ? BackButton() : null,
+          title: widget.parrot.ringNumber != 'brak'
+              ? const Text("Edycja")
+              : const Text("Dodawanie Papugi"),
+        ),
+        body: !_isLoading
+            ? MainBackground(
+                child: DraggableScrollbar.rrect(
                   controller: _rrectController,
-                  itemCount: 1,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Column(
-                        children: [
-                          const SizedBox(height: 16.0),
-                          customTitle(context),
-                          const SizedBox(height: 30),
-                          Form(
-                            key: _formKey,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                //
-                                //******************************************************* */
-                                //Sex
-                                widget.parrot.ringNumber != 'brak'
-                                    ? widget.parrot.pairRingNumber == "brak" ||
-                                            widget.pair.id != ''
-                                        ? genderSwitchRow(context, _sex)
-                                        : infoText(context, widget.parrot.sex)
-                                    : genderSwitchRow(context, _sex),
-                                widget.pair.id == ''
-                                    ? Center()
-                                    : SizedBox(height: 16.0),
-                                //
-                                //******************************************************* */
-                                //Ring number
-                                infoText(context, "Numer obrączki"),
-                                const SizedBox(height: 16.0),
+                  heightScrollThumb: 100,
+                  backgroundColor: Theme.of(context).accentColor,
+                  child: ListView.builder(
+                    controller: _rrectController,
+                    itemCount: 1,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: Column(
+                          children: [
+                            const SizedBox(height: 16.0),
+                            customTitle(context),
+                            const SizedBox(height: 30),
+                            Form(
+                              key: _formKey,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  //
+                                  //******************************************************* */
+                                  //Sex
+                                  widget.parrot.ringNumber != 'brak'
+                                      ? widget.parrot.pairRingNumber ==
+                                                  "brak" ||
+                                              widget.pair.id != ''
+                                          ? genderSwitchRow(context, _sex)
+                                          : infoText(context, widget.parrot.sex)
+                                      : genderSwitchRow(context, _sex),
+                                  widget.pair.id == ''
+                                      ? Center()
+                                      : SizedBox(height: 16.0),
+                                  //
+                                  //******************************************************* */
+                                  //Ring number
+                                  infoText(context, "Numer obrączki"),
+                                  const SizedBox(height: 16.0),
 
-                                ringNumberRow(
-                                  context,
-                                  _regExpCountry,
-                                  node,
-                                  _regExpYear,
-                                  _regExpNumber,
-                                  _country,
-                                  _year,
-                                  _symbol,
-                                  _parrotNumber,
-                                ),
-                                widget.pair.id == ''
-                                    ? const Center()
-                                    : const SizedBox(height: 16.0),
+                                  ringNumberRow(
+                                    context,
+                                    _regExpCountry,
+                                    node,
+                                    _regExpYear,
+                                    _regExpNumber,
+                                    _country,
+                                    _year,
+                                    _symbol,
+                                    _parrotNumber,
+                                  ),
+                                  widget.pair.id == ''
+                                      ? const Center()
+                                      : const SizedBox(height: 16.0),
 
-                                //
-                                //  Born Time
-                                //
-                                const SizedBox(height: 16.0),
-                                widget.pair.id != ''
-                                    ? Row(
-                                        children: [
-                                          Spacer(),
-                                          buildRowCalendar(context),
-                                          Spacer(),
-                                        ],
-                                      )
-                                    : const SizedBox(height: 16.0),
+                                  //
+                                  //  Born Time
+                                  //
+                                  const SizedBox(height: 16.0),
+                                  widget.pair.id != ''
+                                      ? Row(
+                                          children: [
+                                            Spacer(),
+                                            buildRowCalendar(context),
+                                            Spacer(),
+                                          ],
+                                        )
+                                      : const SizedBox(height: 16.0),
 
-                                //
-                                //******************************************************* */
-                                //Color
-                                const SizedBox(height: 16.0),
-                                customTextFormField(
-                                  context: context,
-                                  node: node,
-                                  hint: 'Wprowadż barwę papugi',
-                                  icon: Icons.color_lens,
-                                  mainValue: 'parrotColor',
-                                  maxlines: 1,
-                                  maxLength: 30,
-                                  initvalue: _parrotColor,
-                                ),
-                                const SizedBox(height: 16.0),
+                                  //
+                                  //******************************************************* */
+                                  //Color
+                                  const SizedBox(height: 16.0),
+                                  customTextFormField(
+                                    context: context,
+                                    node: node,
+                                    hint: 'Wprowadż barwę papugi',
+                                    icon: Icons.color_lens,
+                                    mainValue: 'parrotColor',
+                                    maxlines: 1,
+                                    maxLength: 30,
+                                    initvalue: _parrotColor,
+                                  ),
+                                  const SizedBox(height: 16.0),
 
-                                //
-                                //******************************************************* */
-                                //Fission
-                                widget.pair.id == 'brak' || widget.pair.id != ''
-                                    ? const Center()
-                                    : customTextFormField(
-                                        context: context,
-                                        node: node,
-                                        hint: 'Jakie rozszczepienie',
-                                        icon: Icons
-                                            .star_border_purple500_outlined,
-                                        mainValue: 'fission',
-                                        maxlines: 1,
-                                        maxLength: 50,
-                                        initvalue: _fission,
-                                      ),
-                                widget.pair.id == 'brak' || widget.pair.id != ''
-                                    ? const Center()
-                                    : const SizedBox(height: 16.0), //
-                                //******************************************************* */
-                                //cage number
-                                widget.pair.id == 'brak' || widget.pair.id != ''
-                                    ? const Center()
-                                    : customTextFormField(
-                                        context: context,
-                                        node: node,
-                                        hint: 'Numer / nazwa klatki',
-                                        icon: Icons.home_outlined,
-                                        mainValue: 'cageNumber',
-                                        maxlines: 1,
-                                        maxLength: 30,
-                                        initvalue: _cageNumber,
-                                      ),
-                                widget.pair.id == 'brak' || widget.pair.id != ''
-                                    ? const Center()
-                                    : const SizedBox(height: 16.0),
-                                //
-                                //******************************************************* */
-                                //notes
-                                widget.pair.id == 'brak' || widget.pair.id != ''
-                                    ? const Center()
-                                    : customTextFormField(
-                                        context: context,
-                                        node: node,
-                                        hint: 'Notatka / Dodatkowa informacja',
-                                        icon: Icons.note,
-                                        mainValue: 'notes',
-                                        maxlines: 10,
-                                        maxLength: 100,
-                                        initvalue: _notes,
-                                      ),
-                              ],
+                                  //
+                                  //******************************************************* */
+                                  //Fission
+                                  widget.pair.id == 'brak' ||
+                                          widget.pair.id != ''
+                                      ? const Center()
+                                      : customTextFormField(
+                                          context: context,
+                                          node: node,
+                                          hint: 'Jakie rozszczepienie',
+                                          icon: Icons
+                                              .star_border_purple500_outlined,
+                                          mainValue: 'fission',
+                                          maxlines: 1,
+                                          maxLength: 50,
+                                          initvalue: _fission,
+                                        ),
+                                  widget.pair.id == 'brak' ||
+                                          widget.pair.id != ''
+                                      ? const Center()
+                                      : const SizedBox(height: 16.0), //
+                                  //******************************************************* */
+                                  //cage number
+                                  widget.pair.id == 'brak' ||
+                                          widget.pair.id != ''
+                                      ? const Center()
+                                      : customTextFormField(
+                                          context: context,
+                                          node: node,
+                                          hint: 'Numer / nazwa klatki',
+                                          icon: Icons.home_outlined,
+                                          mainValue: 'cageNumber',
+                                          maxlines: 1,
+                                          maxLength: 30,
+                                          initvalue: _cageNumber,
+                                        ),
+                                  widget.pair.id == 'brak' ||
+                                          widget.pair.id != ''
+                                      ? const Center()
+                                      : const SizedBox(height: 16.0),
+                                  //
+                                  //******************************************************* */
+                                  //notes
+                                  widget.pair.id == 'brak' ||
+                                          widget.pair.id != ''
+                                      ? const Center()
+                                      : customTextFormField(
+                                          context: context,
+                                          node: node,
+                                          hint:
+                                              'Notatka / Dodatkowa informacja',
+                                          icon: Icons.note,
+                                          mainValue: 'notes',
+                                          maxlines: 10,
+                                          maxLength: 100,
+                                          initvalue: _notes,
+                                        ),
+                                ],
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 16.0),
-                          (widget.parrot.ringNumber == 'brak' &&
-                                      widget.pair.id == '' ||
-                                  widget.addFromChild)
-                              ? _addParrotConfimButton(context)
-                              : widget.pair.id == ''
-                                  ? _editParrotConfirmButton(context)
-                                  : _addParrotConfimButtonChild(context),
-                          const SizedBox(height: 200),
-                        ],
-                      ),
-                    );
-                  },
+                            const SizedBox(height: 16.0),
+                            (widget.parrot.ringNumber == 'brak' &&
+                                        widget.pair.id == '' ||
+                                    widget.addFromChild)
+                                ? _addParrotConfimButton(context)
+                                : widget.pair.id == ''
+                                    ? _editParrotConfirmButton(context)
+                                    : _addParrotConfimButtonChild(context),
+                            const SizedBox(height: 200),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              )
+            : MainBackground(
+                child: const Center(
+                  child: const CircularProgressIndicator(),
                 ),
               ),
-            )
-          : MainBackground(
-              child: const Center(
-                child: const CircularProgressIndicator(),
-              ),
-            ),
+      ),
     );
   }
 
