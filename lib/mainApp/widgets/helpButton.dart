@@ -1,3 +1,4 @@
+import 'package:breeders_app/models/global_methods.dart';
 import 'package:flutter/material.dart';
 
 import '../../help/help_screen.dart';
@@ -20,8 +21,13 @@ class HelpButton extends StatelessWidget {
         ),
       ),
       onPressed: () async {
+        GlobalMethods _globalMethods = GlobalMethods();
         Navigator.of(context).pop();
-        Navigator.pushNamed(context, HelpScreen.routeName);
+        Navigator.of(context).push(
+          _globalMethods.createRoute(
+            HelpScreen(),
+          ),
+        );
       },
     );
   }

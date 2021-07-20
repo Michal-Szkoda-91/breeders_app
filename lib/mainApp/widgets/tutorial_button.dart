@@ -19,14 +19,16 @@ class TutorialButton extends StatelessWidget {
         ),
       ),
       onPressed: () async {
-        showAnimatedDialog(
+        await showAnimatedDialog(
           context: context,
-          builder: (context) {
-            return TutorialParrotCrud();
-          },
-          animationType: DialogTransitionType.scale,
+          builder: (ctx) => AlertDialog(
+            insetPadding: EdgeInsets.zero,
+            backgroundColor: Colors.transparent,
+            content: TutorialParrotCrud(),
+          ),
+          animationType: DialogTransitionType.fadeScale,
           curve: Curves.fastOutSlowIn,
-          duration: Duration(seconds: 2),
+          duration: Duration(milliseconds: 1400),
         );
       },
     );

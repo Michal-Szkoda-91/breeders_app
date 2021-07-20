@@ -28,53 +28,55 @@ class _ParrotsListScreenState extends State<ParrotsListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      endDrawer: CustomDrawer(auth: _auth),
-      endDrawerEnableOpenDragGesture: false,
-      backgroundColor: Colors.transparent,
-      appBar: AppBar(
-        leading:
-            (ModalRoute.of(context)?.canPop ?? false) ? BackButton() : null,
-        title: Text(widget.raceName),
-      ),
-      body: MainBackground(
-        child: StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance
-              .collection(firebaseUser!.uid)
-              .doc(widget.raceName)
-              .collection("Birds")
-              .snapshots(),
-          builder:
-              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-            if (snapshot.hasError) return Text('Błąd danych');
-            switch (snapshot.connectionState) {
-              case ConnectionState.waiting:
-                return Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(50.0),
-                    child: const CircularProgressIndicator(),
-                  ),
-                );
-              default:
-                _createParrotList(snapshot);
-                return Column(
-                  children: [
-                    _createdParrotList.length == 0
-                        ? Text(
-                            "Brak Papug",
-                            style: TextStyle(
-                              color: Theme.of(context)
-                                  .textSelectionTheme
-                                  .selectionColor,
-                            ),
-                          )
-                        : ParrotCard(createdParrotList: _createdParrotList),
-                    const SizedBox(height: 8),
-                    BannerPage(),
-                  ],
-                );
-            }
-          },
+    return SafeArea(
+      child: Scaffold(
+        endDrawer: CustomDrawer(auth: _auth),
+        endDrawerEnableOpenDragGesture: false,
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          leading:
+              (ModalRoute.of(context)?.canPop ?? false) ? BackButton() : null,
+          title: Text(widget.raceName),
+        ),
+        body: MainBackground(
+          child: StreamBuilder<QuerySnapshot>(
+            stream: FirebaseFirestore.instance
+                .collection(firebaseUser!.uid)
+                .doc(widget.raceName)
+                .collection("Birds")
+                .snapshots(),
+            builder:
+                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              if (snapshot.hasError) return Text('Błąd danych');
+              switch (snapshot.connectionState) {
+                case ConnectionState.waiting:
+                  return Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(50.0),
+                      child: const CircularProgressIndicator(),
+                    ),
+                  );
+                default:
+                  _createParrotList(snapshot);
+                  return Column(
+                    children: [
+                      _createdParrotList.length == 0
+                          ? Text(
+                              "Brak Papug",
+                              style: TextStyle(
+                                color: Theme.of(context)
+                                    .textSelectionTheme
+                                    .selectionColor,
+                              ),
+                            )
+                          : ParrotCard(createdParrotList: _createdParrotList),
+                      const SizedBox(height: 8),
+                      BannerPage(),
+                    ],
+                  );
+              }
+            },
+          ),
         ),
       ),
     );

@@ -30,7 +30,7 @@ class TermsButton extends StatelessWidget {
           },
           animationType: DialogTransitionType.scale,
           curve: Curves.fastOutSlowIn,
-          duration: Duration(seconds: 2),
+          duration: Duration(milliseconds: 1400),
         );
       },
     );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:breeders_app/models/global_methods.dart';
 import '../models/pairing_model.dart';
 import '../../parrots/models/parrot_model.dart';
 import '../screens/addParrot_screen.dart';
@@ -14,6 +15,7 @@ class AddPairChildButton extends StatefulWidget {
 }
 
 class _AddPairChildButtonState extends State<AddPairChildButton> {
+  GlobalMethods _globalMethods = GlobalMethods();
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -31,10 +33,9 @@ class _AddPairChildButtonState extends State<AddPairChildButton> {
               color: Theme.of(context).textSelectionTheme.selectionColor,
             ),
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AddParrotScreen(
+              Navigator.of(context).push(
+                _globalMethods.createRoute(
+                  AddParrotScreen(
                     pair: widget.pair,
                     parrotMap: {
                       "url": "assets/image/parrot.jpg",
