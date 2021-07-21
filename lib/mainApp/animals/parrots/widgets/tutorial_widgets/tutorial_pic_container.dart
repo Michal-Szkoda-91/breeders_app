@@ -36,6 +36,7 @@ class _TutorialPicContainerState extends State<TutorialPicContainer> {
   ];
 
   void _loadImage() {
+    image.evict();
     setState(() {
       image = images[widget.screenNumber - 1];
       title = titles[widget.screenNumber - 1];
@@ -44,15 +45,12 @@ class _TutorialPicContainerState extends State<TutorialPicContainer> {
 
   @override
   Widget build(BuildContext context) {
-    image.evict();
-
     _loadImage();
     final size = MediaQuery.of(context).size;
     return Column(
       children: [
         Container(
           alignment: Alignment.center,
-          color: Colors.black12,
           height: size.height * 0.05,
           width: size.width * 0.9,
           child: Text(

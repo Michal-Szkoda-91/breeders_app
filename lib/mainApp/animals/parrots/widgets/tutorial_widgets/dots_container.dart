@@ -13,6 +13,7 @@ class DotsContainer extends StatelessWidget {
       alignment: Alignment.center,
       width: MediaQuery.of(context).size.width * 0.9,
       height: MediaQuery.of(context).size.height * 0.05,
+      color: Theme.of(context).backgroundColor,
       child: Padding(
         padding: const EdgeInsets.all(3.0),
         child: Center(

@@ -20,7 +20,13 @@ class _TutorialTextContainerState extends State<TutorialTextContainer> {
     final size = MediaQuery.of(context).size;
     return Expanded(
       child: Container(
-        color: Colors.black12,
+        decoration: BoxDecoration(
+          border: Border.all(
+            width: 1,
+            color: Theme.of(context).primaryColor,
+          ),
+          borderRadius: BorderRadius.circular(10),
+        ),
         padding: EdgeInsets.all(5),
         width: size.width * 0.9,
         child: DraggableScrollbar.rrect(
