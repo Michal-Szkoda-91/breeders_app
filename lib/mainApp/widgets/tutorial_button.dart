@@ -21,10 +21,12 @@ class TutorialButton extends StatelessWidget {
       onPressed: () async {
         await showAnimatedDialog(
           context: context,
-          builder: (ctx) => AlertDialog(
-            insetPadding: EdgeInsets.zero,
-            backgroundColor: Colors.transparent,
-            content: TutorialParrotCrud(),
+          builder: (ctx) => SafeArea(
+            child: AlertDialog(
+              insetPadding: EdgeInsets.zero,
+              backgroundColor: Colors.transparent,
+              content: TutorialParrotCrud(),
+            ),
           ),
           animationType: DialogTransitionType.fadeScale,
           curve: Curves.fastOutSlowIn,

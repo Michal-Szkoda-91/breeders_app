@@ -59,7 +59,6 @@ class _ParrotsRaceListScreenState extends State<ParrotsRaceListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       endDrawer: CustomDrawer(auth: _auth),
-      
       endDrawerEnableOpenDragGesture: false,
       backgroundColor: Colors.transparent,
       appBar: AppBar(
@@ -125,10 +124,12 @@ class _ParrotsRaceListScreenState extends State<ParrotsRaceListScreen> {
   showAlert(BuildContext ctx) async {
     await showAnimatedDialog(
       context: context,
-      builder: (ctx) => AlertDialog(
-        insetPadding: EdgeInsets.zero,
-        backgroundColor: Colors.transparent,
-        content: TutorialParrotCrud(),
+      builder: (ctx) => SafeArea(
+        child: AlertDialog(
+          insetPadding: EdgeInsets.zero,
+          backgroundColor: Colors.transparent,
+          content: TutorialParrotCrud(),
+        ),
       ),
       animationType: DialogTransitionType.fadeScale,
       curve: Curves.fastOutSlowIn,
