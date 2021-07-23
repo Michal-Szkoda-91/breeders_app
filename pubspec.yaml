@@ -92,8 +92,6 @@ flutter:
     - assets/icon/splash.png
     #Parrots race
     - assets/image/parrotsRace/
-    # Help Screens
-    - assets/help/
     # policy files
     - assets/privacy_policy/
     # tutorial files
