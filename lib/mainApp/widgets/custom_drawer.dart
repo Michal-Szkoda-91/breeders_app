@@ -5,7 +5,6 @@ import '../../mainApp/widgets/tutorial_button.dart';
 import '../../mainApp/widgets/terms_button.dart';
 import '../../services/auth.dart';
 import 'incubation_drawer_info.dart';
-import 'helpButton.dart';
 import 'logoutButton.dart';
 import 'policyButton.dart';
 import 'exit_button.dart';
@@ -55,7 +54,6 @@ class CustomDrawer extends StatelessWidget {
                 Spacer(),
                 const Divider(thickness: 2),
                 TutorialButton(),
-                HelpButton(),
                 PolicyButton(),
                 TermsButton(),
                 const Divider(thickness: 2),

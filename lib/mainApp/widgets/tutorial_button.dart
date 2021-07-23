@@ -13,7 +13,7 @@ class TutorialButton extends StatelessWidget {
         size: 30,
       ),
       label: Text(
-        'Samouczuek',
+        'Samouczek',
         style: TextStyle(
           color: Theme.of(context).textSelectionTheme.selectionColor,
         ),

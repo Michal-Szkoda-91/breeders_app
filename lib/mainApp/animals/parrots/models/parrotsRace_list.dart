@@ -131,6 +131,12 @@ class ParrotsRace {
       'icubationTime': 20
     },
     {
+      "url": 'assets/image/parrotsRace/Rozella_Królewska.jpg',
+      'name': 'Rozella_Królewska',
+      'lac': '( lac: Platycercus elegants)',
+      'icubationTime': 21
+    },
+    {
       "url": 'assets/image/parrotsRace/Rudosterka.jpg',
       'name': 'Rudosterka',
       'lac': '( lac: Pyrrchura )',
@@ -191,6 +197,7 @@ class ParrotsRace {
     'Papużka_falista',
     'Piona',
     'Rozella',
+    'Rozella_Królewska',
     'Rudosterka',
     'Stokówka',
     'Szkarłatka',
