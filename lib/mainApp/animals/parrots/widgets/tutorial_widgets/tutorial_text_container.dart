@@ -80,7 +80,7 @@ class _TutorialTextContainerState extends State<TutorialTextContainer> {
       case 8:
         return Html(
             data:
-                '<p style="text-align: center; color: white">W razie jakichkolwiek pytań lub niejasności chętnie służę pomocą. Skontaktuj się ze mną na adres <a style="color:blue", href="mailto:michal.szkoda.policy@gmail.com">michal.szkoda.policy@gmail.com</a></p>',
+                '<p style="text-align: center; color: white">Zawsze możesz zobaczyćsamouczek ponownie wybierając opcję w menu bocznym. W razie jakichkolwiek pytań lub niejasności chętnie służę pomocą. Skontaktuj się ze mną na adres <a style="color:blue", href="mailto:michal.szkoda.policy@gmail.com">michal.szkoda.policy@gmail.com</a></p>',
             onLinkTap: (url, _, __, ___) {
               launch(url.toString());
             });

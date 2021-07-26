@@ -20,7 +20,7 @@ class DotsContainer extends StatelessWidget {
           child: ListView.builder(
               shrinkWrap: true,
               scrollDirection: Axis.horizontal,
-              itemCount: 7,
+              itemCount: 8,
               itemBuilder: (context, i) {
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 5),

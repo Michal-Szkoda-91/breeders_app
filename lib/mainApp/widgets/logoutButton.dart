@@ -48,7 +48,7 @@ class LogoutButton extends StatelessWidget {
         actions: <Widget>[
           TextButton(
             style: TextButton.styleFrom(
-              backgroundColor: Theme.of(dialogContext).backgroundColor,
+              backgroundColor: Theme.of(dialogContext).errorColor,
             ),
             child: AutoSizeText(
               'Wyloguj',

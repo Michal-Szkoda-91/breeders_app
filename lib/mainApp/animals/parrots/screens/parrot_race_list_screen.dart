@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -85,8 +86,8 @@ class _ParrotsRaceListScreenState extends State<ParrotsRaceListScreen> {
               default:
                 createListRace(snapshot);
                 if (_showTutorial) {
-                  Future.delayed(
-                      Duration(seconds: 3), () => showAlert(context));
+                  Future.delayed(Duration(milliseconds: 200),
+                      () => askAboutTutorial(context));
                 }
                 return Column(
                   children: [
@@ -121,6 +122,54 @@ class _ParrotsRaceListScreenState extends State<ParrotsRaceListScreen> {
         .sort((a, b) => removeDiacritics(a).compareTo(removeDiacritics(b)));
   }
 
+  askAboutTutorial(BuildContext ctx) async {
+    await showAnimatedDialog(
+      context: context,
+      builder: (ctx) => SafeArea(
+        child: AlertDialog(
+          title: const Text(
+            "Czy chcesz zobaczyć instrukcję korzystania z aplikacji?",
+            textAlign: TextAlign.center,
+          ),
+          actions: [
+            TextButton(
+              style: TextButton.styleFrom(
+                backgroundColor: Theme.of(context).errorColor,
+              ),
+              child: AutoSizeText(
+                'Pomiń',
+                style: TextStyle(
+                  color: Theme.of(context).textSelectionTheme.selectionColor,
+                ),
+              ),
+              onPressed: () {
+                _closeDialog();
+              },
+            ),
+            TextButton(
+              style: TextButton.styleFrom(
+                backgroundColor: Theme.of(context).backgroundColor,
+              ),
+              child: AutoSizeText(
+                'Pokaż',
+                style: TextStyle(
+                  color: Theme.of(context).textSelectionTheme.selectionColor,
+                ),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+                showAlert(context);
+              },
+            )
+          ],
+        ),
+      ),
+      animationType: DialogTransitionType.fadeScale,
+      curve: Curves.fastOutSlowIn,
+      duration: Duration(milliseconds: 800),
+    );
+  }
+
   showAlert(BuildContext ctx) async {
     await showAnimatedDialog(
       context: context,
@@ -135,5 +184,22 @@ class _ParrotsRaceListScreenState extends State<ParrotsRaceListScreen> {
       curve: Curves.fastOutSlowIn,
       duration: Duration(milliseconds: 800),
     );
+  }
+
+  _closeDialog() async {
+    SharedPreferences _prefs = await SharedPreferences.getInstance();
+    final SharedPreferences prefs = _prefs;
+    bool? firstTime = prefs.getBool('show_Tutorial');
+    if (firstTime == null) {
+      prefs.setBool('show_Tutorial', true);
+      Navigator.pop(context);
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+              builder: (BuildContext context) => ParrotsRaceListScreen()),
+          (route) => false);
+    } else {
+      Navigator.pop(context);
+    }
   }
 }
