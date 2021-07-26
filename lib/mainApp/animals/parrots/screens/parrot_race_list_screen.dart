@@ -133,7 +133,7 @@ class _ParrotsRaceListScreenState extends State<ParrotsRaceListScreen> {
       ),
       animationType: DialogTransitionType.fadeScale,
       curve: Curves.fastOutSlowIn,
-      duration: Duration(milliseconds: 1400),
+      duration: Duration(milliseconds: 800),
     );
   }
 }

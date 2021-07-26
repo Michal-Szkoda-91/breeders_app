@@ -30,7 +30,7 @@ class TutorialButton extends StatelessWidget {
           ),
           animationType: DialogTransitionType.fadeScale,
           curve: Curves.fastOutSlowIn,
-          duration: Duration(milliseconds: 1400),
+          duration: Duration(milliseconds: 800),
         );
       },
     );
