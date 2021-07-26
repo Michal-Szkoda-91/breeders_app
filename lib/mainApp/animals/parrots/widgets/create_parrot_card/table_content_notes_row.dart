@@ -67,7 +67,7 @@ class TableContentNotesRow extends StatelessWidget {
       },
       animationType: DialogTransitionType.scale,
       curve: Curves.fastOutSlowIn,
-      duration: Duration(milliseconds: 1400),
+      duration: Duration(milliseconds: 800),
     );
   }
 }

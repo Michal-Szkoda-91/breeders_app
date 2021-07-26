@@ -47,6 +47,8 @@ class _IncubationInformationScreenState
 
   List<ParrotPairing> _createRacePairList(
       List<ParrotPairing> allparrots, String race) {
+    print('$race + ${allparrots.length}____________________________-');
+
     List<ParrotPairing> createdList = [];
     allparrots.forEach(
       (element) {
@@ -61,7 +63,6 @@ class _IncubationInformationScreenState
   @override
   Widget build(BuildContext context) {
     _createRaceList();
-
     return Scaffold(
       endDrawer: CustomDrawer(auth: _auth),
       endDrawerEnableOpenDragGesture: false,
@@ -154,7 +155,7 @@ class _IncubationInformationScreenState
                             IncubationList(
                               parrotList: _createRacePairList(
                                 widget.pairList,
-                                widget.pairList[index].race,
+                                raceList[index],
                               ),
                             ),
                           ],

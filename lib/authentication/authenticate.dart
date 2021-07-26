@@ -135,7 +135,7 @@ class _AuthenticateState extends State<Authenticate> {
       ),
       animationType: DialogTransitionType.scale,
       curve: Curves.fastOutSlowIn,
-      duration: Duration(milliseconds: 1400),
+      duration: Duration(milliseconds: 800),
     );
   }
 }

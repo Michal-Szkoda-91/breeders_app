@@ -14,7 +14,7 @@ class TutorialParrotCrud extends StatefulWidget {
 class _TutorialParrotCrudState extends State<TutorialParrotCrud> {
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
-  List<int> list = [1, 2, 3, 4, 5, 6, 7];
+  List<int> list = [1, 2, 3, 4, 5, 6, 7, 8];
   int _screenNumber = 0;
   AssetImage image = AssetImage("assets/tutorial/add_parrot.gif");
   String title = 'Dodaj papugę';
@@ -27,6 +27,7 @@ class _TutorialParrotCrudState extends State<TutorialParrotCrud> {
     AssetImage('assets/tutorial/incubation.gif'),
     AssetImage('assets/tutorial/archive.gif'),
     AssetImage('assets/tutorial/children.gif'),
+    AssetImage('assets/tutorial/drawer.jpg'),
   ];
 
   var titles = [
@@ -37,6 +38,7 @@ class _TutorialParrotCrudState extends State<TutorialParrotCrud> {
     'Inkubacja',
     'Archiwum Par',
     'Potomstwo',
+    'Informacja'
   ];
 
   void _loadImage() {
