@@ -27,7 +27,7 @@ class _TutorialParrotCrudState extends State<TutorialParrotCrud> {
     AssetImage('assets/tutorial/incubation.gif'),
     AssetImage('assets/tutorial/archive.gif'),
     AssetImage('assets/tutorial/children.gif'),
-    AssetImage('assets/tutorial/drawer.jpg'),
+    AssetImage('assets/tutorial/drawer.png'),
   ];
 
   var titles = [
@@ -92,7 +92,7 @@ class _TutorialParrotCrudState extends State<TutorialParrotCrud> {
                           ),
                         ),
                         Container(
-                          height: size.height * 0.55,
+                          height: size.height * 0.5,
                           width: size.width * 0.9,
                           child: Image.asset(image.assetName),
                         ),
@@ -112,8 +112,16 @@ class _TutorialParrotCrudState extends State<TutorialParrotCrud> {
           color: Theme.of(context).primaryColor,
           child: TextButton.icon(
             onPressed: _closeDialog,
-            icon: Icon(Icons.close),
-            label: Text("Pomiń samouczek"),
+            icon: Icon(
+              Icons.close,
+              color: Theme.of(context).hintColor,
+            ),
+            label: Text(
+              "Pomiń samouczek",
+              style: TextStyle(
+                color: Theme.of(context).hintColor,
+              ),
+            ),
           ),
         ),
         const SizedBox(height: 5.0),
