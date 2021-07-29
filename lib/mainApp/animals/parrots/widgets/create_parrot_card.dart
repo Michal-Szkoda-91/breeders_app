@@ -3,6 +3,7 @@ import 'package:draggable_scrollbar/draggable_scrollbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import 'create_parrot_card/table_content_picture_row.dart';
 import '../../../../models/global_methods.dart';
 import '../models/parrot_model.dart';
 import 'addParrotButtonFromParrotList.dart';
@@ -112,7 +113,7 @@ class _ParrotCardState extends State<ParrotCard> {
                           SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
                             child: Container(
-                              width: 1040,
+                              width: 1090,
                               child: Column(
                                 children: [
                                   Padding(
@@ -121,6 +122,13 @@ class _ParrotCardState extends State<ParrotCard> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceAround,
                                       children: [
+                                        TableTitleRow(
+                                          context: context,
+                                          title: "Pic",
+                                          width: 50.0,
+                                          sortedIndex: 0,
+                                          sorting: () {},
+                                        ),
                                         TableTitleRow(
                                           context: context,
                                           title: "",
@@ -177,11 +185,16 @@ class _ParrotCardState extends State<ParrotCard> {
                                           Container(
                                             padding: const EdgeInsets.only(
                                                 left: 140),
-                                            width: 1040,
+                                            width: 1090,
                                             child: Row(
                                               mainAxisAlignment:
                                                   MainAxisAlignment.spaceAround,
                                               children: [
+                                                TableContentPictureRow(
+                                                  index: index,
+                                                  createdParrotList:
+                                                      widget.createdParrotList,
+                                                ),
                                                 GenderIcon(
                                                   index: index,
                                                   createdParrotList:
@@ -222,7 +235,9 @@ class _ParrotCardState extends State<ParrotCard> {
                                                   width: 150.0,
                                                 ),
                                                 DeleteUpgradeButtons(
-                                                  raceName: widget.createdParrotList[0].race,
+                                                  raceName: widget
+                                                      .createdParrotList[0]
+                                                      .race,
                                                   index: index,
                                                   createdParrotList:
                                                       widget.createdParrotList,

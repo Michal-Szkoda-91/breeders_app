@@ -74,8 +74,8 @@ class _EditPairScreenState extends State<EditPairScreen> {
     // ignore: deprecated_member_use
     PickedFile? image = await _picker.getImage(
       source: ImageSource.gallery,
-      maxWidth: 750,
-      maxHeight: 1000,
+      maxWidth: 500,
+      maxHeight: 750,
     );
     if (image == null) {
       return;
@@ -94,8 +94,8 @@ class _EditPairScreenState extends State<EditPairScreen> {
     // ignore: deprecated_member_use
     PickedFile? image = await _picker.getImage(
       source: ImageSource.camera,
-      maxWidth: 750,
-      maxHeight: 1000,
+      maxWidth: 500,
+      maxHeight: 750,
     );
     if (image == null) {
       return;

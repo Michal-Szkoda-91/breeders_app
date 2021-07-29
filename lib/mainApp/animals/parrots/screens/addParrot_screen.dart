@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:path/path.dart' as Path;
 
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:draggable_scrollbar/draggable_scrollbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
