@@ -231,8 +231,16 @@ class ParrotDataHelper {
         .doc(raceName)
         .collection("Birds")
         .get()
-        .then((snapshot) {
+        .then((snapshot) async {
       for (DocumentSnapshot doc in snapshot.docs) {
+        try {
+          final ref = FirebaseStorage.instanceFor().ref().child(doc['Pic Url']);
+          await ref.delete();
+          print("pic deleted");
+        } catch (e) {
+          print("error occured $e");
+        }
+
         doc.reference.delete();
       }
 
@@ -253,7 +261,6 @@ class ParrotDataHelper {
           }
         });
       }
-
       print("Delete completed");
     }).catchError((err) {
       print(err);
@@ -355,6 +362,16 @@ class ParrotDataHelper {
       }
       print("error occured $err");
     });
+
+    //Delete picture from storage
+    try {
+      final ref =
+          FirebaseStorage.instanceFor().ref().child(parrotToDelete.picUrl);
+      await ref.delete();
+      print("pic deleted");
+    } catch (e) {
+      print("error occured $e");
+    }
   }
 
   //
