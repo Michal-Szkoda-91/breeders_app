@@ -49,6 +49,7 @@ class Deletebutton extends StatelessWidget {
                   cageNumber: '',
                   sex: '',
                   notes: '',
+                  picUrl: '',
                   pairRingNumber: ''),
             );
           },

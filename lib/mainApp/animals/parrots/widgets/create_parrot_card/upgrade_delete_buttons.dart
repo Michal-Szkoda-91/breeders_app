@@ -9,11 +9,13 @@ class DeleteUpgradeButtons extends StatelessWidget {
   final Function delete;
   final int index;
   final List<Parrot> createdParrotList;
+  final String raceName;
 
   DeleteUpgradeButtons({
     required this.delete,
     required this.index,
     required this.createdParrotList,
+    required this.raceName,
   });
 
   final GlobalMethods _globalMethods = GlobalMethods();
@@ -47,7 +49,7 @@ class DeleteUpgradeButtons extends StatelessWidget {
                 _globalMethods.createRoute(
                   AddParrotScreen(
                     parrotMap: {
-                      "url": "assets/image/parrot.jpg",
+                      "url": "assets/image/parrotsRace/$raceName.jpg",
                       "name": "Edytuj Papugę",
                       "icubationTime": "21"
                     },

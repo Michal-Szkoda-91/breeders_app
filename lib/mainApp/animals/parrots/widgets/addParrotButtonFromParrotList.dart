@@ -63,6 +63,7 @@ class _AddParrotFromInsideParrotListState
                   cageNumber: '',
                   sex: '',
                   notes: '',
+                  picUrl: '',
                   pairRingNumber: '',
                 ),
               ),

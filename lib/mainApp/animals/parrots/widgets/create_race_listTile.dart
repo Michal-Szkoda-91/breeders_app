@@ -85,7 +85,14 @@ class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
 
   void _countParrot(AsyncSnapshot<QuerySnapshot> snapshot) {
     _parrotCount = 0;
+
     snapshot.data!.docs.forEach((val) {
+      _parrotDataHelper.upgradingPicUrlAndName(
+          uid: firebaseUser!.uid,
+          context: context,
+          raceName: val["Race Name"],
+          ringNumber: val.id);
+
       _parrotCount++;
       parrotList.add(Parrot(
         ringNumber: val.id,
@@ -96,6 +103,7 @@ class _CreateParrotRaceListTileState extends State<CreateParrotRaceListTile> {
         pairRingNumber: val['PairRingNumber'],
         race: val['Race Name'],
         sex: val['Sex'],
+        picUrl: val["Pic Url"],
       ));
     });
   }

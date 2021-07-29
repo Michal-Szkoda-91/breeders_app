@@ -52,6 +52,7 @@ class _AddPairChildButtonState extends State<AddPairChildButton> {
                       cageNumber: '',
                       sex: '',
                       notes: '',
+                      picUrl: '',
                       pairRingNumber: '',
                     ),
                     data: '',

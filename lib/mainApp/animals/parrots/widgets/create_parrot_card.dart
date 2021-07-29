@@ -222,6 +222,7 @@ class _ParrotCardState extends State<ParrotCard> {
                                                   width: 150.0,
                                                 ),
                                                 DeleteUpgradeButtons(
+                                                  raceName: widget.createdParrotList[0].race,
                                                   index: index,
                                                   createdParrotList:
                                                       widget.createdParrotList,

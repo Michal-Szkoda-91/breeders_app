@@ -97,6 +97,7 @@ class _AddPairScreenState extends State<AddPairScreen> {
           pairRingNumber: val['PairRingNumber'],
           race: widget.raceName,
           sex: val['Sex'],
+          picUrl: val['Pic Url']
         ));
       });
     }).then((value) {

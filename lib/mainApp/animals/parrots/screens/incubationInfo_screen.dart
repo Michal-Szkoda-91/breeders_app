@@ -47,8 +47,6 @@ class _IncubationInformationScreenState
 
   List<ParrotPairing> _createRacePairList(
       List<ParrotPairing> allparrots, String race) {
-    print('$race + ${allparrots.length}____________________________-');
-
     List<ParrotPairing> createdList = [];
     allparrots.forEach(
       (element) {
