@@ -133,6 +133,7 @@ class _CreateParrotsDropdownButtonState
                         fission: '',
                         cageNumber: '',
                         sex: '',
+                        picUrl: '',
                         notes: '',
                         pairRingNumber: ''),
                     addFromChild: false,

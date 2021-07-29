@@ -1,7 +1,12 @@
+import 'dart:io';
+import 'package:path/path.dart' as Path;
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:draggable_scrollbar/draggable_scrollbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 import '../../../animals/parrots/models/parrot_model.dart';
@@ -74,9 +79,58 @@ class _RaceListScreenState extends State<AddParrotScreen> {
   late Children _createdChild;
   bool _isLoading = false;
 
+  //Adding pic to parrot
+  //
+  //
+  //
+  String _pictureUrl = "";
+  bool _isPhotoChoosen = false;
+  PickedFile? _image;
+  bool _isClicked = false;
+  final _picker = ImagePicker();
+  String takenURL = 'loading';
+
+  Future getImageFromGalery() async {
+    PickedFile? image = await _picker.getImage(
+      source: ImageSource.gallery,
+      maxWidth: 500,
+      maxHeight: 750,
+    );
+    if (image == null) {
+      return;
+    } else {
+      if (mounted) {
+        setState(() {
+          _image = image;
+          _isPhotoChoosen = false;
+        });
+      }
+    }
+  }
+
+  Future getImageFromCamera() async {
+    PickedFile? image = await _picker.getImage(
+      source: ImageSource.camera,
+      maxWidth: 500,
+      maxHeight: 750,
+    );
+    if (image == null) {
+      return;
+    } else {
+      if (mounted) {
+        setState(() {
+          _image = image;
+          _isPhotoChoosen = false;
+        });
+      }
+    }
+  }
+
   @override
   void initState() {
     super.initState();
+    _pictureUrl = widget.parrot.picUrl;
+    _image = PickedFile(widget.parrotMap['url']);
     _sexName = _genderMap[1.0].toString();
     if (widget.parrot.ringNumber != 'brak') {
       _isEditing(widget.parrot);
@@ -85,6 +139,11 @@ class _RaceListScreenState extends State<AddParrotScreen> {
       bornTime = widget.data;
       ringToDelChildren = widget.parrot.ringNumber;
     }
+  }
+
+  Future _getImage(String basicUrl) async {
+    final ref = FirebaseStorage.instance.ref().child(basicUrl);
+    takenURL = await ref.getDownloadURL();
   }
 
   void _isEditing(Parrot parrot) {
@@ -98,6 +157,8 @@ class _RaceListScreenState extends State<AddParrotScreen> {
     _cageNumber = parrot.cageNumber;
     _fission = parrot.fission;
     _notes = parrot.notes;
+    _pictureUrl = parrot.picUrl;
+    _getImage(_pictureUrl);
   }
 
   @override
@@ -132,9 +193,9 @@ class _RaceListScreenState extends State<AddParrotScreen> {
                         padding: const EdgeInsets.all(20.0),
                         child: Column(
                           children: [
-                            const SizedBox(height: 16.0),
-                            customTitle(context),
-                            const SizedBox(height: 30),
+                            widget.pair.id != ''
+                                ? customTitleChild(context)
+                                : customTitle(context),
                             Form(
                               key: _formKey,
                               child: Column(
@@ -158,7 +219,6 @@ class _RaceListScreenState extends State<AddParrotScreen> {
                                   //Ring number
                                   infoText(context, "Numer obrączki"),
                                   const SizedBox(height: 16.0),
-
                                   ringNumberRow(
                                     context,
                                     _regExpCountry,
@@ -722,27 +782,33 @@ class _RaceListScreenState extends State<AddParrotScreen> {
           }
           return;
         } else {
-          if (mounted) {
-            setState(() {
-              String race = "";
-              widget.pair.id == ''
-                  ? race = widget.parrotMap['name']
-                  : race = widget.race;
-              _createdParrot = Parrot(
-                  race: race,
-                  ringNumber: _ringNumber,
-                  cageNumber: _cageNumber,
-                  color: _parrotColor,
-                  fission: _fission,
-                  notes: _notes,
-                  sex: _sexName,
-                  pairRingNumber: '');
-            });
-          }
-          await _parrotDataHelper.createParrotCollection(
-            uid: _firebaseUser!.uid,
-            parrot: _createdParrot,
-            context: context,
+          await sendPicture().then(
+            (_) async {
+              if (mounted) {
+                setState(() {
+                  String race = "";
+                  widget.pair.id == ''
+                      ? race = widget.parrotMap['name']
+                      : race = widget.race;
+                  _createdParrot = Parrot(
+                    race: race,
+                    ringNumber: _ringNumber,
+                    cageNumber: _cageNumber,
+                    color: _parrotColor,
+                    fission: _fission,
+                    notes: _notes,
+                    sex: _sexName,
+                    picUrl: _pictureUrl,
+                    pairRingNumber: '',
+                  );
+                });
+              }
+              await _parrotDataHelper.createParrotCollection(
+                uid: _firebaseUser!.uid,
+                parrot: _createdParrot,
+                context: context,
+              );
+            },
           );
           if (mounted) {
             setState(() {
@@ -751,6 +817,26 @@ class _RaceListScreenState extends State<AddParrotScreen> {
           }
         }
       });
+    }
+  }
+
+  //
+  //
+  //
+  //Sending picture to Storage
+
+  Future sendPicture() async {
+    if (_image!.path == widget.parrotMap['url']) {
+      return;
+    } else {
+      if (mounted) {
+        setState(() {
+          _pictureUrl = Path.basename(_image!.path);
+        });
+      }
+      Reference ref = FirebaseStorage.instance.ref().child(_pictureUrl);
+      UploadTask uploadTask = ref.putFile(File(_image!.path));
+      await uploadTask;
     }
   }
 
@@ -898,57 +984,62 @@ class _RaceListScreenState extends State<AddParrotScreen> {
           }
           return;
         } else {
-          setState(
-            () {
-              _ringNumber = "$_country-$_year-$_symbol-$_parrotNumber";
-              _createdParrot = Parrot(
-                  race: widget.parrot.race,
-                  ringNumber: _ringNumber,
-                  cageNumber: _cageNumber,
-                  color: _parrotColor,
-                  fission: _fission,
-                  notes: _notes,
-                  sex: _sexName,
-                  pairRingNumber: widget.parrot.pairRingNumber);
-              if (widget.parrot.ringNumber != _ringNumber) {
-                _parrotToDelete = Parrot(
+          await sendPicture().then((_) async {
+            setState(
+              () {
+                _ringNumber = "$_country-$_year-$_symbol-$_parrotNumber";
+                _createdParrot = Parrot(
                     race: widget.parrot.race,
-                    ringNumber: widget.parrot.ringNumber,
+                    ringNumber: _ringNumber,
                     cageNumber: _cageNumber,
                     color: _parrotColor,
                     fission: _fission,
+                    picUrl: _pictureUrl,
                     notes: _notes,
                     sex: _sexName,
                     pairRingNumber: widget.parrot.pairRingNumber);
+                if (widget.parrot.ringNumber != _ringNumber) {
+                  _parrotToDelete = Parrot(
+                      race: widget.parrot.race,
+                      ringNumber: widget.parrot.ringNumber,
+                      cageNumber: _cageNumber,
+                      color: _parrotColor,
+                      fission: _fission,
+                      notes: _notes,
+                      picUrl: _pictureUrl,
+                      sex: _sexName,
+                      pairRingNumber: widget.parrot.pairRingNumber);
+                }
+              },
+            );
+            await _parrotDataHelper
+                .updateParrot(
+              uid: _firebaseUser!.uid,
+              parrot: _createdParrot,
+              pairRingNumber: _createdParrot.pairRingNumber,
+              context: context,
+            )
+                .then((_) async {
+              if (widget.parrot.ringNumber != _ringNumber) {
+                await _parrotDataHelper.deleteOnlyParrot(
+                  context: context,
+                  parrotToDelete: _parrotToDelete,
+                  showDialog: false,
+                  uid: _firebaseUser!.uid,
+                );
               }
-            },
-          );
-          await _parrotDataHelper
-              .updateParrot(
-            uid: _firebaseUser!.uid,
-            parrot: _createdParrot,
-            pairRingNumber: _createdParrot.pairRingNumber,
-            context: context,
-          )
-              .then((_) async {
-            if (widget.parrot.ringNumber != _ringNumber) {
-              await _parrotDataHelper.deleteOnlyParrot(
-                context: context,
-                parrotToDelete: _parrotToDelete,
-                showDialog: false,
-                uid: _firebaseUser!.uid,
-              );
-            }
-          }).then((value) async {
-            if (_createdParrot.pairRingNumber != 'brak' &&
-                widget.parrot.ringNumber != _ringNumber) {
-              await _parrotDataHelper.updatePairedParrot(
-                uid: _firebaseUser!.uid,
-                parrot: _createdParrot,
-                oldRing: widget.parrot.ringNumber,
-              );
-            }
+            }).then((value) async {
+              if (_createdParrot.pairRingNumber != 'brak' &&
+                  widget.parrot.ringNumber != _ringNumber) {
+                await _parrotDataHelper.updatePairedParrot(
+                  uid: _firebaseUser!.uid,
+                  parrot: _createdParrot,
+                  oldRing: widget.parrot.ringNumber,
+                );
+              }
+            });
           });
+
           if (mounted) {
             setState(() {
               _isLoading = false;
@@ -967,7 +1058,7 @@ class _RaceListScreenState extends State<AddParrotScreen> {
     );
   }
 
-  Widget customTitle(BuildContext context) {
+  Widget customTitleChild(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
@@ -981,23 +1072,182 @@ class _RaceListScreenState extends State<AddParrotScreen> {
             ),
           ),
         ),
-        const Spacer(),
+        SizedBox(
+          width: MediaQuery.of(context).size.width * 0.05,
+        ),
         Container(
-          width: MediaQuery.of(context).size.width * 0.5,
-          child: AutoSizeText(
-            widget.parrot.ringNumber == ''
-                ? widget.parrotMap['name']
-                : widget.parrot.race,
-            maxLines: 1,
+          width: MediaQuery.of(context).size.width * 0.45,
+          child: Text(
+            widget.parrotMap['name'],
             style: TextStyle(
-              fontSize: 24,
               color: Theme.of(context).textSelectionTheme.selectionColor,
               fontWeight: FontWeight.bold,
+              fontSize: 20,
             ),
+            textAlign: TextAlign.right,
           ),
         ),
       ],
     );
+  }
+
+  Widget customTitle(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Stack(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              CircleAvatar(
+                radius: 50,
+                backgroundColor: Theme.of(context).backgroundColor,
+                child: widget.parrot.ringNumber != 'brak' &&
+                        takenURL != 'loading' &&
+                        _image!.path == widget.parrotMap['url']
+                    ? CircleAvatar(
+                        radius: 46,
+                        backgroundImage: NetworkImage(takenURL),
+                      )
+                    : _image!.path == widget.parrotMap['url']
+                        ? CircleAvatar(
+                            radius: 46,
+                            backgroundImage: AssetImage(_image!.path),
+                          )
+                        : CircleAvatar(
+                            radius: 46,
+                            backgroundImage: FileImage(
+                              File(_image!.path),
+                            ),
+                          ),
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.05,
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width * 0.45,
+                child: Text(
+                  widget.parrotMap['name'],
+                  style: TextStyle(
+                    color: Theme.of(context).textSelectionTheme.selectionColor,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                  ),
+                  textAlign: TextAlign.right,
+                ),
+              ),
+            ],
+          ),
+          Positioned(
+            left: 60,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                CircleAvatar(
+                  backgroundColor: _isClicked
+                      ? Colors.orange
+                      : Theme.of(context).backgroundColor,
+                  radius: 25,
+                  child: IconButton(
+                    padding: const EdgeInsets.all(0),
+                    icon: Icon(
+                      Icons.camera_alt_outlined,
+                      size: 35,
+                      color:
+                          Theme.of(context).textSelectionTheme.selectionColor,
+                    ),
+                    onPressed: () {
+                      _animation();
+                      if (mounted) {
+                        setState(() {
+                          _isPhotoChoosen = !_isPhotoChoosen;
+                        });
+                      }
+                    },
+                  ),
+                ),
+                _isPhotoChoosen
+                    ? Row(
+                        children: [
+                          //add photo from galery
+                          CircleAvatar(
+                            backgroundColor: Theme.of(context).accentColor,
+                            radius: 25,
+                            child: IconButton(
+                              padding: EdgeInsets.zero,
+                              icon: Icon(
+                                Icons.folder,
+                                size: 35,
+                                color: Theme.of(context)
+                                    .textSelectionTheme
+                                    .selectionColor,
+                              ),
+                              onPressed: () {
+                                getImageFromGalery();
+                              },
+                            ),
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          //add photo from camera
+                          CircleAvatar(
+                            backgroundColor: Theme.of(context).accentColor,
+                            radius: 25,
+                            child: IconButton(
+                              padding: EdgeInsets.zero,
+                              icon: Icon(
+                                Icons.camera,
+                                size: 35,
+                                color: Theme.of(context)
+                                    .textSelectionTheme
+                                    .selectionColor,
+                              ),
+                              onPressed: () {
+                                getImageFromCamera();
+                              },
+                            ),
+                          ),
+                        ],
+                      )
+                    : Row(
+                        children: [
+                          const CircleAvatar(
+                            backgroundColor: Colors.transparent,
+                            radius: 25,
+                            child: Center(),
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          const CircleAvatar(
+                            backgroundColor: Colors.transparent,
+                            radius: 25,
+                            child: Center(),
+                          ),
+                        ],
+                      ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _animation() {
+    if (mounted) {
+      setState(() {
+        _isClicked = !_isClicked;
+      });
+    }
+    Future.delayed(const Duration(milliseconds: 200)).then((_) {
+      if (mounted) {
+        setState(() {
+          _isClicked = !_isClicked;
+        });
+      }
+    });
   }
 
   InputDecoration _createInputDecoration(

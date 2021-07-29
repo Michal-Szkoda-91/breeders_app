@@ -88,6 +88,7 @@ class _ParrotDialogInformationState extends State<ParrotDialogInformation> {
           pairRingNumber: val['PairRingNumber'],
           race: widget.parrotRace,
           sex: val['Sex'],
+          picUrl: val["Pic Url"],
         );
       }
     });

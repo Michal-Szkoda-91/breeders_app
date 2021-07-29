@@ -13,6 +13,7 @@ class Parrot {
   final String sex;
   final String notes;
   final String pairRingNumber;
+  final String picUrl;
 
   Parrot({
     required this.race,
@@ -23,6 +24,7 @@ class Parrot {
     required this.sex,
     required this.notes,
     required this.pairRingNumber,
+    required this.picUrl,
   });
 }
 
@@ -66,6 +68,7 @@ class ParrotDataHelper {
         "Sex": "${parrot.sex}",
         "Cage number": "${parrot.cageNumber}",
         "Notes": "${parrot.notes}",
+        "Pic Url": "${parrot.picUrl}",
         "PairRingNumber": "brak",
       }, SetOptions(merge: false)).then((_) {
         Navigator.of(context).pop();
@@ -107,6 +110,7 @@ class ParrotDataHelper {
       "Sex": "${parrot.sex}",
       "Cage number": "${parrot.cageNumber}",
       "Notes": "${parrot.notes}",
+      "Pic Url": "${parrot.picUrl}",
       "PairRingNumber": pairRingNumber,
     }).then((_) {
       Navigator.of(context).pop();
@@ -146,6 +150,7 @@ class ParrotDataHelper {
       "Sex": "${parrot.sex}",
       "Cage number": "${parrot.cageNumber}",
       "Notes": "${parrot.notes}",
+      "Pic Url": "${parrot.picUrl}",
       "PairRingNumber": pairRingNumber,
     }).then((_) {
       print("parrot edited");
@@ -184,7 +189,6 @@ class ParrotDataHelper {
           .then((snapshot) async {
         for (DocumentSnapshot doc in snapshot.docs) {
           if (doc['Male Ring'] == oldRing) {
-            print("______________________________${doc['Male Ring']}");
             await collectionReference
                 .doc(parrot.race)
                 .collection("Pairs")
@@ -315,7 +319,6 @@ class ParrotDataHelper {
           if (doc['Male Ring'] == parrotToDelete.ringNumber ||
               doc['Female Ring'] == parrotToDelete.ringNumber) {
             doc.reference.delete();
-            print("++__________________${doc['Pic Url']}");
             try {
               final ref =
                   FirebaseStorage.instanceFor().ref().child(doc['Pic Url']);
@@ -387,6 +390,40 @@ class ParrotDataHelper {
             "Operacja nieudana, nieznany błąd, spróbuj ponownie pózniej");
       }
       print("error occured $err");
+    });
+  }
+
+  ///Methods which is repairing Data model, adding new field if it is not existing
+  ///
+  ///
+  ///
+  Future<dynamic> upgradingPicUrlAndName(
+      {required String uid,
+      required BuildContext context,
+      required String raceName,
+      required String ringNumber}) async {
+    final CollectionReference collectionReference =
+        FirebaseFirestore.instance.collection(uid);
+
+    await collectionReference
+        .doc(raceName)
+        .collection("Birds")
+        .doc(ringNumber)
+        .get()
+        .then((value) async {
+      try {} catch (e) {
+        await collectionReference
+            .doc(raceName)
+            .collection("Birds")
+            .doc(ringNumber)
+            .set({
+          "Pic Url": "brak",
+        }, SetOptions(merge: true)).then((_) {
+          print("UPdated parrot fields");
+        }).catchError((err) {
+          print("UPdated parrot fields - ERROR $err");
+        });
+      }
     });
   }
 }

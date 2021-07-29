@@ -69,7 +69,6 @@ class AuthService {
       User? user = result.user;
       return _userFromFirebaseUser(user!);
     } on FirebaseAuthException catch (e) {
-      print("______________$e");
       if (e.code == 'user-not-found') {
         _globalMethods.showMaterialDialog(
             context, "Użytkownik nie istnieje, załóż konto");

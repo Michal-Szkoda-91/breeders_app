@@ -69,6 +69,7 @@ class _DeleteAndArchiveButtonsState extends State<DeleteAndArchiveButtons> {
                       cageNumber: '',
                       sex: '',
                       notes: '',
+                      picUrl: '',
                       pairRingNumber: '',
                     ));
               },
@@ -114,6 +115,7 @@ class _DeleteAndArchiveButtonsState extends State<DeleteAndArchiveButtons> {
                             cageNumber: '',
                             sex: '',
                             notes: '',
+                            picUrl: '',
                             pairRingNumber: '',
                           ));
                     },

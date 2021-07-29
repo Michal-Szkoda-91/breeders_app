@@ -93,6 +93,7 @@ class _ParrotsListScreenState extends State<ParrotsListScreen> {
         notes: val['Notes'],
         pairRingNumber: val['PairRingNumber'],
         race: widget.raceName,
+        picUrl: val['Pic Url'],
         sex: val['Sex'],
       ));
     });
