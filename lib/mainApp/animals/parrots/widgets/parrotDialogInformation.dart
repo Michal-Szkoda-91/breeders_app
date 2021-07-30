@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'parrotDialogInformation/info_parrow_row.dart';
 import '../models/parrot_model.dart';
+import 'parrot_pair_card_widgets/pairCircularContainer.dart';
 
 class ParrotDialogInformation extends StatefulWidget {
   final String parrotRing;
@@ -66,6 +67,15 @@ class _ParrotDialogInformationState extends State<ParrotDialogInformation> {
                     InfoParrowRow(
                       title: "Nr partnera:",
                       content: _createdParrot.pairRingNumber,
+                    ),
+                    Container(
+                      child: _createdParrot.picUrl == "brak"
+                          ? Center()
+                          : PairCircleAvatar(
+                              picUrl: _createdParrot.picUrl,
+                              isAssets: false,
+                              size: 45,
+                            ),
                     ),
                   ],
                 ),

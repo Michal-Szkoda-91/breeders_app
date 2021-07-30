@@ -24,8 +24,8 @@ class TableContentPictureRow extends StatelessWidget {
         ),
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
-        child: createdParrotList[index].picUrl == "brak"
+        padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 1.0),
+        child: createdParrotList[index].picUrl == ""
             ? PairCircleAvatar(
                 picUrl: createdParrotList[index].picUrl,
                 isAssets: true,

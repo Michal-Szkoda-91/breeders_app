@@ -410,37 +410,5 @@ class ParrotDataHelper {
     });
   }
 
-  ///Methods which is repairing Data model, adding new field if it is not existing
-  ///
-  ///
-  ///
-  Future<dynamic> upgradingPicUrlAndName(
-      {required String uid,
-      required BuildContext context,
-      required String raceName,
-      required String ringNumber}) async {
-    final CollectionReference collectionReference =
-        FirebaseFirestore.instance.collection(uid);
-
-    await collectionReference
-        .doc(raceName)
-        .collection("Birds")
-        .doc(ringNumber)
-        .get()
-        .then((value) async {
-      try {} catch (e) {
-        await collectionReference
-            .doc(raceName)
-            .collection("Birds")
-            .doc(ringNumber)
-            .set({
-          "Pic Url": "brak",
-        }, SetOptions(merge: true)).then((_) {
-          print("UPdated parrot fields");
-        }).catchError((err) {
-          print("UPdated parrot fields - ERROR $err");
-        });
-      }
-    });
-  }
+  
 }
