@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:breeders_app/mainApp/animals/parrots/widgets/parrot_pair_card_widgets/pairCircularContainer.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:path/path.dart' as Path;
@@ -89,16 +90,15 @@ class _AddPairScreenState extends State<AddPairScreen> {
       _allParrotList = [];
       snapshot.docs.forEach((val) {
         _allParrotList.add(Parrot(
-          ringNumber: val.id,
-          cageNumber: val['Cage number'],
-          color: val['Colors'],
-          fission: val['Fission'],
-          notes: val['Notes'],
-          pairRingNumber: val['PairRingNumber'],
-          race: widget.raceName,
-          sex: val['Sex'],
-          picUrl: val['Pic Url']
-        ));
+            ringNumber: val.id,
+            cageNumber: val['Cage number'],
+            color: val['Colors'],
+            fission: val['Fission'],
+            notes: val['Notes'],
+            pairRingNumber: val['PairRingNumber'],
+            race: widget.raceName,
+            sex: val['Sex'],
+            picUrl: val['Pic Url']));
       });
     }).then((value) {
       _createListsOfParrot(_allParrotList);
@@ -543,28 +543,42 @@ class _AddPairScreenState extends State<AddPairScreen> {
       shadowColor: Theme.of(context).cardColor,
       child: Padding(
         padding: const EdgeInsets.all(5.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Row(
           children: [
-            AutoSizeText(
-              parrot.ringNumber,
-              maxLines: 1,
-              style: TextStyle(
-                color: Theme.of(context).textSelectionTheme.selectionColor,
-              ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                AutoSizeText(
+                  parrot.ringNumber,
+                  maxLines: 1,
+                  style: TextStyle(
+                    color: Theme.of(context).textSelectionTheme.selectionColor,
+                  ),
+                ),
+                SizedBox(height: 2),
+                AutoSizeText(
+                  "Kolor: " + parrot.color,
+                  maxLines: 2,
+                  style: TextStyle(
+                    color: Theme.of(context).textSelectionTheme.selectionColor,
+                  ),
+                ),
+                Divider(
+                  color: Theme.of(context).textSelectionTheme.selectionColor,
+                  height: 7,
+                  thickness: 1,
+                ),
+              ],
             ),
-            SizedBox(height: 2),
-            AutoSizeText(
-              "Kolor: " + parrot.color,
-              maxLines: 2,
-              style: TextStyle(
-                color: Theme.of(context).textSelectionTheme.selectionColor,
-              ),
-            ),
-            Divider(
-              color: Theme.of(context).textSelectionTheme.selectionColor,
-              height: 7,
-              thickness: 1,
+            Spacer(),
+            Container(
+              child: parrot.picUrl == ""
+                  ? Center()
+                  : PairCircleAvatar(
+                      picUrl: parrot.picUrl,
+                      isAssets: false,
+                      size: 20,
+                    ),
             ),
           ],
         ),
